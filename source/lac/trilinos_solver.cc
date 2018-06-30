@@ -10,9 +10,8 @@
 // version 2.1 of the License, or (at your option) any later version.
 // The full text of the license can be found in the file LICENSE at
 // the top level of the deal.II distribution.
-// 
-// @Modified By Shilei Lin 2017/04/30
-// ---------------------------------- -----------------------------------
+//
+// ---------------------------------------------------------------------
 
 #include <deal.II/lac/trilinos_solver.h>
 
@@ -36,71 +35,80 @@ namespace TrilinosWrappers
     output_solver_details (output_solver_details),
     gmres_restart_parameter (gmres_restart_parameter)
   {}
+
+
+
   SolverBase::SolverBase (SolverControl  &cn)
     :
     solver_name    (gmres),
     solver_control (cn)
   {}
+
+
+
   SolverBase::SolverBase (const enum SolverBase::SolverName  solver_name,
                           SolverControl                     &cn)
     :
     solver_name    (solver_name),
     solver_control (cn)
   {}
+
+
+
   SolverBase::~SolverBase ()
   {}
+
+
+
   SolverControl &
   SolverBase::control() const
   {
     return solver_control;
   }
 
-  double
-  SolverBase::solve (const SparseMatrix     &a,
-                       VectorBase             &x,
-                       const VectorBase       &b,
-                       const PreconditionBase &preconditioner)
-    {
-      linear_problem.reset();
 
-      // We need an Belos::LinearProblem<double,MV,OP> object to let the Belos solver know
-      // about the matrix and vectors.
-      RCP<const Epetra_CrsMatrix> A = rcpFromRef(*(const_cast<Epetra_CrsMatrix *>(&a.trilinos_matrix())));
-	  RCP<MV> X = rcpFromRef(*(const_cast<Epetra_FEVector *>(&x.trilinos_vector())));
-	  RCP<MV> B = rcp (new MV (A->OperatorDomainMap(), 1));	  
 
-	  A->Apply(*X,*B);
-	       
-      B = rcpFromRef(*(const_cast<MV *>(&b.trilinos_vector())));
-      linear_problem = rcp(new Belos::LinearProblem<double,MV,OP>(A, X, B));
-
-      return do_solve(preconditioner);
-    }
-
-  double
-  SolverBase::solve (Epetra_Operator        &a,
+  void
+  SolverBase::solve (const SparseMatrix     &A,
                      VectorBase             &x,
                      const VectorBase       &b,
                      const PreconditionBase &preconditioner)
   {
-	linear_problem.reset();
+    linear_problem.reset();
 
-    // We need an Belos::LinearProblem<double,MV,OP> object to let the Belos solver know
+    // We need an Epetra_LinearProblem object to let the AztecOO solver know
     // about the matrix and vectors.
-    RCP<const Epetra_Operator> A = rcpFromRef(*(const_cast<Epetra_Operator *>(&a)));
-    RCP<MV> X = rcpFromRef(*(const_cast<Epetra_FEVector *>(&x.trilinos_vector())));
-	RCP<MV> B = rcp (new MV (A->OperatorDomainMap(), 1));	  
-		  
-	A->Apply(*X,*B);
+    linear_problem.reset
+    (new Epetra_LinearProblem(const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix()),
+                              &x.trilinos_vector(),
+                              const_cast<Epetra_MultiVector *>(&b.trilinos_vector())));
 
-    B = rcpFromRef(*(const_cast<MV *>(&b.trilinos_vector())));
-
-    //Set Properties
-    linear_problem = rcp(new Belos::LinearProblem<double,MV,OP>(A, X, B));
-    return do_solve(preconditioner);
+    do_solve(preconditioner);
   }
 
-  double
+
+
+  void
+  SolverBase::solve (Epetra_Operator        &A,
+                     VectorBase             &x,
+                     const VectorBase       &b,
+                     const PreconditionBase &preconditioner)
+  {
+    linear_problem.reset();
+
+    // We need an Epetra_LinearProblem object to let the AztecOO solver know
+    // about the matrix and vectors.
+    linear_problem.reset
+    (new Epetra_LinearProblem(&A,
+                              &x.trilinos_vector(),
+                              const_cast<Epetra_MultiVector *>(&b.trilinos_vector())));
+
+    do_solve(preconditioner);
+  }
+
+
+
+  void
   SolverBase::solve (const SparseMatrix           &A,
                      dealii::Vector<double>       &x,
                      const dealii::Vector<double> &b,
@@ -118,25 +126,22 @@ namespace TrilinosWrappers
             ExcMessage ("Can only work in serial when using deal.II vectors."));
     Assert (A.trilinos_matrix().Filled(),
             ExcMessage ("Matrix is not compressed. Call compress() method."));
-            
+
     Epetra_Vector ep_x (View, A.domain_partitioner(), x.begin());
     Epetra_Vector ep_b (View, A.range_partitioner(), const_cast<double *>(b.begin()));
-    
-	RCP<const Epetra_CrsMatrix> eA = rcpFromRef(*(const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix())));
-	RCP<MV> X = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_x)));
-	RCP<MV> B = rcp (new MV(eA->OperatorDomainMap(), 1));
-	  
-	eA->Apply(*X,*B);
-	   
-    B = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_b)));
 
-    // We need an Belos::LinearProblem<double,MV,OP> object to let the Belos solver know
+    // We need an Epetra_LinearProblem object to let the AztecOO solver know
     // about the matrix and vectors.
-    linear_problem = rcp(new Belos::LinearProblem<double,MV,OP>(eA, X, B));
-    return do_solve(preconditioner);
+    linear_problem.reset (new Epetra_LinearProblem
+                          (const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix()),
+                           &ep_x, &ep_b));
+
+    do_solve(preconditioner);
   }
 
-  double
+
+
+  void
   SolverBase::solve (Epetra_Operator              &A,
                      dealii::Vector<double>       &x,
                      const dealii::Vector<double> &b,
@@ -147,24 +152,16 @@ namespace TrilinosWrappers
     Epetra_Vector ep_x (View, A.OperatorDomainMap(), x.begin());
     Epetra_Vector ep_b (View, A.OperatorRangeMap(), const_cast<double *>(b.begin()));
 
-    // We need an Belos::LinearProblem<double,MV,OP> object to let the AztecOO solver know
+    // We need an Epetra_LinearProblem object to let the AztecOO solver know
     // about the matrix and vectors.
+    linear_problem.reset (new Epetra_LinearProblem(&A,&ep_x, &ep_b));
 
-	RCP<const Epetra_Operator> eA = rcpFromRef(*(const_cast<Epetra_Operator *>(&A)));
-	RCP<MV> X = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_x)));
-	RCP<MV> B = rcp (new MV(eA->OperatorDomainMap (), 1));
-	  
-	eA->Apply(*X,*B);
-	   
-    B = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_b)));
-
-	// We need an Belos::LinearProblem<double,MV,OP> object to let the Belos solver know
-	// about the matrix and vectors.
-	linear_problem = rcp(new Belos::LinearProblem<double,MV,OP>(eA, X, B));
-    return do_solve(preconditioner);
+    do_solve(preconditioner);
   }
 
-  double
+
+
+  void
   SolverBase::solve (const SparseMatrix                                  &A,
                      dealii::parallel::distributed::Vector<double>       &x,
                      const dealii::parallel::distributed::Vector<double> &b,
@@ -182,21 +179,18 @@ namespace TrilinosWrappers
     Epetra_Vector ep_x (View, A.domain_partitioner(), x.begin());
     Epetra_Vector ep_b (View, A.range_partitioner(), const_cast<double *>(b.begin()));
 
-	RCP<const Epetra_CrsMatrix> eA = rcpFromRef(*(const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix())));
-	RCP<MV> X = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_x)));
-	RCP<MV> B = rcp (new MV(eA->OperatorDomainMap (), 1));
-	  
-	eA->Apply(*X,*B);
-	   
-    B = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_b)));
-	// We need an Belos::LinearProblem<double,MV,OP> object to let the Belos solver know
-	// about the matrix and vectors.
-	//Set Properties
-	linear_problem = rcp(new Belos::LinearProblem<double,MV,OP>(eA, X, B));
-    return do_solve(preconditioner);
+    // We need an Epetra_LinearProblem object to let the AztecOO solver know
+    // about the matrix and vectors.
+    linear_problem.reset (new Epetra_LinearProblem
+                          (const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix()),
+                           &ep_x, &ep_b));
+
+    do_solve(preconditioner);
   }
 
-  double
+
+
+  void
   SolverBase::solve (Epetra_Operator                                     &A,
                      dealii::parallel::distributed::Vector<double>       &x,
                      const dealii::parallel::distributed::Vector<double> &b,
@@ -211,93 +205,99 @@ namespace TrilinosWrappers
 
     Epetra_Vector ep_x (View, A.OperatorDomainMap(), x.begin());
     Epetra_Vector ep_b (View, A.OperatorRangeMap(), const_cast<double *>(b.begin()));
-	
-	RCP<const Epetra_Operator> eA = rcpFromRef(*(const_cast<Epetra_Operator *>(&A)));
-	RCP<MV> X = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_x)));
-	RCP<MV> B = rcp (new MV(eA->OperatorDomainMap (), 1),false);
-	  
-	eA->Apply(*X,*B);
-	   
-    B = rcpFromRef(*(const_cast<Epetra_Vector *>(&ep_b)));
-	// We need an Belos::LinearProblem<double,MV,OP> object to let the Belos solver know
-	// about the matrix and vectors.
-	//Set Properties
-	linear_problem = rcp(new Belos::LinearProblem<double,MV,OP>(eA, X, B));
-    return do_solve(preconditioner);
+
+    // We need an Epetra_LinearProblem object to let the AztecOO solver know
+    // about the matrix and vectors.
+    linear_problem.reset (new Epetra_LinearProblem(&A,&ep_x, &ep_b));
+
+    do_solve(preconditioner);
   }
 
-  double
-  SolverBase::do_solve(const PreconditionBase &preconditioner){
-    factory.reset();
-    newSolver.reset();
-    
-	factory = rcp(new Belos::SolverFactory< ST, MV, OP >);
-	// ... set some options, ...
-	RCP<ParameterList> solverParams = rcp(new ParameterList());
-	int max_iters = solver_control.max_steps();
-	double tol = solver_control.tolerance();
-	
-	solverParams->set("Maximum Iterations",    max_iters);
-	solverParams->set("Convergence Tolerance", tol);
-	//solverParams->set("Verbosity",Belos::Errors + Belos::Warnings + Belos::StatusTestDetails);
-	//solverParams->set("Output Frequency",      1);
-	//solverParams->set("Output Style",          Belos::Brief);
 
-		  
-   switch (solver_name){
+
+  void
+  SolverBase::do_solve(const PreconditionBase &preconditioner)
+  {
+    int ierr;
+
+    // Next we can allocate the AztecOO solver...
+    solver.SetProblem(*linear_problem);
+
+    // ... and we can specify the solver to be used.
+    switch (solver_name)
+      {
       case cg:
-        newSolver = factory->create("CG", solverParams);
+        solver.SetAztecOption(AZ_solver, AZ_cg);
         break;
       case cgs:
-        newSolver = factory->create("Block CG", solverParams);
+        solver.SetAztecOption(AZ_solver, AZ_cgs);
         break;
       case gmres:
-        solverParams->set("Maximum Restarts", additional_data.gmres_restart_parameter);
-        newSolver = factory->create("GMERS", solverParams);
-        //solver.SetAztecOption(AZ_kspace, additional_data.gmres_restart_parameter);
+        solver.SetAztecOption(AZ_solver, AZ_gmres);
+        solver.SetAztecOption(AZ_kspace, additional_data.gmres_restart_parameter);
         break;
       case bicgstab:
-        newSolver = factory->create("bicgstab", solverParams);
+        solver.SetAztecOption(AZ_solver, AZ_bicgstab);
         break;
       case tfqmr:
-        newSolver = factory->create("TFQMR", solverParams);
+        solver.SetAztecOption(AZ_solver, AZ_tfqmr);
         break;
       default:
         Assert (false, ExcNotImplemented());
-     }
-     // Introduce the preconditioner, if the identity preconditioner is used,
-	 // the precondioner is set to none, ...
-	 if (preconditioner.preconditioner.use_count()!=0){
-		RCP<Epetra_Operator>MLPrec = //rcp(preconditioner.preconditioner.get());
-			rcpFromRef(*(const_cast<Epetra_Operator *>(preconditioner.preconditioner.get())));
-	 	RCP<Belos::EpetraPrecOp> RP = rcp(new Belos::EpetraPrecOp(MLPrec));
-		linear_problem->setRightPrec(RP);
-	 }
-	 linear_problem->setProblem();
-	 
-	 // Next we can allocate the Belos solver...
-	 newSolver->setProblem(linear_problem);
-	 // ... and then solve!
-	 Belos::ReturnType result = newSolver->solve();
+      }
 
-	 // report errors in more detail than just by checking whether the return
-	 // status is zero or greater. the error strings are taken from the
-	 // implementation of the AztecOO::Iterate function
-	 if(result == Belos::Unconverged)
-		 AssertThrow (false, ExcMessage("Belos::ReturnType Unconverged!"));
+    // Introduce the preconditioner, if the identity preconditioner is used,
+    // the precondioner is set to none, ...
+    if (preconditioner.preconditioner.use_count()!=0)
+      {
+        ierr = solver.SetPrecOperator (const_cast<Epetra_Operator *>
+                                       (preconditioner.preconditioner.get()));
+        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+      }
+    else
+      solver.SetAztecOption(AZ_precond,AZ_none);
 
-	 // Finally, let the deal.II SolverControl object know what has
-	 // happened. If the solve succeeded, the status of the solver control will
-	 // turn into SolverControl::success. 
-	 double actTol = newSolver->achievedTol();
-	 solver_control.check (newSolver->getNumIters(), actTol);
-     
-	 if (solver_control.last_check() != SolverControl::success)
-	   AssertThrow(false, SolverControl::NoConvergence (solver_control.last_step(),
-														solver_control.last_value()));
-														
-	 return actTol;
+    // ... set some options, ...
+    solver.SetAztecOption (AZ_output, additional_data.output_solver_details ?
+                           AZ_all : AZ_none);
+    solver.SetAztecOption (AZ_conv, AZ_noscaled);
+
+    // ... and then solve!
+    ierr = solver.Iterate (solver_control.max_steps(),
+                           solver_control.tolerance());
+
+    // report errors in more detail than just by checking whether the return
+    // status is zero or greater. the error strings are taken from the
+    // implementation of the AztecOO::Iterate function
+    switch (ierr)
+      {
+      case -1:
+        AssertThrow (false, ExcMessage("AztecOO::Iterate error code -1: "
+                                       "option not implemented"));
+      case -2:
+        AssertThrow (false, ExcMessage("AztecOO::Iterate error code -2: "
+                                       "numerical breakdown"));
+      case -3:
+        AssertThrow (false, ExcMessage("AztecOO::Iterate error code -3: "
+                                       "loss of precision"));
+      case -4:
+        AssertThrow (false, ExcMessage("AztecOO::Iterate error code -4: "
+                                       "GMRES Hessenberg ill-conditioned"));
+      default:
+        AssertThrow (ierr >= 0, ExcTrilinosError(ierr));
+      }
+
+    // Finally, let the deal.II SolverControl object know what has
+    // happened. If the solve succeeded, the status of the solver control will
+    // turn into SolverControl::success.
+    solver_control.check (solver.NumIters(), solver.TrueResidual());
+
+    if (solver_control.last_check() != SolverControl::success)
+      AssertThrow(false, SolverControl::NoConvergence (solver_control.last_step(),
+                                                       solver_control.last_value()));
   }
+
+
 
 
 
@@ -501,12 +501,12 @@ namespace TrilinosWrappers
                        VectorBase             &x,
                        const VectorBase       &b)
   {
-    // We need an Belos::LinearProblem<double,MV,OP> object to let the Amesos solver know
+    // We need an Epetra_LinearProblem object to let the Amesos solver know
     // about the matrix and vectors.
-	linear_problem.reset
+    linear_problem.reset
     (new Epetra_LinearProblem(const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix()),
                               &x.trilinos_vector(),
-                              const_cast<MV*>(&b.trilinos_vector())));
+                              const_cast<Epetra_MultiVector *>(&b.trilinos_vector())));
 
     do_solve();
   }
@@ -530,7 +530,7 @@ namespace TrilinosWrappers
     Epetra_Vector ep_x (View, A.domain_partitioner(), x.begin());
     Epetra_Vector ep_b (View, A.range_partitioner(), const_cast<double *>(b.begin()));
 
-    // We need an Belos::LinearProblem<double,MV,OP> object to let the Amesos solver know
+    // We need an Epetra_LinearProblem object to let the Amesos solver know
     // about the matrix and vectors.
     linear_problem.reset (new Epetra_LinearProblem
                           (const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix()),
@@ -553,7 +553,7 @@ namespace TrilinosWrappers
     Epetra_Vector ep_x (View, A.domain_partitioner(), x.begin());
     Epetra_Vector ep_b (View, A.range_partitioner(), const_cast<double *>(b.begin()));
 
-    // We need an Belos::LinearProblem<double,MV,OP> object to let the Amesos solver know
+    // We need an Epetra_LinearProblem object to let the Amesos solver know
     // about the matrix and vectors.
     linear_problem.reset (new Epetra_LinearProblem
                           (const_cast<Epetra_CrsMatrix *>(&A.trilinos_matrix()),

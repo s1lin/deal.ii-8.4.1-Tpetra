@@ -11,7 +11,6 @@
 // The full text of the license can be found in the file LICENSE at
 // the top level of the deal.II distribution.
 //
-// @Modified by Shilei Lin 2017/04/30
 // ---------------------------------------------------------------------
 
 #ifndef dealii__trilinos_solver_h
@@ -29,32 +28,14 @@
 #  include <deal.II/lac/parallel_vector.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
+#  include <Epetra_LinearProblem.h>
 #  include <AztecOO.h>
 #  include <Epetra_Operator.h>
 #  include <Amesos.h>
-#  include "BelosConfigDefs.hpp"
-#  include "BelosLinearProblem.hpp"
-#  include "BelosEpetraAdapter.hpp"
-#  include <BelosSolverFactory.hpp>
-#  include "Teuchos_CommandLineProcessor.hpp"
-#  include "Teuchos_ParameterList.hpp"
-#  include "Teuchos_StandardCatchMacros.hpp"
-#  include <Epetra_Operator.h>
-#  include <BelosTFQMRSolMgr.hpp>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 
 DEAL_II_NAMESPACE_OPEN
-
-using Teuchos::ParameterList;
-using Teuchos::RCP;
-using Teuchos::rcp;
-using Teuchos::rcpFromRef;
-using namespace std;
-
-typedef double                            ST;
-typedef Epetra_MultiVector                MV;
-typedef Epetra_Operator                   OP;
 
 namespace TrilinosWrappers
 {
@@ -84,7 +65,6 @@ namespace TrilinosWrappers
    */
   class SolverBase
   {
-
   public:
 
     /**
@@ -148,7 +128,7 @@ namespace TrilinosWrappers
      * provided by derived classes and the object passed as a preconditioner,
      * one of the linear solvers and preconditioners of Trilinos is chosen.
      */
-    double
+    void
     solve (const SparseMatrix     &A,
            VectorBase             &x,
            const VectorBase       &b,
@@ -161,7 +141,7 @@ namespace TrilinosWrappers
      * preconditioner, one of the linear solvers and preconditioners of
      * Trilinos is chosen.
      */
-    double
+    void
     solve (Epetra_Operator        &A,
            VectorBase             &x,
            const VectorBase       &b,
@@ -177,7 +157,7 @@ namespace TrilinosWrappers
      * expect in case the matrix is locally owned. Otherwise, an exception
      * will be thrown.
      */
-    double
+    void
     solve (const SparseMatrix           &A,
            dealii::Vector<double>       &x,
            const dealii::Vector<double> &b,
@@ -194,7 +174,7 @@ namespace TrilinosWrappers
      * only what you expect in case the matrix is locally owned. Otherwise, an
      * exception will be thrown.
      */
-    double
+    void
     solve (Epetra_Operator              &A,
            dealii::Vector<double>       &x,
            const dealii::Vector<double> &b,
@@ -206,7 +186,7 @@ namespace TrilinosWrappers
      * classes and the object passed as a preconditioner, one of the linear
      * solvers and preconditioners of Trilinos is chosen.
      */
-    double
+    void
     solve (const SparseMatrix                                  &A,
            dealii::parallel::distributed::Vector<double>       &x,
            const dealii::parallel::distributed::Vector<double> &b,
@@ -219,7 +199,7 @@ namespace TrilinosWrappers
      * preconditioner, one of the linear solvers and preconditioners of
      * Trilinos is chosen.
      */
-    double
+    void
     solve (Epetra_Operator                                     &A,
            dealii::parallel::distributed::Vector<double>       &x,
            const dealii::parallel::distributed::Vector<double> &b,
@@ -252,31 +232,23 @@ namespace TrilinosWrappers
   private:
 
     /**
-     * The solve function is used to set properly the Belos::LinearProblem<double,MV,OP>,
+     * The solve function is used to set properly the Epetra_LinearProblem,
      * once it is done this function solves the linear problem.
      */
-
-    double do_solve(const PreconditionBase &preconditioner);
+    void do_solve(const PreconditionBase &preconditioner);
 
     /**
      * A structure that collects the Trilinos sparse matrix, the right hand
      * side vector and the solution vector, which is passed down to the
      * Trilinos solver.
      */
-    //std_cxx11::shared_ptr<Belos::LinearProblem<double,MV,OP>> linear_problem;
-
-
+    std_cxx11::shared_ptr<Epetra_LinearProblem> linear_problem;
 
     /**
      * A structure that contains the Trilinos solver and preconditioner
      * objects.
      */
-
-    RCP<Belos::SolverManager<ST,MV,OP>> newSolver;
-
-    RCP<Belos::LinearProblem<ST,MV,OP>> linear_problem;
-
-    RCP<Belos::SolverFactory<ST,MV,OP>> factory;
+    AztecOO solver;
 
     /**
      * Store a copy of the flags for this particular solver.
