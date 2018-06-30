@@ -134,12 +134,12 @@ namespace TrilinosWrappers
           const MPI_Comm                 &communicator,
           const bool                      exchange_data)
   {
-    std::vector<map_type> epetra_maps;
+    std::vector<map_type> tpetra_maps;
     for (size_type i=0; i<block_sparsity_pattern.n_block_rows(); ++i)
-      epetra_maps.push_back
+      tpetra_maps.push_back
       (parallel_partitioning[i].make_trilinos_map(communicator, false));
 
-    reinit (epetra_maps, block_sparsity_pattern, exchange_data);
+    reinit (tpetra_maps, block_sparsity_pattern, exchange_data);
 
   }
 
@@ -237,7 +237,9 @@ namespace TrilinosWrappers
     // produce a dummy local map and pass it
     // off to the other function
 #ifdef DEAL_II_WITH_MPI
-    Epetra_MpiComm    trilinos_communicator (MPI_COMM_SELF);
+    const Teuchos::RCP<const Teuchos::Comm<int>> trilinos_communicator = Tpetra::DefaultPlatform::getDefaultPlatform().getComm();
+    trilinos_communicator//rcp(new Tpetra_MpiComm (MPI_COMM_SELF), true);
+//    Epetra_MpiComm    trilinos_communicator (MPI_COMM_SELF);
 #else
     Epetra_SerialComm trilinos_communicator;
 #endif

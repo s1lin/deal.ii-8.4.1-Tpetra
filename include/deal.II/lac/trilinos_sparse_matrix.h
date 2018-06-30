@@ -46,7 +46,7 @@ DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
-class Epetra_Export;
+class Tpetra::Export;
 
 DEAL_II_NAMESPACE_OPEN
 
@@ -428,7 +428,7 @@ namespace TrilinosWrappers
 
   /**
    * This class implements a wrapper to use the Trilinos distributed sparse
-   * matrix class Epetra_FECrsMatrix. This is precisely the kind of matrix we
+   * matrix class crs_matrix_type. This is precisely the kind of matrix we
    * deal with all the time - we most likely get it from some assembly
    * process, where also entries not locally owned might need to be written
    * and hence need to be forwarded to the owner process.  This class is
@@ -569,7 +569,7 @@ namespace TrilinosWrappers
 
     /**
      * This function initializes the Trilinos matrix with a deal.II sparsity
-     * pattern, i.e. it makes the Trilinos Epetra matrix know the position of
+     * pattern, i.e. it makes the Trilinos Tpetra matrix know the position of
      * nonzero entries according to the sparsity pattern. This function is
      * meant for use in serial programs, where there is no need to specify how
      * the matrix is going to be distributed among different processors. This
@@ -678,7 +678,7 @@ namespace TrilinosWrappers
 
     /**
      * This constructor is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular matrices, where one map describes
      * the %parallel partitioning of the dofs associated with the matrix rows
      * and the other one the partitioning of dofs in the matrix columns. Note
@@ -700,7 +700,7 @@ namespace TrilinosWrappers
 
     /**
      * This constructor is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular matrices, where one map specifies
      * the %parallel distribution of degrees of freedom associated with matrix
      * rows and the second one specifies the %parallel distribution the dofs
@@ -719,9 +719,9 @@ namespace TrilinosWrappers
                   const std::vector<unsigned int> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
-     * This function is initializes the Trilinos Epetra matrix according to
+     * This function is initializes the Trilinos Tpetra matrix according to
      * the specified sparsity_pattern, and also reassigns the matrix rows to
-     * different processes according to a user-supplied Epetra map. In
+     * different processes according to a user-supplied Tpetra map. In
      * programs following the style of the tutorial programs, this function
      * (and the respective call for a rectangular matrix) are the natural way
      * to initialize the matrix size, its distribution among the MPI processes
@@ -752,7 +752,7 @@ namespace TrilinosWrappers
     /**
      * This function is similar to the other initialization function above,
      * but now also reassigns the matrix rows and columns according to two
-     * user-supplied Epetra maps.  To be used for rectangular matrices. The
+     * user-supplied Tpetra maps.  To be used for rectangular matrices. The
      * optional argument @p exchange_data can be used for reinitialization
      * with a sparsity pattern that is not fully constructed. This feature is
      * only implemented for input sparsity patterns of type
@@ -796,7 +796,7 @@ namespace TrilinosWrappers
 
     /**
      * This function is similar to the other initialization function with
-     * deal.II sparse matrix input above, but now takes Epetra maps for both
+     * deal.II sparse matrix input above, but now takes Tpetra maps for both
      * the rows and the columns of the matrix. Chosen for rectangular
      * matrices.
      *
@@ -869,7 +869,7 @@ namespace TrilinosWrappers
 
     /**
      * This constructor is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular matrices, where one map specifies
      * the %parallel distribution of degrees of freedom associated with matrix
      * rows and the second one specifies the %parallel distribution the dofs
@@ -887,7 +887,7 @@ namespace TrilinosWrappers
                   const std::vector<unsigned int> &n_entries_per_row);
 
     /**
-     * This function is initializes the Trilinos Epetra matrix according to
+     * This function is initializes the Trilinos Tpetra matrix according to
      * the specified sparsity_pattern, and also reassigns the matrix rows to
      * different processes according to a user-supplied index set and
      * %parallel communicator. In programs following the style of the tutorial
@@ -1117,9 +1117,9 @@ namespace TrilinosWrappers
      *
      * For the case that the matrix is constructed without a sparsity pattern
      * and new matrix entries are added on demand, please note the following
-     * behavior imposed by the underlying Epetra_FECrsMatrix data structure:
+     * behavior imposed by the underlying crs_matrix_type data structure:
      * If the same matrix entry is inserted more than once, the matrix entries
-     * will be added upon calling compress() (since Epetra does not track
+     * will be added upon calling compress() (since Tpetra does not track
      * values to the same entry before the final compress() is called), even
      * if VectorOperation::insert is specified as argument to compress(). In
      * the case you cannot make sure that matrix entries are only set once,
@@ -1153,9 +1153,9 @@ namespace TrilinosWrappers
      *
      * For the case that the matrix is constructed without a sparsity pattern
      * and new matrix entries are added on demand, please note the following
-     * behavior imposed by the underlying Epetra_FECrsMatrix data structure:
+     * behavior imposed by the underlying crs_matrix_type data structure:
      * If the same matrix entry is inserted more than once, the matrix entries
-     * will be added upon calling compress() (since Epetra does not track
+     * will be added upon calling compress() (since Tpetra does not track
      * values to the same entry before the final compress() is called), even
      * if VectorOperation::insert is specified as argument to compress(). In
      * the case you cannot make sure that matrix entries are only set once,
@@ -1194,9 +1194,9 @@ namespace TrilinosWrappers
      *
      * For the case that the matrix is constructed without a sparsity pattern
      * and new matrix entries are added on demand, please note the following
-     * behavior imposed by the underlying Epetra_FECrsMatrix data structure:
+     * behavior imposed by the underlying crs_matrix_type data structure:
      * If the same matrix entry is inserted more than once, the matrix entries
-     * will be added upon calling compress() (since Epetra does not track
+     * will be added upon calling compress() (since Tpetra does not track
      * values to the same entry before the final compress() is called), even
      * if VectorOperation::insert is specified as argument to compress(). In
      * the case you cannot make sure that matrix entries are only set once,
@@ -1226,9 +1226,9 @@ namespace TrilinosWrappers
      *
      * For the case that the matrix is constructed without a sparsity pattern
      * and new matrix entries are added on demand, please note the following
-     * behavior imposed by the underlying Epetra_FECrsMatrix data structure:
+     * behavior imposed by the underlying crs_matrix_type data structure:
      * If the same matrix entry is inserted more than once, the matrix entries
-     * will be added upon calling compress() (since Epetra does not track
+     * will be added upon calling compress() (since Tpetra does not track
      * values to the same entry before the final compress() is called), even
      * if VectorOperation::insert is specified as argument to compress(). In
      * the case you cannot make sure that matrix entries are only set once,
@@ -1715,10 +1715,10 @@ namespace TrilinosWrappers
     const crs_matrix_type &trilinos_matrix () const;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_CrsGraph
+     * Return a const reference to the underlying Trilinos crs_graph_type
      * data that stores the sparsity pattern of the matrix.
      */
-    const Epetra_CrsGraph &trilinos_sparsity_pattern () const;
+    const crs_graph_type &trilinos_sparsity_pattern () const;
 
     /**
      * Return a const reference to the underlying Trilinos map_type that
@@ -1985,7 +1985,7 @@ namespace TrilinosWrappers
     SparseMatrix &operator = (const SparseMatrix &);
 
     /**
-     * Pointer to the user-supplied Epetra Trilinos mapping of the matrix
+     * Pointer to the user-supplied Tpetra Trilinos mapping of the matrix
      * columns that assigns parts of the matrix to the individual processes.
      */
     std_cxx11::shared_ptr<map_type> column_space_map;
@@ -1995,7 +1995,7 @@ namespace TrilinosWrappers
      * problems which allows for assembling into non-local elements.  The
      * actual type, a sparse matrix, is set in the constructor.
      */
-    std_cxx11::shared_ptr<Epetra_FECrsMatrix> matrix;
+    std_cxx11::shared_ptr<crs_matrix_type> matrix;
 
     /**
      * A sparse matrix object in Trilinos to be used for collecting the non-
@@ -2007,7 +2007,7 @@ namespace TrilinosWrappers
     /**
      * An export object used to communicate the nonlocal matrix.
      */
-    std_cxx11::shared_ptr<Epetra_Export>    nonlocal_matrix_exporter;
+    std_cxx11::shared_ptr<export_type>    nonlocal_matrix_exporter;
 
     /**
      * Trilinos doesn't allow to mix additions to matrix entries and
@@ -2020,7 +2020,7 @@ namespace TrilinosWrappers
      * case, so we simply use their model, which stores whether the last
      * operation was an addition or an insertion.
      */
-    Epetra_CombineMode last_action;
+    Tpetra_CombineMode last_action;
 
     /**
      * A boolean variable to hold information on whether the vector is
@@ -2436,13 +2436,9 @@ namespace TrilinosWrappers
   SparseMatrix::in_local_range (const size_type index) const
   {
     TrilinosWrappers::types::int_type begin, end;
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    begin = matrix->RowMap().MinMyGID();
-    end = matrix->RowMap().MaxMyGID()+1;
-#else
-    begin = matrix->RowMap().MinMyGID64();
-    end = matrix->RowMap().MaxMyGID64()+1;
-#endif
+
+    begin = matrix->getRowMap().get()->getMinGlobalIndex();
+    end = matrix->getRowMap().get()->getMaxGlobalIndex()+1;
 
     return ((index >= static_cast<size_type>(begin)) &&
             (index < static_cast<size_type>(end)));
@@ -2514,7 +2510,7 @@ namespace TrilinosWrappers
           {
             int ierr;
             ierr = matrix->GlobalAssemble(*column_space_map,
-                                          matrix->RowMap(), false);
+                                          matrix->getRowMap(), false);
 
             Assert (ierr == 0, ExcTrilinosError(ierr));
             (void)ierr; // removes -Wunused-but-set-variable in optimized mode
@@ -2536,11 +2532,7 @@ namespace TrilinosWrappers
   SparseMatrix::size_type
   SparseMatrix::m () const
   {
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    return matrix->NumGlobalRows();
-#else
-    return matrix->NumGlobalRows64();
-#endif
+    return matrix->getGlobalNumRows();
   }
 
 
@@ -2553,11 +2545,7 @@ namespace TrilinosWrappers
     // sparsity pattern), it does not know about the number of columns so we
     // must always take this from the additional column space map
     Assert(column_space_map.get() != 0, ExcInternalError());
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    return column_space_map->NumGlobalElements();
-#else
-    return column_space_map->NumGlobalElements64();
-#endif
+    return column_space_map->getGlobalNumElements();
   }
 
 
@@ -2566,7 +2554,7 @@ namespace TrilinosWrappers
   unsigned int
   SparseMatrix::local_size () const
   {
-    return matrix -> NumMyRows();
+    return matrix -> getNodeNumRows();
   }
 
 
@@ -2576,14 +2564,8 @@ namespace TrilinosWrappers
   SparseMatrix::local_range () const
   {
     size_type begin, end;
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    begin = matrix->RowMap().MinMyGID();
-    end = matrix->RowMap().MaxMyGID()+1;
-#else
-    begin = matrix->RowMap().MinMyGID64();
-    end = matrix->RowMap().MaxMyGID64()+1;
-#endif
-
+    begin = matrix->getRowMap().get()->getMinGlobalIndex();
+    end = matrix->getRowMap().get()->getMaxGlobalIndex()+1;
     return std::make_pair (begin, end);
   }
 
@@ -2593,13 +2575,8 @@ namespace TrilinosWrappers
   SparseMatrix::size_type
   SparseMatrix::n_nonzero_elements () const
   {
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    return matrix->NumGlobalNonzeros();
-#else
-    return matrix->NumGlobalNonzeros64();
-#endif
+    return matrix->getCrsGraph().getNonzero;
   }
-
 
 
   template <typename SparsityPatternType>
@@ -2635,16 +2612,16 @@ namespace TrilinosWrappers
   const crs_matrix_type &
   SparseMatrix::trilinos_matrix () const
   {
-    return static_cast<const crs_matrix_type &>(*matrix);
+    return static_cast<const crs_matrix_type &>(*matrix.get());
   }
 
 
 
   inline
-  const Epetra_CrsGraph &
+  const crs_graph_type &
   SparseMatrix::trilinos_sparsity_pattern () const
   {
-    return matrix->Graph();
+    return static_cast<const crs_graph_type &>(matrix->getCrsGraph().get());
   }
 
 
@@ -2653,7 +2630,7 @@ namespace TrilinosWrappers
   IndexSet
   SparseMatrix::locally_owned_domain_indices () const
   {
-    return IndexSet(matrix->DomainMap());
+    return IndexSet(static_cast<const map_type &>(matrix->getDomainMap().get()));
   }
 
 
@@ -2662,7 +2639,7 @@ namespace TrilinosWrappers
   IndexSet
   SparseMatrix::locally_owned_range_indices () const
   {
-    return IndexSet(matrix->RangeMap());
+    return IndexSet(static_cast<const map_type &>(matrix->getRangeMap().get()));
   }
 
 

@@ -43,10 +43,6 @@ DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 // forward declarations
 class Ifpack_Preconditioner;
 class Ifpack_Chebyshev;
-namespace ML_Epetra
-{
-  class MultiLevelPreconditioner;
-}
 
 
 DEAL_II_NAMESPACE_OPEN
@@ -268,9 +264,7 @@ namespace TrilinosWrappers
                      const AdditionalData &additional_data = AdditionalData());
   };
 
-
-
-
+  
   /**
    * A wrapper class for a (pointwise) SSOR preconditioner for Trilinos
    * matrices. This preconditioner works both in serial and in parallel,
@@ -363,9 +357,7 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
-
+  
 
   /**
    * A wrapper class for a (pointwise) SOR preconditioner for Trilinos
@@ -459,8 +451,6 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
 
   /**
    * A wrapper class for a block Jacobi preconditioner for Trilinos matrices.
@@ -556,9 +546,7 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
-
+  
 
   /**
    * A wrapper class for a block SSOR preconditioner for Trilinos matrices. As
@@ -670,9 +658,7 @@ namespace TrilinosWrappers
                      const AdditionalData &additional_data = AdditionalData());
   };
 
-
-
-
+  
   /**
    * A wrapper class for a block SOR preconditioner for Trilinos matrices. As
    * opposed to PreconditionSOR where each row is treated separately, this
@@ -782,9 +768,8 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
-
+  
+  
   /**
    * A wrapper class for an incomplete Cholesky factorization (IC)
    * preconditioner for @em symmetric Trilinos matrices. This preconditioner
@@ -892,8 +877,7 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
+  
 
   /**
    * A wrapper class for an incomplete LU factorization (ILU(k))
@@ -1004,11 +988,7 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
-
-
-
+  
 
   /**
    * A wrapper class for a thresholded incomplete LU factorization (ILU-T)
@@ -1126,9 +1106,8 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
-
+  
+  
   /**
    * A wrapper class for a sparse direct LU decomposition on parallel blocks
    * for Trilinos matrices. When run in serial, this corresponds to a direct
@@ -1176,11 +1155,6 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
-
-
-
 
   /**
    * A wrapper class for a Chebyshev preconditioner for Trilinos matrices.
@@ -1260,8 +1234,6 @@ namespace TrilinosWrappers
     void initialize (const SparseMatrix   &matrix,
                      const AdditionalData &additional_data = AdditionalData());
   };
-
-
 
   /**
    * This class implements an algebraic multigrid (AMG) preconditioner based
@@ -1791,8 +1763,7 @@ namespace TrilinosWrappers
   };
 #endif
 
-
-
+  
   /**
    * A wrapper class for an identity preconditioner for Trilinos matrices.
    *
@@ -1849,8 +1820,6 @@ namespace TrilinosWrappers
 
 
 // -------------------------- inline and template functions ----------------------
-
-
 #ifndef DOXYGEN
 
   inline
@@ -1858,14 +1827,13 @@ namespace TrilinosWrappers
   PreconditionBase::vmult (VectorBase       &dst,
                            const VectorBase &src) const
   {
-    Assert (dst.vector_partitioner().SameAs(preconditioner->getRangeMap()),
+    Assert (dst.vector_partitioner().isSameAs(dynamic_cast<map_type &>(preconditioner->getRangeMap().get())), 
             ExcNonMatchingMaps("dst"));
-    Assert (src.vector_partitioner().SameAs(preconditioner->getDomainMap()),
+    Assert (src.vector_partitioner().isSameAs(dynamic_cast<map_type &>(dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).get())), 
             ExcNonMatchingMaps("src"));
 
-    const int ierr = preconditioner->apply (src.trilinos_vector(),
-                                                   dst.trilinos_vector());
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    preconditioner->apply (src.trilinos_vector(), dst.trilinos_vector());
+
   }
 
   inline
@@ -1873,16 +1841,14 @@ namespace TrilinosWrappers
   PreconditionBase::Tvmult (VectorBase       &dst,
                             const VectorBase &src) const
   {
-    Assert (dst.vector_partitioner().SameAs(preconditioner->getRangeMap()),
+    Assert (dst.vector_partitioner().isSameAs(dynamic_cast<map_type &>(preconditioner->getRangeMap().get())),
             ExcNonMatchingMaps("dst"));
-    Assert (src.vector_partitioner().SameAs(preconditioner->getDomainMap()),
+    Assert (src.vector_partitioner().isSameAs(dynamic_cast<map_type &>(preconditioner->getDomainMap().get())),
             ExcNonMatchingMaps("src"));
 
-    preconditioner->SetUseTranspose(true);
-    const int ierr = preconditioner->apply (src.trilinos_vector(),
-                                                   dst.trilinos_vector());
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
-    preconditioner->SetUseTranspose(false);
+//    preconditioner->SetUseTranspose(true);
+    preconditioner->apply(src.trilinos_vector(), dst.trilinos_vector());
+//    preconditioner->SetUseTranspose(false);
   }
 
 
@@ -1900,10 +1866,10 @@ namespace TrilinosWrappers
                                 const dealii::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.size()),
-                     preconditioner->getDomainMap().getNodeNumElements());
+                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.size()),
-                     preconditioner->getRangeMap().getNodeNumElements());
-    vector_type tril_dst (View, preconditioner->getDomainMap(),
+                     preconditioner->getRangeMap()->getNodeNumElements());
+    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
                             dst.begin());
     vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
@@ -1917,17 +1883,17 @@ namespace TrilinosWrappers
                                  const dealii::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.size()),
-                     preconditioner->getDomainMap().getNodeNumElements());
+                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.size()),
                      preconditioner->getRangeMap().getNodeNumElements());
-    vector_type tril_dst (View, preconditioner->getDomainMap(),
+    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
                             dst.begin());
     vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
 
-    preconditioner->SetUseTranspose(true);
+//    preconditioner->SetUseTranspose(true);
     preconditioner->apply (tril_src, tril_dst);
-    preconditioner->SetUseTranspose(false);
+//    preconditioner->SetUseTranspose(false);
   }
 
 
@@ -1938,10 +1904,10 @@ namespace TrilinosWrappers
                            const parallel::distributed::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.local_size()),
-                     preconditioner->getDomainMap().getNodeNumElements());
+                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.local_size()),
-                     preconditioner->getRangeMap().getNodeNumElements());
-    vector_type tril_dst (View, preconditioner->getDomainMap(),
+                     preconditioner->getRangeMap()->getNodeNumElements());
+    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
                             dst.begin());
     vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
@@ -1955,17 +1921,17 @@ namespace TrilinosWrappers
                             const parallel::distributed::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.local_size()),
-                     preconditioner->getDomainMap().getNodeNumElements());
+                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.local_size()),
-                     preconditioner->getRangeMap().getNodeNumElements());
-    vector_type tril_dst (View, preconditioner->getDomainMap(),
+                     preconditioner->getRangeMap()->getNodeNumElements());
+    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
                             dst.begin());
     vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
 
-    preconditioner->SetUseTranspose(true);
+//    preconditioner->SetUseTranspose(true);
     preconditioner->apply (tril_src, tril_dst);
-    preconditioner->SetUseTranspose(false);
+//    preconditioner->SetUseTranspose(false);
   }
 
   inline

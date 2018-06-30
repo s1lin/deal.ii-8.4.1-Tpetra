@@ -26,12 +26,12 @@
 #include <string>
 
 #ifdef DEAL_II_WITH_TRILINOS
-#  include <Epetra_Comm.h>
-#  include <Epetra_Map.h>
+#  include <Tpetra_MpiPlatform.hpp>
+#  include <Tpetra_Map_decl.hpp>
 #  ifdef DEAL_II_WITH_MPI
-#    include <Epetra_MpiComm.h>
+#    include <Tpetra_MpiPlatform.h>
 #  else
-#    include <Epetra_SerialComm.h>
+#    include <Tpetra_SerialComm.h>
 #  endif
 #endif
 
@@ -453,26 +453,26 @@ namespace Utilities
   namespace Trilinos
   {
     /**
-     * Returns a Trilinos Epetra_Comm object needed for creation of
-     * Epetra_Maps.
+     * Returns a Trilinos Tpetra_Comm object needed for creation of
+     * Tpetra_Maps.
      *
      * If deal.II has been configured to use a compiler that does not support
      * MPI then the resulting communicator will be a serial one. Otherwise,
      * the communicator will correspond to MPI_COMM_WORLD, i.e. a communicator
      * that encompasses all processes within this MPI universe.
      */
-    const Epetra_Comm &comm_world();
+    const Tpetra_Comm &comm_world();
 
     /**
-     * Returns a Trilinos Epetra_Comm object needed for creation of
-     * Epetra_Maps.
+     * Returns a Trilinos Tpetra_Comm object needed for creation of
+     * Tpetra_Maps.
      *
      * If deal.II has been configured to use a compiler that does not support
      * MPI then the resulting communicator will be a serial one. Otherwise,
      * the communicator will correspond to MPI_COMM_SELF, i.e. a communicator
      * that comprises only this one processor.
      */
-    const Epetra_Comm &comm_self();
+    const Teuchos::RCP<const Teuchos::Comm<int>>  &comm_self();
 
     /**
      * Given a communicator, duplicate it. If the given communicator is
@@ -481,7 +481,7 @@ namespace Utilities
      * create a separate MPI communicator that contains the same processors
      * and in the same order but has a separate identifier distinct from the
      * given communicator. The function returns a pointer to a new object of a
-     * class derived from Epetra_Comm. The caller of this function needs to
+     * class derived from Tpetra_Comm. The caller of this function needs to
      * assume ownership of this function. The returned object should be
      * destroyed using the destroy_communicator() function.
      *
@@ -506,39 +506,39 @@ namespace Utilities
      * relative timing as is the case in a sequential program that just uses a
      * single communicator.
      */
-    Epetra_Comm *
-    duplicate_communicator (const Epetra_Comm &communicator);
+    Tpetra_Comm *
+    duplicate_communicator (const Tpetra_Comm &communicator);
 
     /**
-     * Given an Epetra communicator that was created by the
+     * Given an Tpetra communicator that was created by the
      * duplicate_communicator() function, destroy the underlying MPI
-     * communicator object and reset the Epetra_Comm object to a the result of
+     * communicator object and reset the Tpetra_Comm object to a the result of
      * comm_self().
      *
      * It is necessary to call this function at the time when the result of
      * duplicate_communicator() is no longer needed. The reason is that in
      * that function, we first create a new MPI_Comm object and then create an
-     * Epetra_Comm around it. While we can take care of destroying the latter,
+     * Tpetra_Comm around it. While we can take care of destroying the latter,
      * it doesn't destroy the communicator since it can only assume that it
      * may also be still used by other objects in the program. Consequently,
      * we have to take care of destroying it ourselves, explicitly.
      *
      * This function does exactly that. Because this has to happen while the
-     * Epetra_Comm object is still around, it first resets the latter and then
+     * Tpetra_Comm object is still around, it first resets the latter and then
      * destroys the communicator object.
      *
-     * @note If you call this function on an Epetra_Comm object that is not
+     * @note If you call this function on an Tpetra_Comm object that is not
      * created by duplicate_communicator(), you are likely doing something
      * quite wrong. Don't do this.
      */
     void
-    destroy_communicator (Epetra_Comm &communicator);
+    destroy_communicator (Tpetra_Comm &communicator);
 
     /**
      * Return the number of MPI processes there exist in the given
      * communicator object. If this is a sequential job, it returns 1.
      */
-    unsigned int get_n_mpi_processes (const Epetra_Comm &mpi_communicator);
+    unsigned int get_n_mpi_processes (const Tpetra_Comm &mpi_communicator);
 
     /**
      * Return the number of the present MPI process in the space of processes
@@ -546,10 +546,10 @@ namespace Utilities
      * each process between zero and (less than) the number of all processes
      * (given by get_n_mpi_processes()).
      */
-    unsigned int get_this_mpi_process (const Epetra_Comm &mpi_communicator);
+    unsigned int get_this_mpi_process (const Tpetra_Comm &mpi_communicator);
 
     /**
-     * Given a Trilinos Epetra map, create a new map that has the same
+     * Given a Trilinos Tpetra map, create a new map that has the same
      * subdivision of elements to processors but uses the given communicator
      * object instead of the one stored in the first argument. In essence,
      * this means that we create a map that communicates among the same
@@ -558,9 +558,9 @@ namespace Utilities
      * This function is typically used with a communicator that has been
      * obtained by the duplicate_communicator() function.
      */
-    Epetra_Map
-    duplicate_map (const Epetra_BlockMap  &map,
-                   const Epetra_Comm &comm);
+    Tpetra_Map
+    duplicate_map (const Tpetra_BlockMap  &map,
+                   const Tpetra_Comm &comm);
   }
 
 #endif

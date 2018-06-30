@@ -149,7 +149,7 @@ namespace TrilinosWrappers
                  const size_type n_block_columns);
 
     /**
-     * Resize the matrix, by using an array of Epetra maps to determine the
+     * Resize the matrix, by using an array of Tpetra maps to determine the
      * %parallel distribution of the individual matrices. This function
      * assumes that a quadratic block matrix is generated.
      */

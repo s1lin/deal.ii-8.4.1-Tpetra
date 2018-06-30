@@ -1651,7 +1651,7 @@ namespace TrilinosWrappers
   {
     Assert (size() == v.size(),
             ExcDimensionMismatch(size(), v.size()));
-    Assert (vector->Map().SameAs(v.vector->Map()),
+    Assert (vector->getMap()->isSameAs(v.vector->getMap().get()),
             ExcDifferentParallelPartitioning());
 
     vector->update (-1.0, *(v.vector), 1.0);
@@ -1736,7 +1736,7 @@ namespace TrilinosWrappers
     // if the local size is the same and if the vectors are not ghosted
     if (local_size() == v.local_size() && !v.has_ghost_elements())
       {
-        Assert (this->vector->Map().SameAs(v.vector->Map())==true,
+        Assert (this->vector->getMap()->isSameAs(v.vector->getMap().get()->getLocalMap())==true,
                 ExcDifferentParallelPartitioning());
         vector->update(1., *(v.vector), s);
       }
@@ -1900,7 +1900,7 @@ namespace TrilinosWrappers
     AssertIsFinite(a);
 
     // If we don't have the same map, copy.
-    if (vector->Map().SameAs(v.vector->Map())==false)
+    if (vector->getMap()->isSameAs(v.vector->getMap())==false)
       {
         this->sadd(0., a, v);
       }

@@ -49,25 +49,10 @@ namespace TrilinosWrappers
 
   namespace
   {
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    // define a helper function that queries the global ID of local ID of
-    // an map_type object  by calling either the 32- or 64-bit
-    // function necessary.
     inline
-    int gid(const map_type &map, int i)
-    {
+    int gid(const map_type &map, int i) {
       return map.getGlobalElement(i);
     }
-#else
-    // define a helper function that queries the global ID of local ID of
-    // an map_type object  by calling either the 32- or 64-bit
-    // function necessary.
-    inline
-    long long int gid(const map_type &map, int i)
-    {
-      return map.GID64(i);
-    }
-#endif
   }
 
   /**
@@ -661,12 +646,12 @@ namespace TrilinosWrappers
     void Vector::reinit (const map_type             &parallel_partitioner,
                          const dealii::Vector<number> &v)
     {
-      if (vector.get() == 0 || vector->Map().SameAs(parallel_partitioner) == false)
+      if (vector.get() == 0 || vector->getMap().get()->isSameAs(parallel_partitioner) == false)
         vector.reset (new vector_type(parallel_partitioner));
 
       has_ghosts = vector->Map().UniqueGIDs()==false;
 
-      const int size = parallel_partitioner.NumMyElements();
+      const int size = parallel_partitioner.getNodeNumElements();
 
       // Need to copy out values, since the deal.II might not use doubles, so
       // that a direct access is not possible.
@@ -940,8 +925,8 @@ namespace TrilinosWrappers
     const map_type &map = vector_partitioner();
     const TrilinosWrappers::types::int_type size = map.NumMyElements();
 
-    Assert (map.MaxLID() == size-1,
-            ExcDimensionMismatch(map.MaxLID(), size-1));
+    Assert (map.getMaxLocalIndex() == size-1,
+            ExcDimensionMismatch(map.getMaxLocalIndex(), size-1));
 
     // Need to copy out values, since the
     // deal.II might not use doubles, so

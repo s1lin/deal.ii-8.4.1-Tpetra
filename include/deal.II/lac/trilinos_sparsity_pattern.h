@@ -443,7 +443,7 @@ namespace TrilinosWrappers
 
     /**
      * This constructor is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular sparsity pattern, where one map
      * describes the %parallel partitioning of the dofs associated with the
      * sparsity pattern rows and the other one of the sparsity pattern
@@ -465,7 +465,7 @@ namespace TrilinosWrappers
 
     /**
      * This constructor is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular matrices, where one map specifies
      * the %parallel distribution of rows and the second one specifies the
      * distribution of degrees of freedom associated with matrix columns. This
@@ -518,7 +518,7 @@ namespace TrilinosWrappers
 
     /**
      * This reinit function is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular sparsity pattern, where one map
      * describes the %parallel partitioning of the dofs associated with the
      * sparsity pattern rows and the other one of the sparsity pattern
@@ -541,7 +541,7 @@ namespace TrilinosWrappers
 
     /**
      * This reinit function is similar to the one above, but it now takes two
-     * different Epetra maps for rows and columns. This interface is meant to
+     * different Tpetra maps for rows and columns. This interface is meant to
      * be used for generating rectangular matrices, where one map specifies
      * the %parallel distribution of rows and the second one specifies the
      * distribution of degrees of freedom associated with matrix columns. This
@@ -737,7 +737,7 @@ namespace TrilinosWrappers
      * column elements, no matter how far they might be spread out. The second
      * IndexSet is only used to specify the number of columns and for internal
      * arrangements when doing matrix-vector products with vectors based on an
-     * EpetraMap based on that IndexSet.
+     * TpetraMap based on that IndexSet.
      *
      * The number of columns entries per row is specified by the argument
      * <tt>n_entries_per_row</tt>.
@@ -940,7 +940,7 @@ namespace TrilinosWrappers
 //@{
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_CrsGraph
+     * Return a const reference to the underlying Trilinos Tpetra_CrsGraph
      * data that stores the sparsity pattern.
      */
     const crs_graph_type &trilinos_sparsity_pattern () const;
@@ -990,7 +990,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use get_mpi_communicator instead.
      */
-    const Epetra_Comm &trilinos_communicator () const DEAL_II_DEPRECATED;
+    const Tpetra_Comm &trilinos_communicator () const DEAL_II_DEPRECATED;
 
     /**
      * Return the MPI communicator object in use with this matrix.
@@ -1143,7 +1143,7 @@ namespace TrilinosWrappers
   private:
 
     /**
-     * Pointer to the user-supplied Epetra Trilinos mapping of the matrix
+     * Pointer to the user-supplied Tpetra Trilinos mapping of the matrix
      * columns that assigns parts of the matrix to the individual processes.
      */
     std_cxx11::shared_ptr<map_type> column_space_map;
@@ -1161,7 +1161,7 @@ namespace TrilinosWrappers
      * when the particular constructor or reinit method with writable_rows
      * argument is set
      */
-    std_cxx11::shared_ptr<Epetra_CrsGraph> nonlocal_graph;
+    std_cxx11::shared_ptr<crs_graph_type> nonlocal_graph;
 
     friend class SparseMatrix;
     friend class SparsityPatternIterators::Accessor;
@@ -1395,13 +1395,9 @@ namespace TrilinosWrappers
   SparsityPattern::in_local_range (const size_type index) const
   {
     TrilinosWrappers::types::int_type begin, end;
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    begin = graph->RowMap().MinMyGID();
-    end = graph->RowMap().MaxMyGID()+1;
-#else
-    begin = graph->RowMap().MinMyGID64();
-    end = graph->RowMap().MaxMyGID64()+1;
-#endif
+
+    begin = graph->getRowMap().get()->getMinGlobalIndex();
+    end = graph->getRowMap().get()->getMaxGlobalIndex()+1;
 
     return ((index >= static_cast<size_type>(begin)) &&
             (index < static_cast<size_type>(end)));
@@ -1413,7 +1409,7 @@ namespace TrilinosWrappers
   bool
   SparsityPattern::is_compressed () const
   {
-    return graph->Filled();
+    return graph->isFillComplete();
   }
 
 
@@ -1465,24 +1461,23 @@ namespace TrilinosWrappers
     const int n_cols = static_cast<int>(end - begin);
 
     int ierr;
-    if ( graph->RowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row)) != -1)
-      ierr = graph->InsertGlobalIndices (row, n_cols, col_index_ptr);
+    if ( graph->getRowMap().get()->getLocalElement(static_cast<TrilinosWrappers::types::int_type>(row)) != -1)
+        graph->insertGlobalIndices(row, n_cols, col_index_ptr);
     else if (nonlocal_graph.get() != 0)
       {
         // this is the case when we have explicitly set the off-processor rows
         // and want to create a separate matrix object for them (to retain
         // thread-safety)
-        Assert (nonlocal_graph->RowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row)) != -1,
+        Assert (nonlocal_graph->getRowMap().get()->getLocalElement(static_cast<TrilinosWrappers::types::int_type>(row)) != -1,
                 ExcMessage("Attempted to write into off-processor matrix row "
                            "that has not be specified as being writable upon "
                            "initialization"));
-        ierr = nonlocal_graph->InsertGlobalIndices (row, n_cols, col_index_ptr);
+        nonlocal_graph->insertGlobalIndices (row, n_cols, col_index_ptr);
       }
     else
-      ierr = graph->InsertGlobalIndices
+      graph->insertGlobalIndices
              (1, (TrilinosWrappers::types::int_type *)&row, n_cols, col_index_ptr);
 
-    AssertThrow (ierr >= 0, ExcTrilinosError(ierr));
   }
 
 
@@ -1500,7 +1495,7 @@ namespace TrilinosWrappers
   IndexSet
   SparsityPattern::locally_owned_domain_indices () const
   {
-    return IndexSet(static_cast<const map_type &>(graph->DomainMap()));
+    return IndexSet(static_cast<const map_type &>(graph->getDomainMap()));
   }
 
 
@@ -1509,7 +1504,7 @@ namespace TrilinosWrappers
   IndexSet
   SparsityPattern::locally_owned_range_indices () const
   {
-    return IndexSet(static_cast<const map_type &>(graph->RangeMap()));
+    return IndexSet(static_cast<const map_type &>(graph->getRangeMap()));
   }
 
 #endif // DOXYGEN

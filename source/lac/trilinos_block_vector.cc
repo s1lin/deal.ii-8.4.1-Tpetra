@@ -26,21 +26,10 @@ namespace TrilinosWrappers
 {
   namespace
   {
-    // define a helper function that queries the size of an map_type object
-    // by calling either the 32- or 64-bit function necessary, and returns the
-    // result in the correct data type so that we can use it in calling other
-    // Epetra member functions that are overloaded by index type
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    int n_global_elements (const map_type &map)
+    long long n_global_elements (const map_type &map)
     {
       return map.getGlobalNumElements();
     }
-#else
-    long long int n_global_elements (const map_type &map)
-    {
-      return map.NumGlobalElements64();
-    }
-#endif
   }
 
 
@@ -52,7 +41,6 @@ namespace TrilinosWrappers
       BaseClass::operator = (s);
       return *this;
     }
-
 
 
     BlockVector &
@@ -84,7 +72,6 @@ namespace TrilinosWrappers
       return *this;
     }
 #endif
-
 
 
     BlockVector &
