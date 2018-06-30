@@ -26,17 +26,17 @@ namespace TrilinosWrappers
 {
   namespace
   {
-    // define a helper function that queries the size of an Epetra_Map object
+    // define a helper function that queries the size of an map_type object
     // by calling either the 32- or 64-bit function necessary, and returns the
     // result in the correct data type so that we can use it in calling other
     // Epetra member functions that are overloaded by index type
 #ifndef DEAL_II_WITH_64BIT_INDICES
-    int n_global_elements (const Epetra_BlockMap &map)
+    int n_global_elements (const map_type &map)
     {
-      return map.NumGlobalElements();
+      return map.getGlobalNumElements();
     }
 #else
-    long long int n_global_elements (const Epetra_BlockMap &map)
+    long long int n_global_elements (const map_type &map)
     {
       return map.NumGlobalElements64();
     }
@@ -107,8 +107,8 @@ namespace TrilinosWrappers
 
 
     void
-    BlockVector::reinit (const std::vector<Epetra_Map> &input_maps,
-                         const bool                     omit_zeroing_entries)
+    BlockVector::reinit (const std::vector<map_type> &input_maps,
+                         const bool                  omit_zeroing_entries)
     {
       const size_type no_blocks = input_maps.size();
       std::vector<size_type> block_sizes (no_blocks);
@@ -267,7 +267,7 @@ namespace TrilinosWrappers
 
 
   void
-  BlockVector::reinit (const std::vector<Epetra_Map> &input_maps,
+  BlockVector::reinit (const std::vector<map_type> &input_maps,
                        const bool                     omit_zeroing_entries)
   {
     size_type no_blocks = input_maps.size();

@@ -26,7 +26,7 @@
 #  include <deal.II/lac/parallel_vector.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include <Epetra_Export.h>
+#  include <Tpetra_Export_decl.hpp>
 #  include <ml_epetra_utils.h>
 #  include <ml_struct.h>
 #  include <Teuchos_RCP.hpp>
@@ -38,75 +38,39 @@ namespace TrilinosWrappers
 {
   namespace
   {
-#ifndef DEAL_II_WITH_64BIT_INDICES
     // define a helper function that queries the size of an map_type object
     // by calling either the 32- or 64-bit function necessary, and returns the
     // result in the correct data type so that we can use it in calling other
     // Epetra member functions that are overloaded by index type
-    int n_global_elements (const Epetra_BlockMap &map)
+    int n_global_elements (const map_type &map)
     {
-      return map.NumGlobalElements();
+      return map.getGlobalNumElements();
     }
 
-    int min_my_gid(const Epetra_BlockMap &map)
+    int min_my_gid(const map_type &map)
     {
-      return map.MinMyGID();
+      return map.getMinLocalIndex();
     }
 
-    int max_my_gid(const Epetra_BlockMap &map)
+    int max_my_gid(const map_type &map)
     {
-      return map.MaxMyGID();
+      return map.getMaxGlobalIndex();
     }
 
-    int n_global_cols(const Epetra_CrsGraph &graph)
+    int n_global_cols(const crs_graph_type &graph)
     {
-      return graph.NumGlobalCols();
+      return graph.getGlobalNumCols();
     }
 
-    int global_column_index(const Epetra_CrsMatrix &matrix, int i)
+    int global_column_index(const crs_matrix_type &matrix, int i)
     {
       return matrix.GCID(i);
     }
 
-    int global_row_index(const Epetra_CrsMatrix &matrix, int i)
+    int global_row_index(const crs_matrix_type &matrix, int i)
     {
       return matrix.GRID(i);
     }
-#else
-    // define a helper function that queries the size of an map_type object
-    // by calling either the 32- or 64-bit function necessary, and returns the
-    // result in the correct data type so that we can use it in calling other
-    // Epetra member functions that are overloaded by index type
-    long long int n_global_elements (const Epetra_BlockMap &map)
-    {
-      return map.NumGlobalElements64();
-    }
-
-    long long int min_my_gid(const Epetra_BlockMap &map)
-    {
-      return map.MinMyGID64();
-    }
-
-    long long int max_my_gid(const Epetra_BlockMap &map)
-    {
-      return map.MaxMyGID64();
-    }
-
-    long long int n_global_cols(const Epetra_CrsGraph &graph)
-    {
-      return graph.NumGlobalCols64();
-    }
-
-    long long int global_column_index(const Epetra_CrsMatrix &matrix, int i)
-    {
-      return matrix.GCID64(i);
-    }
-
-    long long int global_row_index(const Epetra_CrsMatrix &matrix, int i)
-    {
-      return matrix.GRID64(i);
-    }
-#endif
   }
 
 
@@ -179,7 +143,7 @@ namespace TrilinosWrappers
     :
     column_space_map (new map_type (0, 0,
                                       Utilities::Trilinos::comm_self())),
-    matrix (new Epetra_FECrsMatrix(View, *column_space_map,
+    matrix (new crs_matrix_type(View, *column_space_map,
                                    *column_space_map, 0)),
     last_action (Zero),
     compressed (true)
@@ -193,7 +157,7 @@ namespace TrilinosWrappers
                               const size_type n_max_entries_per_row)
     :
     column_space_map (new map_type (input_map)),
-    matrix (new Epetra_FECrsMatrix(Copy, *column_space_map,
+    matrix (new crs_matrix_type(Copy, *column_space_map,
                                    TrilinosWrappers::types::int_type(n_max_entries_per_row), false)),
     last_action (Zero),
     compressed (false)
@@ -205,7 +169,7 @@ namespace TrilinosWrappers
                               const std::vector<unsigned int> &n_entries_per_row)
     :
     column_space_map (new map_type (input_map)),
-    matrix (new Epetra_FECrsMatrix
+    matrix (new crs_matrix_type
             (Copy, *column_space_map,
              (int *)const_cast<unsigned int *>(&(n_entries_per_row[0])),
              false)),
@@ -220,7 +184,7 @@ namespace TrilinosWrappers
                               const size_type n_max_entries_per_row)
     :
     column_space_map (new map_type (input_col_map)),
-    matrix (new Epetra_FECrsMatrix(Copy, input_row_map,
+    matrix (new crs_matrix_type(Copy, input_row_map,
                                    TrilinosWrappers::types::int_type(n_max_entries_per_row), false)),
     last_action (Zero),
     compressed (false)
@@ -233,7 +197,7 @@ namespace TrilinosWrappers
                               const std::vector<unsigned int> &n_entries_per_row)
     :
     column_space_map (new map_type (input_col_map)),
-    matrix (new Epetra_FECrsMatrix(Copy, input_row_map,
+    matrix (new crs_matrix_type(Copy, input_row_map,
                                    (int *)const_cast<unsigned int *>(&(n_entries_per_row[0])),
                                    false)),
     last_action (Zero),
@@ -257,7 +221,7 @@ namespace TrilinosWrappers
     // can't do so in parallel, where the
     // information from columns is only
     // available when entries have been added
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    map_type (static_cast<TrilinosWrappers::types::int_type>(m), 0,
                                                Utilities::Trilinos::comm_self()),
                                    *column_space_map,
@@ -275,7 +239,7 @@ namespace TrilinosWrappers
     :
     column_space_map (new map_type (static_cast<TrilinosWrappers::types::int_type>(n), 0,
                                       Utilities::Trilinos::comm_self())),
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    map_type (static_cast<TrilinosWrappers::types::int_type>(m), 0,
                                                Utilities::Trilinos::comm_self()),
                                    *column_space_map,
@@ -293,7 +257,7 @@ namespace TrilinosWrappers
     :
     column_space_map (new map_type(parallel_partitioning.
                                      make_trilinos_map(communicator, false))),
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    *column_space_map,
                                    n_max_entries_per_row,
                                    false)),
@@ -309,7 +273,7 @@ namespace TrilinosWrappers
     :
     column_space_map (new map_type(parallel_partitioning.
                                      make_trilinos_map(communicator, false))),
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    *column_space_map,
                                    (int *)const_cast<unsigned int *>(&(n_entries_per_row[0])),
                                    false)),
@@ -326,7 +290,7 @@ namespace TrilinosWrappers
     :
     column_space_map (new map_type(col_parallel_partitioning.
                                      make_trilinos_map(communicator, false))),
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    row_parallel_partitioning.
                                    make_trilinos_map(communicator, false),
                                    n_max_entries_per_row,
@@ -344,7 +308,7 @@ namespace TrilinosWrappers
     :
     column_space_map (new map_type(col_parallel_partitioning.
                                      make_trilinos_map(communicator, false))),
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    row_parallel_partitioning.
                                    make_trilinos_map(communicator, false),
                                    (int *)const_cast<unsigned int *>(&(n_entries_per_row[0])),
@@ -358,7 +322,7 @@ namespace TrilinosWrappers
   SparseMatrix::SparseMatrix (const SparsityPattern &sparsity_pattern)
     :
     column_space_map (new map_type (sparsity_pattern.domain_partitioner())),
-    matrix (new Epetra_FECrsMatrix(Copy,
+    matrix (new crs_matrix_type(Copy,
                                    sparsity_pattern.trilinos_sparsity_pattern(),
                                    false)),
     last_action (Zero),
@@ -389,8 +353,8 @@ namespace TrilinosWrappers
     // different maps or if we detect a row where the columns of the two
     // matrices do not match)
     bool needs_deep_copy =
-      !matrix->RowMap().SameAs(rhs.matrix->RowMap()) ||
-      !matrix->ColMap().SameAs(rhs.matrix->ColMap()) ||
+      !matrix->getRowMap().SameAs(rhs.matrix->getRowMap()) ||
+      !matrix->getColMap().SameAs(rhs.matrix->getColMap()) ||
       !matrix->DomainMap().SameAs(rhs.matrix->DomainMap()) ||
       n_nonzero_elements() != rhs.n_nonzero_elements();
     if (!needs_deep_copy)
@@ -405,7 +369,7 @@ namespace TrilinosWrappers
         for (size_type row=local_range.first; row < local_range.second; ++row)
           {
             const int row_local =
-              matrix->RowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row));
+              matrix->getRowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row));
 
             int n_entries, rhs_n_entries;
             TrilinosScalar *value_ptr, *rhs_value_ptr;
@@ -439,13 +403,13 @@ namespace TrilinosWrappers
 
         // release memory before reallocation
         matrix.reset ();
-        matrix.reset (new Epetra_FECrsMatrix(*rhs.matrix));
+        matrix.reset (new crs_matrix_type(*rhs.matrix));
 
-        matrix->FillComplete(*column_space_map, matrix->RowMap());
+        matrix->FillComplete(*column_space_map, matrix->getRowMap());
       }
 
     if (rhs.nonlocal_matrix.get() != 0)
-      nonlocal_matrix.reset(new Epetra_CrsMatrix(Copy, rhs.nonlocal_matrix->Graph()));
+      nonlocal_matrix.reset(new crs_matrix_type(Copy, rhs.nonlocal_matrix->Graph()));
   }
 
 
@@ -461,9 +425,9 @@ namespace TrilinosWrappers
                    const SparsityPatternType                 &sparsity_pattern,
                    const bool                                 exchange_data,
                    std_cxx11::shared_ptr<map_type>         &column_space_map,
-                   std_cxx11::shared_ptr<Epetra_FECrsMatrix> &matrix,
-                   std_cxx11::shared_ptr<Epetra_CrsMatrix>   &nonlocal_matrix,
-                   std_cxx11::shared_ptr<Epetra_Export>      &nonlocal_matrix_exporter)
+                   std_cxx11::shared_ptr<crs_matrix_type> &matrix,
+                   std_cxx11::shared_ptr<crs_matrix_type>   &nonlocal_matrix,
+                   std_cxx11::shared_ptr<export_type>      &nonlocal_matrix_exporter)
     {
       // release memory before reallocation
       matrix.reset();
@@ -489,7 +453,7 @@ namespace TrilinosWrappers
           SparsityPattern trilinos_sparsity;
           trilinos_sparsity.reinit (input_row_map, input_col_map,
                                     sparsity_pattern, exchange_data);
-          matrix.reset (new Epetra_FECrsMatrix
+          matrix.reset (new crs_matrix_type
                         (Copy, trilinos_sparsity.trilinos_sparsity_pattern(), false));
 
           return;
@@ -516,12 +480,12 @@ namespace TrilinosWrappers
       // col_map that tells how the domain dofs of the matrix will be
       // distributed). for only one processor, we can directly assign the
       // columns as well. Compare this with bug # 4123 in the Sandia Bugzilla.
-      std_cxx11::shared_ptr<Epetra_CrsGraph> graph;
+      std_cxx11::shared_ptr<crs_graph_type> graph;
       if (input_row_map.Comm().NumProc() > 1)
-        graph.reset (new Epetra_CrsGraph (Copy, input_row_map,
+        graph.reset (new crs_graph_type (Copy, input_row_map,
                                           &n_entries_per_row[0], true));
       else
-        graph.reset (new Epetra_CrsGraph (Copy, input_row_map, input_col_map,
+        graph.reset (new crs_graph_type (Copy, input_row_map, input_col_map,
                                           &n_entries_per_row[0], true));
 
       // This functions assumes that the sparsity pattern sits on all
@@ -543,7 +507,7 @@ namespace TrilinosWrappers
             for (size_type col=0; p != sparsity_pattern.end(row); ++p, ++col)
               row_indices[col] = p->column();
           }
-          graph->Epetra_CrsGraph::InsertGlobalIndices (row, row_length,
+          graph->crs_graph_type::InsertGlobalIndices (row, row_length,
                                                        &row_indices[0]);
         }
 
@@ -560,7 +524,7 @@ namespace TrilinosWrappers
       (void)n_global_cols;
 
       // And now finally generate the matrix.
-      matrix.reset (new Epetra_FECrsMatrix(Copy, *graph, false));
+      matrix.reset (new crs_matrix_type(Copy, *graph, false));
     }
 
 
@@ -568,22 +532,22 @@ namespace TrilinosWrappers
     // for the non-local graph, we need to circumvent the problem that some
     // processors will not add into the non-local graph at all: We do not want
     // to insert dummy elements on >5000 processors because that gets very
-    // slow. Thus, we set a flag in Epetra_CrsGraph that sets the correct
+    // slow. Thus, we set a flag in crs_graph_type that sets the correct
     // flag. Since it is protected, we need to expose this information by
-    // deriving a class from Epetra_CrsGraph for the purpose of creating the
+    // deriving a class from crs_graph_type for the purpose of creating the
     // data structure
-    class Epetra_CrsGraphMod : public Epetra_CrsGraph
+    class Epetra_CrsGraphMod : public crs_graph_type
     {
     public:
       Epetra_CrsGraphMod (const map_type &row_map,
                           const int        *n_entries_per_row)
         :
-        Epetra_CrsGraph(Copy, row_map, n_entries_per_row, true)
+        crs_graph_type(Copy, row_map, n_entries_per_row, true)
       {};
 
       void SetIndicesAreGlobal()
       {
-        this->Epetra_CrsGraph::SetIndicesAreGlobal(true);
+        this->crs_graph_type::SetIndicesAreGlobal(true);
       }
     };
 
@@ -592,14 +556,14 @@ namespace TrilinosWrappers
     // more information about the non-locally owned rows
     template <>
     void
-    reinit_matrix (const map_type                          &input_row_map,
-                   const map_type                          &input_col_map,
-                   const DynamicSparsityPattern              &sparsity_pattern,
-                   const bool                                 exchange_data,
-                   std_cxx11::shared_ptr<map_type>         &column_space_map,
-                   std_cxx11::shared_ptr<Epetra_FECrsMatrix> &matrix,
-                   std_cxx11::shared_ptr<Epetra_CrsMatrix>   &nonlocal_matrix,
-                   std_cxx11::shared_ptr<Epetra_Export>      &nonlocal_matrix_exporter)
+    reinit_matrix (const map_type                           &input_row_map,
+                   const map_type                           &input_col_map,
+                   const DynamicSparsityPattern             &sparsity_pattern,
+                   const bool                               exchange_data,
+                   std_cxx11::shared_ptr<map_type>          &column_space_map,
+                   std_cxx11::shared_ptr<crs_matrix_type>   &matrix,
+                   std_cxx11::shared_ptr<crs_matrix_type>   &nonlocal_matrix,
+                   std_cxx11::shared_ptr<export_type>       &nonlocal_matrix_exporter)
     {
       matrix.reset();
       nonlocal_matrix.reset();
@@ -644,7 +608,7 @@ namespace TrilinosWrappers
 
       const unsigned int n_rows = relevant_rows.n_elements();
       std::vector<TrilinosWrappers::types::int_type> ghost_rows;
-      std::vector<int> n_entries_per_row(input_row_map.NumMyElements());
+      std::vector<int> n_entries_per_row(input_row_map.getNodeNumElements());
       std::vector<int> n_entries_per_ghost_row;
       for (unsigned int i=0, own=0; i<n_rows; ++i)
         {
@@ -663,11 +627,11 @@ namespace TrilinosWrappers
                                    (ghost_rows.size()>0)?(&ghost_rows[0]):NULL,
                                    0, input_row_map.Comm());
 
-      std_cxx11::shared_ptr<Epetra_CrsGraph> graph;
+      std_cxx11::shared_ptr<crs_graph_type> graph;
       std_cxx11::shared_ptr<Epetra_CrsGraphMod> nonlocal_graph;
       if (input_row_map.Comm().NumProc() > 1)
         {
-          graph.reset (new Epetra_CrsGraph (Copy, input_row_map,
+          graph.reset (new crs_graph_type (Copy, input_row_map,
                                             (n_entries_per_row.size()>0)?(&n_entries_per_row[0]):NULL,
                                             exchange_data ? false : true));
           if (have_ghost_rows == true)
@@ -675,7 +639,7 @@ namespace TrilinosWrappers
                                                           &n_entries_per_ghost_row[0]));
         }
       else
-        graph.reset (new Epetra_CrsGraph (Copy, input_row_map, input_col_map,
+        graph.reset (new crs_graph_type (Copy, input_row_map, input_col_map,
                                           (n_entries_per_row.size()>0)?(&n_entries_per_row[0]):NULL,
                                           true));
 
@@ -720,13 +684,13 @@ namespace TrilinosWrappers
           // insert data from nonlocal graph into the final sparsity pattern
           if (exchange_data)
             {
-              Epetra_Export exporter(nonlocal_graph->RowMap(), input_row_map);
+              export_type exporter(nonlocal_graph->getRowMap(), input_row_map);
               int ierr = graph->Export(*nonlocal_graph, exporter, Add);
               (void)ierr;
               Assert (ierr==0, ExcTrilinosError(ierr));
             }
 
-          nonlocal_matrix.reset (new Epetra_CrsMatrix(Copy, *nonlocal_graph));
+          nonlocal_matrix.reset (new crs_matrix_type(Copy, *nonlocal_graph));
         }
 
       graph->FillComplete(input_col_map, input_row_map);
@@ -735,7 +699,7 @@ namespace TrilinosWrappers
       AssertDimension (sparsity_pattern.n_cols(),static_cast<size_type>(
                          n_global_cols(*graph)));
 
-      matrix.reset (new Epetra_FECrsMatrix(Copy, *graph, false));
+      matrix.reset (new crs_matrix_type(Copy, *graph, false));
     }
   }
 
@@ -828,11 +792,11 @@ namespace TrilinosWrappers
     // reinit with a (parallel) Trilinos sparsity pattern.
     column_space_map.reset (new map_type
                             (sparsity_pattern.domain_partitioner()));
-    matrix.reset (new Epetra_FECrsMatrix
+    matrix.reset (new crs_matrix_type
                   (Copy, sparsity_pattern.trilinos_sparsity_pattern(), false));
 
     if (sparsity_pattern.nonlocal_graph.get() != 0)
-      nonlocal_matrix.reset (new Epetra_CrsMatrix(Copy, *sparsity_pattern.nonlocal_graph));
+      nonlocal_matrix.reset (new crs_matrix_type(Copy, *sparsity_pattern.nonlocal_graph));
     else
       nonlocal_matrix.reset ();
 
@@ -851,11 +815,11 @@ namespace TrilinosWrappers
     column_space_map.reset (new map_type (sparse_matrix.domain_partitioner()));
     matrix.reset ();
     nonlocal_matrix_exporter.reset();
-    matrix.reset (new Epetra_FECrsMatrix
+    matrix.reset (new crs_matrix_type
                   (Copy, sparse_matrix.trilinos_sparsity_pattern(), false));
 
     if (sparse_matrix.nonlocal_matrix != 0)
-      nonlocal_matrix.reset (new Epetra_CrsMatrix
+      nonlocal_matrix.reset (new crs_matrix_type
                              (Copy, sparse_matrix.nonlocal_matrix->Graph()));
     else
       nonlocal_matrix.reset();
@@ -1012,7 +976,7 @@ namespace TrilinosWrappers
 
 
   void
-  SparseMatrix::reinit (const Epetra_CrsMatrix &input_matrix,
+  SparseMatrix::reinit (const crs_matrix_type &input_matrix,
                         const bool              copy_values)
   {
     Assert (input_matrix.Filled()==true,
@@ -1020,12 +984,12 @@ namespace TrilinosWrappers
 
     column_space_map.reset (new map_type (input_matrix.DomainMap()));
 
-    const Epetra_CrsGraph *graph = &input_matrix.Graph();
+    const crs_graph_type *graph = &input_matrix.Graph();
 
     nonlocal_matrix.reset();
     nonlocal_matrix_exporter.reset();
     matrix.reset ();
-    matrix.reset (new Epetra_FECrsMatrix(Copy, *graph, false));
+    matrix.reset (new crs_matrix_type(Copy, *graph, false));
 
     matrix->FillComplete (*column_space_map, input_matrix.RangeMap(), true);
 
@@ -1074,17 +1038,17 @@ namespace TrilinosWrappers
       {
         // do only export in case of an add() operation, otherwise the owning
         // processor must have set the correct entry
-        nonlocal_matrix->FillComplete(*column_space_map, matrix->RowMap());
+        nonlocal_matrix->FillComplete(*column_space_map, matrix->getRowMap());
         if (nonlocal_matrix_exporter.get() == 0)
           nonlocal_matrix_exporter.reset
-          (new Epetra_Export(nonlocal_matrix->RowMap(), matrix->RowMap()));
+          (new export_type(nonlocal_matrix->getRowMap(), matrix->getRowMap()));
         ierr = matrix->Export(*nonlocal_matrix, *nonlocal_matrix_exporter, mode);
         AssertThrow(ierr == 0, ExcTrilinosError(ierr));
-        ierr = matrix->FillComplete(*column_space_map, matrix->RowMap());
+        ierr = matrix->FillComplete(*column_space_map, matrix->getRowMap());
         nonlocal_matrix->PutScalar(0);
       }
     else
-      ierr = matrix->GlobalAssemble (*column_space_map, matrix->RowMap(),
+      ierr = matrix->GlobalAssemble (*column_space_map, matrix->getRowMap(),
                                      true, mode);
 
     AssertThrow (ierr == 0, ExcTrilinosError(ierr));
@@ -1107,7 +1071,7 @@ namespace TrilinosWrappers
     // empty matrix.
     column_space_map.reset (new map_type (0, 0,
                                             Utilities::Trilinos::comm_self()));
-    matrix.reset (new Epetra_FECrsMatrix(View, *column_space_map, 0));
+    matrix.reset (new crs_matrix_type(View, *column_space_map, 0));
     nonlocal_matrix.reset();
     nonlocal_matrix_exporter.reset();
 
@@ -1401,7 +1365,7 @@ namespace TrilinosWrappers
     int ierr;
     if (last_action == Add)
       {
-        ierr = matrix->GlobalAssemble (*column_space_map, matrix->RowMap(),
+        ierr = matrix->GlobalAssemble (*column_space_map, matrix->getRowMap(),
                                        true);
 
         Assert (ierr == 0, ExcTrilinosError(ierr));
@@ -1463,18 +1427,18 @@ namespace TrilinosWrappers
 
 
     // If the calling matrix owns the row to which we want to insert values,
-    // we can directly call the Epetra_CrsMatrix input function, which is much
-    // faster than the Epetra_FECrsMatrix function. We distinguish between two
+    // we can directly call the crs_matrix_type input function, which is much
+    // faster than the crs_matrix_type function. We distinguish between two
     // cases: the first one is when the matrix is not filled (i.e., it is
     // possible to add new elements to the sparsity pattern), and the second
     // one is when the pattern is already fixed. In the former case, we add
     // the possibility to insert new values, and in the second we just replace
     // data.
-    if (matrix->RowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == true)
+    if (matrix->getRowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == true)
       {
         if (matrix->Filled() == false)
           {
-            ierr = matrix->Epetra_CrsMatrix::InsertGlobalValues(
+            ierr = matrix->crs_matrix_type::InsertGlobalValues(
                      static_cast<TrilinosWrappers::types::int_type>(row),
                      static_cast<int>(n_columns),const_cast<double *>(col_value_ptr),
                      col_index_ptr);
@@ -1486,7 +1450,7 @@ namespace TrilinosWrappers
               ierr = 0;
           }
         else
-          ierr = matrix->Epetra_CrsMatrix::ReplaceGlobalValues(row, n_columns,
+          ierr = matrix->crs_matrix_type::ReplaceGlobalValues(row, n_columns,
                                                                col_value_ptr,
                                                                col_index_ptr);
       }
@@ -1506,7 +1470,7 @@ namespace TrilinosWrappers
                                                (TrilinosWrappers::types::int_type *)&row,
                                                n_columns, col_index_ptr,
                                                &col_value_ptr,
-                                               Epetra_FECrsMatrix::ROW_MAJOR);
+                                               crs_matrix_type::ROW_MAJOR);
             if (ierr > 0)
               ierr = 0;
           }
@@ -1515,7 +1479,7 @@ namespace TrilinosWrappers
                                               (TrilinosWrappers::types::int_type *)&row,
                                               n_columns, col_index_ptr,
                                               &col_value_ptr,
-                                              Epetra_FECrsMatrix::ROW_MAJOR);
+                                              crs_matrix_type::ROW_MAJOR);
         // use the FECrsMatrix facilities for set even in the case when we
         // have explicitly set the off-processor rows because that only works
         // properly when adding elements, not when setting them (since we want
@@ -1593,7 +1557,7 @@ namespace TrilinosWrappers
         // TODO: this could lead to a dead lock when only one processor
         // calls GlobalAssemble.
         ierr = matrix->GlobalAssemble(*column_space_map,
-                                      matrix->RowMap(), false);
+                                      matrix->getRowMap(), false);
 
         AssertThrow (ierr == 0, ExcTrilinosError(ierr));
       }
@@ -1658,11 +1622,11 @@ namespace TrilinosWrappers
       }
 
     // If the calling processor owns the row to which we want to add values, we
-    // can directly call the Epetra_CrsMatrix input function, which is much
-    // faster than the Epetra_FECrsMatrix function.
-    if (matrix->RowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == true)
+    // can directly call the crs_matrix_type input function, which is much
+    // faster than the crs_matrix_type function.
+    if (matrix->getRowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == true)
       {
-        ierr = matrix->Epetra_CrsMatrix::SumIntoGlobalValues(row, n_columns,
+        ierr = matrix->crs_matrix_type::SumIntoGlobalValues(row, n_columns,
                                                              col_value_ptr,
                                                              col_index_ptr);
       }
@@ -1672,7 +1636,7 @@ namespace TrilinosWrappers
         // this is the case when we have explicitly set the off-processor rows
         // and want to create a separate matrix object for them (to retain
         // thread-safety)
-        Assert (nonlocal_matrix->RowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row)) != -1,
+        Assert (nonlocal_matrix->getRowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row)) != -1,
                 ExcMessage("Attempted to write into off-processor matrix row "
                            "that has not be specified as being writable upon "
                            "initialization"));
@@ -1694,7 +1658,7 @@ namespace TrilinosWrappers
                                             (TrilinosWrappers::types::int_type *)&row, n_columns,
                                             col_index_ptr,
                                             &col_value_ptr,
-                                            Epetra_FECrsMatrix::ROW_MAJOR);
+                                            crs_matrix_type::ROW_MAJOR);
       }
 
 #ifdef DEBUG
@@ -1703,18 +1667,18 @@ namespace TrilinosWrappers
         std::cout << "------------------------------------------"
                   << std::endl;
         std::cout << "Got error " << ierr << " in row " << row
-                  << " of proc " << matrix->RowMap().Comm().MyPID()
+                  << " of proc " << matrix->getRowMap().Comm().MyPID()
                   << " when trying to add the columns:" << std::endl;
         for (TrilinosWrappers::types::int_type i=0; i<n_columns; ++i)
           std::cout << col_index_ptr[i] << " ";
         std::cout << std::endl << std::endl;
         std::cout << "Matrix row "
-                  << (matrix->RowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == false ? "(nonlocal part)" : "")
+                  << (matrix->getRowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == false ? "(nonlocal part)" : "")
                   << " has the following indices:" << std::endl;
         std::vector<TrilinosWrappers::types::int_type> indices;
-        const Epetra_CrsGraph *graph =
+        const crs_graph_type *graph =
           (nonlocal_matrix.get() != 0 &&
-           matrix->RowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == false) ?
+           matrix->getRowMap().MyGID(static_cast<TrilinosWrappers::types::int_type>(row)) == false) ?
           &nonlocal_matrix->Graph() : &matrix->Graph();
 
         indices.resize(graph->NumGlobalIndices(static_cast<TrilinosWrappers::types::int_type>(row)));
@@ -1759,7 +1723,7 @@ namespace TrilinosWrappers
     AssertDimension (rhs.n(), n());
     AssertDimension (rhs.local_range().first, local_range().first);
     AssertDimension (rhs.local_range().second, local_range().second);
-    Assert(matrix->RowMap().SameAs(rhs.matrix->RowMap()),
+    Assert(matrix->getRowMap().SameAs(rhs.matrix->getRowMap()),
            ExcMessage("Can only add matrices with same distribution of rows"));
     Assert(matrix->Filled() && rhs.matrix->Filled(),
            ExcMessage("Addition of matrices only allowed if matrices are "
@@ -1767,13 +1731,13 @@ namespace TrilinosWrappers
 
     const std::pair<size_type, size_type>
     local_range = rhs.local_range();
-    const bool same_col_map = matrix->ColMap().SameAs(rhs.matrix->ColMap());
+    const bool same_col_map = matrix->getColMap().SameAs(rhs.matrix->getColMap());
 
     int ierr;
     for (size_type row=local_range.first; row < local_range.second; ++row)
       {
         const int row_local =
-          matrix->RowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row));
+          matrix->getRowMap().LID(static_cast<TrilinosWrappers::types::int_type>(row));
 
         // First get a view to the matrix columns of both matrices. Note that
         // the data is in local index spaces so we need to be careful not only
@@ -1814,7 +1778,7 @@ namespace TrilinosWrappers
                   continue;
                 const TrilinosWrappers::types::int_type rhs_global_col =
                   global_column_index(*rhs.matrix, rhs_index_ptr[i]);
-                int local_col = matrix->ColMap().LID(rhs_global_col);
+                int local_col = matrix->getColMap().LID(rhs_global_col);
                 int *local_index = Utilities::lower_bound(index_ptr,
                                                           index_ptr+n_entries,
                                                           local_col);
@@ -1917,14 +1881,14 @@ namespace TrilinosWrappers
     {
       template <typename VectorType>
       inline
-      void check_vector_map_equality(const Epetra_CrsMatrix &,
+      void check_vector_map_equality(const crs_matrix_type &,
                                      const VectorType &,
                                      const VectorType &)
       {
       }
 
       inline
-      void check_vector_map_equality(const Epetra_CrsMatrix              &m,
+      void check_vector_map_equality(const crs_matrix_type              &m,
                                      const TrilinosWrappers::MPI::Vector &in,
                                      const TrilinosWrappers::MPI::Vector &out)
       {
@@ -2045,7 +2009,7 @@ namespace TrilinosWrappers
   TrilinosScalar
   SparseMatrix::matrix_norm_square (const VectorBase &v) const
   {
-    Assert (matrix->RowMap().SameAs(matrix->DomainMap()),
+    Assert (matrix->getRowMap().SameAs(matrix->DomainMap()),
             ExcNotQuadratic());
 
     VectorBase temp_vector;
@@ -2061,7 +2025,7 @@ namespace TrilinosWrappers
   SparseMatrix::matrix_scalar_product (const VectorBase &u,
                                        const VectorBase &v) const
   {
-    Assert (matrix->RowMap().SameAs(matrix->DomainMap()),
+    Assert (matrix->getRowMap().SameAs(matrix->DomainMap()),
             ExcNotQuadratic());
 
     VectorBase temp_vector;
@@ -2124,16 +2088,16 @@ namespace TrilinosWrappers
       // we insert the data from B, but
       // multiply each row with the respective
       // vector element.
-      Teuchos::RCP<Epetra_CrsMatrix> mod_B;
+      Teuchos::RCP<crs_matrix_type> mod_B;
       if (use_vector == false)
         {
-          mod_B = Teuchos::rcp(const_cast<Epetra_CrsMatrix *>
+          mod_B = Teuchos::rcp(const_cast<crs_matrix_type *>
                                (&inputright.trilinos_matrix()),
                                false);
         }
       else
         {
-          mod_B = Teuchos::rcp(new Epetra_CrsMatrix
+          mod_B = Teuchos::rcp(new crs_matrix_type
                                (Copy, inputright.trilinos_sparsity_pattern()),
                                true);
           mod_B->FillComplete(inputright.domain_partitioner(),
@@ -2174,14 +2138,14 @@ namespace TrilinosWrappers
 
       if (transpose_left == false)
         ML_Operator_WrapEpetraCrsMatrix
-        (const_cast<Epetra_CrsMatrix *>(&inputleft.trilinos_matrix()),A_,
+        (const_cast<crs_matrix_type *>(&inputleft.trilinos_matrix()),A_,
          false);
       else
         {
           // create transposed matrix
           SparsityPattern sparsity_transposed (inputleft.domain_partitioner(),
                                                inputleft.range_partitioner());
-          Assert (inputleft.domain_partitioner().LinearMap() == true,
+          Assert (inputleft.domain_partitioner().isContiguous() == true,
                   ExcMessage("Matrix must be partitioned contiguously between procs."));
           for (unsigned int i=0; i<inputleft.local_size(); ++i)
             {
@@ -2190,15 +2154,15 @@ namespace TrilinosWrappers
                                                                      indices);
               Assert (num_entries >= 0, ExcInternalError());
 #ifndef DEAL_II_WITH_64BIT_INDICES
-              const size_type GID = inputleft.trilinos_matrix().RowMap().GID(i);
+              const size_type getGlobalElement = inputleft.trilinos_matrix().getRowMap().getGlobalElement(i);
               for (TrilinosWrappers::types::int_type j=0; j<num_entries; ++j)
-                sparsity_transposed.add (inputleft.trilinos_matrix().ColMap().GID(indices[j]),
-                                         GID);
+                sparsity_transposed.add (inputleft.trilinos_matrix().getColMap().getGlobalElement(indices[j]),
+                                         getGlobalElement);
 #else
-              const size_type GID = inputleft.trilinos_matrix().RowMap().GID64(i);
+              const size_type getGlobalElement = inputleft.trilinos_matrix().getRowMap().GID64(i);
               for (TrilinosWrappers::types::int_type j=0; j<num_entries; ++j)
-                sparsity_transposed.add (inputleft.trilinos_matrix().ColMap().GID64(indices[j]),
-                                         GID);
+                sparsity_transposed.add (inputleft.trilinos_matrix().getColMap().GID64(indices[j]),
+                                         getGlobalElement);
 #endif
             }
 
@@ -2212,20 +2176,20 @@ namespace TrilinosWrappers
                                                            values, indices);
               Assert (num_entries >= 0, ExcInternalError());
 #ifndef DEAL_II_WITH_64BIT_INDICES
-              const size_type GID = inputleft.trilinos_matrix().RowMap().GID(i);
+              const size_type getGlobalElement = inputleft.trilinos_matrix().getRowMap().getGlobalElement(i);
               for (TrilinosWrappers::types::int_type j=0; j<num_entries; ++j)
-                transposed_mat.set (inputleft.trilinos_matrix().ColMap().GID(indices[j]),
-                                    GID, values[j]);
+                transposed_mat.set (inputleft.trilinos_matrix().getColMap().getGlobalElement(indices[j]),
+                                    getGlobalElement, values[j]);
 #else
-              const size_type GID = inputleft.trilinos_matrix().RowMap().GID64(i);
+              const size_type getGlobalElement = inputleft.trilinos_matrix().getRowMap().GID64(i);
               for (TrilinosWrappers::types::int_type j=0; j<num_entries; ++j)
-                transposed_mat.set (inputleft.trilinos_matrix().ColMap().GID64(indices[j]),
-                                    GID, values[j]);
+                transposed_mat.set (inputleft.trilinos_matrix().getColMap().GID64(indices[j]),
+                                    getGlobalElement, values[j]);
 #endif
             }
           transposed_mat.compress(VectorOperation::insert);
           ML_Operator_WrapEpetraCrsMatrix
-          (const_cast<Epetra_CrsMatrix *>(&transposed_mat.trilinos_matrix()),
+          (const_cast<crs_matrix_type *>(&transposed_mat.trilinos_matrix()),
            A_,false);
         }
       ML_Operator_WrapEpetraCrsMatrix(mod_B.get(),B_,false);
@@ -2293,10 +2257,10 @@ namespace TrilinosWrappers
 
       // create an Epetra matrix from the ML
       // matrix that we got as a result.
-      Epetra_CrsMatrix *C_mat;
+      crs_matrix_type *C_mat;
       ML_Operator2EpetraCrsMatrix(C_, C_mat);
-      C_mat->FillComplete();
-      C_mat->OptimizeStorage();
+      C_mat->fillComplete();
+//      C_mat->OptimizeStorage();
       result.reinit (*C_mat);
 
       // destroy allocated memory
@@ -2403,7 +2367,7 @@ namespace TrilinosWrappers
   const map_type &
   SparseMatrix::row_partitioner () const
   {
-    return matrix->RowMap();
+    return matrix->getRowMap();
   }
 
 
@@ -2411,7 +2375,7 @@ namespace TrilinosWrappers
   const map_type &
   SparseMatrix::col_partitioner () const
   {
-    return matrix->ColMap();
+    return matrix->getColMap();
   }
 
 

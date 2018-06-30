@@ -109,8 +109,7 @@ IF(DEAL_II_WITH_TRILINOS)
     trilinos_block_vector.cc
     trilinos_parallel_block_vector.cc
     trilinos_precondition.cc
-    trilinos_precondition_ml.cc
-    trilinos_precondition_muelu.cc
+          trilinos_precondition_muelu.cc
     trilinos_solver.cc
     trilinos_sparse_matrix.cc
     trilinos_sparsity_pattern.cc

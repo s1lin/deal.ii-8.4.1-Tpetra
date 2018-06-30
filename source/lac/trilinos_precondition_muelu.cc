@@ -25,7 +25,7 @@
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 #  include <Teuchos_ParameterList.hpp>
 #  include <Teuchos_RCP.hpp>
-#  include <Epetra_MultiVector.h>
+#  include <Tpetra_MultiVector_decl.hpp>
 #  include <ml_include.h>
 #  include <ml_MultiLevelPreconditioner.h>
 
@@ -40,37 +40,20 @@ namespace TrilinosWrappers
 {
   namespace
   {
-#ifndef DEAL_II_WITH_64BIT_INDICES
-    int n_global_rows (const Epetra_RowMatrix &matrix)
+    int n_global_rows (const row_matrix_type &matrix)
     {
-      return matrix.NumGlobalRows();
+      return matrix.getGlobalNumRows();
     }
 
-    int global_length (const Epetra_MultiVector &vector)
+    int global_length (const multi_vector_type &vector)
     {
-      return vector.GlobalLength();
+      return vector.getGlobalLength();
     }
 
-    int gid(const Epetra_Map &map, unsigned int i)
+    int gid(const map_type &map, unsigned int i)
     {
-      return map.GID(i);
+      return map.getGlobalElement(i);
     }
-#else
-    long long int n_global_rows (const Epetra_RowMatrix &matrix)
-    {
-      return matrix.NumGlobalRows64();
-    }
-
-    long long int global_length (const Epetra_MultiVector &vector)
-    {
-      return vector.GlobalLength64();
-    }
-
-    long long int gid(const Epetra_Map &map, dealii::types::global_dof_index i)
-    {
-      return map.GID64(i);
-    }
-#endif
   }
 
 
@@ -118,7 +101,7 @@ namespace TrilinosWrappers
 
 
   void
-  PreconditionAMGMueLu::initialize (const Epetra_CrsMatrix &matrix,
+  PreconditionAMGMueLu::initialize (const crs_matrix_type &matrix,
                                     const AdditionalData   &additional_data)
   {
     // Build the AMG preconditioner.
@@ -160,11 +143,11 @@ namespace TrilinosWrappers
     else
       parameter_list.set("ML output", 0);
 
-    const Epetra_Map &domain_map = matrix.OperatorDomainMap();
+    const RCP<map_type> &domain_map = matrix.getDomainMap();
 
     const size_type constant_modes_dimension =
       additional_data.constant_modes.size();
-    Epetra_MultiVector distributed_constant_modes (domain_map,
+    multi_vector_type distributed_constant_modes (domain_map,
                                                    constant_modes_dimension > 0 ?
                                                    constant_modes_dimension : 1);
     std::vector<double> dummy (constant_modes_dimension);
@@ -176,7 +159,7 @@ namespace TrilinosWrappers
           additional_data.constant_modes[0].size() == n_rows;
         const size_type n_relevant_rows =
           constant_modes_are_global ? n_rows : additional_data.constant_modes[0].size();
-        const size_type my_size = domain_map.NumMyElements();
+        const size_type my_size = domain_map.get().getNodeNumElements();
         if (constant_modes_are_global == false)
           Assert (n_relevant_rows == my_size,
                   ExcDimensionMismatch(n_relevant_rows, my_size));
@@ -201,7 +184,7 @@ namespace TrilinosWrappers
 
         parameter_list.set("null space: type", "pre-computed");
         parameter_list.set("null space: dimension",
-                           distributed_constant_modes.NumVectors());
+                           distributed_constant_modes.getNumVectors());
         if (my_size > 0)
           parameter_list.set("null space: vectors",
                              distributed_constant_modes.Values());
@@ -227,7 +210,7 @@ namespace TrilinosWrappers
 
 
   void
-  PreconditionAMGMueLu::initialize (const Epetra_CrsMatrix       &matrix,
+  PreconditionAMGMueLu::initialize (const crs_matrix_type       &matrix,
                                     Teuchos::ParameterList &muelu_parameters)
   {
     // We cannot use MueLu::CreateEpetraOperator directly because, we cannot
@@ -240,10 +223,10 @@ namespace TrilinosWrappers
 
     // Cast matrix into a MueLu::Matrix. The constness needs to be cast away.
     // MueLu uses Teuchos::RCP which are Trilinos version of std::shared_ptr.
-    Teuchos::RCP<Epetra_CrsMatrix> rcp_matrix = Teuchos::rcpFromRef(
-                                                  *(const_cast<Epetra_CrsMatrix *>(&matrix)));
+    Teuchos::RCP<crs_matrix_type> rcp_matrix = Teuchos::rcpFromRef(
+                                                  *(const_cast<crs_matrix_type *>(&matrix)));
     Teuchos::RCP<Xpetra::CrsMatrix<double,int,int,node> > muelu_crs_matrix =
-      Teuchos::rcp(new Xpetra::EpetraCrsMatrix (rcp_matrix));
+      Teuchos::rcp(new Xpetra::TpetraCrsMatrix (rcp_matrix));
     Teuchos::RCP<Xpetra::Matrix<double,int,int,node> > muelu_matrix =
       Teuchos::rcp(new Xpetra::CrsMatrixWrap<double,int,int,node> (muelu_crs_matrix));
 
@@ -277,7 +260,7 @@ namespace TrilinosWrappers
     // equidistributed map; avoid
     // storing the nonzero
     // elements.
-    vector_distributor.reset (new Epetra_Map(static_cast<TrilinosWrappers::types::int_type>(n_rows),
+    vector_distributor.reset (new map_type(static_cast<TrilinosWrappers::types::int_type>(n_rows),
                                              0, communicator));
 
     if (trilinos_matrix.get() == 0)

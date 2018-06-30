@@ -24,7 +24,7 @@ namespace TrilinosWrappers
 {
   namespace MPI
   {
-    BlockVector::BlockVector (const std::vector<Epetra_Map> &parallel_partitioning)
+    BlockVector::BlockVector (const std::vector<map_type> &parallel_partitioning)
     {
       reinit (parallel_partitioning, false);
     }

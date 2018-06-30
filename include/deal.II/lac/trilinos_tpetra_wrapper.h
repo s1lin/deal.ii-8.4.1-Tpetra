@@ -143,6 +143,7 @@ using Teuchos::tuple;
 //OperatorDomainMap() =	getDomainMap()
 //Apply()			  = Apply()
 //ApplyInverse()	  = Apply()
+//SetUseTranspose()   =
 
 //-------------------------------------------
 
@@ -162,6 +163,7 @@ using Teuchos::tuple;
 //MeanValue() = meanValue()
 //Update() = update()
 //PutScalar() = putScalar()
+//NumGlobalRows()   =
 
 //-------------------------------------------
 // MueLu uses Teuchos::RCP which is Trilinos version of std::shared_ptr.
@@ -174,21 +176,19 @@ typedef KokkosClassic::DefaultNode::DefaultNodeType NT;
 
 typedef Tpetra::Map<SC, LO, GO>                     map_type;
 typedef Tpetra::Vector<SC, LO,	GO, NT>             vector_type;
-typedef Tpetra::LocalMap<SC, LO, GO>                local_map_type;
 typedef Tpetra::RowMatrix<SC, LO, GO, NT>           row_matrix_type;
 typedef Tpetra::Export<SC, LO, GO>                  export_type;
 typedef Tpetra::Import<SC, LO, GO>                  import_type;
 typedef Tpetra::CrsMatrix<SC, LO, GO, NT>           crs_matrix_type;
-typedef Tpetra::CrsGraph<SC, LO, GO, NT>            crs_graph_type;
+typedef Tpetra::CrsGraph<SC, LO, GO>                crs_graph_type;
 typedef Tpetra::MultiVector<SC, LO, GO, NT>         multi_vector_type;
 typedef Tpetra::Operator<SC, LO, GO, NT>            operator_type;
 
 //"reference-counted pointer."
-typedef RCP<const map_type>                         rcprowMap_type;
-typedef RCP<const map_type>                         rcpcolMap_type;
-typedef RCP<const crs_matrix_type>                  rcpcrsMatrix_type;
+//typedef RCP<const map_type>                         rcprowMap_type;
+//typedef RCP<const map_type>                         rcpcolMap_type;
+//typedef RCP<const crs_matrix_type>                  rcpcrsMatrix_type;
 typedef MueLu::MLParameterListInterpreter<SC, LO, GO, NT> ML_ParameterListInterpreter;
-
 
 typedef Teuchos::RCP<Teuchos::Comm<int>> comm_type;
 

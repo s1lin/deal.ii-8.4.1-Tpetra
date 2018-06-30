@@ -19,14 +19,15 @@
 
 #  include <deal.II/lac/trilinos_sparse_matrix.h>
 #  include <deal.II/lac/trilinos_block_vector.h>
+#  include <Teuchos_RCPDecl.hpp>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 #  include <Tpetra_Vector_decl.hpp>
-#  include <import_type_decl.hpp>
+#  include <Tpetra_Import_decl.hpp>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 #  include <cmath>
-#include <Teuchos_RCPDecl.hpp>
+
 
 
 DEAL_II_NAMESPACE_OPEN

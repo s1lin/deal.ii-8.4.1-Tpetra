@@ -26,7 +26,7 @@ DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 #  include <Ifpack_Chebyshev.h>
 #  include <Teuchos_ParameterList.hpp>
 #  include <Teuchos_RCP.hpp>
-#  include <Epetra_MultiVector.h>
+#  include <Tpetra_MultiVector_decl.hpp>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 DEAL_II_NAMESPACE_OPEN
@@ -50,7 +50,7 @@ namespace TrilinosWrappers
 #ifdef DEAL_II_WITH_MPI
     communicator (base.communicator),
 #endif
-    vector_distributor (new Epetra_Map(*base.vector_distributor))
+    vector_distributor (new map_type(*base.vector_distributor))
   {}
 
 
@@ -93,7 +93,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("point relaxation",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            0));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -145,7 +145,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("point relaxation",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -198,7 +198,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("point relaxation",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -254,7 +254,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("block relaxation",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            0));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -314,7 +314,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("block relaxation",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -375,7 +375,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("block relaxation",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -432,7 +432,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("IC",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -483,7 +483,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("ILU",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -536,7 +536,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("ILUT",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>
@@ -582,7 +582,7 @@ namespace TrilinosWrappers
     preconditioner.reset ();
     preconditioner.reset (Ifpack().Create
                           ("Amesos",
-                           const_cast<Epetra_CrsMatrix *>(&matrix.trilinos_matrix()),
+                           const_cast<crs_matrix_type *>(&matrix.trilinos_matrix()),
                            additional_data.overlap));
 
     Ifpack_Preconditioner *ifpack = static_cast<Ifpack_Preconditioner *>

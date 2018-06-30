@@ -33,11 +33,11 @@ DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 #  else
 #    include <Epetra_SerialComm.h>
 #  endif
-#  include <Epetra_Map.h>
+#  include <Tpetra_Map_decl.hpp>
 
 #  include <Teuchos_ParameterList.hpp>
-#  include <Epetra_RowMatrix.h>
-#  include <Epetra_Vector.h>
+#  include <Tpetra_RowMatrix_decl.hpp>
+#  include <Tpetra_Vector_decl.hpp>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 // forward declarations
@@ -153,13 +153,13 @@ namespace TrilinosWrappers
                          const dealii::parallel::distributed::Vector<double> &src) const;
 
     /**
-     * Return a reference to the underlaying Trilinos Epetra_Operator. So you
+     * Return a reference to the underlaying Trilinos operator_type. So you
      * can use the preconditioner with unwrapped Trilinos solver.
      *
      * Calling this function from an uninitialized object will cause an
      * exception.
      */
-    Epetra_Operator &trilinos_operator() const;
+    operator_type &trilinos_operator() const;
 
     /**
      * Exception.
@@ -178,7 +178,7 @@ namespace TrilinosWrappers
      * This is a pointer to the preconditioner object that is used when
      * applying the preconditioner.
      */
-    std_cxx11::shared_ptr<Epetra_Operator> preconditioner;
+    std_cxx11::shared_ptr<operator_type> preconditioner;
 
     /**
      * Internal communication pattern in case the matrix needs to be copied
@@ -194,7 +194,7 @@ namespace TrilinosWrappers
      * Internal Trilinos map in case the matrix needs to be copied from
      * deal.II format.
      */
-    std_cxx11::shared_ptr<Epetra_Map>   vector_distributor;
+    std_cxx11::shared_ptr<map_type>   vector_distributor;
   };
 
 
@@ -1271,7 +1271,7 @@ namespace TrilinosWrappers
    * preconditioner object is created based on the matrix that we want the
    * preconditioner to be based on. A call of the respective
    * <code>vmult</code> function does call the respective operation in the
-   * Trilinos package, where it is called <code>ApplyInverse</code>. Use of
+   * Trilinos package, where it is called <code>apply</code>. Use of
    * this class is explained in the step-31 tutorial program.
    *
    * Since the Trilinos objects we want to use are heavily dependent on Epetra
@@ -1475,7 +1475,7 @@ namespace TrilinosWrappers
      * Let Trilinos compute a multilevel hierarchy for the solution of a
      * linear system with the given matrix. As opposed to the other initialize
      * function above, this function uses an abstract interface to an object
-     * of type Epetra_RowMatrix which allows a user to pass quite general
+     * of type row_matrix_type which allows a user to pass quite general
      * objects to the ML preconditioner.
      *
      * This initialization routine is useful in cases where the operator to be
@@ -1486,10 +1486,10 @@ namespace TrilinosWrappers
      * faster matrix-vector multiplications than possible with matrix entries
      * (matrix-free methods). These implementations can be beneficially
      * combined with Chebyshev smoothers that only perform matrix-vector
-     * products. The interface class Epetra_RowMatrix is very flexible to
+     * products. The interface class row_matrix_type is very flexible to
      * enable this kind of implementation.
      */
-    void initialize (const Epetra_RowMatrix &matrix,
+    void initialize (const row_matrix_type &matrix,
                      const AdditionalData   &additional_data = AdditionalData());
 
     /**
@@ -1511,10 +1511,10 @@ namespace TrilinosWrappers
      * Let Trilinos compute a multilevel hierarchy for the solution of a
      * linear system with the given matrix. As opposed to the other initialize
      * function above, this function uses an abstract interface to an object
-     * of type Epetra_RowMatrix which allows a user to pass quite general
+     * of type row_matrix_type which allows a user to pass quite general
      * objects to the ML preconditioner.
      */
-    void initialize (const Epetra_RowMatrix       &matrix,
+    void initialize (const row_matrix_type       &matrix,
                      const Teuchos::ParameterList &ml_parameters);
 
     /**
@@ -1735,7 +1735,7 @@ namespace TrilinosWrappers
      * function above, this function uses an object of type
      * Epetra_CrsMatrixCrs.
      */
-    void initialize (const Epetra_CrsMatrix &matrix,
+    void initialize (const crs_matrix_type &matrix,
                      const AdditionalData   &additional_data = AdditionalData());
 
     /**
@@ -1755,9 +1755,9 @@ namespace TrilinosWrappers
     /**
      * Let Trilinos compute a multilevel hierarchy for the solution of a
      * linear system with the given matrix. As opposed to the other initialize
-     * function above, this function uses an object of type Epetra_CrsMatrix.
+     * function above, this function uses an object of type crs_matrix_type.
      */
-    void initialize (const Epetra_CrsMatrix &matrix,
+    void initialize (const crs_matrix_type &matrix,
                      Teuchos::ParameterList &muelu_parameters);
 
     /**
@@ -1858,12 +1858,12 @@ namespace TrilinosWrappers
   PreconditionBase::vmult (VectorBase       &dst,
                            const VectorBase &src) const
   {
-    Assert (dst.vector_partitioner().SameAs(preconditioner->OperatorRangeMap()),
+    Assert (dst.vector_partitioner().SameAs(preconditioner->getRangeMap()),
             ExcNonMatchingMaps("dst"));
-    Assert (src.vector_partitioner().SameAs(preconditioner->OperatorDomainMap()),
+    Assert (src.vector_partitioner().SameAs(preconditioner->getDomainMap()),
             ExcNonMatchingMaps("src"));
 
-    const int ierr = preconditioner->ApplyInverse (src.trilinos_vector(),
+    const int ierr = preconditioner->apply (src.trilinos_vector(),
                                                    dst.trilinos_vector());
     AssertThrow (ierr == 0, ExcTrilinosError(ierr));
   }
@@ -1873,13 +1873,13 @@ namespace TrilinosWrappers
   PreconditionBase::Tvmult (VectorBase       &dst,
                             const VectorBase &src) const
   {
-    Assert (dst.vector_partitioner().SameAs(preconditioner->OperatorRangeMap()),
+    Assert (dst.vector_partitioner().SameAs(preconditioner->getRangeMap()),
             ExcNonMatchingMaps("dst"));
-    Assert (src.vector_partitioner().SameAs(preconditioner->OperatorDomainMap()),
+    Assert (src.vector_partitioner().SameAs(preconditioner->getDomainMap()),
             ExcNonMatchingMaps("src"));
 
     preconditioner->SetUseTranspose(true);
-    const int ierr = preconditioner->ApplyInverse (src.trilinos_vector(),
+    const int ierr = preconditioner->apply (src.trilinos_vector(),
                                                    dst.trilinos_vector());
     AssertThrow (ierr == 0, ExcTrilinosError(ierr));
     preconditioner->SetUseTranspose(false);
@@ -1900,16 +1900,15 @@ namespace TrilinosWrappers
                                 const dealii::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.size()),
-                     preconditioner->OperatorDomainMap().NumMyElements());
+                     preconditioner->getDomainMap().getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.size()),
-                     preconditioner->OperatorRangeMap().NumMyElements());
-    Epetra_Vector tril_dst (View, preconditioner->OperatorDomainMap(),
+                     preconditioner->getRangeMap().getNodeNumElements());
+    vector_type tril_dst (View, preconditioner->getDomainMap(),
                             dst.begin());
-    Epetra_Vector tril_src (View, preconditioner->OperatorRangeMap(),
+    vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
 
-    const int ierr = preconditioner->ApplyInverse (tril_src, tril_dst);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    preconditioner->apply (tril_src, tril_dst);
   }
 
 
@@ -1918,17 +1917,16 @@ namespace TrilinosWrappers
                                  const dealii::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.size()),
-                     preconditioner->OperatorDomainMap().NumMyElements());
+                     preconditioner->getDomainMap().getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.size()),
-                     preconditioner->OperatorRangeMap().NumMyElements());
-    Epetra_Vector tril_dst (View, preconditioner->OperatorDomainMap(),
+                     preconditioner->getRangeMap().getNodeNumElements());
+    vector_type tril_dst (View, preconditioner->getDomainMap(),
                             dst.begin());
-    Epetra_Vector tril_src (View, preconditioner->OperatorRangeMap(),
+    vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
 
     preconditioner->SetUseTranspose(true);
-    const int ierr = preconditioner->ApplyInverse (tril_src, tril_dst);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    preconditioner->apply (tril_src, tril_dst);
     preconditioner->SetUseTranspose(false);
   }
 
@@ -1940,16 +1938,15 @@ namespace TrilinosWrappers
                            const parallel::distributed::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.local_size()),
-                     preconditioner->OperatorDomainMap().NumMyElements());
+                     preconditioner->getDomainMap().getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.local_size()),
-                     preconditioner->OperatorRangeMap().NumMyElements());
-    Epetra_Vector tril_dst (View, preconditioner->OperatorDomainMap(),
+                     preconditioner->getRangeMap().getNodeNumElements());
+    vector_type tril_dst (View, preconditioner->getDomainMap(),
                             dst.begin());
-    Epetra_Vector tril_src (View, preconditioner->OperatorRangeMap(),
+    vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
 
-    const int ierr = preconditioner->ApplyInverse (tril_src, tril_dst);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    preconditioner->apply (tril_src, tril_dst);
   }
 
   inline
@@ -1958,22 +1955,21 @@ namespace TrilinosWrappers
                             const parallel::distributed::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.local_size()),
-                     preconditioner->OperatorDomainMap().NumMyElements());
+                     preconditioner->getDomainMap().getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.local_size()),
-                     preconditioner->OperatorRangeMap().NumMyElements());
-    Epetra_Vector tril_dst (View, preconditioner->OperatorDomainMap(),
+                     preconditioner->getRangeMap().getNodeNumElements());
+    vector_type tril_dst (View, preconditioner->getDomainMap(),
                             dst.begin());
-    Epetra_Vector tril_src (View, preconditioner->OperatorRangeMap(),
+    vector_type tril_src (View, preconditioner->getRangeMap(),
                             const_cast<double *>(src.begin()));
 
     preconditioner->SetUseTranspose(true);
-    const int ierr = preconditioner->ApplyInverse (tril_src, tril_dst);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    preconditioner->apply (tril_src, tril_dst);
     preconditioner->SetUseTranspose(false);
   }
 
   inline
-  Epetra_Operator &
+  operator_type &
   PreconditionBase::trilinos_operator () const
   {
     AssertThrow (preconditioner, ExcMessage("Trying to dereference a null pointer."));
