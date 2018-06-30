@@ -469,7 +469,7 @@ namespace TrilinosWrappers
   Vector::Vector ()
   {
     last_action = Zero;
-    Tpetra_LocalMap map (0, 0, Utilities::Trilinos::comm_self());
+    map_type map (0, 0, Utilities::Trilinos::comm_self());
     vector.reset (new vector_type(map));
   }
 
@@ -478,7 +478,7 @@ namespace TrilinosWrappers
   Vector::Vector (const size_type n)
   {
     last_action = Zero;
-    Tpetra_LocalMap map ((TrilinosWrappers::types::int_type)n, 0, Utilities::Trilinos::comm_self());
+    map_type map ((TrilinosWrappers::types::int_type)n, 0, Utilities::Trilinos::comm_self());
     vector.reset (new vector_type (map));
   }
 
@@ -487,7 +487,7 @@ namespace TrilinosWrappers
   Vector::Vector (const map_type &input_map)
   {
     last_action = Zero;
-    Tpetra_LocalMap map (n_global_elements(input_map),
+    map_type map (n_global_elements(input_map),
                          input_map.IndexBase(),
                          input_map.Comm());
     vector.reset (new vector_type(map));
@@ -499,7 +499,7 @@ namespace TrilinosWrappers
                   const MPI_Comm &communicator)
   {
     last_action = Zero;
-    Tpetra_LocalMap map (static_cast<TrilinosWrappers::types::int_type>(partitioning.size()),
+    map_type map (static_cast<TrilinosWrappers::types::int_type>(partitioning.size()),
                          0,
 #ifdef DEAL_II_WITH_MPI
                          Tpetra_MpiComm(communicator));
@@ -515,7 +515,7 @@ namespace TrilinosWrappers
   Vector::Vector (const VectorBase &v)
   {
     last_action = Zero;
-    Tpetra_LocalMap map (n_global_elements(v.vector->getMap()),
+    map_type map (n_global_elements(v.vector->getMap()),
                          v.vector->getMap().IndexBase(),
                          v.vector->getMap().Comm());
     vector.reset (new vector_type(map));
@@ -538,7 +538,7 @@ namespace TrilinosWrappers
   {
     if (size() != n)
       {
-        Tpetra_LocalMap map ((TrilinosWrappers::types::int_type)n, 0,
+        map_type map ((TrilinosWrappers::types::int_type)n, 0,
                              Utilities::Trilinos::comm_self());
         vector.reset (new vector_type (map));
       }
@@ -564,7 +564,7 @@ namespace TrilinosWrappers
   {
     if (n_global_elements(vector->getMap()) != n_global_elements(input_map))
       {
-        Tpetra_LocalMap map (n_global_elements(input_map),
+        map_type map (n_global_elements(input_map),
                              input_map.IndexBase(),
                              input_map.Comm());
         vector.reset (new vector_type (map));
@@ -593,7 +593,7 @@ namespace TrilinosWrappers
     if (n_global_elements(vector->getMap()) !=
         static_cast<TrilinosWrappers::types::int_type>(partitioning.size()))
       {
-        Tpetra_LocalMap map (static_cast<TrilinosWrappers::types::int_type>(partitioning.size()),
+        map_type map (static_cast<TrilinosWrappers::types::int_type>(partitioning.size()),
                              0,
 #ifdef DEAL_II_WITH_MPI
                              Tpetra_MpiComm(communicator));
@@ -636,7 +636,7 @@ namespace TrilinosWrappers
       {
         if (local_range() != v.local_range())
           {
-            Tpetra_LocalMap map (global_length(*(v.vector)),
+            map_type map (global_length(*(v.vector)),
                                  v.vector->getMap().IndexBase(),
                                  v.vector->Comm());
             vector.reset (new vector_type(map));
@@ -691,9 +691,10 @@ namespace TrilinosWrappers
   {
     if (size() != v.size())
       {
-        Tpetra_LocalMap map (n_global_elements(v.vector->getMap()),
+        map_type map (n_global_elements(v.vector->getMap()),
                              v.vector->getMap().IndexBase(),
                              v.vector->Comm());
+
         vector.reset (new vector_type(map));
       }
 
@@ -708,7 +709,7 @@ namespace TrilinosWrappers
   {
     if (size() != v.size())
       {
-        Tpetra_LocalMap map (n_global_elements(v.vector->getMap()),
+        map_type map (n_global_elements(v.vector->getMap()),
                              v.vector->getMap().IndexBase(),
                              v.vector->Comm());
         vector.reset (new vector_type(map));
