@@ -32,13 +32,12 @@
 #  include <deal.II/base/std_cxx11/shared_ptr.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include <Epetra_FECrsGraph.h>
-#  include <Epetra_Map.h>
+#  include "trilinos_tpetra_wrapper.h"
 #  ifdef DEAL_II_WITH_MPI
-#    include <Epetra_MpiComm.h>
-#    include "mpi.h"
-#  else
-#    include "Epetra_SerialComm.h"
+#	 include <Tpetra_MpiPlatform.hpp>
+# else
+#    include <Tpetra_SerialPlatform.hpp>
+#    include <Teuchos_DefaultComm.hpp>
 #  endif
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
@@ -252,7 +251,7 @@ namespace TrilinosWrappers
 
   /**
    * This class implements a wrapper class to use the Trilinos distributed
-   * sparsity pattern class Epetra_FECrsGraph. This class is designed to be
+   * sparsity pattern class crs_graph_type. This class is designed to be
    * used for construction of %parallel Trilinos matrices. The functionality
    * of this class is modeled after the existing sparsity pattern classes,
    * with the difference that this class can work fully in %parallel according
@@ -406,12 +405,12 @@ namespace TrilinosWrappers
     void compress ();
 //@}
     /**
-     * @name Constructors and initialization using an Epetra_Map description
+     * @name Constructors and initialization using an map_type description
      */
 //@{
 
     /**
-     * Constructor for a square sparsity pattern using an Epetra_map for the
+     * Constructor for a square sparsity pattern using an map_type for the
      * description of the %parallel partitioning. Moreover, the number of
      * nonzero entries in the rows of the sparsity pattern can be specified.
      * Note that this number does not need to be exact, and it is allowed that
@@ -424,7 +423,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparsityPattern (const Epetra_Map &parallel_partitioning,
+    SparsityPattern (const map_type &parallel_partitioning,
                      const size_type   n_entries_per_row = 0) DEAL_II_DEPRECATED;
 
     /**
@@ -439,7 +438,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparsityPattern (const Epetra_Map             &parallel_partitioning,
+    SparsityPattern (const map_type             &parallel_partitioning,
                      const std::vector<size_type> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
@@ -451,7 +450,7 @@ namespace TrilinosWrappers
      * columns. Note that there is no real parallelism along the columns
      * &ndash; the processor that owns a certain row always owns all the
      * column elements, no matter how far they might be spread out. The second
-     * Epetra_Map is only used to specify the number of columns and for
+     * map_type is only used to specify the number of columns and for
      * specifying the correct domain space when performing matrix-vector
      * products with vectors based on the same column map.
      *
@@ -460,8 +459,8 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparsityPattern (const Epetra_Map   &row_parallel_partitioning,
-                     const Epetra_Map   &col_parallel_partitioning,
+    SparsityPattern (const map_type   &row_parallel_partitioning,
+                     const map_type   &col_parallel_partitioning,
                      const size_type     n_entries_per_row = 0) DEAL_II_DEPRECATED;
 
     /**
@@ -477,13 +476,13 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparsityPattern (const Epetra_Map             &row_parallel_partitioning,
-                     const Epetra_Map             &col_parallel_partitioning,
+    SparsityPattern (const map_type             &row_parallel_partitioning,
+                     const map_type             &col_parallel_partitioning,
                      const std::vector<size_type> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
      * Reinitialization function for generating a square sparsity pattern
-     * using an Epetra_Map for the description of the %parallel partitioning
+     * using an map_type for the description of the %parallel partitioning
      * and the number of nonzero entries in the rows of the sparsity pattern.
      * Note that this number does not need to be exact, and it is even allowed
      * that the actual sparsity structure has more nonzero entries than
@@ -498,7 +497,7 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     void
-    reinit (const Epetra_Map &parallel_partitioning,
+    reinit (const map_type &parallel_partitioning,
             const size_type   n_entries_per_row = 0) DEAL_II_DEPRECATED;
 
     /**
@@ -514,7 +513,7 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     void
-    reinit (const Epetra_Map             &parallel_partitioning,
+    reinit (const map_type             &parallel_partitioning,
             const std::vector<size_type> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
@@ -526,7 +525,7 @@ namespace TrilinosWrappers
      * columns. Note that there is no real parallelism along the columns
      * &ndash; the processor that owns a certain row always owns all the
      * column elements, no matter how far they might be spread out. The second
-     * Epetra_Map is only used to specify the number of columns and for
+     * map_type is only used to specify the number of columns and for
      * internal arrangements when doing matrix-vector products with vectors
      * based on that column map.
      *
@@ -536,8 +535,8 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     void
-    reinit (const Epetra_Map   &row_parallel_partitioning,
-            const Epetra_Map   &col_parallel_partitioning,
+    reinit (const map_type   &row_parallel_partitioning,
+            const map_type   &col_parallel_partitioning,
             const size_type     n_entries_per_row = 0) DEAL_II_DEPRECATED;
 
     /**
@@ -554,8 +553,8 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     void
-    reinit (const Epetra_Map             &row_parallel_partitioning,
-            const Epetra_Map             &col_parallel_partitioning,
+    reinit (const map_type             &row_parallel_partitioning,
+            const map_type             &col_parallel_partitioning,
             const std::vector<size_type> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
@@ -570,8 +569,8 @@ namespace TrilinosWrappers
      */
     template<typename SparsityPatternType>
     void
-    reinit (const Epetra_Map          &row_parallel_partitioning,
-            const Epetra_Map          &col_parallel_partitioning,
+    reinit (const map_type          &row_parallel_partitioning,
+            const map_type          &col_parallel_partitioning,
             const SparsityPatternType &nontrilinos_sparsity_pattern,
             const bool                 exchange_data = false) DEAL_II_DEPRECATED;
 
@@ -587,7 +586,7 @@ namespace TrilinosWrappers
      */
     template<typename SparsityPatternType>
     void
-    reinit (const Epetra_Map          &parallel_partitioning,
+    reinit (const map_type          &parallel_partitioning,
             const SparsityPatternType &nontrilinos_sparsity_pattern,
             const bool                 exchange_data = false) DEAL_II_DEPRECATED;
 //@}
@@ -632,7 +631,7 @@ namespace TrilinosWrappers
      * sparsity pattern. Note that there is no real parallelism along the
      * columns &ndash; the processor that owns a certain row always owns all
      * the column elements, no matter how far they might be spread out. The
-     * second Epetra_Map is only used to specify the number of columns and for
+     * second map_type is only used to specify the number of columns and for
      * internal arrangements when doing matrix-vector products with vectors
      * based on that column map.
      *
@@ -944,47 +943,47 @@ namespace TrilinosWrappers
      * Return a const reference to the underlying Trilinos Epetra_CrsGraph
      * data that stores the sparsity pattern.
      */
-    const Epetra_FECrsGraph &trilinos_sparsity_pattern () const;
+    const crs_graph_type &trilinos_sparsity_pattern () const;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the parallel partitioning of the domain space of this sparsity
      * pattern, i.e., the partitioning of the vectors matrices based on this
      * sparsity pattern are multiplied with.
      *
      * @deprecated Use locally_owned_domain_indices() instead.
      */
-    const Epetra_Map &domain_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &domain_partitioner () const DEAL_II_DEPRECATED;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the range space of this sparsity pattern,
      * i.e., the partitioning of the vectors that are result from matrix-
      * vector products.
      *
      * @deprecated Use locally_owned_range_indices() instead.
      */
-    const Epetra_Map &range_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &range_partitioner () const DEAL_II_DEPRECATED;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the sparsity pattern rows. Equal to the
      * partitioning of the range.
      *
      * @deprecated Use locally_owned_range_indices() instead.
      */
-    const Epetra_Map &row_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &row_partitioner () const DEAL_II_DEPRECATED;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the sparsity pattern columns. This is in
-     * general not equal to the partitioner Epetra_Map for the domain because
+     * general not equal to the partitioner map_type for the domain because
      * of overlap in the matrix.
      *
      * @deprecated Usually not necessary. If desired, access via the
-     * Epetra_FECrsGraph.
+     * crs_graph_type.
      */
-    const Epetra_Map &col_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &col_partitioner () const DEAL_II_DEPRECATED;
 
     /**
      * Return a const reference to the communicator used for this object.
@@ -1147,14 +1146,14 @@ namespace TrilinosWrappers
      * Pointer to the user-supplied Epetra Trilinos mapping of the matrix
      * columns that assigns parts of the matrix to the individual processes.
      */
-    std_cxx11::shared_ptr<Epetra_Map> column_space_map;
+    std_cxx11::shared_ptr<map_type> column_space_map;
 
     /**
      * A sparsity pattern object in Trilinos to be used for finite element
      * based problems which allows for adding non-local elements to the
      * pattern.
      */
-    std_cxx11::shared_ptr<Epetra_FECrsGraph> graph;
+    std_cxx11::shared_ptr<crs_graph_type> graph;
 
     /**
      * A sparsity pattern object for the non-local part of the sparsity
@@ -1489,7 +1488,7 @@ namespace TrilinosWrappers
 
 
   inline
-  const Epetra_FECrsGraph &
+  const crs_graph_type &
   SparsityPattern::trilinos_sparsity_pattern () const
   {
     return *graph;
@@ -1501,7 +1500,7 @@ namespace TrilinosWrappers
   IndexSet
   SparsityPattern::locally_owned_domain_indices () const
   {
-    return IndexSet(static_cast<const Epetra_Map &>(graph->DomainMap()));
+    return IndexSet(static_cast<const map_type &>(graph->DomainMap()));
   }
 
 
@@ -1510,7 +1509,7 @@ namespace TrilinosWrappers
   IndexSet
   SparsityPattern::locally_owned_range_indices () const
   {
-    return IndexSet(static_cast<const Epetra_Map &>(graph->RangeMap()));
+    return IndexSet(static_cast<const map_type &>(graph->RangeMap()));
   }
 
 #endif // DOXYGEN

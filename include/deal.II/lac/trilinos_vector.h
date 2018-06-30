@@ -30,8 +30,7 @@
 #  include <deal.II/lac/trilinos_vector_base.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include "Epetra_Map.h"
-#  include "Epetra_LocalMap.h"
+#  include "trilinos_tpetra_wrapper.h"
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 DEAL_II_NAMESPACE_OPEN
@@ -52,19 +51,19 @@ namespace TrilinosWrappers
   {
 #ifndef DEAL_II_WITH_64BIT_INDICES
     // define a helper function that queries the global ID of local ID of
-    // an Epetra_BlockMap object  by calling either the 32- or 64-bit
+    // an map_type object  by calling either the 32- or 64-bit
     // function necessary.
     inline
-    int gid(const Epetra_BlockMap &map, int i)
+    int gid(const map_type &map, int i)
     {
-      return map.GID(i);
+      return map.getGlobalElement(i);
     }
 #else
     // define a helper function that queries the global ID of local ID of
-    // an Epetra_BlockMap object  by calling either the 32- or 64-bit
+    // an map_type object  by calling either the 32- or 64-bit
     // function necessary.
     inline
-    long long int gid(const Epetra_BlockMap &map, int i)
+    long long int gid(const map_type &map, int i)
     {
       return map.GID64(i);
     }
@@ -85,7 +84,7 @@ namespace TrilinosWrappers
 
     /**
      * This class implements a wrapper to use the Trilinos distributed vector
-     * class Epetra_FEVector. This class is derived from the
+     * class vector_type. This class is derived from the
      * TrilinosWrappers::VectorBase class and provides all functionality
      * included there.
      *
@@ -663,7 +662,7 @@ namespace TrilinosWrappers
                          const dealii::Vector<number> &v)
     {
       if (vector.get() == 0 || vector->Map().SameAs(parallel_partitioner) == false)
-        vector.reset (new Epetra_FEVector(parallel_partitioner));
+        vector.reset (new vector_type(parallel_partitioner));
 
       has_ghosts = vector->Map().UniqueGIDs()==false;
 
@@ -692,7 +691,7 @@ namespace TrilinosWrappers
     {
       if (size() != v.size())
         {
-          vector.reset (new Epetra_FEVector(Epetra_Map
+          vector.reset (new vector_type(Epetra_Map
                                             (static_cast<TrilinosWrappers::types::int_type>(v.size()), 0,
 #ifdef DEAL_II_WITH_MPI
                                              Epetra_MpiComm(MPI_COMM_SELF)
@@ -907,8 +906,8 @@ namespace TrilinosWrappers
   template <typename number>
   Vector::Vector (const dealii::Vector<number> &v)
   {
-    Epetra_LocalMap map ((TrilinosWrappers::types::int_type)v.size(), 0, Utilities::Trilinos::comm_self());
-    vector.reset (new Epetra_FEVector(map));
+    map_type map ((TrilinosWrappers::types::int_type)v.size(), 0, Teuchos::RCP<Teuchos::Comm<int>>);
+    vector.reset (new vector_type(map));
     *this = v;
   }
 
@@ -933,9 +932,9 @@ namespace TrilinosWrappers
       {
         vector.reset();
 
-        Epetra_LocalMap map ((TrilinosWrappers::types::int_type)v.size(), 0,
-                             Utilities::Trilinos::comm_self());
-        vector.reset (new Epetra_FEVector(map));
+        map_type map ((TrilinosWrappers::types::int_type)v.size(), 0,
+                             comm_type);
+        vector.reset (new vector_type(map));
       }
 
     const Epetra_Map &map = vector_partitioner();

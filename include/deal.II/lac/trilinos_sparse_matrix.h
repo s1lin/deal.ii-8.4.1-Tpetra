@@ -36,16 +36,14 @@
 #  define TrilinosScalar double
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include <Epetra_FECrsMatrix.h>
-#  include <Epetra_Map.h>
-#  include <Epetra_CrsGraph.h>
-#  include <Epetra_MultiVector.h>
+#  include "trilinos_tpetra_wrapper.h"
 #  ifdef DEAL_II_WITH_MPI
-#    include <Epetra_MpiComm.h>
-#    include "mpi.h"
-#  else
-#    include "Epetra_SerialComm.h"
+#	 include <Tpetra_MpiPlatform.hpp>
+# else
+    #include <Tpetra_SerialPlatform.hpp>
+    #include <Teuchos_DefaultComm.hpp>
 #  endif
+
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 class Epetra_Export;
@@ -576,7 +574,7 @@ namespace TrilinosWrappers
      * meant for use in serial programs, where there is no need to specify how
      * the matrix is going to be distributed among different processors. This
      * function works in %parallel, too, but it is recommended to manually
-     * specify the %parallel partitioning of the matrix using an Epetra_Map.
+     * specify the %parallel partitioning of the matrix using an map_type.
      * When run in %parallel, it is currently necessary that each processor
      * holds the sparsity_pattern structure because each processor sets its
      * rows.
@@ -638,19 +636,19 @@ namespace TrilinosWrappers
                  const ::dealii::SparsityPattern      *use_this_sparsity=0);
 
     /**
-     * This reinit function takes as input a Trilinos Epetra_CrsMatrix and
+     * This reinit function takes as input a Trilinos crs_matrix_type and
      * copies its sparsity pattern. If so requested, even the content (values)
      * will be copied.
      */
-    void reinit (const Epetra_CrsMatrix &input_matrix,
+    void reinit (const crs_matrix_type &input_matrix,
                  const bool              copy_values = true);
 //@}
     /**
-     * @name Constructors and initialization using an Epetra_Map description
+     * @name Constructors and initialization using an map_type description
      */
 //@{
     /**
-     * Constructor using an Epetra_Map to describe the %parallel partitioning.
+     * Constructor using an map_type to describe the %parallel partitioning.
      * The parameter @p n_max_entries_per_row sets the number of nonzero
      * entries in each row that will be allocated. Note that this number does
      * not need to be exact, and it is even allowed that the actual matrix
@@ -663,7 +661,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparseMatrix (const Epetra_Map  &parallel_partitioning,
+    SparseMatrix (const map_type  &parallel_partitioning,
                   const size_type    n_max_entries_per_row = 0) DEAL_II_DEPRECATED;
 
     /**
@@ -675,7 +673,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparseMatrix (const Epetra_Map                &parallel_partitioning,
+    SparseMatrix (const map_type                &parallel_partitioning,
                   const std::vector<unsigned int> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
@@ -686,7 +684,7 @@ namespace TrilinosWrappers
      * and the other one the partitioning of dofs in the matrix columns. Note
      * that there is no real parallelism along the columns &ndash; the
      * processor that owns a certain row always owns all the column elements,
-     * no matter how far they might be spread out. The second Epetra_Map is
+     * no matter how far they might be spread out. The second map_type is
      * only used to specify the number of columns and for internal
      * arrangements when doing matrix-vector products with vectors based on
      * that column map.
@@ -696,8 +694,8 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparseMatrix (const Epetra_Map &row_parallel_partitioning,
-                  const Epetra_Map &col_parallel_partitioning,
+    SparseMatrix (const map_type &row_parallel_partitioning,
+                  const map_type &col_parallel_partitioning,
                   const size_type   n_max_entries_per_row = 0) DEAL_II_DEPRECATED;
 
     /**
@@ -716,8 +714,8 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet argument instead.
      */
-    SparseMatrix (const Epetra_Map                &row_parallel_partitioning,
-                  const Epetra_Map                &col_parallel_partitioning,
+    SparseMatrix (const map_type                &row_parallel_partitioning,
+                  const map_type                &col_parallel_partitioning,
                   const std::vector<unsigned int> &n_entries_per_row) DEAL_II_DEPRECATED;
 
     /**
@@ -747,7 +745,7 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     template<typename SparsityPatternType>
-    void reinit (const Epetra_Map          &parallel_partitioning,
+    void reinit (const map_type          &parallel_partitioning,
                  const SparsityPatternType &sparsity_pattern,
                  const bool                 exchange_data = false) DEAL_II_DEPRECATED;
 
@@ -766,8 +764,8 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     template<typename SparsityPatternType>
-    void reinit (const Epetra_Map          &row_parallel_partitioning,
-                 const Epetra_Map          &col_parallel_partitioning,
+    void reinit (const map_type          &row_parallel_partitioning,
+                 const map_type          &col_parallel_partitioning,
                  const SparsityPatternType &sparsity_pattern,
                  const bool                 exchange_data = false) DEAL_II_DEPRECATED;
 
@@ -790,7 +788,7 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     template <typename number>
-    void reinit (const Epetra_Map                     &parallel_partitioning,
+    void reinit (const map_type                     &parallel_partitioning,
                  const ::dealii::SparseMatrix<number> &dealii_sparse_matrix,
                  const double                          drop_tolerance=1e-13,
                  const bool                            copy_values=true,
@@ -812,8 +810,8 @@ namespace TrilinosWrappers
      * @deprecated Use the respective method with IndexSet argument instead.
      */
     template <typename number>
-    void reinit (const Epetra_Map                      &row_parallel_partitioning,
-                 const Epetra_Map                      &col_parallel_partitioning,
+    void reinit (const map_type                      &row_parallel_partitioning,
+                 const map_type                      &col_parallel_partitioning,
                  const ::dealii::SparseMatrix<number>  &dealii_sparse_matrix,
                  const double                           drop_tolerance=1e-13,
                  const bool                             copy_values=true,
@@ -1711,10 +1709,10 @@ namespace TrilinosWrappers
 //@{
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_CrsMatrix
+     * Return a const reference to the underlying Trilinos crs_matrix_type
      * data.
      */
-    const Epetra_CrsMatrix &trilinos_matrix () const;
+    const crs_matrix_type &trilinos_matrix () const;
 
     /**
      * Return a const reference to the underlying Trilinos Epetra_CrsGraph
@@ -1723,43 +1721,43 @@ namespace TrilinosWrappers
     const Epetra_CrsGraph &trilinos_sparsity_pattern () const;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the domain space of this matrix, i.e., the
      * partitioning of the vectors this matrix has to be multiplied with.
      *
      * @deprecated Use locally_owned_domain_indices() instead.
      */
-    const Epetra_Map &domain_partitioner ()  const DEAL_II_DEPRECATED;
+    const map_type &domain_partitioner ()  const DEAL_II_DEPRECATED;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the range space of this matrix, i.e., the
      * partitioning of the vectors that are result from matrix-vector
      * products.
      *
      * @deprecated Use locally_owned_range_indices() instead.
      */
-    const Epetra_Map &range_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &range_partitioner () const DEAL_II_DEPRECATED;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the matrix rows. Equal to the partitioning of
      * the range.
      *
      * @deprecated Use locally_owned_range_indices() instead.
      */
-    const Epetra_Map &row_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &row_partitioner () const DEAL_II_DEPRECATED;
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the partitioning of the matrix columns. This is in general not
-     * equal to the partitioner Epetra_Map for the domain because of overlap
+     * equal to the partitioner map_type for the domain because of overlap
      * in the matrix.
      *
      * @deprecated Usually not necessary. If desired, access it via the
-     * Epetra_CrsMatrix.
+     * crs_matrix_type.
      */
-    const Epetra_Map &col_partitioner () const DEAL_II_DEPRECATED;
+    const map_type &col_partitioner () const DEAL_II_DEPRECATED;
 //@}
 
     /**
@@ -1990,7 +1988,7 @@ namespace TrilinosWrappers
      * Pointer to the user-supplied Epetra Trilinos mapping of the matrix
      * columns that assigns parts of the matrix to the individual processes.
      */
-    std_cxx11::shared_ptr<Epetra_Map> column_space_map;
+    std_cxx11::shared_ptr<map_type> column_space_map;
 
     /**
      * A sparse matrix object in Trilinos to be used for finite element based
@@ -2004,7 +2002,7 @@ namespace TrilinosWrappers
      * local elements if the matrix was constructed from a Trilinos sparsity
      * pattern with the respective option.
      */
-    std_cxx11::shared_ptr<Epetra_CrsMatrix> nonlocal_matrix;
+    std_cxx11::shared_ptr<crs_matrix_type> nonlocal_matrix;
 
     /**
      * An export object used to communicate the nonlocal matrix.
@@ -2626,7 +2624,7 @@ namespace TrilinosWrappers
                              const bool                            copy_values,
                              const ::dealii::SparsityPattern      *use_this_sparsity)
   {
-    Epetra_Map map = parallel_partitioning.make_trilinos_map (communicator, false);
+    map_type map = parallel_partitioning.make_trilinos_map (communicator, false);
     reinit (parallel_partitioning, parallel_partitioning, sparse_matrix,
             drop_tolerance, copy_values, use_this_sparsity);
   }
@@ -2634,10 +2632,10 @@ namespace TrilinosWrappers
 
 
   inline
-  const Epetra_CrsMatrix &
+  const crs_matrix_type &
   SparseMatrix::trilinos_matrix () const
   {
-    return static_cast<const Epetra_CrsMatrix &>(*matrix);
+    return static_cast<const crs_matrix_type &>(*matrix);
   }
 
 

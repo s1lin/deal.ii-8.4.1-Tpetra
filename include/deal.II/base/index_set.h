@@ -24,7 +24,7 @@
 #include <algorithm>
 
 #ifdef DEAL_II_WITH_TRILINOS
-#  include <Epetra_Map.h>
+#  include <deal.II/lac/trilinos_tpetra_wrapper.h>
 #endif
 
 #if defined(DEAL_II_WITH_MPI) || defined(DEAL_II_WITH_PETSC)
@@ -108,9 +108,9 @@ public:
 
 #ifdef DEAL_II_WITH_TRILINOS
   /**
-   * Constructor from a trilinos Epetra_Map.
+   * Constructor from a trilinos map_type.
    */
-  explicit IndexSet(const Epetra_Map &map);
+  explicit IndexSet(const map_type &map);
 #endif
 
   /**
@@ -359,7 +359,7 @@ public:
    * application of this method is to select a subset of the elements of a
    * vector, e.g. for extracting only certain solution components.
    */
-  Epetra_Map make_trilinos_map (const MPI_Comm &communicator = MPI_COMM_WORLD,
+  map_type make_trilinos_map (const MPI_Comm &communicator = MPI_COMM_WORLD,
                                 const bool      overlapping  = false) const;
 #endif
 

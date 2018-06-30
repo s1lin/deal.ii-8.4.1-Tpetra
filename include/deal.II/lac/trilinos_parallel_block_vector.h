@@ -100,12 +100,12 @@ namespace TrilinosWrappers
 
       /**
        * Constructor. Generate a block vector with as many blocks as there are
-       * entries in @p partitioning. Each Epetra_Map contains the layout of
+       * entries in @p partitioning. Each map_type contains the layout of
        * the distribution of data among the MPI processes.
        *
        * This function is deprecated.
        */
-      explicit BlockVector (const std::vector<Epetra_Map> &parallel_partitioning) DEAL_II_DEPRECATED;
+      explicit BlockVector (const std::vector<map_type> &parallel_partitioning) DEAL_II_DEPRECATED;
 
       /**
        * Constructor. Generate a block vector with as many blocks as there are
@@ -198,7 +198,7 @@ namespace TrilinosWrappers
 
       /**
        * Reinitialize the BlockVector to contain as many blocks as there are
-       * Epetra_Maps given in the input argument, according to the parallel
+       * map_types given in the input argument, according to the parallel
        * distribution of the individual components described in the maps.
        *
        * If <tt>omit_zeroing_entries==false</tt>, the vector is filled with
@@ -206,7 +206,7 @@ namespace TrilinosWrappers
        *
        * This function is deprecated.
        */
-      void reinit (const std::vector<Epetra_Map> &parallel_partitioning,
+      void reinit (const std::vector<map_type> &parallel_partitioning,
                    const bool                     omit_zeroing_entries = false) DEAL_II_DEPRECATED;
 
       /**

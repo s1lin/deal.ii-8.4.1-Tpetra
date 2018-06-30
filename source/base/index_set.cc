@@ -17,13 +17,12 @@
 #include <deal.II/base/index_set.h>
 #include <list>
 
-#ifdef DEAL_II_WITH_TRILINOS
 #  ifdef DEAL_II_WITH_MPI
-#    include <Epetra_MpiComm.h>
+#	 include <Tpetra_MpiPlatform.hpp>
+# else
+#   include <Tpetra_SerialPlatform.hpp>
+#   include <Teuchos_DefaultComm.hpp>
 #  endif
-#  include <Epetra_SerialComm.h>
-#  include <Epetra_Map.h>
-#endif
 
 DEAL_II_NAMESPACE_OPEN
 
@@ -34,49 +33,26 @@ DEAL_II_NAMESPACE_OPEN
 // the 64-bit path uses a few different names, so put that into a separate
 // implementation
 
-#ifdef DEAL_II_WITH_64BIT_INDICES
-
-IndexSet::IndexSet (const Epetra_Map &map)
-  :
-  is_compressed (true),
-  index_space_size (map.NumGlobalElements64()),
-  largest_range (numbers::invalid_unsigned_int)
-{
-  // For a contiguous map, we do not need to go through the whole data...
-  if (map.LinearMap())
-    add_range(size_type(map.MinMyGID64()), size_type(map.MaxMyGID64()+1));
-  else
-    {
-      const size_type n_indices = map.NumMyElements();
-      size_type *indices = (size_type *)map.MyGlobalElements64();
-      add_indices(indices, indices+n_indices);
-    }
-  compress();
-}
-
-#else
 
 // this is the standard 32-bit implementation
 
-IndexSet::IndexSet (const Epetra_Map &map)
+IndexSet::IndexSet (const map_type &map)
   :
   is_compressed (true),
-  index_space_size (map.NumGlobalElements()),
+  index_space_size (map.getGlobalNumElements()),
   largest_range (numbers::invalid_unsigned_int)
 {
   // For a contiguous map, we do not need to go through the whole data...
-  if (map.LinearMap())
-    add_range(size_type(map.MinMyGID()), size_type(map.MaxMyGID()+1));
+  if (map.isContiguous())
+    add_range(size_type(map.getMinGlobalIndex()), size_type(map.getMaxAllGlobalIndex()+1));
   else
     {
-      const size_type n_indices = map.NumMyElements();
-      unsigned int *indices = (unsigned int *)map.MyGlobalElements();
+      const size_type n_indices = map.getNodeNumElements();
+      unsigned int *indices = (unsigned int *)map.getNodeNumElements();
       add_indices(indices, indices+n_indices);
     }
   compress();
 }
-
-#endif
 
 #endif // ifdef DEAL_II_WITH_TRILINOS
 
@@ -480,7 +456,7 @@ void IndexSet::fill_index_vector(std::vector<size_type> &indices) const
 
 #ifdef DEAL_II_WITH_TRILINOS
 
-Epetra_Map
+map_type
 IndexSet::make_trilinos_map (const MPI_Comm &communicator,
                              const bool overlapping) const
 {
@@ -492,7 +468,7 @@ IndexSet::make_trilinos_map (const MPI_Comm &communicator,
       const size_type n_global_elements
         = Utilities::MPI::sum (n_elements(), communicator);
       Assert (n_global_elements == size(),
-              ExcMessage ("You are trying to create an Epetra_Map object "
+              ExcMessage ("You are trying to create an map_type object "
                           "that partitions elements of an index set "
                           "between processors. However, the union of the "
                           "index sets on different processors does not "
@@ -511,7 +487,7 @@ IndexSet::make_trilinos_map (const MPI_Comm &communicator,
 #endif
 
   if ((is_contiguous() == true) && (!overlapping))
-    return Epetra_Map (TrilinosWrappers::types::int_type(size()),
+    return map_type (TrilinosWrappers::types::int_type(size()),
                        TrilinosWrappers::types::int_type(n_elements()),
                        0,
 #ifdef DEAL_II_WITH_MPI
@@ -524,7 +500,7 @@ IndexSet::make_trilinos_map (const MPI_Comm &communicator,
       std::vector<size_type> indices;
       fill_index_vector(indices);
 
-      return Epetra_Map (TrilinosWrappers::types::int_type(-1),
+      return map_type (TrilinosWrappers::types::int_type(-1),
                          TrilinosWrappers::types::int_type(n_elements()),
                          (n_elements() > 0
                           ?

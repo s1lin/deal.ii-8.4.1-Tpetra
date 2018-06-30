@@ -154,7 +154,7 @@ namespace TrilinosWrappers
      * assumes that a quadratic block matrix is generated.
      */
     template <typename BlockSparsityPatternType>
-    void reinit (const std::vector<Epetra_Map>  &input_maps,
+    void reinit (const std::vector<map_type>  &input_maps,
                  const BlockSparsityPatternType &block_sparsity_pattern,
                  const bool                      exchange_data = false);
 
@@ -185,7 +185,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use the respective method with IndexSet arguments instead.
      */
-    void reinit (const std::vector<Epetra_Map>             &input_maps,
+    void reinit (const std::vector<map_type>             &input_maps,
                  const ::dealii::BlockSparseMatrix<double> &deal_ii_sparse_matrix,
                  const double                               drop_tolerance=1e-13) DEAL_II_DEPRECATED;
 
@@ -193,7 +193,7 @@ namespace TrilinosWrappers
      * This function initializes the Trilinos matrix using the deal.II sparse
      * matrix and the entries stored therein. It uses a threshold to copy only
      * elements whose modulus is larger than the threshold (so zeros in the
-     * deal.II matrix can be filtered away). Since no Epetra_Map is given, all
+     * deal.II matrix can be filtered away). Since no map_type is given, all
      * the elements will be locally stored.
      */
     void reinit (const ::dealii::BlockSparseMatrix<double> &deal_ii_sparse_matrix,
@@ -226,7 +226,7 @@ namespace TrilinosWrappers
     size_type n_nonzero_elements () const;
 
     /**
-     * Return a vector of the underlying Trilinos Epetra_Map that sets the
+     * Return a vector of the underlying Trilinos map_type that sets the
      * partitioning of the domain space of this block matrix, i.e., the
      * partitioning of the individual block vectors this matrix has to be
      * multiplied with.
@@ -234,10 +234,10 @@ namespace TrilinosWrappers
      * @deprecated Use the methods of the individual matrices based on
      * IndexSet arguments.
      */
-    std::vector<Epetra_Map> domain_partitioner () const DEAL_II_DEPRECATED;
+    std::vector<map_type> domain_partitioner () const DEAL_II_DEPRECATED;
 
     /**
-     * Return a vector of the underlying Trilinos Epetra_Map that sets the
+     * Return a vector of the underlying Trilinos map_type that sets the
      * partitioning of the range space of this block matrix, i.e., the
      * partitioning of the individual block vectors that are the result from
      * matrix-vector products.
@@ -245,7 +245,7 @@ namespace TrilinosWrappers
      * @deprecated Use the methods of the individual matrices based on
      * IndexSet arguments.
      */
-    std::vector<Epetra_Map> range_partitioner () const DEAL_II_DEPRECATED;
+    std::vector<map_type> range_partitioner () const DEAL_II_DEPRECATED;
 
 
     /**

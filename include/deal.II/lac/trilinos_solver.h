@@ -29,17 +29,16 @@
 #  include <deal.II/lac/parallel_vector.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include <AztecOO.h>
-#  include <Epetra_Operator.h>
+//#  include <AztecOO.h>
 #  include <Amesos.h>
 #  include "BelosConfigDefs.hpp"
 #  include "BelosLinearProblem.hpp"
-#  include "BelosEpetraAdapter.hpp"
+//#  include "BelosEpetraAdapter.hpp"
+#  include "trilinos_tpetra_wrapper.h"
 #  include <BelosSolverFactory.hpp>
 #  include "Teuchos_CommandLineProcessor.hpp"
 #  include "Teuchos_ParameterList.hpp"
 #  include "Teuchos_StandardCatchMacros.hpp"
-#  include <Epetra_Operator.h>
 #  include <BelosTFQMRSolMgr.hpp>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
@@ -48,13 +47,12 @@ DEAL_II_NAMESPACE_OPEN
 
 using Teuchos::ParameterList;
 using Teuchos::RCP;
-using Teuchos::rcp;
 using Teuchos::rcpFromRef;
 using namespace std;
 
-typedef double                            ST;
-typedef Epetra_MultiVector                MV;
-typedef Epetra_Operator                   OP;
+typedef double                          ST;
+typedef multi_vector_type               MV;
+typedef operator_type                   OP;
 
 namespace TrilinosWrappers
 {
@@ -162,7 +160,7 @@ namespace TrilinosWrappers
      * Trilinos is chosen.
      */
     double
-    solve (Epetra_Operator        &A,
+    solve (operator_type        &A,
            VectorBase             &x,
            const VectorBase       &b,
            const PreconditionBase &preconditioner);
@@ -195,7 +193,7 @@ namespace TrilinosWrappers
      * exception will be thrown.
      */
     double
-    solve (Epetra_Operator              &A,
+    solve (operator_type              &A,
            dealii::Vector<double>       &x,
            const dealii::Vector<double> &b,
            const PreconditionBase       &preconditioner);
@@ -220,7 +218,7 @@ namespace TrilinosWrappers
      * Trilinos is chosen.
      */
     double
-    solve (Epetra_Operator                                     &A,
+    solve (operator_type                                     &A,
            dealii::parallel::distributed::Vector<double>       &x,
            const dealii::parallel::distributed::Vector<double> &b,
            const PreconditionBase                              &preconditioner);
@@ -662,7 +660,7 @@ namespace TrilinosWrappers
      * side vector and the solution vector, which is passed down to the
      * Trilinos solver.
      */
-    std_cxx11::shared_ptr<Epetra_LinearProblem> linear_problem;
+    std_cxx11::shared_ptr<Belos::LinearProblem<SC, GO, LO>> linear_problem;
 
     /**
      * A structure that contains the Trilinos solver and preconditioner

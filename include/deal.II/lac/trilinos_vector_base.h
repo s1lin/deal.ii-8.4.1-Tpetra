@@ -33,14 +33,16 @@
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 #  define TrilinosScalar double
-#  include "Epetra_ConfigDefs.h"
+#  include "trilinos_tpetra_wrapper.h"
 #  ifdef DEAL_II_WITH_MPI // only if MPI is installed
 #    include "mpi.h"
-#    include "Epetra_MpiComm.h"
+#    include "Tpetra_MpiPlatform.hpp"
+#    include <Teuchos_RCP.hpp>//tefos
 #  else
-#    include "Epetra_SerialComm.h"
+#   include <Tpetra_SerialPlatform.hpp>
+#   include <Teuchos_DefaultComm.hpp>
 #  endif
-#  include "Epetra_FEVector.h"
+//#  include "multi_vector_type.h"
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 DEAL_II_NAMESPACE_OPEN
@@ -188,11 +190,11 @@ namespace TrilinosWrappers
    * vector MPI::Vector and a localized vector Vector. The latter is designed
    * for use in either serial implementations or as a localized copy on each
    * processor.  The implementation of this class is based on the Trilinos
-   * vector class Epetra_FEVector, the (parallel) partitioning of which is
-   * governed by an Epetra_Map. This means that the vector type is generic and
+   * vector class multi_vector_type, the (parallel) partitioning of which is
+   * governed by an map_type. This means that the vector type is generic and
    * can be done in this base class, while the definition of the partition map
    * (and hence, the constructor and reinit function) will have to be done in
-   * the derived classes. The Epetra_FEVector is precisely the kind of vector
+   * the derived classes. The multi_vector_type is precisely the kind of vector
    * we deal with all the time - we probably get it from some assembly
    * process, where also entries not locally owned might need to written and
    * hence need to be forwarded to the owner. The only requirement for this
@@ -260,7 +262,7 @@ namespace TrilinosWrappers
 
     /**
      * Reinit functionality, sets the dimension and possibly the parallel
-     * partitioning (Epetra_Map) of the calling vector to the settings of the
+     * partitioning (map_type) of the calling vector to the settings of the
      * input vector.
      */
     void reinit (const VectorBase &v,
@@ -318,10 +320,10 @@ namespace TrilinosWrappers
     /**
      * Another copy function. This one takes a deal.II vector and copies it
      * into a TrilinosWrapper vector. Note that since we do not provide any
-     * Epetra_map that tells about the partitioning of the vector among the
+     * map_type that tells about the partitioning of the vector among the
      * MPI processes, the size of the TrilinosWrapper vector has to be the
      * same as the size of the input vector. In order to change the map, use
-     * the reinit(const Epetra_Map &input_map) function.
+     * the reinit(const map_type &input_map) function.
      */
     template <typename Number>
     VectorBase &
@@ -586,7 +588,7 @@ namespace TrilinosWrappers
      * locally owned elements of this vector. The ordering of local elements
      * corresponds to the one given by the global indices in case the vector
      * is constructed from an IndexSet or other methods in deal.II (note that
-     * an Epetra_Map can contain elements in arbitrary orders, though).
+     * an map_type can contain elements in arbitrary orders, though).
      *
      * It holds that end() - begin() == local_size().
      */
@@ -804,22 +806,22 @@ namespace TrilinosWrappers
     //@{
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_MultiVector
+     * Return a const reference to the underlying Trilinos multi_vector_type
      * class.
      */
-    const Epetra_MultiVector &trilinos_vector () const;
+    const multi_vector_type &trilinos_vector () const;
 
     /**
      * Return a (modifyable) reference to the underlying Trilinos
-     * Epetra_FEVector class.
+     * multi_vector_type class.
      */
-    Epetra_FEVector &trilinos_vector ();
+    multi_vector_type &trilinos_vector ();
 
     /**
-     * Return a const reference to the underlying Trilinos Epetra_Map that
+     * Return a const reference to the underlying Trilinos map_type that
      * sets the parallel partitioning of the vector.
      */
-    const Epetra_Map &vector_partitioner () const;
+    const map_type &vector_partitioner () const;
 
     /**
      * Output of vector in user-defined format in analogy to the
@@ -926,16 +928,16 @@ namespace TrilinosWrappers
     /**
      * Pointer to the actual Epetra vector object. This may represent a vector
      * that is in fact distributed among multiple processors. The object
-     * requires an existing Epetra_Map for storing data when setting it up.
+     * requires an existing map_type for storing data when setting it up.
      */
-    std_cxx11::shared_ptr<Epetra_FEVector> vector;
+    std_cxx11::shared_ptr<Tpetra::Vector<SC, LO, GO, NT>> vector;
 
     /**
      * A vector object in Trilinos to be used for collecting the non-local
      * elements if the vector was constructed with an additional IndexSet
      * describing ghost elements.
      */
-    std_cxx11::shared_ptr<Epetra_MultiVector> nonlocal_vector;
+    std_cxx11::shared_ptr<Tpetra::Vector<SC, LO, GO, NT>> nonlocal_vector;
 
     /**
      * Make the reference class a friend.
@@ -1085,16 +1087,18 @@ namespace TrilinosWrappers
     IndexSet is (size());
 
     // easy case: local range is contiguous
-    if (vector->Map().LinearMap())
+    //    if (vector->Map().LinearMap())
+    if (vector->getMap()->isContiguous())
       {
         const std::pair<size_type, size_type> x = local_range();
         is.add_range (x.first, x.second);
       }
-    else if (vector->Map().NumMyElements() > 0)
+//    else if (vector>Map().NumMyElements() > 0)
+    else if (vector->getLocalLength() > 0)
       {
-        const size_type n_indices = vector->Map().NumMyElements();
+        const size_type n_indices = vector->getLocalLength();
 #ifndef DEAL_II_WITH_64BIT_INDICES
-        unsigned int *vector_indices = (unsigned int *)vector->Map().MyGlobalElements();
+        unsigned int *vector_indices = (unsigned int *)vector->getGlobalLength();
 #else
         size_type *vector_indices = (size_type *)vector->Map().MyGlobalElements64();
 #endif
@@ -1172,7 +1176,7 @@ namespace TrilinosWrappers
   VectorBase::iterator
   VectorBase::begin()
   {
-    return (*vector)[0];
+    return (*vector).getData().begin();
   }
 
 
@@ -1213,11 +1217,11 @@ namespace TrilinosWrappers
             ExcMessage("Vector has not been constructed properly."));
 
     if (omit_zeroing_entries == false ||
-        vector_partitioner().SameAs(v.vector_partitioner())==false)
-      vector.reset (new Epetra_FEVector(*v.vector));
+        vector_partitioner()..SameAs(v.vector_partitioner())==false)
+      vector.reset (new multi_vector_type(*v.vector));
 
     if (v.nonlocal_vector.get() != 0)
-      nonlocal_vector.reset(new Epetra_MultiVector(v.nonlocal_vector->Map(), 1));
+      nonlocal_vector.reset(new multi_vector_type(v.nonlocal_vector->Map(), 1));
   }
 
 
@@ -1228,9 +1232,8 @@ namespace TrilinosWrappers
   {
     AssertIsFinite(s);
 
-    const int ierr = vector->PutScalar(s);
+    vector->PutScalar(s);
 
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
 
     if (nonlocal_vector.get() != 0)
       nonlocal_vector->PutScalar(0.);
@@ -1298,7 +1301,7 @@ namespace TrilinosWrappers
           (*vector)[0][local_row] = values[i];
         else
           {
-            const int ierr = vector->ReplaceGlobalValues (1,
+            vector->ReplaceGlobalValues (1,
                                                           (const TrilinosWrappers::types::int_type *)(&row),
                                                           &values[i]);
             AssertThrow (ierr == 0, ExcTrilinosError(ierr));
@@ -1371,7 +1374,7 @@ namespace TrilinosWrappers
           (*vector)[0][local_row] += values[i];
         else if (nonlocal_vector.get() == 0)
           {
-            const int ierr = vector->SumIntoGlobalValues (1,
+            vector->SumIntoGlobalValues (1,
                                                           (const TrilinosWrappers::types::int_type *)(&row),
                                                           &values[i]);
             AssertThrow (ierr == 0, ExcTrilinosError(ierr));
@@ -1411,7 +1414,7 @@ namespace TrilinosWrappers
   VectorBase::size_type
   VectorBase::local_size () const
   {
-    return (size_type) vector->Map().NumMyElements();
+    return (size_type) vector->getNumVectors();
   }
 
 
@@ -1428,7 +1431,7 @@ namespace TrilinosWrappers
     const TrilinosWrappers::types::int_type end = vector->Map().MaxMyGID64()+1;
 #endif
 
-    Assert (end-begin == vector->Map().NumMyElements(),
+    Assert (end-begin == vector->getNumVectors(),
             ExcMessage ("This function only makes sense if the elements that this "
                         "vector stores on the current processor form a contiguous range. "
                         "This does not appear to be the case for the current vector."));
@@ -1448,8 +1451,7 @@ namespace TrilinosWrappers
 
     TrilinosScalar result;
 
-    const int ierr = vector->Dot(*(vec.vector), &result);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->dot(*(vec.vector), &result);
 
     return result;
   }
@@ -1473,8 +1475,7 @@ namespace TrilinosWrappers
     Assert (!has_ghost_elements(), ExcGhostsPresent());
 
     TrilinosScalar mean;
-    const int ierr = vector->MeanValue (&mean);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->MeanValue (&mean);
 
     return mean;
   }
@@ -1495,8 +1496,7 @@ namespace TrilinosWrappers
   VectorBase::min () const
   {
     TrilinosScalar min_value;
-    const int ierr = vector->MinValue (&min_value);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->MinValue (&min_value);
 
     return min_value;
   }
@@ -1508,8 +1508,7 @@ namespace TrilinosWrappers
   VectorBase::max () const
   {
     TrilinosScalar max_value;
-    const int ierr = vector->MaxValue (&max_value);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->MaxValue (&max_value);
 
     return max_value;
   }
@@ -1523,8 +1522,7 @@ namespace TrilinosWrappers
     Assert (!has_ghost_elements(), ExcGhostsPresent());
 
     TrilinosScalar d;
-    const int ierr = vector->Norm1 (&d);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->Norm1 (&d);
 
     return d;
   }
@@ -1538,8 +1536,7 @@ namespace TrilinosWrappers
     Assert (!has_ghost_elements(), ExcGhostsPresent());
 
     TrilinosScalar d;
-    const int ierr = vector->Norm2 (&d);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->Norm2 (&d);
 
     return d;
   }
@@ -1578,8 +1575,7 @@ namespace TrilinosWrappers
     // is safe to run even in the
     // presence of ghost elements
     TrilinosScalar d;
-    const int ierr = vector->NormInf (&d);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->NormInf (&d);
 
     return d;
   }
@@ -1609,8 +1605,7 @@ namespace TrilinosWrappers
   {
     AssertIsFinite(a);
 
-    const int ierr = vector->Scale(a);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->Scale(a);
 
     return *this;
   }
@@ -1627,8 +1622,7 @@ namespace TrilinosWrappers
 
     AssertIsFinite(factor);
 
-    const int ierr = vector->Scale(factor);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->Scale(factor);
 
     return *this;
   }
@@ -1644,8 +1638,7 @@ namespace TrilinosWrappers
     Assert (vector->Map().SameAs(v.vector->Map()),
             ExcDifferentParallelPartitioning());
 
-    const int ierr = vector->Update (1.0, *(v.vector), 1.0);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->update (1.0, *(v.vector), 1.0);
 
     return *this;
   }
@@ -1661,8 +1654,7 @@ namespace TrilinosWrappers
     Assert (vector->Map().SameAs(v.vector->Map()),
             ExcDifferentParallelPartitioning());
 
-    const int ierr = vector->Update (-1.0, *(v.vector), 1.0);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->update (-1.0, *(v.vector), 1.0);
 
     return *this;
   }
@@ -1698,8 +1690,7 @@ namespace TrilinosWrappers
 
     AssertIsFinite(a);
 
-    const int ierr = vector->Update(a, *(v.vector), 1.);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->update(a, *(v.vector), 1.);
   }
 
 
@@ -1722,9 +1713,8 @@ namespace TrilinosWrappers
     AssertIsFinite(a);
     AssertIsFinite(b);
 
-    const int ierr = vector->Update(a, *(v.vector), b, *(w.vector), 1.);
+    vector->update(a, *(v.vector), b, *(w.vector), 1.);
 
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
   }
 
 
@@ -1748,8 +1738,7 @@ namespace TrilinosWrappers
       {
         Assert (this->vector->Map().SameAs(v.vector->Map())==true,
                 ExcDifferentParallelPartitioning());
-        const int ierr = vector->Update(1., *(v.vector), s);
-        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+        vector->update(1., *(v.vector), s);
       }
     else
       {
@@ -1780,8 +1769,7 @@ namespace TrilinosWrappers
       {
         Assert (this->vector->Map().SameAs(v.vector->Map())==true,
                 ExcDifferentParallelPartitioning());
-        const int ierr = vector->Update(a, *(v.vector), s);
-        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+        vector->update(a, *(v.vector), s);
       }
     else
       {
@@ -1822,8 +1810,7 @@ namespace TrilinosWrappers
                 ExcDifferentParallelPartitioning());
         Assert (this->vector->Map().SameAs(w.vector->Map())==true,
                 ExcDifferentParallelPartitioning());
-        const int ierr = vector->Update(a, *(v.vector), b, *(w.vector), s);
-        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+        vector->update(a, *(v.vector), b, *(w.vector), s);
       }
     else
       {
@@ -1871,15 +1858,11 @@ namespace TrilinosWrappers
         Assert (this->vector->Map().SameAs(x.vector->Map())==true,
                 ExcDifferentParallelPartitioning());
 
-        // Update member can only
+        // update member can only
         // input two other vectors so
         // do it in two steps
-        const int ierr = vector->Update(a, *(v.vector), b, *(w.vector), s);
-        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
-
-        const int jerr = vector->Update(c, *(x.vector), 1.);
-        Assert (jerr == 0, ExcTrilinosError(jerr));
-        (void)jerr; // removes -Wunused-parameter warning in optimized mode
+        vector->update(a, *(v.vector), b, *(w.vector), s);
+        vector->update(c, *(x.vector), 1.);
       }
     else
       {
@@ -1901,8 +1884,7 @@ namespace TrilinosWrappers
     Assert (local_size() == factors.local_size(),
             ExcDimensionMismatch(local_size(), factors.local_size()));
 
-    const int ierr = vector->Multiply (1.0, *(factors.vector), *vector, 0.0);
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    vector->elementWiseMultiply(1.0, *(factors.vector), *vector, 0.0);
   }
 
 
@@ -1925,9 +1907,7 @@ namespace TrilinosWrappers
     else
       {
         // Otherwise, just update
-        int ierr = vector->Update(a, *v.vector, 0.0);
-        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
-
+        vector->update(a, *v.vector, 0.0);
         last_action = Zero;
       }
 
@@ -1945,25 +1925,28 @@ namespace TrilinosWrappers
     Assert (local_size() == w.local_size(),
             ExcDimensionMismatch (local_size(), w.local_size()));
 
-    const int ierr = vector->ReciprocalMultiply(1.0, *(w.vector),
-                                                *(v.vector), 0.0);
 
-    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+    &v.vector->reciprocal(static_cast<(v.vector.get()));
+    vector->elementWiseMultiply(1.0, *(w.vector), *(v.vector->reciprocal(new multi_vector_type()v.vector.get())), 0.0);
+
+//     ReciprocalMultiply(1.0, *(w.vector),
+//                                                *(v.vector), 0.0);
+//    AssertThrow (ierr == 0, ExcTrilinosError(ierr));
   }
 
 
 
   inline
-  const Epetra_MultiVector &
+  const multi_vector_type &
   VectorBase::trilinos_vector () const
   {
-    return static_cast<const Epetra_MultiVector &>(*vector);
+    return static_cast<const multi_vector_type &>(*vector);
   }
 
 
 
   inline
-  Epetra_FEVector &
+  multi_vector_type &
   VectorBase::trilinos_vector ()
   {
     return *vector;
@@ -1972,10 +1955,10 @@ namespace TrilinosWrappers
 
 
   inline
-  const Epetra_Map &
+  const map_type &
   VectorBase::vector_partitioner () const
   {
-    return static_cast<const Epetra_Map &>(vector->Map());
+    return static_cast<const map_type &>(vector->getMap());
   }
 
 
@@ -1988,9 +1971,13 @@ namespace TrilinosWrappers
 
 #ifdef DEAL_II_WITH_MPI
 
-    const Epetra_MpiComm *mpi_comm
-      = dynamic_cast<const Epetra_MpiComm *>(&vector->Map().Comm());
-    comm = mpi_comm->Comm();
+//      const Epetra_MpiComm *mpi_comm
+//              = dynamic_cast<const Epetra_MpiComm *>(&vector->Map().Comm());
+//      comm = mpi_comm->Comm();
+
+    const comm_type mpi_comm
+      = dynamic_cast<const comm_type>(vector->getMap().getRawPtr()->getComm());
+    comm = dynamic_cast<int> (mpi_comm.get());
 
 #else
 
