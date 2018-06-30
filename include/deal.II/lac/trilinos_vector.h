@@ -340,7 +340,7 @@ namespace TrilinosWrappers
 
       /**
        * Copy the given vector. Resize the present vector if necessary. In
-       * this case, also the Epetra_Map that designs the parallel partitioning
+       * this case, also the map_type that designs the parallel partitioning
        * is taken from the input vector.
        */
       Vector &operator= (const Vector &v);
@@ -368,10 +368,10 @@ namespace TrilinosWrappers
       /**
        * Another copy function. This one takes a deal.II vector and copies it
        * into a TrilinosWrapper vector. Note that since we do not provide any
-       * Epetra_map that tells about the partitioning of the vector among the
+       * map_type that tells about the partitioning of the vector among the
        * MPI processes, the size of the TrilinosWrapper vector has to be the
        * same as the size of the input vector. In order to change the map, use
-       * the reinit(const Epetra_Map &input_map) function.
+       * the reinit(const map_type &input_map) function.
        */
       template <typename Number>
       Vector &operator= (const ::dealii::Vector<Number> &v);
@@ -398,11 +398,11 @@ namespace TrilinosWrappers
        const Vector                                 &vector);
 //@}
       /**
-       * @name Initialization with an Epetra_Map
+       * @name Initialization with an map_type
        */
 //@{
       /**
-       * This constructor takes an Epetra_Map that already knows how to
+       * This constructor takes an map_type that already knows how to
        * distribute the individual components among the MPI processors. Since
        * it also includes information about the size of the vector, this is
        * all we need to generate a parallel vector.
@@ -417,12 +417,12 @@ namespace TrilinosWrappers
        * @see
        * @ref GlossGhostedVector "vectors with ghost elements"
        */
-      explicit Vector (const Epetra_Map &parallel_partitioning)  DEAL_II_DEPRECATED;
+      explicit Vector (const map_type &parallel_partitioning)  DEAL_II_DEPRECATED;
 
       /**
        * Copy constructor from the TrilinosWrappers vector class. Since a
        * vector of this class does not necessarily need to be distributed
-       * among processes, the user needs to supply us with an Epetra_Map that
+       * among processes, the user needs to supply us with an map_type that
        * sets the partitioning details.
        *
        * Depending on whether the @p parallel_partitioning argument uniquely
@@ -435,11 +435,11 @@ namespace TrilinosWrappers
        * @see
        * @ref GlossGhostedVector "vectors with ghost elements"
        */
-      Vector (const Epetra_Map &parallel_partitioning,
+      Vector (const map_type &parallel_partitioning,
               const VectorBase &v) DEAL_II_DEPRECATED;
 
       /**
-       * Reinitialize from a deal.II vector. The Epetra_Map specifies the
+       * Reinitialize from a deal.II vector. The map_type specifies the
        * %parallel partitioning.
        *
        * Depending on whether the @p parallel_partitioning argument uniquely
@@ -453,7 +453,7 @@ namespace TrilinosWrappers
        * @ref GlossGhostedVector "vectors with ghost elements"
        */
       template <typename number>
-      void reinit (const Epetra_Map             &parallel_partitioner,
+      void reinit (const map_type             &parallel_partitioner,
                    const dealii::Vector<number> &v) DEAL_II_DEPRECATED;
 
       /**
@@ -470,7 +470,7 @@ namespace TrilinosWrappers
        * @see
        * @ref GlossGhostedVector "vectors with ghost elements"
        */
-      void reinit (const Epetra_Map &parallel_partitioning,
+      void reinit (const map_type &parallel_partitioning,
                    const bool        omit_zeroing_entries = false) DEAL_II_DEPRECATED;
 
       /**
@@ -488,7 +488,7 @@ namespace TrilinosWrappers
        * @ref GlossGhostedVector "vectors with ghost elements"
        */
       template <typename Number>
-      Vector (const Epetra_Map             &parallel_partitioning,
+      Vector (const map_type             &parallel_partitioning,
               const dealii::Vector<Number> &v) DEAL_II_DEPRECATED;
 //@}
       /**
@@ -637,7 +637,7 @@ namespace TrilinosWrappers
 #ifndef DOXYGEN
 
     template <typename number>
-    Vector::Vector (const Epetra_Map             &input_map,
+    Vector::Vector (const map_type             &input_map,
                     const dealii::Vector<number> &v)
     {
       reinit (input_map, v);
@@ -658,7 +658,7 @@ namespace TrilinosWrappers
 
 
     template <typename number>
-    void Vector::reinit (const Epetra_Map             &parallel_partitioner,
+    void Vector::reinit (const map_type             &parallel_partitioner,
                          const dealii::Vector<number> &v)
     {
       if (vector.get() == 0 || vector->Map().SameAs(parallel_partitioner) == false)
@@ -691,7 +691,7 @@ namespace TrilinosWrappers
     {
       if (size() != v.size())
         {
-          vector.reset (new vector_type(Epetra_Map
+          vector.reset (new vector_type(map_type
                                             (static_cast<TrilinosWrappers::types::int_type>(v.size()), 0,
 #ifdef DEAL_II_WITH_MPI
                                              Epetra_MpiComm(MPI_COMM_SELF)
@@ -766,7 +766,7 @@ namespace TrilinosWrappers
      * ignored, the only thing that matters is the size of the index space
      * described by this argument.
      */
-    explicit Vector (const Epetra_Map &partitioning) DEAL_II_DEPRECATED;
+    explicit Vector (const map_type &partitioning) DEAL_II_DEPRECATED;
 
     /**
      * This constructor takes as input the number of elements in the vector.
@@ -801,7 +801,7 @@ namespace TrilinosWrappers
                  const bool      omit_zeroing_entries = false);
 
     /**
-     * Initialization with an Epetra_Map. Similar to the call in the other
+     * Initialization with an map_type. Similar to the call in the other
      * class MPI::Vector, with the difference that now a copy on all processes
      * is generated. This initialization function is appropriate when the data
      * in the localized vector should be imported from a distributed vector
@@ -813,7 +813,7 @@ namespace TrilinosWrappers
      * the only thing that matters is the size of the index space described by
      * this argument.
      */
-    void reinit (const Epetra_Map &input_map,
+    void reinit (const map_type &input_map,
                  const bool        omit_zeroing_entries = false);
 
     /**
@@ -937,7 +937,7 @@ namespace TrilinosWrappers
         vector.reset (new vector_type(map));
       }
 
-    const Epetra_Map &map = vector_partitioner();
+    const map_type &map = vector_partitioner();
     const TrilinosWrappers::types::int_type size = map.NumMyElements();
 
     Assert (map.MaxLID() == size-1,

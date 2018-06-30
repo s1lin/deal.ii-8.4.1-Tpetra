@@ -22,7 +22,7 @@
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
 #  include <Tpetra_Vector_decl.hpp>
-#  include <Tpetra_Import_decl.hpp>
+#  include <import_type_decl.hpp>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 #  include <cmath>
@@ -118,13 +118,13 @@ namespace TrilinosWrappers
       :
       VectorBase()
     {
-      AssertThrow (n_global_elements(input_map) == n_global_elements(v.vector->Map()),
+      AssertThrow (n_global_elements(input_map) == n_global_elements(v.vector->getMap().get()),
                    ExcDimensionMismatch (n_global_elements(input_map),
-                                         n_global_elements(v.vector->Map())));
+                                         n_global_elements(v.vector->getMap())));
 
       last_action = Zero;
 
-      if (input_map.SameAs(v.vector->Map()) == true)
+      if (input_map.isSameAs(v.vector->getMap().get()) == true)
         vector.reset (new vector_type(*v.vector));
       else
         {
@@ -179,16 +179,14 @@ namespace TrilinosWrappers
     {
       nonlocal_vector.reset();
 
-      if (vector->Map().SameAs(input_map)==false)
+      if (vector->getMap().SameAs(input_map)==false)
         vector.reset (new vector_type(input_map));
       else if (omit_zeroing_entries == false)
         {
-          const int ierr = vector->PutScalar(0.);
-          (void)ierr;
-          Assert (ierr == 0, ExcTrilinosError(ierr));
+          vector->putScalar(0.);
         }
 
-      has_ghosts = vector->Map().UniqueGIDs()==false;
+      has_ghosts = vector->getMap().UniqueGIDs()==false;
       last_action = Zero;
     }
 
@@ -220,9 +218,9 @@ namespace TrilinosWrappers
       // with the map in v, and generate the vector.
       if (allow_different_maps == false)
         {
-          if (vector->Map().SameAs(v.vector->Map()) == false)
+          if (vector->getMap().SameAs(v.vector->getMap()) == false)
             {
-              vector.reset (new vector_type(v.vector->Map()));
+              vector.reset (new vector_type(v.vector->getMap()));
               has_ghosts = v.has_ghosts;
               last_action = Zero;
             }
@@ -238,8 +236,7 @@ namespace TrilinosWrappers
               (void)ierr;
               Assert (ierr == 0, ExcTrilinosError(ierr));
 
-              ierr = vector->PutScalar(0.0);
-              Assert (ierr == 0, ExcTrilinosError(ierr));
+              vector->putScalar(0.0);
 
               last_action = Zero;
             }
@@ -259,9 +256,9 @@ namespace TrilinosWrappers
           AssertThrow (size() == v.size(),
                        ExcDimensionMismatch (size(), v.size()));
 
-          Tpetra_Import data_exchange (vector->Map(), v.vector->Map());
+          import_type data_exchange (vector->getMap(), v.vector->getMap());
 
-          const int ierr = vector->Import(*v.vector, data_exchange, Insert);
+          const int ierr = vector->doImport(*v.vector, data_exchange, Insert);
           AssertThrow (ierr == 0, ExcTrilinosError(ierr));
 
           last_action = Insert;
@@ -330,9 +327,8 @@ namespace TrilinosWrappers
 
           import_type data_exchange (vector->getMap(), actual_vec->getMap());
 
-          const int ierr = vector->Import(*actual_vec, data_exchange, Insert);
-          AssertThrow (ierr == 0, ExcTrilinosError(ierr));
-
+          vector->doImport(*actual_vec, data_exchange, Insert);
+          
           last_action = Insert;
         }
 
@@ -355,7 +351,7 @@ namespace TrilinosWrappers
         {
           map_type map = locally_owned_entries.make_trilinos_map (communicator,
                                                                     true);
-          Assert (map.IsOneToOne(),
+          Assert (map.isOneToOne(),
                   ExcMessage("A writable vector must not have ghost entries in "
                              "its parallel partitioning"));
           reinit (map);
@@ -379,11 +375,11 @@ namespace TrilinosWrappers
       // layout (just need to copy the local data, not reset the memory and
       // the underlying map_type). The third case means that we have to
       // rebuild the calling vector.
-      if (vector->Map().SameAs(v.vector->Map()))
+      if (vector->getMap().SameAs(v.vector->getMap()))
         {
           *vector = *v.vector;
           if (v.nonlocal_vector.get() != 0)
-            nonlocal_vector.reset(new Tpetra_MultiVector(v.nonlocal_vector->Map(), 1));
+            nonlocal_vector.reset(new Tpetra_MultiVector(v.nonlocal_vector->getMap(), 1));
           last_action = Zero;
         }
       // Second case: vectors have the same global
@@ -391,7 +387,7 @@ namespace TrilinosWrappers
       // one of them a one-to-one mapping). Then we
       // can call the import/export functionality.
       else if (size() == v.size() &&
-               (v.vector->Map().UniqueGIDs() || vector->Map().UniqueGIDs()))
+               (v.vector->getMap().UniqueGIDs() || vector->getMap().UniqueGIDs()))
         {
           reinit (v, false, true);
         }
@@ -405,7 +401,7 @@ namespace TrilinosWrappers
         }
 
       if (v.nonlocal_vector.get() != 0)
-        nonlocal_vector.reset(new Tpetra_MultiVector(v.nonlocal_vector->Map(), 1));
+        nonlocal_vector.reset(new Tpetra_MultiVector(v.nonlocal_vector->getMap(), 1));
 
       return *this;
     }
@@ -429,10 +425,8 @@ namespace TrilinosWrappers
 
       Assert (size() == v.size(), ExcDimensionMismatch(size(), v.size()));
 
-      Tpetra_Import data_exchange (vector->Map(), v.vector->Map());
-      const int ierr = vector->Import(*v.vector, data_exchange, Insert);
-
-      AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+      import_type data_exchange (vector->getMap(), v.vector->getMap());
+      vector->doImport(*v.vector, data_exchange, Insert);
 
       last_action = Insert;
 
@@ -445,22 +439,22 @@ namespace TrilinosWrappers
     Vector::import_nonlocal_data_for_fe (const TrilinosWrappers::SparseMatrix &m,
                                          const Vector                         &v)
     {
-      Assert (m.trilinos_matrix().Filled() == true,
+      Assert (m.trilinos_matrix().isFillComplete() == true,
               ExcMessage ("Matrix is not compressed. "
                           "Cannot find exchange information!"));
-      Assert (v.vector->Map().UniqueGIDs() == true,
+      Assert (v.vector->getMap().UniqueGIDs() == true,
               ExcMessage ("The input vector has overlapping data, "
                           "which is not allowed."));
 
-      if (vector->Map().SameAs(m.trilinos_matrix().ColMap()) == false)
+      if (vector->getMap().SameAs(m.trilinos_matrix().getColMap()) == false)
         {
           vector.reset (new vector_type(
-                          m.trilinos_matrix().ColMap()
+                          m.trilinos_matrix().getColMap()
                         ));
         }
 
-      Tpetra_Import data_exchange (vector->Map(), v.vector->Map());
-      const int ierr = vector->Import(*v.vector, data_exchange, Insert);
+      import_type data_exchange (vector->getMap(), v.vector->getMap());
+      const int ierr = vector->doImport(*v.vector, data_exchange, Insert);
 
       AssertThrow (ierr == 0, ExcTrilinosError(ierr));
 
@@ -521,14 +515,14 @@ namespace TrilinosWrappers
   Vector::Vector (const VectorBase &v)
   {
     last_action = Zero;
-    Tpetra_LocalMap map (n_global_elements(v.vector->Map()),
-                         v.vector->Map().IndexBase(),
-                         v.vector->Map().Comm());
+    Tpetra_LocalMap map (n_global_elements(v.vector->getMap()),
+                         v.vector->getMap().IndexBase(),
+                         v.vector->getMap().Comm());
     vector.reset (new vector_type(map));
 
-    if (vector->Map().SameAs(v.vector->Map()) == true)
+    if (vector->getMap().SameAs(v.vector->getMap()) == true)
       {
-        const int ierr = vector->Update(1.0, *v.vector, 0.0);
+        const int ierr = vector->update(1.0, *v.vector, 0.0);
         AssertThrow (ierr == 0, ExcTrilinosError(ierr));
       }
     else
@@ -555,7 +549,7 @@ namespace TrilinosWrappers
         (void)ierr;
         Assert (ierr == 0, ExcTrilinosError(ierr));
 
-        ierr = vector->PutScalar(0.0);
+        ierr = vector->putScalar(0.0);
         Assert (ierr == 0, ExcTrilinosError(ierr));
       }
 
@@ -568,7 +562,7 @@ namespace TrilinosWrappers
   Vector::reinit (const map_type &input_map,
                   const bool        omit_zeroing_entries)
   {
-    if (n_global_elements(vector->Map()) != n_global_elements(input_map))
+    if (n_global_elements(vector->getMap()) != n_global_elements(input_map))
       {
         Tpetra_LocalMap map (n_global_elements(input_map),
                              input_map.IndexBase(),
@@ -582,7 +576,7 @@ namespace TrilinosWrappers
         (void)ierr;
         Assert (ierr == 0, ExcTrilinosError(ierr));
 
-        ierr = vector->PutScalar(0.0);
+        ierr = vector->putScalar(0.0);
         Assert (ierr == 0, ExcTrilinosError(ierr));
       }
 
@@ -596,7 +590,7 @@ namespace TrilinosWrappers
                   const MPI_Comm &communicator,
                   const bool      omit_zeroing_entries)
   {
-    if (n_global_elements(vector->Map()) !=
+    if (n_global_elements(vector->getMap()) !=
         static_cast<TrilinosWrappers::types::int_type>(partitioning.size()))
       {
         Tpetra_LocalMap map (static_cast<TrilinosWrappers::types::int_type>(partitioning.size()),
@@ -616,7 +610,7 @@ namespace TrilinosWrappers
         (void)ierr;
         Assert (ierr == 0, ExcTrilinosError(ierr));
 
-        ierr = vector->PutScalar(0.0);
+        ierr = vector->putScalar(0.0);
         Assert (ierr == 0, ExcTrilinosError(ierr));
       }
 
@@ -643,14 +637,14 @@ namespace TrilinosWrappers
         if (local_range() != v.local_range())
           {
             Tpetra_LocalMap map (global_length(*(v.vector)),
-                                 v.vector->Map().IndexBase(),
+                                 v.vector->getMap().IndexBase(),
                                  v.vector->Comm());
             vector.reset (new vector_type(map));
           }
         else
           {
             int ierr;
-            Assert (vector->Map().SameAs(v.vector->Map()) == true,
+            Assert (vector->getMap().SameAs(v.vector->getMap()) == true,
                     ExcMessage ("The Tpetra maps in the assignment operator ="
                                 " do not match, even though the local_range "
                                 " seems to be the same. Check vector setup!"));
@@ -659,7 +653,7 @@ namespace TrilinosWrappers
             (void)ierr;
             Assert (ierr == 0, ExcTrilinosError(ierr));
 
-            ierr = vector->PutScalar(0.0);
+            ierr = vector->putScalar(0.0);
             Assert (ierr == 0, ExcTrilinosError(ierr));
           }
         last_action = Zero;
@@ -681,10 +675,9 @@ namespace TrilinosWrappers
         AssertThrow (size() == v.size(),
                      ExcDimensionMismatch (size(), v.size()));
 
-        Tpetra_Import data_exchange (vector->Map(), v.vector->Map());
-
-        const int ierr = vector->Import(*v.vector, data_exchange, Insert);
-        AssertThrow (ierr == 0, ExcTrilinosError(ierr));
+        import_type data_exchange (vector->getMap(), v.vector->getMap());
+ 
+        vector->doImport(*v.vector, data_exchange, Insert);
 
         last_action = Insert;
       }
@@ -698,8 +691,8 @@ namespace TrilinosWrappers
   {
     if (size() != v.size())
       {
-        Tpetra_LocalMap map (n_global_elements(v.vector->Map()),
-                             v.vector->Map().IndexBase(),
+        Tpetra_LocalMap map (n_global_elements(v.vector->getMap()),
+                             v.vector->getMap().IndexBase(),
                              v.vector->Comm());
         vector.reset (new vector_type(map));
       }
@@ -715,17 +708,15 @@ namespace TrilinosWrappers
   {
     if (size() != v.size())
       {
-        Tpetra_LocalMap map (n_global_elements(v.vector->Map()),
-                             v.vector->Map().IndexBase(),
+        Tpetra_LocalMap map (n_global_elements(v.vector->getMap()),
+                             v.vector->getMap().IndexBase(),
                              v.vector->Comm());
         vector.reset (new vector_type(map));
       }
 
-    const int ierr = vector->Update(1.0, *v.vector, 0.0);
-    Assert (ierr == 0, ExcTrilinosError(ierr));
-    (void)ierr;
+     vector->update(1.0, *v.vector, 0.0);
 
-    return *this;
+     return *this;
   }
 
 }

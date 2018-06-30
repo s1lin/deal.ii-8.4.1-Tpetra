@@ -87,6 +87,7 @@ using Teuchos::tuple;
 //MyGlobalElements()= 	getNodeNumElements () *****
 //MyGID()			=	isNodeGlobalElement()
 //MyLID()			=	isNodeLocalElement()
+//IsOneToOne()      =   isOneToOne()
 //-------------------------------------------
 
 //MPI
