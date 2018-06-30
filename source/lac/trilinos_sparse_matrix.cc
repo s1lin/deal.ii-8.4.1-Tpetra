@@ -2322,7 +2322,7 @@ namespace TrilinosWrappers
         int *indices;
         int num_entries;
 
-        for (int i=0; i<matrix->NumMyRows(); ++i)
+        for (int i=0; i<matrix->getNodeNumRows(); ++i)
           {
             matrix->ExtractMyRowView (i, num_entries, values, indices);
             for (TrilinosWrappers::types::int_type j=0; j<num_entries; ++j)
@@ -2341,7 +2341,7 @@ namespace TrilinosWrappers
   SparseMatrix::memory_consumption () const
   {
     size_type static_memory = sizeof(this) + sizeof (*matrix)
-                              + sizeof(*matrix->Graph().DataPtr());
+                              + sizeof(*matrix->getCrsGraph().DataPtr());
     return ((sizeof(TrilinosScalar)+sizeof(TrilinosWrappers::types::int_type))*
             matrix->NumMyNonzeros() + sizeof(int)*local_size() + static_memory);
   }
@@ -2351,7 +2351,7 @@ namespace TrilinosWrappers
   const map_type &
   SparseMatrix::domain_partitioner () const
   {
-    return matrix->DomainMap();
+    return static_cast<const map_type &>(matrix->getDomainMap().get());
   }
 
 
@@ -2359,7 +2359,7 @@ namespace TrilinosWrappers
   const map_type &
   SparseMatrix::range_partitioner () const
   {
-    return matrix->RangeMap();
+    return static_cast<const map_type &>(matrix->getRangeMap().get());
   }
 
 
@@ -2367,7 +2367,7 @@ namespace TrilinosWrappers
   const map_type &
   SparseMatrix::row_partitioner () const
   {
-    return matrix->getRowMap();
+    return static_cast<const map_type &>(matrix->getRowMap().get());
   }
 
 
@@ -2375,7 +2375,7 @@ namespace TrilinosWrappers
   const map_type &
   SparseMatrix::col_partitioner () const
   {
-    return matrix->getColMap();
+    return static_cast<const map_type &>(matrix->getColMap().get());
   }
 
 
@@ -2386,7 +2386,7 @@ namespace TrilinosWrappers
 #ifdef DEAL_II_WITH_MPI
 
     const Epetra_MpiComm *mpi_comm
-      = dynamic_cast<const Epetra_MpiComm *>(&matrix->RangeMap().Comm());
+      = dynamic_cast<const Epetra_MpiComm *>(&matrix->getRangeMap().get().getComm());
     return mpi_comm->Comm();
 #else
 

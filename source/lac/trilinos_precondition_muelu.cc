@@ -250,7 +250,7 @@ namespace TrilinosWrappers
   PreconditionAMGMueLu::
   initialize (const ::dealii::SparseMatrix<number> &deal_ii_sparse_matrix,
               const AdditionalData                 &additional_data,
-              const double                          drop_tolerance,
+              const double                         drop_tolerance,
               const ::dealii::SparsityPattern      *use_this_sparsity)
   {
     preconditioner.reset();

@@ -22,7 +22,7 @@
 #  include <deal.II/lac/dynamic_sparsity_pattern.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include <Epetra_Export.h>
+#  include <Epetra_doExport.h>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 DEAL_II_NAMESPACE_OPEN
@@ -133,11 +133,11 @@ namespace TrilinosWrappers
     column_space_map.reset(new map_type (TrilinosWrappers::types::int_type(0),
                                            TrilinosWrappers::types::int_type(0),
                                            Utilities::Trilinos::comm_self()));
-    graph.reset (new Epetra_FECrsGraph(View,
+    graph.reset (new crs_graph_type(View,
                                        *column_space_map,
                                        *column_space_map,
                                        0));
-    graph->FillComplete();
+    graph->isFillComplete();
   }
 
 
@@ -200,7 +200,7 @@ namespace TrilinosWrappers
     column_space_map (new map_type(TrilinosWrappers::types::int_type(0),
                                      TrilinosWrappers::types::int_type(0),
                                      Utilities::Trilinos::comm_self())),
-    graph (new Epetra_FECrsGraph(View,
+    graph (new crs_graph_type(View,
                                  *column_space_map,
                                  *column_space_map,
                                  0))
@@ -302,15 +302,15 @@ namespace TrilinosWrappers
     void
     reinit_sp (const map_type                         &row_map,
                const map_type                         &col_map,
-               const size_type                           n_entries_per_row,
+               const size_type                        n_entries_per_row,
                std_cxx11::shared_ptr<map_type>        &column_space_map,
-               std_cxx11::shared_ptr<Epetra_FECrsGraph> &graph,
-               std_cxx11::shared_ptr<crs_graph_type>   &nonlocal_graph)
+               std_cxx11::shared_ptr<crs_graph_type>  &graph,
+               std_cxx11::shared_ptr<crs_graph_type>  &nonlocal_graph)
     {
-      Assert(row_map.IsOneToOne(),
+      Assert(row_map.isOneToOne(),
              ExcMessage("Row map must be 1-to-1, i.e., no overlap between "
                         "the maps of different processors."));
-      Assert(col_map.IsOneToOne(),
+      Assert(col_map.isOneToOne(),
              ExcMessage("Column map must be 1-to-1, i.e., no overlap between "
                         "the maps of different processors."));
 
@@ -327,7 +327,7 @@ namespace TrilinosWrappers
       // require building a non-local graph which gives us thread-safe
       // initialization.
       if (row_map.get()->getComm().NumProc() > 1)
-        graph.reset (new Epetra_FECrsGraph(Copy, row_map,
+        graph.reset (new crs_graph_type(Copy, row_map,
                                            n_entries_per_row, false
                                            // TODO: Check which new Trilinos
                                            // version supports this... Remember
@@ -338,7 +338,7 @@ namespace TrilinosWrappers
                                            //#endif
                                           ));
       else
-        graph.reset (new Epetra_FECrsGraph(Copy, row_map, col_map,
+        graph.reset (new crs_graph_type(Copy, row_map, col_map,
                                            n_entries_per_row, false));
     }
 
@@ -349,13 +349,13 @@ namespace TrilinosWrappers
                const map_type                         &col_map,
                const std::vector<size_type>             &n_entries_per_row,
                std_cxx11::shared_ptr<map_type>        &column_space_map,
-               std_cxx11::shared_ptr<Epetra_FECrsGraph> &graph,
+               std_cxx11::shared_ptr<crs_graph_type> &graph,
                std_cxx11::shared_ptr<crs_graph_type>   &nonlocal_graph)
     {
-      Assert(row_map.IsOneToOne(),
+      Assert(row_map.isOneToOne(),
              ExcMessage("Row map must be 1-to-1, i.e., no overlap between "
                         "the maps of different processors."));
-      Assert(col_map.IsOneToOne(),
+      Assert(col_map.isOneToOne(),
              ExcMessage("Column map must be 1-to-1, i.e., no overlap between "
                         "the maps of different processors."));
 
@@ -371,8 +371,8 @@ namespace TrilinosWrappers
       for (unsigned int i=0; i<local_entries_per_row.size(); ++i)
         local_entries_per_row[i] = n_entries_per_row[min_my_gid(row_map)+i];
 
-      if (row_map.get()->getComm().NumProc() > 1)
-        graph.reset(new Epetra_FECrsGraph(Copy, row_map,
+      if (row_map.getComm().get().NumProc() > 1)
+        graph.reset(new crs_graph_type(Copy, row_map,
                                           &local_entries_per_row[0],
                                           false
                                           // TODO: Check which new Trilinos
@@ -384,7 +384,7 @@ namespace TrilinosWrappers
                                           //#endif
                                          ));
       else
-        graph.reset(new Epetra_FECrsGraph(Copy, row_map, col_map,
+        graph.reset(new crs_graph_type(Copy, row_map, col_map,
                                           &local_entries_per_row[0],
                                           false));
     }
@@ -398,7 +398,7 @@ namespace TrilinosWrappers
                const SparsityPatternType                &sp,
                const bool                                exchange_data,
                std_cxx11::shared_ptr<map_type>        &column_space_map,
-               std_cxx11::shared_ptr<Epetra_FECrsGraph> &graph,
+               std_cxx11::shared_ptr<crs_graph_type> &graph,
                std_cxx11::shared_ptr<crs_graph_type>   &nonlocal_graph)
     {
       nonlocal_graph.reset ();
@@ -411,7 +411,7 @@ namespace TrilinosWrappers
 
       column_space_map.reset (new map_type (col_map));
 
-      Assert (row_map.LinearMap() == true,
+      Assert (row_map.isContiguous() == true,
               ExcMessage ("This function only works if the row map is contiguous."));
 
       const size_type first_row = min_my_gid(row_map),
@@ -423,12 +423,12 @@ namespace TrilinosWrappers
       for (size_type row=first_row; row<last_row; ++row)
         n_entries_per_row[row-first_row] = static_cast<int>(sp.row_length(row));
 
-      if (row_map.get()->getComm().NumProc() > 1)
-        graph.reset(new Epetra_FECrsGraph(Copy, row_map,
+      if (row_map.getComm().NumProc() > 1)
+        graph.reset(new crs_graph_type(Copy, row_map,
                                           &n_entries_per_row[0],
                                           false));
       else
-        graph.reset (new Epetra_FECrsGraph(Copy, row_map, col_map,
+        graph.reset (new crs_graph_type(Copy, row_map, col_map,
                                            &n_entries_per_row[0],
                                            false));
 
@@ -458,8 +458,7 @@ namespace TrilinosWrappers
                     ++p;
                 }
             }
-            graph->crs_graph_type::InsertGlobalIndices (row, row_length,
-                                                         &row_indices[0]);
+            graph->crs_graph_type::insertGlobalIndices(row, row_length, &row_indices[0]);
           }
       else
         for (size_type row=0; row<sp.n_rows(); ++row)
@@ -480,7 +479,7 @@ namespace TrilinosWrappers
                     ++p;
                 }
             }
-            graph->InsertGlobalIndices (1,
+            graph->insertGlobalIndices (1,
                                         reinterpret_cast<TrilinosWrappers::types::int_type *>(&row),
                                         row_length, &row_indices[0]);
           }
@@ -725,9 +724,8 @@ namespace TrilinosWrappers
     column_space_map.reset (new map_type (TrilinosWrappers::types::int_type(0),
                                             TrilinosWrappers::types::int_type(0),
                                             Utilities::Trilinos::comm_self()));
-    graph.reset (new Epetra_FECrsGraph(View, *column_space_map,
-                                       *column_space_map, 0));
-    graph->FillComplete();
+    graph.reset (new crs_graph_type(View, *column_space_map, *column_space_map, 0));
+    graph->isFillComplete();
 
     nonlocal_graph.reset();
   }
@@ -741,25 +739,25 @@ namespace TrilinosWrappers
     Assert (column_space_map.get() != 0, ExcInternalError());
     if (nonlocal_graph.get() != 0)
       {
-        if (nonlocal_graph->IndicesAreGlobal() == false &&
-            nonlocal_graph->getRowMap().NumMyElements() > 0)
+        if (nonlocal_graph->isGloballyIndexed() == false &&
+            nonlocal_graph->getRowMap().get()->getNodeNumElements() > 0)
           {
             // insert dummy element
             TrilinosWrappers::types::int_type row = nonlocal_graph->getRowMap().MyGID(
                                                       static_cast<TrilinosWrappers::types::int_type> (0));
-            nonlocal_graph->InsertGlobalIndices(row, 1, &row);
+            nonlocal_graph->insertGlobalIndices(row, 1, &row);
           }
-        Assert(nonlocal_graph->getRowMap().NumMyElements() == 0 ||
-               nonlocal_graph->IndicesAreGlobal() == true,
+        Assert(nonlocal_graph.get()->getRowMap().NumMyElements() == 0 ||
+               nonlocal_graph.get()->IndicesAreGlobal() == true,
                ExcInternalError());
-        nonlocal_graph->FillComplete(*column_space_map,
+        nonlocal_graph->isFillComplete(*column_space_map,
                                      static_cast<const map_type &>(graph->getRangeMap()));
         nonlocal_graph->OptimizeStorage();
-        Epetra_Export exporter(nonlocal_graph->getRowMap(), graph->getRowMap());
-        ierr = graph->Export(*nonlocal_graph, exporter, Add);
+        Epetra_doExport exporter(nonlocal_graph->getRowMap(), graph->getRowMap());
+        ierr = graph->doExport(*nonlocal_graph, exporter, Add);
         AssertThrow (ierr == 0, ExcTrilinosError(ierr));
         ierr =
-          graph->FillComplete(*column_space_map,
+          graph->isFillComplete(*column_space_map,
                               static_cast<const map_type &>(graph->getRangeMap()));
       }
     else
@@ -881,7 +879,7 @@ namespace TrilinosWrappers
               local_b = std::abs(static_cast<TrilinosWrappers::types::int_type>(i-indices[j]));
           }
       }
-    graph->Comm().MaxAll((TrilinosWrappers::types::int_type *)&local_b, &global_b, 1);
+    graph->getComm().MaxAll((TrilinosWrappers::types::int_type *)&local_b, &global_b, 1);
     return static_cast<size_type>(global_b);
   }
 
@@ -913,9 +911,7 @@ namespace TrilinosWrappers
   unsigned int
   SparsityPattern::local_size () const
   {
-    int n_rows = graph -> NumMyRows();
-
-    return n_rows;
+    return graph -> getNodeNumRows();
   }
 
 
@@ -924,8 +920,8 @@ namespace TrilinosWrappers
   SparsityPattern::local_range () const
   {
     size_type begin, end;
-    begin =  min_my_gid(graph->getRowMap());
-    end = max_my_gid(graph->getRowMap())+1;
+    begin =  min_my_gid(graph->getRowMap().get());
+    end = max_my_gid(graph->getRowMap().get())+1;
 
     return std::make_pair (begin, end);
   }
@@ -945,7 +941,7 @@ namespace TrilinosWrappers
   unsigned int
   SparsityPattern::max_entries_per_row () const
   {
-    int nnz = graph->MaxNumIndices();
+    int nnz = graph->getNodeMaxNumRowEntries();
 
     return static_cast<unsigned int>(nnz);
   }
