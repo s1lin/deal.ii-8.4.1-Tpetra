@@ -9,24 +9,24 @@
 /* -------------------------------------------------------------------------- */
 
 void umfpack_di_defaults
-(
-    double Control [UMFPACK_CONTROL]
-) ;
+        (
+                double Control[UMFPACK_CONTROL]
+        );
 
 void umfpack_dl_defaults
-(
-    double Control [UMFPACK_CONTROL]
-) ;
+        (
+                double Control[UMFPACK_CONTROL]
+        );
 
 void umfpack_zi_defaults
-(
-    double Control [UMFPACK_CONTROL]
-) ;
+        (
+                double Control[UMFPACK_CONTROL]
+        );
 
 void umfpack_zl_defaults
-(
-    double Control [UMFPACK_CONTROL]
-) ;
+        (
+                double Control[UMFPACK_CONTROL]
+        );
 
 /*
 double int Syntax:

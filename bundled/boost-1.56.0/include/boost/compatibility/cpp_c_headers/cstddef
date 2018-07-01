@@ -8,8 +8,8 @@
 #include <stddef.h>
 
 namespace std {
-  using ::ptrdiff_t;
-  using ::size_t;
+    using ::ptrdiff_t;
+    using ::size_t;
 }
 
 #endif // CSTDDEF_HEADER

@@ -46,7 +46,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_SYSC_NAME "Dignus Systems/C++"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_SYSC,BOOST_COMP_SYSC_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_SYSC,
+BOOST_COMP_SYSC_NAME)
 
 #ifdef BOOST_COMP_SYSC_EMULATED
 #include <boost/predef/detail/test.h>

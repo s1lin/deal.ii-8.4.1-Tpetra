@@ -24,18 +24,19 @@
     /**/
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace fusion { namespace result_of
-{
-    template <typename Sequence
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(FUSION_MAX_VECTOR_SIZE, int I, INT_MAX)>
-    struct as_nview
-    {
-        typedef mpl::vector_c<
-            int, BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, I)
-        > index_type;
-        typedef nview<Sequence, index_type> type;
-    };
-}}}
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(FUSION_MAX_VECTOR_SIZE, int I, INT_MAX)>
+            struct as_nview {
+                typedef mpl::vector_c<
+                        int, BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, I)
+                > index_type;
+                typedef nview <Sequence, index_type> type;
+            };
+        }
+    }
+}
 
 #include BOOST_PP_ITERATE()
 

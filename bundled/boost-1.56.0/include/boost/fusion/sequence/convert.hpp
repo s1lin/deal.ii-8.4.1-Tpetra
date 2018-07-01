@@ -7,44 +7,43 @@
 #if !defined(FUSION_CONVERT_10022005_1442)
 #define FUSION_CONVERT_10022005_1442
 
-namespace boost { namespace fusion
-{
-    namespace extension
-    {
-        template <typename Tag>
-        struct convert_impl;
-    }
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename Tag>
+            struct convert_impl;
+        }
 
-    namespace result_of
-    {
-        template <typename Tag, typename Sequence>
-        struct convert
-        {
-            typedef typename
+        namespace result_of {
+            template<typename Tag, typename Sequence>
+            struct convert {
+                typedef typename
                 extension::convert_impl<Tag>::template apply<Sequence>
-            gen;
+                        gen;
 
-            typedef typename gen::type type;
-        };
-    }
+                typedef typename gen::type type;
+            };
+        }
 
-    template <typename Tag, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::convert<Tag, Sequence>::type
-    convert(Sequence& seq)
-    {
+        template<typename Tag, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::convert<Tag, Sequence>::type
+        convert(Sequence
+        & seq) {
         typedef typename result_of::convert<Tag, Sequence>::gen gen;
-        return gen::call(seq);
+        return
+        gen::call(seq);
     }
 
-    template <typename Tag, typename Sequence>
+    template<typename Tag, typename Sequence>
     BOOST_FUSION_GPU_ENABLED
     inline typename result_of::convert<Tag, Sequence const>::type
-    convert(Sequence const& seq)
-    {
-        typedef typename result_of::convert<Tag, Sequence const>::gen gen;
-        return gen::call(seq);
-    }
+    convert(Sequence
+    const& seq) {
+    typedef typename result_of::convert<Tag, Sequence const>::gen gen;
+    return
+    gen::call(seq);
+}
 }}
 
 #endif

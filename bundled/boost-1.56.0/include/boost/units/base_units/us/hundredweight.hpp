@@ -18,22 +18,24 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
 //typedef scaled_base_unit<pound_base_unit, scale<10, static_rational<2> > > hundredweight_base_unit;
-typedef scaled_base_unit<pound_base_unit, scale<100, static_rational<1> > > hundredweight_base_unit;
+            typedef scaled_base_unit <pound_base_unit, scale<100, static_rational < 1>> >
+            hundredweight_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::hundredweight_base_unit> {
-    static const char* name()   { return("hundredweight (U.S.)"); }
-    static const char* symbol() { return("cwt"); }
-};
+        template<>
+        struct base_unit_info<us::hundredweight_base_unit> {
+            static const char *name() { return ("hundredweight (U.S.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("cwt"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

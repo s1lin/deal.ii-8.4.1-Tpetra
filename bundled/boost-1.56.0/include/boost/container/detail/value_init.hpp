@@ -21,23 +21,21 @@
 #include <boost/container/detail/workaround.hpp>
 
 namespace boost {
-namespace container {
-namespace container_detail {
+    namespace container {
+        namespace container_detail {
 
-template<class T>
-struct value_init
-{
-   value_init()
-      : m_t()
-   {}
+            template<class T>
+            struct value_init {
+                value_init()
+                        : m_t() {}
 
-   operator T &() { return m_t; }
+                operator T &() { return m_t; }
 
-   T m_t;
-};
+                T m_t;
+            };
 
-}  //namespace container_detail {
-}  //namespace container {
+        }  //namespace container_detail {
+    }  //namespace container {
 }  //namespace boost {
 
 #include <boost/container/detail/config_end.hpp>

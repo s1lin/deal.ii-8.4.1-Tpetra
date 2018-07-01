@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<luminous_flux_dimension,si::system>      luminous_flux;
-    
-BOOST_UNITS_STATIC_CONSTANT(lumen,luminous_flux); 
-BOOST_UNITS_STATIC_CONSTANT(lumens,luminous_flux);    
+            typedef unit <luminous_flux_dimension, si::system> luminous_flux;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(lumen, luminous_flux
+            );
+            BOOST_UNITS_STATIC_CONSTANT(lumens, luminous_flux
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

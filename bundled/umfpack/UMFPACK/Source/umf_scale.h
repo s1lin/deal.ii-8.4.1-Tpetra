@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_scale
-(
-    Int n,
-    Entry alpha,
-    Entry X [ ]
-) ;
+        (
+                Int n,
+                Entry alpha,
+                Entry X[]
+        );

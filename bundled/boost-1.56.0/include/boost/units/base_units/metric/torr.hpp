@@ -14,6 +14,7 @@
 #include <boost/units/conversion.hpp>
 #include <boost/units/systems/si/pressure.hpp>
 
-BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(metric, torr, "torr", "Torr", 1.01325e5/760.0, si::pressure, -401);
+BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(metric, torr,
+"torr", "Torr", 1.01325e5/760.0, si::pressure, -401);
 
 #endif

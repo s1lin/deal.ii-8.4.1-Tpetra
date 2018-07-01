@@ -26,22 +26,20 @@
 
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
 // specialization for vexcl vector
-template< typename T >
-struct algebra_dispatcher< vex::vector< T > >
-{
-    typedef vector_space_algebra algebra_type;
-};
+            template<typename T>
+            struct algebra_dispatcher<vex::vector < T> > {
+            typedef vector_space_algebra algebra_type;
+        };
 
 // specialization for vexcl multivector
-template< typename T , size_t N >
-struct algebra_dispatcher< vex::multivector< T , N > >
-{
-    typedef vector_space_algebra algebra_type;
-};
+        template<typename T, size_t N>
+        struct algebra_dispatcher<vex::multivector < T, N> > {
+        typedef vector_space_algebra algebra_type;
+    };
 
 } // namespace odeint
 } // namespace numeric

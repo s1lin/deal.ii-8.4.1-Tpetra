@@ -76,10 +76,10 @@ SCALAR_IS_LTZERO(x):
 
 /* These all work properly, according to the IEEE 754 standard ... except on */
 /* a PC with windows.  Works fine in Linux on the same PC... */
-#define SCALAR_IS_NAN(x)	((x) != (x))
-#define SCALAR_IS_ZERO(x)	((x) == 0.)
-#define SCALAR_IS_NONZERO(x)	((x) != 0.)
-#define SCALAR_IS_LTZERO(x)	((x) < 0.)
+#define SCALAR_IS_NAN(x)    ((x) != (x))
+#define SCALAR_IS_ZERO(x)    ((x) == 0.)
+#define SCALAR_IS_NONZERO(x)    ((x) != 0.)
+#define SCALAR_IS_LTZERO(x)    ((x) < 0.)
 
 #endif
 
@@ -88,18 +88,18 @@ SCALAR_IS_LTZERO(x):
 
 /* true if an integer (stored in double x) would overflow (or if x is NaN) */
 #define INT_OVERFLOW(x) ((!((x) * (1.0+1e-8) <= (double) Int_MAX)) \
-			|| SCALAR_IS_NAN (x))
+            || SCALAR_IS_NAN (x))
 
 /* print a scalar (avoid printing "-0" for negative zero).  */
 #define PRINT_SCALAR(a) \
 { \
     if (SCALAR_IS_NONZERO (a)) \
     { \
-	PRINTF ((" (%g)", (a))) ; \
+    PRINTF ((" (%g)", (a))) ; \
     } \
     else \
     { \
-	PRINTF ((" (0)")) ; \
+    PRINTF ((" (0)")) ; \
     } \
 }
 
@@ -111,38 +111,38 @@ SCALAR_IS_LTZERO(x):
 
 #define Entry double
 
-#define SPLIT(s)    		    (1)
-#define REAL_COMPONENT(c)	    (c)
-#define IMAG_COMPONENT(c)	    (0.)
-#define ASSIGN(c,s1,s2,p,split)	    { (c) = (s1)[p] ; }
-#define CLEAR(c)		    { (c) = 0. ; }
-#define CLEAR_AND_INCREMENT(p)	    { *p++ = 0. ; }
-#define IS_NAN(a)		    SCALAR_IS_NAN (a)
-#define IS_ZERO(a)		    SCALAR_IS_ZERO (a)
-#define IS_NONZERO(a)		    SCALAR_IS_NONZERO (a)
-#define SCALE_DIV(c,s)		    { (c) /= (s) ; }
-#define SCALE(c,s)		    { (c) *= (s) ; }
-#define ASSEMBLE(c,a)		    { (c) += (a) ; }
-#define ASSEMBLE_AND_INCREMENT(c,p) { (c) += *p++ ; }
-#define DECREMENT(c,a)		    { (c) -= (a) ; }
-#define MULT(c,a,b)		    { (c) = (a) * (b) ; }
-#define MULT_CONJ(c,a,b)	    { (c) = (a) * (b) ; }
-#define MULT_SUB(c,a,b)		    { (c) -= (a) * (b) ; }
-#define MULT_SUB_CONJ(c,a,b)	    { (c) -= (a) * (b) ; }
-#define DIV(c,a,b)		    { (c) = (a) / (b) ; }
-#define DIV_CONJ(c,a,b)		    { (c) = (a) / (b) ; }
-#define APPROX_ABS(s,a)		    { (s) = SCALAR_ABS (a) ; }
-#define ABS(s,a)		    { (s) = SCALAR_ABS (a) ; }
-#define PRINT_ENTRY(a)		    PRINT_SCALAR (a)
+#define SPLIT(s)                (1)
+#define REAL_COMPONENT(c)        (c)
+#define IMAG_COMPONENT(c)        (0.)
+#define ASSIGN(c, s1, s2, p, split)        { (c) = (s1)[p] ; }
+#define CLEAR(c)            { (c) = 0. ; }
+#define CLEAR_AND_INCREMENT(p)        { *p++ = 0. ; }
+#define IS_NAN(a)            SCALAR_IS_NAN (a)
+#define IS_ZERO(a)            SCALAR_IS_ZERO (a)
+#define IS_NONZERO(a)            SCALAR_IS_NONZERO (a)
+#define SCALE_DIV(c, s)            { (c) /= (s) ; }
+#define SCALE(c, s)            { (c) *= (s) ; }
+#define ASSEMBLE(c, a)            { (c) += (a) ; }
+#define ASSEMBLE_AND_INCREMENT(c, p) { (c) += *p++ ; }
+#define DECREMENT(c, a)            { (c) -= (a) ; }
+#define MULT(c, a, b)            { (c) = (a) * (b) ; }
+#define MULT_CONJ(c, a, b)        { (c) = (a) * (b) ; }
+#define MULT_SUB(c, a, b)            { (c) -= (a) * (b) ; }
+#define MULT_SUB_CONJ(c, a, b)        { (c) -= (a) * (b) ; }
+#define DIV(c, a, b)            { (c) = (a) / (b) ; }
+#define DIV_CONJ(c, a, b)            { (c) = (a) / (b) ; }
+#define APPROX_ABS(s, a)            { (s) = SCALAR_ABS (a) ; }
+#define ABS(s, a)            { (s) = SCALAR_ABS (a) ; }
+#define PRINT_ENTRY(a)            PRINT_SCALAR (a)
 
 /* for flop counts */
-#define MULTSUB_FLOPS	2.	/* c -= a*b */
-#define DIV_FLOPS	1.	/* c = a/b */
-#define ABS_FLOPS	0.	/* c = abs (a) */
-#define ASSEMBLE_FLOPS	1.	/* c += a */
-#define DECREMENT_FLOPS	1.	/* c -= a */
-#define MULT_FLOPS	1.	/* c = a*b */
-#define SCALE_FLOPS	1.	/* c = a/s */
+#define MULTSUB_FLOPS    2.    /* c -= a*b */
+#define DIV_FLOPS    1.    /* c = a/b */
+#define ABS_FLOPS    0.    /* c = abs (a) */
+#define ASSEMBLE_FLOPS    1.    /* c += a */
+#define DECREMENT_FLOPS    1.    /* c -= a */
+#define MULT_FLOPS    1.    /* c = a*b */
+#define SCALE_FLOPS    1.    /* c = a/s */
 
 #else
 
@@ -221,7 +221,7 @@ typedef struct
     }  \
     else \
     { \
- 	(c) = ((Entry *)(s1))[p] ; \
+     (c) = ((Entry *)(s1))[p] ; \
     }  \
 }
 
@@ -354,7 +354,7 @@ typedef struct
 #define DIV(c,a,b) \
 { \
     (void) umfpack_divcomplex ((a).Real, (a).Imag, (b).Real, (b).Imag, \
-	&((c).Real), &((c).Imag)) ; \
+    &((c).Real), &((c).Imag)) ; \
 }
 
 /* -------------------------------------------------------------------------- */
@@ -363,7 +363,7 @@ typedef struct
 #define DIV_CONJ(c,a,b) \
 { \
     (void) umfpack_divcomplex ((a).Real, (a).Imag, (b).Real, (-(b).Imag), \
-	&((c).Real), &((c).Imag)) ; \
+    &((c).Real), &((c).Imag)) ; \
 }
 
 /* -------------------------------------------------------------------------- */
@@ -389,29 +389,29 @@ typedef struct
 { \
     if (SCALAR_IS_NONZERO ((a).Real)) \
     { \
-	PRINTF ((" (%g", (a).Real)) ; \
+    PRINTF ((" (%g", (a).Real)) ; \
     } \
     else \
     { \
-	PRINTF ((" (0")) ; \
+    PRINTF ((" (0")) ; \
     } \
     if (SCALAR_IS_LTZERO ((a).Imag)) \
     { \
-	PRINTF ((" - %gi)", -(a).Imag)) ; \
+    PRINTF ((" - %gi)", -(a).Imag)) ; \
     } \
     else if (SCALAR_IS_ZERO ((a).Imag)) \
     { \
-	PRINTF ((" + 0i)")) ; \
+    PRINTF ((" + 0i)")) ; \
     } \
     else \
     { \
-	PRINTF ((" + %gi)", (a).Imag)) ; \
+    PRINTF ((" + %gi)", (a).Imag)) ; \
     } \
 }
 
 /* -------------------------------------------------------------------------- */
 
-#endif	/* #ifndef COMPLEX */
+#endif    /* #ifndef COMPLEX */
 
 /* -------------------------------------------------------------------------- */
 /* Double precision, with int's as integers */
@@ -419,112 +419,112 @@ typedef struct
 
 #ifdef DINT
 
-#define UMF_analyze		 umf_i_analyze
-#define UMF_apply_order		 umf_i_apply_order
-#define UMF_assemble		 umfdi_assemble
-#define UMF_assemble_fixq	 umfdi_assemble_fixq
-#define UMF_blas3_update	 umfdi_blas3_update
-#define UMF_build_tuples	 umfdi_build_tuples
-#define UMF_build_tuples_usage	 umfdi_build_tuples_usage
-#define UMF_colamd		 umf_i_colamd
-#define UMF_colamd_set_defaults	 umf_i_colamd_set_defaults
-#define UMF_create_element	 umfdi_create_element
-#define UMF_extend_front	 umfdi_extend_front
-#define UMF_free		 umf_i_free
-#define UMF_fsize		 umf_i_fsize
-#define UMF_garbage_collection	 umfdi_garbage_collection
-#define UMF_get_memory		 umfdi_get_memory
-#define UMF_grow_front		 umfdi_grow_front
-#define UMF_init_front		 umfdi_init_front
-#define UMF_is_permutation	 umf_i_is_permutation
-#define UMF_kernel		 umfdi_kernel
-#define UMF_kernel_init		 umfdi_kernel_init
-#define UMF_kernel_init_usage	 umfdi_kernel_init_usage
-#define UMF_kernel_wrapup	 umfdi_kernel_wrapup
-#define UMF_local_search	 umfdi_local_search
-#define UMF_lsolve		 umfdi_lsolve
-#define UMF_ltsolve		 umfdi_ltsolve
-#define UMF_lhsolve		 umfdi_lhsolve
-#define UMF_malloc		 umf_i_malloc
-#define UMF_mem_alloc_element	 umfdi_mem_alloc_element
+#define UMF_analyze         umf_i_analyze
+#define UMF_apply_order         umf_i_apply_order
+#define UMF_assemble         umfdi_assemble
+#define UMF_assemble_fixq     umfdi_assemble_fixq
+#define UMF_blas3_update     umfdi_blas3_update
+#define UMF_build_tuples     umfdi_build_tuples
+#define UMF_build_tuples_usage     umfdi_build_tuples_usage
+#define UMF_colamd         umf_i_colamd
+#define UMF_colamd_set_defaults     umf_i_colamd_set_defaults
+#define UMF_create_element     umfdi_create_element
+#define UMF_extend_front     umfdi_extend_front
+#define UMF_free         umf_i_free
+#define UMF_fsize         umf_i_fsize
+#define UMF_garbage_collection     umfdi_garbage_collection
+#define UMF_get_memory         umfdi_get_memory
+#define UMF_grow_front         umfdi_grow_front
+#define UMF_init_front         umfdi_init_front
+#define UMF_is_permutation     umf_i_is_permutation
+#define UMF_kernel         umfdi_kernel
+#define UMF_kernel_init         umfdi_kernel_init
+#define UMF_kernel_init_usage     umfdi_kernel_init_usage
+#define UMF_kernel_wrapup     umfdi_kernel_wrapup
+#define UMF_local_search     umfdi_local_search
+#define UMF_lsolve         umfdi_lsolve
+#define UMF_ltsolve         umfdi_ltsolve
+#define UMF_lhsolve         umfdi_lhsolve
+#define UMF_malloc         umf_i_malloc
+#define UMF_mem_alloc_element     umfdi_mem_alloc_element
 #define UMF_mem_alloc_head_block umfdi_mem_alloc_head_block
 #define UMF_mem_alloc_tail_block umfdi_mem_alloc_tail_block
-#define UMF_mem_free_tail_block	 umfdi_mem_free_tail_block
+#define UMF_mem_free_tail_block     umfdi_mem_free_tail_block
 #define UMF_mem_init_memoryspace umfdi_mem_init_memoryspace
-#define UMF_realloc		 umf_i_realloc
-#define UMF_report_perm		 umf_i_report_perm
-#define UMF_report_vector	 umfdi_report_vector
-#define UMF_row_search		 umfdi_row_search
-#define UMF_scale		 umfdi_scale
-#define UMF_scale_column	 umfdi_scale_column
-#define UMF_set_stats		 umf_i_set_stats
-#define UMF_singletons		 umf_i_singletons
-#define UMF_solve		 umfdi_solve
-#define UMF_start_front		 umfdi_start_front
-#define UMF_store_lu		 umfdi_store_lu
-#define UMF_store_lu_drop	 umfdi_store_lu_drop
-#define UMF_symbolic_usage	 umfdi_symbolic_usage
-#define UMF_transpose		 umfdi_transpose
-#define UMF_tuple_lengths	 umfdi_tuple_lengths
-#define UMF_usolve		 umfdi_usolve
-#define UMF_utsolve		 umfdi_utsolve
-#define UMF_uhsolve		 umfdi_uhsolve
-#define UMF_valid_numeric	 umfdi_valid_numeric
-#define UMF_valid_symbolic	 umfdi_valid_symbolic
-#define UMF_triplet_map_x	 umfdi_triplet_map_x
-#define UMF_triplet_map_nox	 umfdi_triplet_map_nox
-#define UMF_triplet_nomap_x	 umfdi_triplet_nomap_x
-#define UMF_triplet_nomap_nox	 umfdi_triplet_nomap_nox
-#define UMF_2by2		 umfdi_2by2
+#define UMF_realloc         umf_i_realloc
+#define UMF_report_perm         umf_i_report_perm
+#define UMF_report_vector     umfdi_report_vector
+#define UMF_row_search         umfdi_row_search
+#define UMF_scale         umfdi_scale
+#define UMF_scale_column     umfdi_scale_column
+#define UMF_set_stats         umf_i_set_stats
+#define UMF_singletons         umf_i_singletons
+#define UMF_solve         umfdi_solve
+#define UMF_start_front         umfdi_start_front
+#define UMF_store_lu         umfdi_store_lu
+#define UMF_store_lu_drop     umfdi_store_lu_drop
+#define UMF_symbolic_usage     umfdi_symbolic_usage
+#define UMF_transpose         umfdi_transpose
+#define UMF_tuple_lengths     umfdi_tuple_lengths
+#define UMF_usolve         umfdi_usolve
+#define UMF_utsolve         umfdi_utsolve
+#define UMF_uhsolve         umfdi_uhsolve
+#define UMF_valid_numeric     umfdi_valid_numeric
+#define UMF_valid_symbolic     umfdi_valid_symbolic
+#define UMF_triplet_map_x     umfdi_triplet_map_x
+#define UMF_triplet_map_nox     umfdi_triplet_map_nox
+#define UMF_triplet_nomap_x     umfdi_triplet_nomap_x
+#define UMF_triplet_nomap_nox     umfdi_triplet_nomap_nox
+#define UMF_2by2         umfdi_2by2
 
-#define UMFPACK_col_to_triplet	 umfpack_di_col_to_triplet
-#define UMFPACK_defaults	 umfpack_di_defaults
-#define UMFPACK_free_numeric	 umfpack_di_free_numeric
-#define UMFPACK_free_symbolic	 umfpack_di_free_symbolic
-#define UMFPACK_get_lunz	 umfpack_di_get_lunz
-#define UMFPACK_get_numeric	 umfpack_di_get_numeric
-#define UMFPACK_get_symbolic	 umfpack_di_get_symbolic
-#define UMFPACK_get_determinant	 umfpack_di_get_determinant
-#define UMFPACK_numeric		 umfpack_di_numeric
-#define UMFPACK_qsymbolic	 umfpack_di_qsymbolic
-#define UMFPACK_report_control	 umfpack_di_report_control
-#define UMFPACK_report_info	 umfpack_di_report_info
-#define UMFPACK_report_matrix	 umfpack_di_report_matrix
-#define UMFPACK_report_numeric	 umfpack_di_report_numeric
-#define UMFPACK_report_perm	 umfpack_di_report_perm
-#define UMFPACK_report_status	 umfpack_di_report_status
-#define UMFPACK_report_symbolic	 umfpack_di_report_symbolic
-#define UMFPACK_report_triplet	 umfpack_di_report_triplet
-#define UMFPACK_report_vector	 umfpack_di_report_vector
-#define UMFPACK_save_numeric	 umfpack_di_save_numeric
-#define UMFPACK_save_symbolic	 umfpack_di_save_symbolic
-#define UMFPACK_load_numeric	 umfpack_di_load_numeric
-#define UMFPACK_load_symbolic	 umfpack_di_load_symbolic
-#define UMFPACK_scale		 umfpack_di_scale
-#define UMFPACK_solve		 umfpack_di_solve
-#define UMFPACK_symbolic	 umfpack_di_symbolic
-#define UMFPACK_transpose	 umfpack_di_transpose
-#define UMFPACK_triplet_to_col	 umfpack_di_triplet_to_col
-#define UMFPACK_wsolve		 umfpack_di_wsolve
+#define UMFPACK_col_to_triplet     umfpack_di_col_to_triplet
+#define UMFPACK_defaults     umfpack_di_defaults
+#define UMFPACK_free_numeric     umfpack_di_free_numeric
+#define UMFPACK_free_symbolic     umfpack_di_free_symbolic
+#define UMFPACK_get_lunz     umfpack_di_get_lunz
+#define UMFPACK_get_numeric     umfpack_di_get_numeric
+#define UMFPACK_get_symbolic     umfpack_di_get_symbolic
+#define UMFPACK_get_determinant     umfpack_di_get_determinant
+#define UMFPACK_numeric         umfpack_di_numeric
+#define UMFPACK_qsymbolic     umfpack_di_qsymbolic
+#define UMFPACK_report_control     umfpack_di_report_control
+#define UMFPACK_report_info     umfpack_di_report_info
+#define UMFPACK_report_matrix     umfpack_di_report_matrix
+#define UMFPACK_report_numeric     umfpack_di_report_numeric
+#define UMFPACK_report_perm     umfpack_di_report_perm
+#define UMFPACK_report_status     umfpack_di_report_status
+#define UMFPACK_report_symbolic     umfpack_di_report_symbolic
+#define UMFPACK_report_triplet     umfpack_di_report_triplet
+#define UMFPACK_report_vector     umfpack_di_report_vector
+#define UMFPACK_save_numeric     umfpack_di_save_numeric
+#define UMFPACK_save_symbolic     umfpack_di_save_symbolic
+#define UMFPACK_load_numeric     umfpack_di_load_numeric
+#define UMFPACK_load_symbolic     umfpack_di_load_symbolic
+#define UMFPACK_scale         umfpack_di_scale
+#define UMFPACK_solve         umfpack_di_solve
+#define UMFPACK_symbolic     umfpack_di_symbolic
+#define UMFPACK_transpose     umfpack_di_transpose
+#define UMFPACK_triplet_to_col     umfpack_di_triplet_to_col
+#define UMFPACK_wsolve         umfpack_di_wsolve
 
 /* for debugging only: */
-#define UMF_malloc_count	 umf_i_malloc_count
-#define UMF_debug		 umfdi_debug
-#define UMF_allocfail		 umfdi_allocfail
-#define UMF_gprob		 umfdi_gprob
-#define UMF_dump_dense		 umfdi_dump_dense
-#define UMF_dump_element	 umfdi_dump_element
-#define UMF_dump_rowcol		 umfdi_dump_rowcol
-#define UMF_dump_matrix		 umfdi_dump_matrix
-#define UMF_dump_current_front	 umfdi_dump_current_front
-#define UMF_dump_lu		 umfdi_dump_lu
-#define UMF_dump_memory		 umfdi_dump_memory
-#define UMF_dump_packed_memory	 umfdi_dump_packed_memory
-#define UMF_dump_col_matrix	 umfdi_dump_col_matrix
-#define UMF_dump_chain		 umfdi_dump_chain
-#define UMF_dump_start		 umfdi_dump_start
-#define UMF_dump_rowmerge	 umfdi_dump_rowmerge
-#define UMF_dump_diagonal_map	 umfdi_dump_diagonal_map
+#define UMF_malloc_count     umf_i_malloc_count
+#define UMF_debug         umfdi_debug
+#define UMF_allocfail         umfdi_allocfail
+#define UMF_gprob         umfdi_gprob
+#define UMF_dump_dense         umfdi_dump_dense
+#define UMF_dump_element     umfdi_dump_element
+#define UMF_dump_rowcol         umfdi_dump_rowcol
+#define UMF_dump_matrix         umfdi_dump_matrix
+#define UMF_dump_current_front     umfdi_dump_current_front
+#define UMF_dump_lu         umfdi_dump_lu
+#define UMF_dump_memory         umfdi_dump_memory
+#define UMF_dump_packed_memory     umfdi_dump_packed_memory
+#define UMF_dump_col_matrix     umfdi_dump_col_matrix
+#define UMF_dump_chain         umfdi_dump_chain
+#define UMF_dump_start         umfdi_dump_start
+#define UMF_dump_rowmerge     umfdi_dump_rowmerge
+#define UMF_dump_diagonal_map     umfdi_dump_diagonal_map
 
 #endif
 

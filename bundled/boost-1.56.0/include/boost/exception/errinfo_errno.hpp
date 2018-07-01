@@ -5,7 +5,7 @@
 
 #ifndef UUID_F0EE17BE6C1211DE87FF459155D89593
 #define UUID_F0EE17BE6C1211DE87FF459155D89593
-#if (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#if (__GNUC__ * 100 + __GNUC_MINOR__ > 301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
 #endif
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
@@ -17,9 +17,8 @@
 #include <string.h>
 
 namespace
-boost
-    {
-    typedef error_info<struct errinfo_errno_,int> errinfo_errno;
+boost {
+    typedef error_info<struct errinfo_errno_, int> errinfo_errno;
 
     //Usage hint:
     //if( c_function(....)!=0 )
@@ -29,14 +28,13 @@ boost
     //        errinfo_api_function("c_function") );
     inline
     std::string
-    to_string( errinfo_errno const & e )
-        {
+    to_string(errinfo_errno const &e) {
         std::ostringstream tmp;
-        int v=e.value();
+        int v = e.value();
         tmp << v << ", \"" << strerror(v) << "\"";
         return tmp.str();
-        }
     }
+}
 
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma warning(pop)

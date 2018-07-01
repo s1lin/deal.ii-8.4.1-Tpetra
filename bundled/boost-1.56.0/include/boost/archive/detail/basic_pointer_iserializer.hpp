@@ -29,39 +29,52 @@
 #endif
 
 namespace boost {
-namespace serialization {
-    class extended_type_info;
-} // namespace serialization
+    namespace serialization {
+        class extended_type_info;
+    } // namespace serialization
 
 // forward declarations
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iarchive;
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iserializer;
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer 
-    : public basic_serializer {
-protected:
-    explicit basic_pointer_iserializer(
-        const boost::serialization::extended_type_info & type_
-    );
-    // account for bogus gcc warning
-    #if defined(__GNUC__)
-    virtual
-    #endif
-    ~basic_pointer_iserializer();
-public:
-    virtual void * heap_allocation() const = 0;
-    virtual const basic_iserializer & get_basic_serializer() const = 0;
-    virtual void load_object_ptr(
-        basic_iarchive & ar, 
-        void * x,
-        const unsigned int file_version
-    ) const = 0;
-};
+            basic_iarchive;
 
-} // namespace detail
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
+            basic_iserializer;
+
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
+            basic_pointer_iserializer
+            : public basic_serializer {
+            protected:
+
+            explicit basic_pointer_iserializer(
+                    const boost::serialization::extended_type_info &type_
+            );
+            // account for bogus gcc warning
+#if defined(__GNUC__)
+
+            virtual
+#endif
+            ~basic_pointer_iserializer();
+
+            public:
+
+            virtual void *heap_allocation() const = 0;
+
+            virtual const basic_iserializer &get_basic_serializer() const = 0;
+
+            virtual void load_object_ptr(
+                    basic_iarchive & ar,
+                    void * x,
+            const unsigned int file_version
+            ) const = 0;
+        };
+
+    } // namespace detail
 } // namespace archive
 } // namespace boost
 

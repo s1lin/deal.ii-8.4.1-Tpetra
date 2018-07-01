@@ -32,23 +32,22 @@ namespace boost {
             Result of the find operation must be convertible to iterator_range.
         */
         template<typename FinderT, typename IteratorT>
-        struct FinderConcept
-        {
+        struct FinderConcept {
         private:
-            typedef iterator_range<IteratorT> range;
+            typedef iterator_range <IteratorT> range;
         public:
-            void constraints()
-            {
+            void constraints() {
                 // Operation
-                r=(*pF)(i,i);
+                r = (*pF)(i, i);
             }
+
         private:
             range r;
             IteratorT i;
-            FinderT* pF;    
+            FinderT *pF;
         }; // Finder_concept
 
-        
+
         //! Formatter concept
         /*!
             Defines the Formatter concept. Formatter is a functor, which
@@ -59,18 +58,17 @@ namespace boost {
             or a reference to it.
         */
         template<typename FormatterT, typename FinderT, typename IteratorT>
-        struct FormatterConcept
-        {
+        struct FormatterConcept {
         public:
-            void constraints()
-            {
+            void constraints() {
                 // Operation
-                ::boost::begin((*pFo)( (*pF)(i,i) ));
-                ::boost::end((*pFo)( (*pF)(i,i) ));
+                ::boost::begin((*pFo)((*pF)(i, i)));
+                ::boost::end((*pFo)((*pF)(i, i)));
             }
+
         private:
             IteratorT i;
-            FinderT* pF;
+            FinderT *pF;
             FormatterT *pFo;
         }; // FormatterConcept;
 

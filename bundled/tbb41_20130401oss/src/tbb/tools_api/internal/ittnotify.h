@@ -65,7 +65,7 @@
 #endif /* ITT_PLATFORM_POSIX */
 
 #ifndef ITT_PLATFORM
-#  if ITT_OS==ITT_OS_WIN
+#  if ITT_OS == ITT_OS_WIN
 #    define ITT_PLATFORM ITT_PLATFORM_WIN
 #  else
 #    define ITT_PLATFORM ITT_PLATFORM_POSIX
@@ -74,12 +74,13 @@
 
 #include <stddef.h>
 #include <stdarg.h>
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 #include <tchar.h>
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
 #ifndef CDECL
-#  if ITT_PLATFORM==ITT_PLATFORM_WIN
+#  if ITT_PLATFORM == ITT_PLATFORM_WIN
 #    define CDECL __cdecl
 #  else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 #    define CDECL /* nothing */
@@ -87,7 +88,7 @@
 #endif /* CDECL */
 
 #ifndef STDCALL
-#  if ITT_PLATFORM==ITT_PLATFORM_WIN
+#  if ITT_PLATFORM == ITT_PLATFORM_WIN
 #    define STDCALL __stdcall
 #  else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 #    define STDCALL /* nothing */
@@ -97,8 +98,8 @@
 #define ITTAPI    CDECL
 #define LIBITTAPI /* nothing */
 
-#define ITT_JOIN_AUX(p,n) p##n
-#define ITT_JOIN(p,n)     ITT_JOIN_AUX(p,n)
+#define ITT_JOIN_AUX(p, n) p##n
+#define ITT_JOIN(p, n)     ITT_JOIN_AUX(p,n)
 
 #ifndef INTEL_ITTNOTIFY_PREFIX
 #  define INTEL_ITTNOTIFY_PREFIX __itt_
@@ -119,7 +120,7 @@
 #ifdef ITT_STUBV
 #undef ITT_STUBV
 #endif
-#define ITT_STUBV(api,type,name,args,params)                      \
+#define ITT_STUBV(api, type, name, args, params)                      \
     typedef type (api* ITT_JOIN(ITTNOTIFY_NAME(name),_t)) args;   \
     extern ITT_JOIN(ITTNOTIFY_NAME(name),_t) ITTNOTIFY_NAME(name);
 #define ITT_STUB ITT_STUBV
@@ -152,7 +153,7 @@ typedef int __itt_mark_type;
  * @param[in] name - name of mark to create
  * @return Returns a handle to the mark type
  */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 __itt_mark_type ITTAPI __itt_mark_createA(const char    *name);
 __itt_mark_type ITTAPI __itt_mark_createW(const wchar_t *name);
 #ifdef UNICODE
@@ -169,13 +170,13 @@ __itt_mark_type ITTAPI __itt_mark_create(const char *name);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 ITT_STUB(ITTAPI, __itt_mark_type, mark_createA, (const char    *name), (name))
 ITT_STUB(ITTAPI, __itt_mark_type, mark_createW, (const wchar_t *name), (name))
 #else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-ITT_STUB(ITTAPI, __itt_mark_type, mark_create,  (const char *name), (name))
+ITT_STUB (ITTAPI, __itt_mark_type, mark_create, (const char *name), (name))
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 #define __itt_mark_createA     ITTNOTIFY_DATA(mark_createA)
 #define __itt_mark_createA_ptr ITTNOTIFY_NAME(mark_createA)
 #define __itt_mark_createW     ITTNOTIFY_DATA(mark_createW)
@@ -217,7 +218,7 @@ ITT_STUB(ITTAPI, __itt_mark_type, mark_create,  (const char *name), (name))
  * @param[in] parameter - string parameter of mark
  * @return Returns zero value in case of success, non-zero value otherwise.
  */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 int ITTAPI __itt_markA(__itt_mark_type mt, const char    *parameter);
 int ITTAPI __itt_markW(__itt_mark_type mt, const wchar_t *parameter);
 #ifdef UNICODE
@@ -234,13 +235,15 @@ int ITTAPI __itt_mark(__itt_mark_type mt, const char *parameter);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 ITT_STUB(ITTAPI, int, markA, (__itt_mark_type mt, const char    *parameter), (mt, parameter))
 ITT_STUB(ITTAPI, int, markW, (__itt_mark_type mt, const wchar_t *parameter), (mt, parameter))
 #else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-ITT_STUB(ITTAPI, int, mark,  (__itt_mark_type mt, const char *parameter), (mt, parameter))
+ITT_STUB (ITTAPI, int, mark, (__itt_mark_type
+        mt,
+        const char *parameter), (mt, parameter))
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 #define __itt_markA     ITTNOTIFY_DATA(markA)
 #define __itt_markA_ptr ITTNOTIFY_NAME(markA)
 #define __itt_markW     ITTNOTIFY_DATA(markW)
@@ -275,7 +278,7 @@ ITT_STUB(ITTAPI, int, mark,  (__itt_mark_type mt, const char *parameter), (mt, p
  * rather then for one thread
  * @see int __itt_mark(__itt_mark_type mt, const char* parameter);
  */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 int ITTAPI __itt_mark_globalA(__itt_mark_type mt, const char    *parameter);
 int ITTAPI __itt_mark_globalW(__itt_mark_type mt, const wchar_t *parameter);
 #ifdef UNICODE
@@ -292,13 +295,15 @@ int ITTAPI __itt_mark_global(__itt_mark_type mt, const char *parameter);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 ITT_STUB(ITTAPI, int, mark_globalA, (__itt_mark_type mt, const char    *parameter), (mt, parameter))
 ITT_STUB(ITTAPI, int, mark_globalW, (__itt_mark_type mt, const wchar_t *parameter), (mt, parameter))
 #else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-ITT_STUB(ITTAPI, int, mark_global,  (__itt_mark_type mt, const char *parameter), (mt, parameter))
+ITT_STUB (ITTAPI, int, mark_global, (__itt_mark_type
+        mt,
+        const char *parameter), (mt, parameter))
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 #define __itt_mark_globalA     ITTNOTIFY_DATA(mark_globalA)
 #define __itt_mark_globalA_ptr ITTNOTIFY_NAME(mark_globalA)
 #define __itt_mark_globalW     ITTNOTIFY_DATA(mark_globalW)
@@ -348,7 +353,8 @@ int ITTAPI __itt_mark_off(__itt_mark_type mt);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUB(ITTAPI, int, mark_off, (__itt_mark_type mt), (mt))
+ITT_STUB (ITTAPI, int, mark_off, (__itt_mark_type
+        mt), (mt))
 #define __itt_mark_off     ITTNOTIFY_DATA(mark_off)
 #define __itt_mark_off_ptr ITTNOTIFY_NAME(mark_off)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -369,7 +375,8 @@ int ITTAPI __itt_mark_global_off(__itt_mark_type mt);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUB(ITTAPI, int, mark_global_off, (__itt_mark_type mt), (mt))
+ITT_STUB (ITTAPI, int, mark_global_off, (__itt_mark_type
+        mt), (mt))
 #define __itt_mark_global_off     ITTNOTIFY_DATA(mark_global_off)
 #define __itt_mark_global_off_ptr ITTNOTIFY_NAME(mark_global_off)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -399,7 +406,7 @@ typedef struct ___itt_counter *__itt_counter;
  * After __itt_counter_create() is called, __itt_counter_inc() / __itt_counter_inc_delta() can be used
  * to increment the counter on any thread
  */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 __itt_counter ITTAPI __itt_counter_createA(const char    *name, const char    *domain);
 __itt_counter ITTAPI __itt_counter_createW(const wchar_t *name, const wchar_t *domain);
 #ifdef UNICODE
@@ -416,13 +423,13 @@ __itt_counter ITTAPI __itt_counter_create(const char *name, const char *domain);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 ITT_STUB(ITTAPI, __itt_counter, counter_createA, (const char    *name, const char    *domain), (name, domain))
 ITT_STUB(ITTAPI, __itt_counter, counter_createW, (const wchar_t *name, const wchar_t *domain), (name, domain))
 #else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-ITT_STUB(ITTAPI, __itt_counter, counter_create,  (const char *name, const char *domain), (name, domain))
+ITT_STUB (ITTAPI, __itt_counter, counter_create, (const char *name, const char *domain), (name, domain))
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 #define __itt_counter_createA     ITTNOTIFY_DATA(counter_createA)
 #define __itt_counter_createA_ptr ITTNOTIFY_NAME(counter_createA)
 #define __itt_counter_createW     ITTNOTIFY_DATA(counter_createW)
@@ -460,7 +467,8 @@ void ITTAPI __itt_counter_destroy(__itt_counter id);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, counter_destroy, (__itt_counter id), (id))
+ITT_STUBV(ITTAPI, void, counter_destroy, (__itt_counter
+        id), (id))
 #define __itt_counter_destroy     ITTNOTIFY_VOID(counter_destroy)
 #define __itt_counter_destroy_ptr ITTNOTIFY_NAME(counter_destroy)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -480,7 +488,8 @@ void ITTAPI __itt_counter_inc(__itt_counter id);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, counter_inc, (__itt_counter id), (id))
+ITT_STUBV(ITTAPI, void, counter_inc, (__itt_counter
+        id), (id))
 #define __itt_counter_inc     ITTNOTIFY_VOID(counter_inc)
 #define __itt_counter_inc_ptr ITTNOTIFY_NAME(counter_inc)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -500,7 +509,9 @@ void ITTAPI __itt_counter_inc_delta(__itt_counter id, unsigned long long value);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, counter_inc_delta, (__itt_counter id, unsigned long long value), (id, value))
+ITT_STUBV(ITTAPI, void, counter_inc_delta, (__itt_counter
+        id, unsigned long long
+        value), (id, value))
 #define __itt_counter_inc_delta     ITTNOTIFY_VOID(counter_inc_delta)
 #define __itt_counter_inc_delta_ptr ITTNOTIFY_NAME(counter_inc_delta)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -533,7 +544,7 @@ __itt_caller ITTAPI __itt_stack_caller_create(void);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUB(ITTAPI, __itt_caller, stack_caller_create, (void), ())
+ITT_STUB (ITTAPI, __itt_caller, stack_caller_create, (void), ())
 #define __itt_stack_caller_create     ITTNOTIFY_DATA(stack_caller_create)
 #define __itt_stack_caller_create_ptr ITTNOTIFY_NAME(stack_caller_create)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -553,7 +564,8 @@ void ITTAPI __itt_stack_caller_destroy(__itt_caller id);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, stack_caller_destroy, (__itt_caller id), (id))
+ITT_STUBV(ITTAPI, void, stack_caller_destroy, (__itt_caller
+        id), (id))
 #define __itt_stack_caller_destroy     ITTNOTIFY_VOID(stack_caller_destroy)
 #define __itt_stack_caller_destroy_ptr ITTNOTIFY_NAME(stack_caller_destroy)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -574,7 +586,8 @@ void ITTAPI __itt_stack_callee_enter(__itt_caller id);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, stack_callee_enter, (__itt_caller id), (id))
+ITT_STUBV(ITTAPI, void, stack_callee_enter, (__itt_caller
+        id), (id))
 #define __itt_stack_callee_enter     ITTNOTIFY_VOID(stack_callee_enter)
 #define __itt_stack_callee_enter_ptr ITTNOTIFY_NAME(stack_callee_enter)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -594,7 +607,8 @@ void ITTAPI __itt_stack_callee_leave(__itt_caller id);
 /** @cond exclude_from_documentation */
 #ifndef INTEL_NO_MACRO_BODY
 #ifndef INTEL_NO_ITTNOTIFY_API
-ITT_STUBV(ITTAPI, void, stack_callee_leave, (__itt_caller id), (id))
+ITT_STUBV(ITTAPI, void, stack_callee_leave, (__itt_caller
+        id), (id))
 #define __itt_stack_callee_leave     ITTNOTIFY_VOID(stack_callee_leave)
 #define __itt_stack_callee_leave_ptr ITTNOTIFY_NAME(stack_callee_leave)
 #else  /* INTEL_NO_ITTNOTIFY_API */
@@ -612,25 +626,25 @@ ITT_STUBV(ITTAPI, void, stack_callee_leave, (__itt_caller id), (id))
 
 /** @cond exclude_from_documentation */
 typedef enum __itt_error_code {
-    __itt_error_success       = 0, /*!< no error */
-    __itt_error_no_module     = 1, /*!< module can't be loaded */
+    __itt_error_success = 0, /*!< no error */
+    __itt_error_no_module = 1, /*!< module can't be loaded */
     /* %1$s -- library name; win: %2$d -- system error code; unx: %2$s -- system error message. */
-    __itt_error_no_symbol     = 2, /*!< symbol not found */
+            __itt_error_no_symbol = 2, /*!< symbol not found */
     /* %1$s -- library name, %2$s -- symbol name. */
-    __itt_error_unknown_group = 3, /*!< unknown group specified */
+            __itt_error_unknown_group = 3, /*!< unknown group specified */
     /* %1$s -- env var name, %2$s -- group name. */
-    __itt_error_cant_read_env = 4, /*!< GetEnvironmentVariable() failed */
+            __itt_error_cant_read_env = 4, /*!< GetEnvironmentVariable() failed */
     /* %1$s -- env var name, %2$d -- system error. */
-    __itt_error_env_too_long  = 5, /*!< variable value too long */
+            __itt_error_env_too_long = 5, /*!< variable value too long */
     /* %1$s -- env var name, %2$d -- actual length of the var, %3$d -- max allowed length. */
-    __itt_error_system        = 6  /*!< pthread_mutexattr_init or pthread_mutex_init failed */
+            __itt_error_system = 6  /*!< pthread_mutexattr_init or pthread_mutex_init failed */
     /* %1$s -- function name, %2$d -- errno. */
 } __itt_error_code;
 
 typedef void (__itt_error_notification_t)(__itt_error_code code, va_list);
-__itt_error_notification_t* __itt_set_error_handler(__itt_error_notification_t*);
+__itt_error_notification_t *__itt_set_error_handler(__itt_error_notification_t *);
 
-const char* ITTAPI __itt_api_version(void);
+const char *ITTAPI __itt_api_version(void);
 /** @endcond */
 
 /** @cond exclude_from_documentation */
@@ -640,7 +654,7 @@ const char* ITTAPI __itt_api_version(void);
 void __itt_error_handler(__itt_error_code code, va_list args);
 extern const int ITTNOTIFY_NAME(err);
 #define __itt_err ITTNOTIFY_NAME(err)
-ITT_STUB(ITTAPI, const char*, api_version, (void), ())
+ITT_STUB (ITTAPI, const char*, api_version, (void), ())
 #define __itt_api_version     ITTNOTIFY_DATA(api_version)
 #define __itt_api_version_ptr ITTNOTIFY_NAME(api_version)
 #else  /* INTEL_NO_ITTNOTIFY_API */

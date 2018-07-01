@@ -14,59 +14,55 @@
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct zip_view_iterator_tag;
+        struct zip_view_iterator_tag;
 
-    namespace detail
-    {
-        template<typename N>
-        struct poly_advance
-        {
-            template<typename Sig>
-            struct result;
+        namespace detail {
+            template<typename N>
+            struct poly_advance {
+                template<typename Sig>
+                struct result;
 
-            template<typename N1, typename It>
-            struct result<poly_advance<N1>(It)>
-            {
-                typedef typename remove_reference<It>::type it;
-                typedef typename result_of::advance<it,N>::type type;
-            };
+                template<typename N1, typename It>
+                struct result<poly_advance<N1>(It)> {
+                    typedef typename remove_reference<It>::type it;
+                    typedef typename result_of::advance<it, N>::type type;
+                };
 
-            template<typename It>
-            BOOST_FUSION_GPU_ENABLED
-            typename result<poly_advance(It)>::type
-            operator()(const It& it) const
-            {
-                return fusion::advance<N>(it);
-            }
-        };
-    }
-
-    namespace extension
-    {
-        template<typename Tag>
-        struct advance_impl;
-
-        template<>
-        struct advance_impl<zip_view_iterator_tag>
-        {
-            template<typename It, typename N>
-            struct apply
-            {
-                typedef zip_view_iterator<
-                    typename result_of::transform<typename It::iterators, detail::poly_advance<N> >::type> type;
-
+                template<typename It>
                 BOOST_FUSION_GPU_ENABLED
-                static type
-                call(It const& it)
-                {
-                    return type(
-                        fusion::transform(it.iterators_, detail::poly_advance<N>()));
+                typename result<poly_advance(It)>::type
+
+                operator()(const It &it) const {
+                    return fusion::advance<N>(it);
                 }
             };
-        };
+        }
+
+        namespace extension {
+            template<typename Tag>
+            struct advance_impl;
+
+            template<>
+            struct advance_impl<zip_view_iterator_tag> {
+                template<typename It, typename N>
+                struct apply {
+                    typedef zip_view_iterator<
+                            typename result_of::transform<typename It::iterators, detail::poly_advance<N> >::type> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(It const& it)
+                    {
+                        return type(
+                                fusion::transform(it.iterators_, detail::poly_advance<N>()));
+                    }
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

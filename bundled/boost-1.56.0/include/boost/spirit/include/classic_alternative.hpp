@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_ALTERNATIVE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_ALTERNATIVE
+
 #include <boost/spirit/home/classic/core/composite/alternative.hpp>
+
 #endif

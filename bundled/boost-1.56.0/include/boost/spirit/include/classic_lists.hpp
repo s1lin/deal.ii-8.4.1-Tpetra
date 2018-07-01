@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_LISTS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_LISTS
+
 #include <boost/spirit/home/classic/utility/lists.hpp>
+
 #endif

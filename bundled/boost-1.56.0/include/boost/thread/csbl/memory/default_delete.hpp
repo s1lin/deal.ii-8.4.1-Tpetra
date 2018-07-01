@@ -109,17 +109,14 @@ namespace boost
   }
 }
 #else
-namespace boost
-{
-  namespace csbl
-  {
-    using ::std::default_delete;
-  }
+namespace boost {
+    namespace csbl {
+        using ::std::default_delete;
+    }
 }
 #endif // defined  BOOST_NO_CXX11_SMART_PTR
 
-namespace boost
-{
-  using ::boost::csbl::default_delete;
+namespace boost {
+    using ::boost::csbl::default_delete;
 }
 #endif // header

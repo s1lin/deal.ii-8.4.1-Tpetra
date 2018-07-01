@@ -13,25 +13,23 @@
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/algorithm/query/detail/any.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename F>
-        struct any
-        {
-            typedef bool type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename F>
+            struct any {
+                typedef bool type;
+            };
+        }
 
-    template <typename Sequence, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    inline bool
-    any(Sequence const& seq, F f)
-    {
-        return detail::any(seq, f, typename traits::category_of<Sequence>::type());
+        template<typename Sequence, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        inline bool
+        any(Sequence const &seq, F f) {
+            return detail::any(seq, f, typename traits::category_of<Sequence>::type());
+        }
     }
-}}
+}
 
 #endif
 

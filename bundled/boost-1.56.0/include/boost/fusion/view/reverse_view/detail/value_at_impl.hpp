@@ -13,22 +13,23 @@
 #include <boost/mpl/minus.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion { namespace extension
-{
-    template <typename>
-    struct value_at_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct value_at_impl;
 
-    template <>
-    struct value_at_impl<reverse_view_tag>
-    {
-        template <typename Seq, typename N>
-        struct apply
-          : result_of::value_at<
-                typename Seq::seq_type
-              , mpl::minus<typename Seq::size, mpl::int_<1>, N>
-            >
-        {};
-    };
-}}}
+            template<>
+            struct value_at_impl<reverse_view_tag> {
+                template<typename Seq, typename N>
+                struct apply
+                        : result_of::value_at<
+                                typename Seq::seq_type, mpl::minus < typename Seq::size, mpl::int_ < 1>, N>
+                >
+                {};
+            };
+        }
+    }
+}
 
 #endif

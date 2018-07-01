@@ -70,7 +70,8 @@
 
 /**************************************************************************************************/
 
-namespace boost { namespace algorithm {
+namespace boost {
+    namespace algorithm {
 
 /**************************************************************************************************/
 
@@ -79,18 +80,18 @@ namespace boost { namespace algorithm {
     \brief iterator-based gather implementation
 */
 
-template <
-    typename BidirectionalIterator,  // Iter models BidirectionalIterator
-    typename Pred>                   // Pred models UnaryPredicate
-std::pair<BidirectionalIterator, BidirectionalIterator> gather 
-        ( BidirectionalIterator first, BidirectionalIterator last, BidirectionalIterator pivot, Pred pred )
-{
+        template<
+                typename BidirectionalIterator,  // Iter models BidirectionalIterator
+                typename Pred>
+        // Pred models UnaryPredicate
+        std::pair<BidirectionalIterator, BidirectionalIterator> gather
+                (BidirectionalIterator first, BidirectionalIterator last, BidirectionalIterator pivot, Pred pred) {
 //  The first call partitions everything up to (but not including) the pivot element,
 //  while the second call partitions the rest of the sequence.
-    return std::make_pair (
-        std::stable_partition ( first, pivot, !boost::bind<bool> ( pred, _1 )),
-        std::stable_partition ( pivot, last,   boost::bind<bool> ( pred, _1 )));
-}
+            return std::make_pair(
+                    std::stable_partition(first, pivot, !boost::bind<bool>(pred, _1)),
+                    std::stable_partition(pivot, last, boost::bind<bool>(pred, _1)));
+        }
 
 /**************************************************************************************************/
 
@@ -99,23 +100,24 @@ std::pair<BidirectionalIterator, BidirectionalIterator> gather
     \brief range-based gather implementation
 */
 
-template <
-    typename BidirectionalRange,    //
-    typename Pred>                  // Pred models UnaryPredicate
-std::pair<
-    typename boost::range_iterator<const BidirectionalRange>::type,
-    typename boost::range_iterator<const BidirectionalRange>::type>
-gather (
-    const BidirectionalRange &range,
-    typename boost::range_iterator<const BidirectionalRange>::type pivot,
-    Pred pred )
-{
-    return boost::algorithm::gather ( boost::begin ( range ), boost::end ( range ), pivot, pred );
-}
+        template<
+                typename BidirectionalRange,    //
+                typename Pred>
+        // Pred models UnaryPredicate
+        std::pair<
+                typename boost::range_iterator<const BidirectionalRange>::type,
+                typename boost::range_iterator<const BidirectionalRange>::type>
+        gather(
+                const BidirectionalRange &range,
+                typename boost::range_iterator<const BidirectionalRange>::type pivot,
+                Pred pred) {
+            return boost::algorithm::gather(boost::begin(range), boost::end(range), pivot, pred);
+        }
 
 /**************************************************************************************************/
 
-}}  // namespace
+    }
+}  // namespace
 
 /**************************************************************************************************/
 

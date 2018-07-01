@@ -5,7 +5,7 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_build_tuples
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );

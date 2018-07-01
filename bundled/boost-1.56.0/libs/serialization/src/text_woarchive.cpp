@@ -9,11 +9,13 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+
 #ifdef BOOST_NO_STD_WSTREAMBUF
 #error "wide char i/o not supported on this platform"
 #else
 
 #define BOOST_WARCHIVE_SOURCE
+
 #include <boost/archive/text_woarchive.hpp>
 #include <boost/archive/detail/archive_serializer_map.hpp>
 
@@ -23,13 +25,18 @@
 #include <boost/archive/impl/text_woarchive_impl.ipp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-template class detail::archive_serializer_map<text_woarchive>;
-template class basic_text_oarchive<text_woarchive> ;
-template class text_woarchive_impl<text_woarchive> ;
+        template
+        class detail::archive_serializer_map<text_woarchive>;
 
-} // namespace archive
+        template
+        class basic_text_oarchive<text_woarchive>;
+
+        template
+        class text_woarchive_impl<text_woarchive>;
+
+    } // namespace archive
 } // namespace boost
 
 #endif // BOOST_NO_STD_WSTREAMBUF

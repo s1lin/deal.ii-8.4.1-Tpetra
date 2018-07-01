@@ -9,68 +9,68 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_get_numeric
-(
-    int Lp [ ],
-    int Lj [ ],
-    double Lx [ ],
-    int Up [ ],
-    int Ui [ ],
-    double Ux [ ],
-    int P [ ],
-    int Q [ ],
-    double Dx [ ],
-    int *do_recip,
-    double Rs [ ],
-    void *Numeric
-) ;
+        (
+                int Lp[],
+                int Lj[],
+                double Lx[],
+                int Up[],
+                int Ui[],
+                double Ux[],
+                int P[],
+                int Q[],
+                double Dx[],
+                int *do_recip,
+                double Rs[],
+                void *Numeric
+        );
 
 UF_long umfpack_dl_get_numeric
-(
-    UF_long Lp [ ],
-    UF_long Lj [ ],
-    double Lx [ ],
-    UF_long Up [ ],
-    UF_long Ui [ ],
-    double Ux [ ],
-    UF_long P [ ],
-    UF_long Q [ ],
-    double Dx [ ],
-    UF_long *do_recip,
-    double Rs [ ],
-    void *Numeric
-) ;
+        (
+                UF_long Lp[],
+                UF_long Lj[],
+                double Lx[],
+                UF_long Up[],
+                UF_long Ui[],
+                double Ux[],
+                UF_long P[],
+                UF_long Q[],
+                double Dx[],
+                UF_long *do_recip,
+                double Rs[],
+                void *Numeric
+        );
 
 int umfpack_zi_get_numeric
-(
-    int Lp [ ],
-    int Lj [ ],
-    double Lx [ ], double Lz [ ],
-    int Up [ ],
-    int Ui [ ],
-    double Ux [ ], double Uz [ ],
-    int P [ ],
-    int Q [ ],
-    double Dx [ ], double Dz [ ],
-    int *do_recip,
-    double Rs [ ],
-    void *Numeric
-) ;
+        (
+                int Lp[],
+                int Lj[],
+                double Lx[], double Lz[],
+                int Up[],
+                int Ui[],
+                double Ux[], double Uz[],
+                int P[],
+                int Q[],
+                double Dx[], double Dz[],
+                int *do_recip,
+                double Rs[],
+                void *Numeric
+        );
 
 UF_long umfpack_zl_get_numeric
-(
-    UF_long Lp [ ],
-    UF_long Lj [ ],
-    double Lx [ ], double Lz [ ],
-    UF_long Up [ ],
-    UF_long Ui [ ],
-    double Ux [ ], double Uz [ ],
-    UF_long P [ ],
-    UF_long Q [ ],
-    double Dx [ ], double Dz [ ],
-    UF_long *do_recip,
-    double Rs [ ],
-    void *Numeric
-) ;
+        (
+                UF_long Lp[],
+                UF_long Lj[],
+                double Lx[], double Lz[],
+                UF_long Up[],
+                UF_long Ui[],
+                double Ux[], double Uz[],
+                UF_long P[],
+                UF_long Q[],
+                double Dx[], double Dz[],
+                UF_long *do_recip,
+                double Rs[],
+                void *Numeric
+        );
 
 /*
 double int Syntax:

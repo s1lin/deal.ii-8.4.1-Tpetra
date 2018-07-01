@@ -17,9 +17,9 @@ GLOBAL EXTERN Int UMF_malloc_count ;
 #endif
 
 GLOBAL void *UMF_malloc
-(
-    Int n_objects,
-    size_t size_of_object
-) ;
+        (
+                Int n_objects,
+                size_t size_of_object
+        );
 
 #endif

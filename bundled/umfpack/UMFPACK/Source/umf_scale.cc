@@ -13,69 +13,62 @@
 #include "umf_internal.h"
 
 GLOBAL void UMF_scale
-(
-    Int n,
-    Entry pivot,
-    Entry X [ ]
-)
-{
-    Entry x ;
-    double s ;
-    Int i ;
+        (
+                Int n,
+                Entry pivot,
+                Entry X[]
+        ) {
+    Entry x;
+    double s;
+    Int i;
 
     /* ---------------------------------------------------------------------- */
     /* compute the approximate absolute value of the pivot, and select method */
     /* ---------------------------------------------------------------------- */
 
-    APPROX_ABS (s, pivot) ;
+    APPROX_ABS (s, pivot);
 
-    if (s < RECIPROCAL_TOLERANCE || IS_NAN (pivot))
-    {
-	/* ------------------------------------------------------------------ */
-	/* tiny, or zero, pivot case */
-	/* ------------------------------------------------------------------ */
+    if (s < RECIPROCAL_TOLERANCE || IS_NAN (pivot)) {
+        /* ------------------------------------------------------------------ */
+        /* tiny, or zero, pivot case */
+        /* ------------------------------------------------------------------ */
 
-	/* The pivot is tiny, or NaN.  Do not divide zero by the pivot value,
-	 * and do not multiply by 1/pivot, either. */
+        /* The pivot is tiny, or NaN.  Do not divide zero by the pivot value,
+         * and do not multiply by 1/pivot, either. */
 
-	for (i = 0 ; i < n ; i++)
-	{
-	    /* X [i] /= pivot ; */
-	    x = X [i] ;
+        for (i = 0; i < n; i++) {
+            /* X [i] /= pivot ; */
+            x = X[i];
 
 #ifndef NO_DIVIDE_BY_ZERO
-	    if (IS_NONZERO (x))
-	    {
-		DIV (X [i], x, pivot) ;
-	    }
+            if (IS_NONZERO (x)) {
+                DIV (X[i], x, pivot);
+            }
 #else
-	    /* Do not divide by zero */
-	    if (IS_NONZERO (x) && IS_NONZERO (pivot))
-	    {
-		DIV (X [i], x, pivot) ;
-	    }
+            /* Do not divide by zero */
+            if (IS_NONZERO (x) && IS_NONZERO (pivot))
+            {
+            DIV (X [i], x, pivot) ;
+            }
 #endif
 
-	}
+        }
 
-    }
-    else
-    {
+    } else {
 
-	/* ------------------------------------------------------------------ */
-	/* normal case */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* normal case */
+        /* ------------------------------------------------------------------ */
 
-	/* The pivot is not tiny, and is not NaN.   Don't bother to check for
-	 * zeros in the pivot column, X.  This is slightly more accurate than
-	 * multiplying by 1/pivot (but slightly slower), particularly if the
-	 * pivot column consists of only IEEE subnormals. */
+        /* The pivot is not tiny, and is not NaN.   Don't bother to check for
+         * zeros in the pivot column, X.  This is slightly more accurate than
+         * multiplying by 1/pivot (but slightly slower), particularly if the
+         * pivot column consists of only IEEE subnormals. */
 
-	for (i = 0 ; i < n ; i++)
-	{
-	    /* X [i] /= pivot ; */
-	    x = X [i] ;
-	    DIV (X [i], x, pivot) ;
-	}
+        for (i = 0; i < n; i++) {
+            /* X [i] /= pivot ; */
+            x = X[i];
+            DIV (X[i], x, pivot);
+        }
     }
 }

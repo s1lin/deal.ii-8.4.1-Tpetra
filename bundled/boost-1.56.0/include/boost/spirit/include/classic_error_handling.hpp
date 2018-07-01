@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_ERROR_HANDLING
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_ERROR_HANDLING
+
 #include <boost/spirit/home/classic/error_handling.hpp>
+
 #endif

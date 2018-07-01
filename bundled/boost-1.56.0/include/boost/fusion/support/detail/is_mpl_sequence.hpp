@@ -15,14 +15,17 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename T>
-    struct is_mpl_sequence
-        : mpl::and_<
-            mpl::not_<is_convertible<T, from_sequence_convertible_type> >
-          , mpl::is_sequence<T> >
-    {};
-}}}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename T>
+            struct is_mpl_sequence
+                    : mpl::and_<
+                            mpl::not_ < is_convertible < T, from_sequence_convertible_type> >
+            , mpl::is_sequence <T> > {
+        };
+    }
+}
+}
 
 #endif

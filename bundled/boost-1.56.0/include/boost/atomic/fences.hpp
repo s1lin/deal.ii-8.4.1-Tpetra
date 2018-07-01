@@ -31,28 +31,32 @@
 
 namespace boost {
 
-namespace atomics {
+    namespace atomics {
 
 #if BOOST_ATOMIC_THREAD_FENCE > 0
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::thread_fence(order);
-}
+        BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
+        {
+            detail::thread_fence(order);
+        }
 #else
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::thread_fence();
-}
+
+        BOOST_FORCEINLINE void atomic_thread_fence(memory_order)
+
+        BOOST_NOEXCEPT {
+        detail::lockpool::thread_fence();
+    }
 #endif
 
 #if BOOST_ATOMIC_SIGNAL_FENCE > 0
-BOOST_FORCEINLINE void atomic_signal_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::signal_fence(order);
-}
+    BOOST_FORCEINLINE void atomic_signal_fence(memory_order order) BOOST_NOEXCEPT
+    {
+        detail::signal_fence(order);
+    }
 #else
-BOOST_FORCEINLINE void atomic_signal_fence(memory_order) BOOST_NOEXCEPT
-{
+
+    BOOST_FORCEINLINE void atomic_signal_fence(memory_order)
+
+    BOOST_NOEXCEPT {
     detail::lockpool::signal_fence();
 }
 #endif

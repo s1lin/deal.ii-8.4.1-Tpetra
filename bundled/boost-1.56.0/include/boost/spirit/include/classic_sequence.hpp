@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SEQUENCE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SEQUENCE
+
 #include <boost/spirit/home/classic/core/composite/sequence.hpp>
+
 #endif

@@ -8,7 +8,9 @@
 ==============================================================================*/
 
 #if FUSION_MAX_MAP_SIZE <= 10
+
 #include <boost/fusion/container/generation/detail/preprocessed/map_tie10.hpp>
+
 #elif FUSION_MAX_MAP_SIZE <= 20
 #include <boost/fusion/container/generation/detail/preprocessed/map_tie20.hpp>
 #elif FUSION_MAX_MAP_SIZE <= 30

@@ -10,10 +10,12 @@
 
 //  Rogue Wave std lib:
 
-#define BOOST_RW_STDLIB 1 
+#define BOOST_RW_STDLIB 1
 
 #if !defined(__STD_RWCOMPILER_H__) && !defined(_RWSTD_VER)
+
 #  include <boost/config/no_tr1/utility.hpp>
+
 #  if !defined(__STD_RWCOMPILER_H__) && !defined(_RWSTD_VER)
 #     error This is not the Rogue Wave standard library
 #  endif
@@ -32,7 +34,7 @@
 #ifndef _RWSTD_VER
 #  define BOOST_STDLIB "Rogue Wave standard library version (Unknown version)"
 #elif _RWSTD_VER < 0x04010200
- #  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
+#  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
 #else
 #  ifdef _RWSTD_VER_STR
 #    define BOOST_STDLIB "Apache STDCXX standard library version " _RWSTD_VER_STR
@@ -117,7 +119,7 @@
 // partial specialization support:
 //
 #if (BOOST_RWSTD_VER < 0x020000) || defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
-    #define BOOST_NO_STD_DISTANCE
+#define BOOST_NO_STD_DISTANCE
 #endif
 
 //

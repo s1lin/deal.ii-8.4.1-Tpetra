@@ -13,31 +13,32 @@
 #include <boost/utility/enable_if.hpp>
 
 
-namespace boost { namespace fusion { namespace result_of
-{
-    template<typename Sequence>
-    struct flatten
-    {
-        typedef flatten_view<Sequence> type;
-    };
-}}}
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence>
+            struct flatten {
+                typedef flatten_view <Sequence> type;
+            };
+        }
+    }
+}
 
-namespace boost { namespace fusion
-{
-    template <typename Sequence>
-    inline typename result_of::flatten<Sequence>::type
-    flatten(Sequence& view)
-    {
-        return flatten_view<Sequence>(view);
+namespace boost {
+    namespace fusion {
+        template<typename Sequence>
+        inline typename result_of::flatten<Sequence>::type
+        flatten(Sequence &view) {
+            return flatten_view<Sequence>(view);
+        }
+
+        template<typename Sequence>
+        inline typename result_of::flatten<Sequence const>::type
+        flatten(Sequence const &view) {
+            return flatten_view < Sequence const>(view);
+        }
     }
-    
-    template <typename Sequence>
-    inline typename result_of::flatten<Sequence const>::type
-    flatten(Sequence const& view)
-    {
-        return flatten_view<Sequence const>(view);
-    }
-}}
+}
 
 
 #endif

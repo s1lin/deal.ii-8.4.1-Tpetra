@@ -25,87 +25,84 @@
 #include <boost/numeric/odeint/util/copy.hpp>
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
-template< class T >
-struct is_resizeable< thrust::device_vector< T > >
-{
-    struct type : public boost::true_type { };
-    const static bool value = type::value;
-};
+            template<class T>
+            struct is_resizeable<thrust::device_vector < T> > {
+            struct type : public boost::true_type {
+            };
+            const static bool value = type::value;
+        };
 
-template< class T >
-struct same_size_impl< thrust::device_vector< T > , thrust::device_vector< T > >
-{
-    static bool same_size( const thrust::device_vector< T > &x , const thrust::device_vector< T > &y )
-    {
-        return x.size() == y.size();
-    }
-};
+        template<class T>
+        struct same_size_impl<thrust::device_vector < T> , thrust::device_vector <T> > {
+        static bool same_size(const thrust::device_vector <T> &x, const thrust::device_vector <T> &y) {
+            return x.size() == y.size();
+        }
+    };
 
-template< class T >
-struct resize_impl< thrust::device_vector< T > , thrust::device_vector< T > >
-{
-    static void resize( thrust::device_vector< T > &x , const thrust::device_vector< T > &y )
-    {
-        x.resize( y.size() );
+    template<class T>
+    struct resize_impl<thrust::device_vector < T> , thrust::device_vector <T> > {
+    static void resize(thrust::device_vector <T> &x, const thrust::device_vector <T> &y) {
+        x.resize(y.size());
     }
 };
 
 
-template< class T >
-struct is_resizeable< thrust::host_vector< T > >
+template<class T>
+struct is_resizeable<thrust::host_vector < T> >
 {
-    struct type : public boost::true_type { };
-    const static bool value = type::value;
+struct type : public boost::true_type {
+};
+const static bool value = type::value;
 };
 
-template< class T >
-struct same_size_impl< thrust::host_vector< T > , thrust::host_vector< T > >
+template<class T>
+struct same_size_impl<thrust::host_vector < T> , thrust::host_vector <T> >
 {
-    static bool same_size( const thrust::host_vector< T > &x , const thrust::host_vector< T > &y )
-    {
-        return x.size() == y.size();
-    }
+static bool same_size(const thrust::host_vector <T> &x, const thrust::host_vector <T> &y) {
+    return x.size() == y.size();
+}
+
 };
 
-template< class T >
-struct resize_impl< thrust::host_vector< T > , thrust::host_vector< T > >
+template<class T>
+struct resize_impl<thrust::host_vector < T> , thrust::host_vector <T> >
 {
-    static void resize( thrust::host_vector< T > &x , const thrust::host_vector< T > &y )
-    {
-        x.resize( y.size() );
-    }
+static void resize(thrust::host_vector <T> &x, const thrust::host_vector <T> &y) {
+    x.resize(y.size());
+}
+
 };
 
 
 
-template< class Container1, class Value >
-struct copy_impl< Container1 , thrust::device_vector< Value > >
+template<class Container1, class Value>
+struct copy_impl<Container1, thrust::device_vector < Value> >
 {
-    static void copy( const Container1 &from , thrust::device_vector< Value > &to )
-    {
-        thrust::copy( boost::begin( from ) , boost::end( from ) , boost::begin( to ) );
-    }
+static void copy(const Container1 &from, thrust::device_vector <Value> &to) {
+    thrust::copy(boost::begin(from), boost::end(from), boost::begin(to));
+}
+
 };
 
-template< class Value , class Container2 >
-struct copy_impl< thrust::device_vector< Value > , Container2 >
+template<class Value, class Container2>
+struct copy_impl<thrust::device_vector < Value> , Container2 >
 {
-    static void copy( const thrust::device_vector< Value > &from , Container2 &to )
-    {
-        thrust::copy( boost::begin( from ) , boost::end( from ) , boost::begin( to ) );
-    }
+static void copy(const thrust::device_vector <Value> &from, Container2 &to) {
+    thrust::copy(boost::begin(from), boost::end(from), boost::begin(to));
+}
+
 };
 
-template< class Value >
-struct copy_impl< thrust::device_vector< Value > , thrust::device_vector< Value > >
+template<class Value>
+struct copy_impl<thrust::device_vector < Value> , thrust::device_vector <Value> >
 {
-    static void copy( const thrust::device_vector< Value > &from , thrust::device_vector< Value > &to )
-    {
-        thrust::copy( boost::begin( from ) , boost::end( from ) , boost::begin( to ) );
-    }
+static void copy(const thrust::device_vector <Value> &from, thrust::device_vector <Value> &to) {
+    thrust::copy(boost::begin(from), boost::end(from), boost::begin(to));
+}
+
 };
 
 

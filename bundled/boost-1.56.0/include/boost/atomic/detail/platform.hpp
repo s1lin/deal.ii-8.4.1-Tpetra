@@ -24,16 +24,16 @@
 #if !defined(BOOST_ATOMIC_FORCE_FALLBACK)
 
 // Compiler-based backends
-#if ((defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 407)) ||\
-    (defined(BOOST_CLANG) && ((__clang_major__ * 100 + __clang_minor__) >= 302))) &&\
+#if ((defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 407)) || \
+    (defined(BOOST_CLANG) && ((__clang_major__ * 100 + __clang_minor__) >= 302))) && \
     (\
-        (__GCC_ATOMIC_BOOL_LOCK_FREE + 0) == 2 ||\
-        (__GCC_ATOMIC_CHAR_LOCK_FREE + 0) == 2 ||\
-        (__GCC_ATOMIC_SHORT_LOCK_FREE + 0) == 2 ||\
-        (__GCC_ATOMIC_INT_LOCK_FREE + 0) == 2 ||\
-        (__GCC_ATOMIC_LONG_LOCK_FREE + 0) == 2 ||\
+        (__GCC_ATOMIC_BOOL_LOCK_FREE + 0) == 2 || \
+        (__GCC_ATOMIC_CHAR_LOCK_FREE + 0) == 2 || \
+        (__GCC_ATOMIC_SHORT_LOCK_FREE + 0) == 2 || \
+        (__GCC_ATOMIC_INT_LOCK_FREE + 0) == 2 || \
+        (__GCC_ATOMIC_LONG_LOCK_FREE + 0) == 2 || \
         (__GCC_ATOMIC_LLONG_LOCK_FREE + 0) == 2\
-    )
+)
 
 #define BOOST_ATOMIC_DETAIL_PLATFORM gcc_atomic
 

@@ -19,12 +19,11 @@
 #include <boost/range/iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
-namespace boost
-{
-    template< class T >
+namespace boost {
+    template<class T>
     struct range_pointer
-            : iterator_pointer< BOOST_DEDUCED_TYPENAME range_iterator<T>::type >
-    { };
+            : iterator_pointer<BOOST_DEDUCED_TYPENAME range_iterator<T>::type> {
+    };
 }
 
 #endif

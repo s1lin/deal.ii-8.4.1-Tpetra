@@ -26,31 +26,29 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from binary_oarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class binary_oarchive : 
-    public binary_oarchive_impl<
-        binary_oarchive, std::ostream::char_type, std::ostream::traits_type
-    >
-{
-public:
-    binary_oarchive(std::ostream & os, unsigned int flags = 0) :
-        binary_oarchive_impl<
-            binary_oarchive, std::ostream::char_type, std::ostream::traits_type
-        >(os, flags)
-    {}
-    binary_oarchive(std::streambuf & bsb, unsigned int flags = 0) :
-        binary_oarchive_impl<
-            binary_oarchive, std::ostream::char_type, std::ostream::traits_type
-        >(bsb, flags)
-    {}
-};
+        class binary_oarchive :
+                public binary_oarchive_impl<
+                        binary_oarchive, std::ostream::char_type, std::ostream::traits_type
+                > {
+        public:
+            binary_oarchive(std::ostream &os, unsigned int flags = 0) :
+                    binary_oarchive_impl<
+                            binary_oarchive, std::ostream::char_type, std::ostream::traits_type
+                    >(os, flags) {}
 
-} // namespace archive
+            binary_oarchive(std::streambuf &bsb, unsigned int flags = 0) :
+                    binary_oarchive_impl<
+                            binary_oarchive, std::ostream::char_type, std::ostream::traits_type
+                    >(bsb, flags) {}
+        };
+
+    } // namespace archive
 } // namespace boost
 
 // required by export

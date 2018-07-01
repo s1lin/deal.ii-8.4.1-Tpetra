@@ -28,7 +28,7 @@
 
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
-#     define BOOST_STATIC_ASSERT_MSG( ... ) static_assert(__VA_ARGS__)
+#     define BOOST_STATIC_ASSERT_MSG(...) static_assert(__VA_ARGS__)
 #  else
 #     define BOOST_STATIC_ASSERT_MSG( B, Msg ) BOOST_STATIC_ASSERT( B )
 #  endif
@@ -53,7 +53,7 @@
 //
 #if defined(__GNUC__) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 4)))
 #  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
-#     define BOOST_STATIC_ASSERT_BOOL_CAST( ... ) ((__VA_ARGS__) == 0 ? false : true)
+#     define BOOST_STATIC_ASSERT_BOOL_CAST(...) ((__VA_ARGS__) == 0 ? false : true)
 #  else
 #     define BOOST_STATIC_ASSERT_BOOL_CAST( x ) ((x) == 0 ? false : true)
 #  endif
@@ -75,7 +75,7 @@
 
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
-#     define BOOST_STATIC_ASSERT( ... ) static_assert(__VA_ARGS__, #__VA_ARGS__)
+#     define BOOST_STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 #  else
 #     define BOOST_STATIC_ASSERT( B ) static_assert(B, #B)
 #  endif

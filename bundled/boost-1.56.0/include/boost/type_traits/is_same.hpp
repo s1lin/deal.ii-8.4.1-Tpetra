@@ -28,12 +28,16 @@
 namespace boost {
 
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_same,T,U,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename T,is_same,T,T,true)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_same, T, U,
+    false)
+
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename T, is_same, T, T,
+
+    true)
 #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-// without this, Borland's compiler gives the wrong answer for
-// references to arrays:
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename T,is_same,T&,T&,true)
+    // without this, Borland's compiler gives the wrong answer for
+    // references to arrays:
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename T,is_same,T&,T&,true)
 #endif
 
 

@@ -16,23 +16,26 @@
 #endif
 
 namespace boost {
-namespace detail {
-namespace winapi {
+    namespace detail {
+        namespace winapi {
 #if defined( UNDER_CE )
-// Windows CE define GetCurrentThread as an inline function in kfuncs.h
-inline HANDLE_ GetCurrentThread() 
-{
-  return ::GetCurrentThread();
-}
+            // Windows CE define GetCurrentThread as an inline function in kfuncs.h
+            inline HANDLE_ GetCurrentThread()
+            {
+              return ::GetCurrentThread();
+            }
 #else
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetCurrentThread;
+            using ::GetCurrentThread;
 #else
-    extern "C" __declspec(dllimport) HANDLE_ WINAPI GetCurrentThread();
+            extern "C" __declspec(dllimport) HANDLE_ WINAPI
+
+            GetCurrentThread();
+
 #endif
 #endif
-}
-}
+        }
+    }
 }
 
 #endif // BOOST_DETAIL_WINAPI_GETCURRENTTHREAD_HPP

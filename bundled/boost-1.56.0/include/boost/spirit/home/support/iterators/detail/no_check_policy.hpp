@@ -10,22 +10,26 @@
 #include <boost/spirit/home/support/iterators/multi_pass_fwd.hpp>
 #include <boost/spirit/home/support/iterators/detail/multi_pass.hpp>
 
-namespace boost { namespace spirit { namespace iterator_policies
-{
-    ///////////////////////////////////////////////////////////////////////////
-    //  class no_check
-    //  Implementation of the CheckingPolicy used by multi_pass
-    //  It does not do anything :-)
-    ///////////////////////////////////////////////////////////////////////////
-    struct no_check
-    {
-        ///////////////////////////////////////////////////////////////////////
-        struct unique : public detail::default_checking_policy {};
+namespace boost {
+    namespace spirit {
+        namespace iterator_policies {
+            ///////////////////////////////////////////////////////////////////////////
+            //  class no_check
+            //  Implementation of the CheckingPolicy used by multi_pass
+            //  It does not do anything :-)
+            ///////////////////////////////////////////////////////////////////////////
+            struct no_check {
+                ///////////////////////////////////////////////////////////////////////
+                struct unique : public detail::default_checking_policy {
+                };
 
-        ///////////////////////////////////////////////////////////////////////
-        struct shared {};
-    };
+                ///////////////////////////////////////////////////////////////////////
+                struct shared {
+                };
+            };
 
-}}}
+        }
+    }
+}
 
 #endif

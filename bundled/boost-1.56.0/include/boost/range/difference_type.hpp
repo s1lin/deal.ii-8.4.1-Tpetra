@@ -20,16 +20,15 @@
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-namespace boost
-{
-    template< class T >
+namespace boost {
+    template<class T>
     struct range_difference
             : iterator_difference<
-                BOOST_DEDUCED_TYPENAME range_iterator<
-                    BOOST_DEDUCED_TYPENAME remove_reference<T>::type
-                >::type
-            >
-    { };
+                    BOOST_DEDUCED_TYPENAME range_iterator<
+    BOOST_DEDUCED_TYPENAME remove_reference<T>::type
+    >::type
+    > {
+};
 }
 
 #endif

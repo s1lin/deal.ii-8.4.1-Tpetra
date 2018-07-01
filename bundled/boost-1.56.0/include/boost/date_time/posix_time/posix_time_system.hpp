@@ -17,24 +17,25 @@
 
 
 namespace boost {
-namespace posix_time { 
+    namespace posix_time {
 
 #ifdef BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 
-#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
-  typedef date_time::split_timedate_system<posix_time_system_config, 1000000000> posix_time_system;
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers
+        typedef date_time::split_timedate_system<posix_time_system_config, 1000000000> posix_time_system;
 #else
-  typedef date_time::split_timedate_system<posix_time_system_config> posix_time_system;
+        typedef date_time::split_timedate_system<posix_time_system_config> posix_time_system;
 #endif
 
 #else
 
-  typedef date_time::counted_time_rep<millisec_posix_time_system_config> int64_time_rep;
-  typedef date_time::counted_time_system<int64_time_rep> posix_time_system;
+        typedef date_time::counted_time_rep <millisec_posix_time_system_config> int64_time_rep;
+        typedef date_time::counted_time_system <int64_time_rep> posix_time_system;
 
 #endif
 
-} }//namespace posix_time
+    }
+}//namespace posix_time
 
 
 #endif

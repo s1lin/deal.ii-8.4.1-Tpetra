@@ -11,22 +11,23 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct boost_array_tag;
+        struct boost_array_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct is_sequence_impl;
+        namespace extension {
+            template<typename Tag>
+            struct is_sequence_impl;
 
-        template<>
-        struct is_sequence_impl<boost_array_tag>
-        {
-            template<typename Sequence>
-            struct apply : mpl::true_ {};
-        };
+            template<>
+            struct is_sequence_impl<boost_array_tag> {
+                template<typename Sequence>
+                struct apply : mpl::true_ {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

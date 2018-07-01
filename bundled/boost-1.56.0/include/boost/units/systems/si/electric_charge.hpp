@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<electric_charge_dimension,si::system>    electric_charge;
-   
-BOOST_UNITS_STATIC_CONSTANT(coulomb,electric_charge);   
-BOOST_UNITS_STATIC_CONSTANT(coulombs,electric_charge);  
+            typedef unit <electric_charge_dimension, si::system> electric_charge;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(coulomb, electric_charge
+            );
+            BOOST_UNITS_STATIC_CONSTANT(coulombs, electric_charge
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

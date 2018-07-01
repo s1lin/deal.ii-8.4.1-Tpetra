@@ -11,6 +11,7 @@
 
 #include <boost/thread/detail/config.hpp>
 #include <boost/thread/detail/platform.hpp>
+
 #if defined(BOOST_THREAD_PLATFORM_WIN32)
 #include <boost/thread/win32/once.hpp>
 #elif defined(BOOST_THREAD_PLATFORM_PTHREAD)
@@ -27,15 +28,14 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-  // template<class Callable, class ...Args> void
-  // call_once(once_flag& flag, Callable&& func, Args&&... args);
-template<typename Function>
-inline void call_once(Function func,once_flag& flag)
+namespace boost {
+    // template<class Callable, class ...Args> void
+    // call_once(once_flag& flag, Callable&& func, Args&&... args);
+    template<typename Function>
+    inline void call_once(Function func, once_flag &flag)
 //inline void call_once(void (*func)(),once_flag& flag)
     {
-        call_once(flag,func);
+        call_once(flag, func);
     }
 }
 

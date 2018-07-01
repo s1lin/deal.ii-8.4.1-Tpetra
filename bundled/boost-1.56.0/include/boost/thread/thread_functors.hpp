@@ -16,42 +16,37 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
+namespace boost {
 
-  struct detach
-  {
-    void operator()(thread& t)
-    {
-      t.detach();
-    }
-  };
+    struct detach {
+        void operator()(thread &t) {
+            t.detach();
+        }
+    };
 
-  struct join_if_joinable
-  {
-    void operator()(thread& t)
-    {
-      if (t.joinable())
-      {
-        t.join();
-      }
-    }
-  };
+    struct join_if_joinable {
+        void operator()(thread &t) {
+            if (t.joinable()) {
+                t.join();
+            }
+        }
+    };
 
 #if defined BOOST_THREAD_PROVIDES_INTERRUPTIONS
-  struct interrupt_and_join_if_joinable
-  {
-    void operator()(thread& t)
+    struct interrupt_and_join_if_joinable
     {
-      t.interrupt();
-      if (t.joinable())
+      void operator()(thread& t)
       {
-        t.join();
+        t.interrupt();
+        if (t.joinable())
+        {
+          t.join();
+        }
       }
-    }
-  };
+    };
 #endif
 }
+
 #include <boost/config/abi_suffix.hpp>
 
 #endif

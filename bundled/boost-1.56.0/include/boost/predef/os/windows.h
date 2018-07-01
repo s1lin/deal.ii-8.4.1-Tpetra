@@ -29,11 +29,11 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_OS_WINDOWS BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && ( \
+#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && (\
     defined(_WIN32) || defined(_WIN64) || \
     defined(__WIN32__) || defined(__TOS_WIN__) || \
     defined(__WINDOWS__) \
-    )
+)
 #   undef BOOST_OS_WINDOWS
 #   define BOOST_OS_WINDOWS BOOST_VERSION_NUMBER_AVAILABLE
 #endif
@@ -46,6 +46,8 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_WINDOWS_NAME "Microsoft Windows"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_OS_WINDOWS,BOOST_OS_WINDOWS_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_OS_WINDOWS,
+BOOST_OS_WINDOWS_NAME)
 
 #endif

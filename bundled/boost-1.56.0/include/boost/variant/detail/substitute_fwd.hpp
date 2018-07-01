@@ -33,7 +33,8 @@
 #endif
 
 namespace boost {
-namespace detail { namespace variant {
+    namespace detail {
+        namespace variant {
 
 #if !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
@@ -42,17 +43,18 @@ namespace detail { namespace variant {
 //
 // Substitutes one type for another in the given type expression.
 //
-template <
-      typename T, typename Dest, typename Source
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(
-          typename Arity = mpl::int_< mpl::aux::template_arity<T>::value >
-        )
-    >
-struct substitute;
+            template<
+                    typename T, typename Dest, typename Source
+                    BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(
+                            typename Arity = mpl::int_ < mpl::aux::template_arity<T>::value >
+                    )
+            >
+            struct substitute;
 
 #endif // !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
-}} // namespace detail::variant
+        }
+    } // namespace detail::variant
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_SUBSTITUTE_FWD_HPP

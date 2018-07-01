@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_ERASE_ACTOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_ERASE_ACTOR
+
 #include <boost/spirit/home/classic/actor/erase_actor.hpp>
+
 #endif

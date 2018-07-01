@@ -18,14 +18,14 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for magnetic flux density : M T^-2 I^-1
-typedef derived_dimension<mass_base_dimension,1,
-                          time_base_dimension,-2,
-                          current_base_dimension,-1>::type magnetic_flux_density_dimension;        
+        typedef derived_dimension<mass_base_dimension, 1,
+                time_base_dimension, -2,
+                current_base_dimension, -1>::type magnetic_flux_density_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

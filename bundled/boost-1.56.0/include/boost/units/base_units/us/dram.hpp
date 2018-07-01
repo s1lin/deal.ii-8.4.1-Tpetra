@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pound_base_unit, scale<16, static_rational<-2> > > dram_base_unit;
+            typedef scaled_base_unit <pound_base_unit, scale<16, static_rational < -2>> >
+            dram_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::dram_base_unit> {
-    static const char* name()   { return("dram (U.S.)"); }
-    static const char* symbol() { return("dr"); }
-};
+        template<>
+        struct base_unit_info<us::dram_base_unit> {
+            static const char *name() { return ("dram (U.S.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("dr"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

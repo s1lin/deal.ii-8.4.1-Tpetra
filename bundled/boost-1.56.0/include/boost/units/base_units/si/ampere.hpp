@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-struct ampere_base_unit : public base_unit<ampere_base_unit, current_dimension, -6>
-{
-    static std::string name()   { return("ampere"); }
-    static std::string symbol() { return("A"); }
-};
+            struct ampere_base_unit : public base_unit<ampere_base_unit, current_dimension, -6> {
+                static std::string name() { return ("ampere"); }
 
-} // namespace si
+                static std::string symbol() { return ("A"); }
+            };
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

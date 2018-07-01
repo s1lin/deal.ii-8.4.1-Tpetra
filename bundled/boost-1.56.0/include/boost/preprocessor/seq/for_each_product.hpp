@@ -6,12 +6,18 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_SEQ_FOR_EACH_PRODUCT_HPP
 # define BOOST_PREPROCESSOR_SEQ_FOR_EACH_PRODUCT_HPP
 #
+
+
 # include <boost/preprocessor/arithmetic/dec.hpp>
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/control/if.hpp>
@@ -20,15 +26,23 @@
 # include <boost/preprocessor/seq/size.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
 # include <boost/preprocessor/tuple/rem.hpp>
+
 #
+
 # /* BOOST_PP_SEQ_FOR_EACH_PRODUCT */
+
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT(macro, sets) BOOST_PP_SEQ_FOR_EACH_PRODUCT_E(BOOST_PP_FOR, macro, sets)
 #
+
 # /* BOOST_PP_SEQ_FOR_EACH_PRODUCT_R */
+
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_R(r, macro, sets) BOOST_PP_SEQ_FOR_EACH_PRODUCT_E(BOOST_PP_FOR_ ## r, macro, sets)
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_E(impl, macro, sets) impl((BOOST_PP_SEQ_HEAD(sets)(nil), BOOST_PP_SEQ_TAIL(sets)(nil), (nil), macro), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_0)
 # else
@@ -36,6 +50,7 @@
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_E_I(impl, macro, sets) impl((BOOST_PP_SEQ_HEAD(sets)(nil), BOOST_PP_SEQ_TAIL(sets)(nil), (nil), macro), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_0)
 # endif
 #
+
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_STRICT()
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_P(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_P_I data
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_P_I(cset, rset, res, macro) BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(cset))
@@ -43,6 +58,7 @@
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_P(r, data) BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(BOOST_PP_TUPLE_ELEM(4, 0, data)))
 # endif
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_O(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_O_I data
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_O_I(cset, rset, res, macro) (BOOST_PP_SEQ_TAIL(cset), rset, res, macro)
@@ -50,8 +66,10 @@
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_O(r, data) (BOOST_PP_SEQ_TAIL(BOOST_PP_TUPLE_ELEM(4, 0, data)), BOOST_PP_TUPLE_ELEM(4, 1, data), BOOST_PP_TUPLE_ELEM(4, 2, data), BOOST_PP_TUPLE_ELEM(4, 3, data))
 # endif
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_C(data, i) BOOST_PP_IF(BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(BOOST_PP_TUPLE_ELEM(4, 1, data))), BOOST_PP_SEQ_FOR_EACH_PRODUCT_N_ ## i, BOOST_PP_SEQ_FOR_EACH_PRODUCT_I)
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_I(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_I_I(r, BOOST_PP_TUPLE_ELEM(4, 0, data), BOOST_PP_TUPLE_ELEM(4, 1, data), BOOST_PP_TUPLE_ELEM(4, 2, data), BOOST_PP_TUPLE_ELEM(4, 3, data))
 # else
@@ -59,16 +77,20 @@
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_I_IM(r, im) BOOST_PP_SEQ_FOR_EACH_PRODUCT_I_I(r, im)
 # endif
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_I_I(r, cset, rset, res, macro) macro(r, BOOST_PP_SEQ_TAIL(res (BOOST_PP_SEQ_HEAD(cset))))
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_H_I data
 # else
 #    define BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_H_I(BOOST_PP_TUPLE_ELEM(4, 0, data), BOOST_PP_TUPLE_ELEM(4, 1, data), BOOST_PP_TUPLE_ELEM(4, 2, data), BOOST_PP_TUPLE_ELEM(4, 3, data))
 # endif
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_H_I(cset, rset, res, macro) (BOOST_PP_SEQ_HEAD(rset)(nil), BOOST_PP_SEQ_TAIL(rset), res (BOOST_PP_SEQ_HEAD(cset)), macro)
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_0(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_C(data, 0)(r, data)
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_1(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_C(data, 1)(r, data)
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_2(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_C(data, 2)(r, data)
@@ -96,6 +118,7 @@
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_24(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_C(data, 24)(r, data)
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_25(r, data) BOOST_PP_SEQ_FOR_EACH_PRODUCT_C(data, 25)(r, data)
 #
+
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_N_0(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_1)
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_N_1(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_2)
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_N_2(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_3)
@@ -123,4 +146,5 @@
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_N_24(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_25)
 # define BOOST_PP_SEQ_FOR_EACH_PRODUCT_N_25(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_SEQ_FOR_EACH_PRODUCT_H(data), BOOST_PP_SEQ_FOR_EACH_PRODUCT_P, BOOST_PP_SEQ_FOR_EACH_PRODUCT_O, BOOST_PP_SEQ_FOR_EACH_PRODUCT_M_26)
 #
+
 # endif

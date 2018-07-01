@@ -16,20 +16,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<volume_dimension,si::system>    volume;
-    
-BOOST_UNITS_STATIC_CONSTANT(cubic_meter,volume);    
-BOOST_UNITS_STATIC_CONSTANT(cubic_meters,volume);   
-BOOST_UNITS_STATIC_CONSTANT(cubic_metre,volume);    
-BOOST_UNITS_STATIC_CONSTANT(cubic_metres,volume);   
+            typedef unit <volume_dimension, si::system> volume;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(cubic_meter, volume
+            );
+            BOOST_UNITS_STATIC_CONSTANT(cubic_meters, volume
+            );
+            BOOST_UNITS_STATIC_CONSTANT(cubic_metre, volume
+            );
+            BOOST_UNITS_STATIC_CONSTANT(cubic_metres, volume
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

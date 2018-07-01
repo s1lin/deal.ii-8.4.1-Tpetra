@@ -18,46 +18,52 @@
 #define BOOST_TYPEOF_sizer_item(z, n, _)\
     char item ## n[V::item ## n ::value];
 
-namespace boost { namespace type_of {
-    template<class V>
-    struct sizer
-    {
-        // char item0[V::item0::value];
-        // char item1[V::item1::value];
-        // ...
+namespace boost {
+    namespace type_of {
+        template<class V>
+        struct sizer {
+            // char item0[V::item0::value];
+            // char item1[V::item1::value];
+            // ...
 
-        BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE, BOOST_TYPEOF_sizer_item, ~)
-    };
-}}
+            BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE, BOOST_TYPEOF_sizer_item, ~)
+        };
+    }
+}
 
 #undef BOOST_TYPEOF_sizer_item
 
 //
-namespace boost { namespace type_of {
+namespace boost {
+    namespace type_of {
 # ifdef BOOST_NO_SFINAE
-    template<class V, class T>
-    sizer<typename encode_type<V, T>::type> encode(const T&);
+        template<class V, class T>
+        sizer<typename encode_type<V, T>::type> encode(const T&);
 # else
-    template<class V, class T>
-    typename enable_if<
-        typename is_function<T>::type,
-        sizer<typename encode_type<V, T>::type> >::type encode(T&);
 
-    template<class V, class T>
-    typename disable_if<
-        typename is_function<T>::type,
-        sizer<typename encode_type<V, T>::type> >::type encode(const T&);
+        template<class V, class T>
+        typename enable_if<
+                typename is_function<T>::type,
+                sizer<typename encode_type<V, T>::type> >::type encode(T &);
+
+        template<class V, class T>
+        typename disable_if<
+                typename is_function<T>::type,
+                sizer<typename encode_type<V, T>::type> >::type encode(const T &);
+
 # endif
-}}
+    }
+}
 //
-namespace boost { namespace type_of {
+namespace boost {
+    namespace type_of {
 
-    template<class V>
-    struct decode_begin
-    {
-        typedef typename decode_type<typename V::begin>::type type;
-    };
-}}
+        template<class V>
+        struct decode_begin {
+            typedef typename decode_type<typename V::begin>::type type;
+        };
+    }
+}
 
 #define BOOST_TYPEOF_TYPEITEM(z, n, expr)\
     boost::mpl::size_t<sizeof(boost::type_of::encode<BOOST_TYPEOF_VECTOR(0)<> >(expr).item ## n)>
@@ -74,21 +80,23 @@ namespace boost { namespace type_of {
 
 //offset_vector is used to delay the insertion of data into the vector in order to allow
 //encoding to be done in many steps
-namespace boost { namespace type_of {
-    template<typename V,typename Offset>
-    struct offset_vector {
-    };
+namespace boost {
+    namespace type_of {
+        template<typename V, typename Offset>
+        struct offset_vector {
+        };
 
-    template<class V,class Offset,class T>
-    struct push_back<boost::type_of::offset_vector<V,Offset>,T> {
-        typedef offset_vector<V,typename Offset::prior> type;
-    };
+        template<class V, class Offset, class T>
+        struct push_back<boost::type_of::offset_vector<V, Offset>, T> {
+            typedef offset_vector<V, typename Offset::prior> type;
+        };
 
-    template<class V,class T>
-    struct push_back<boost::type_of::offset_vector<V,mpl::size_t<0> >,T> {
-        typedef typename push_back<V,T>::type type;
+        template<class V, class T>
+        struct push_back<boost::type_of::offset_vector<V, mpl::size_t < 0> >,T> {
+        typedef typename push_back<V, T>::type type;
     };
-}}
+}
+}
 
 #define BOOST_TYPEOF_NESTED_TYPEITEM(z, n, expr)\
     BOOST_STATIC_CONSTANT(int,BOOST_PP_CAT(value,n) = sizeof(boost::type_of::encode<_typeof_start_vector>(expr).item ## n));\
@@ -170,13 +178,13 @@ typedef BOOST_PP_CAT(_typeof_template_,name)<int> name;
 # define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) BOOST_TYPEOF_NESTED_TYPEDEF(name,expr)
 
 #else
-# define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
+# define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name, expr) \
     struct name {\
         BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
         typedef typename boost::type_of::decode_type<_typeof_fraction_iter<boost::mpl::size_t<0> > >::type type;\
     };
 
-# define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
+# define BOOST_TYPEOF_NESTED_TYPEDEF(name, expr) \
     struct name {\
         BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
         typedef boost::type_of::decode_type<_typeof_fraction_iter<boost::mpl::size_t<0> > >::type type;\

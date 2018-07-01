@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_CLOSURE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_CLOSURE
+
 #include <boost/spirit/home/classic/attribute/closure.hpp>
+
 #endif

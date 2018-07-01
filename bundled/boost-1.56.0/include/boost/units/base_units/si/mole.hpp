@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-struct mole_base_unit : public base_unit<mole_base_unit, amount_dimension, -4>
-{
-    static std::string name()   { return("mole"); }
-    static std::string symbol() { return("mol"); }
-};
+            struct mole_base_unit : public base_unit<mole_base_unit, amount_dimension, -4> {
+                static std::string name() { return ("mole"); }
 
-} // namespace si
+                static std::string symbol() { return ("mol"); }
+            };
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

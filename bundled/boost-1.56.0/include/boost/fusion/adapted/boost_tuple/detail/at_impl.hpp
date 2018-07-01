@@ -11,42 +11,40 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/mpl/if.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct boost_tuple_tag;
+namespace boost {
+    namespace fusion {
+        struct boost_tuple_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct at_impl;
+        namespace extension {
+            template<typename T>
+            struct at_impl;
 
-        template <>
-        struct at_impl<boost_tuple_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply 
-            {
-                typedef typename
-                    tuples::element<N::value, Sequence>::type 
-                element;
-    
-                typedef typename 
+            template<>
+            struct at_impl<boost_tuple_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename
+                    tuples::element<N::value, Sequence>::type
+                            element;
+
+                    typedef typename
                     mpl::if_<
-                        is_const<Sequence>
-                      , typename tuples::access_traits<element>::const_type
-                      , typename tuples::access_traits<element>::non_const_type
-                    >::type 
-                type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& seq)
-                {
-                    return tuples::get<N::value>(seq);
-                }
+                            is_const < Sequence>
+                    , typename tuples::access_traits<element>::const_type
+                    , typename tuples::access_traits<element>::non_const_type
+                    >::type
+                            type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return tuples::get<N::value>(seq);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

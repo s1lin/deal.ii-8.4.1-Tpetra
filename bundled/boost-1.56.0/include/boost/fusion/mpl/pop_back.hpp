@@ -13,28 +13,27 @@
 #include <boost/fusion/algorithm/transformation/pop_back.hpp>
 #include <boost/fusion/sequence/convert.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct pop_back_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct pop_back_impl;
 
-    template <>
-    struct pop_back_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply
-        {
-            typedef typename
+        template<>
+        struct pop_back_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply {
+                typedef typename
                 fusion::result_of::pop_back<Sequence>::type
-            result;
+                        result;
 
-            typedef typename
+                typedef typename
                 fusion::result_of::convert<
-                    typename fusion::detail::tag_of<Sequence>::type, result>::type
-            type;
+                        typename fusion::detail::tag_of<Sequence>::type, result>::type
+                        type;
+            };
         };
-    };
-}}
+    }
+}
 
 #endif
 

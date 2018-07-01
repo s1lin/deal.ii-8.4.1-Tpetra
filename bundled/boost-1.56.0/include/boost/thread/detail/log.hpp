@@ -7,6 +7,7 @@
 #define BOOST_THREAD_DETAIL_LOG_HPP
 
 #include <boost/thread/detail/config.hpp>
+
 #if defined BOOST_THREAD_USES_LOG
 #include <boost/thread/recursive_mutex.hpp>
 #include <boost/thread/lock_guard.hpp>
@@ -47,29 +48,25 @@ namespace boost
 
 #else
 
-namespace boost
-{
-  namespace thread_detail
-  {
-    struct dummy_stream_t
-    {
-    };
+namespace boost {
+    namespace thread_detail {
+        struct dummy_stream_t {
+        };
 
-    template <typename T>
-    inline dummy_stream_t const& operator<<(dummy_stream_t const& os, T)
-    {
-      return os;
+        template<typename T>
+        inline dummy_stream_t const &operator<<(dummy_stream_t const &os, T) {
+            return os;
+        }
+
+        inline dummy_stream_t const &operator<<(dummy_stream_t const &os, dummy_stream_t const &) {
+            return os;
+        }
+
+
+        BOOST_CONSTEXPR_OR_CONST dummy_stream_t
+        dummy_stream = {};
+
     }
-
-    inline dummy_stream_t const& operator<<(dummy_stream_t const& os, dummy_stream_t const&)
-    {
-      return os;
-    }
-
-
-    BOOST_CONSTEXPR_OR_CONST dummy_stream_t dummy_stream = {};
-
-  }
 }
 
 #define BOOST_THREAD_LOG if (true) {} else boost::thread_detail::dummy_stream

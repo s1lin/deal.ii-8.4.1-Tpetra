@@ -16,20 +16,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<velocity_dimension,cgs::system>     velocity;
-    
-BOOST_UNITS_STATIC_CONSTANT(centimeter_per_second,velocity);    
-BOOST_UNITS_STATIC_CONSTANT(centimeters_per_second,velocity);   
-BOOST_UNITS_STATIC_CONSTANT(centimetre_per_second,velocity);    
-BOOST_UNITS_STATIC_CONSTANT(centimetres_per_second,velocity);   
+            typedef unit <velocity_dimension, cgs::system> velocity;
 
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(centimeter_per_second, velocity
+            );
+            BOOST_UNITS_STATIC_CONSTANT(centimeters_per_second, velocity
+            );
+            BOOST_UNITS_STATIC_CONSTANT(centimetre_per_second, velocity
+            );
+            BOOST_UNITS_STATIC_CONSTANT(centimetres_per_second, velocity
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

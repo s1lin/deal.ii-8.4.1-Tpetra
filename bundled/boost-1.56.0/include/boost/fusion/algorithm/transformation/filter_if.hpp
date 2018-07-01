@@ -10,25 +10,25 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/view/filter_view/filter_view.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename Pred>
-        struct filter_if
-        {
-            typedef filter_view<Sequence, Pred> type;
-        };
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename Pred>
+            struct filter_if {
+                typedef filter_view <Sequence, Pred> type;
+            };
+        }
+
+        template<typename Pred, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::filter_if<Sequence const, Pred>::type
+        filter_if(Sequence
+        const& seq) {
+        return
+        filter_view<Sequence const, Pred>(seq);
     }
-    
-    template <typename Pred, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::filter_if<Sequence const, Pred>::type
-    filter_if(Sequence const& seq)
-    {
-        return filter_view<Sequence const, Pred>(seq);
-    }
-}}
+}
+}
 
 #endif
 

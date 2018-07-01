@@ -19,26 +19,26 @@
 #include <boost/mpl/list/aux_/tag.hpp>
 #include <boost/mpl/list/aux_/item.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct begin_impl< aux::list_tag >
-{
-    template< typename List > struct apply
-    {
-        typedef l_iter<typename List::type> type;
-    };
-};
+        template<>
+        struct begin_impl<aux::list_tag> {
+            template<typename List>
+            struct apply {
+                typedef l_iter<typename List::type> type;
+            };
+        };
 
-template<>
-struct end_impl< aux::list_tag >
-{
-    template< typename > struct apply
-    {
-        typedef l_iter<l_end> type;
-    };
-};
+        template<>
+        struct end_impl<aux::list_tag> {
+            template<typename>
+            struct apply {
+                typedef l_iter <l_end> type;
+            };
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_LIST_AUX_BEGIN_END_HPP_INCLUDED

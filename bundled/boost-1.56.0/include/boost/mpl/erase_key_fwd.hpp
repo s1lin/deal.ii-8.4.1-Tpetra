@@ -14,11 +14,15 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Tag > struct erase_key_impl;
-template< typename Sequence, typename Key > struct erase_key;
+        template<typename Tag>
+        struct erase_key_impl;
+        template<typename Sequence, typename Key>
+        struct erase_key;
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_ERASE_KEY_FWD_HPP_INCLUDED

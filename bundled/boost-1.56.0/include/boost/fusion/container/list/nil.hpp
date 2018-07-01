@@ -14,38 +14,36 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace fusion
-{
-    struct void_;
-    struct cons_tag;
-    struct forward_traversal_tag;
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct void_;
+        struct cons_tag;
+        struct forward_traversal_tag;
+        struct fusion_sequence_tag;
 
-    struct nil_ : sequence_base<nil_>
-    {
-        typedef mpl::int_<0> size;
-        typedef cons_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::false_ is_view;
-        typedef forward_traversal_tag category;
-        typedef void_ car_type;
-        typedef void_ cdr_type;
+        struct nil_ : sequence_base<nil_> {
+            typedef mpl::int_<0> size;
+            typedef cons_tag fusion_tag;
+            typedef fusion_sequence_tag tag; // this gets picked up by MPL
+            typedef mpl::false_ is_view;
+            typedef forward_traversal_tag category;
+            typedef void_ car_type;
+            typedef void_ cdr_type;
 
-        BOOST_FUSION_GPU_ENABLED
-        nil_() {}
+            BOOST_FUSION_GPU_ENABLED
+            nil_() {}
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        nil_(Iterator const& /*iter*/, mpl::true_ /*this_is_an_iterator*/)
-        {}
+            template<typename Iterator>
+            BOOST_FUSION_GPU_ENABLED
+            nil_(Iterator const & /*iter*/, mpl::true_ /*this_is_an_iterator*/) {}
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        void assign_from_iter(Iterator const& /*iter*/)
-        {
-        }
-    };
-}}
+            template<typename Iterator>
+            BOOST_FUSION_GPU_ENABLED
+            void assign_from_iter(Iterator const & /*iter*/) {
+            }
+        };
+    }
+}
 
 #endif
 

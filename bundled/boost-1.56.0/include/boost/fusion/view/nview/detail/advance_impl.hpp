@@ -12,40 +12,38 @@
 #include <boost/mpl/advance.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct nview_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_iterator_tag;
 
-    template <typename Sequence, typename Pos>
-    struct nview_iterator;
+        template<typename Sequence, typename Pos>
+        struct nview_iterator;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct advance_impl;
+        namespace extension {
+            template<typename Tag>
+            struct advance_impl;
 
-        template<>
-        struct advance_impl<nview_iterator_tag>
-        {
-            template<typename Iterator, typename Dist>
-            struct apply
-            {
-                typedef typename Iterator::first_type::iterator_type iterator_type;
-                typedef typename Iterator::sequence_type sequence_type;
+            template<>
+            struct advance_impl<nview_iterator_tag> {
+                template<typename Iterator, typename Dist>
+                struct apply {
+                    typedef typename Iterator::first_type::iterator_type iterator_type;
+                    typedef typename Iterator::sequence_type sequence_type;
 
-                typedef nview_iterator<sequence_type, 
-                    typename mpl::advance<iterator_type, Dist>::type> type;
+                    typedef nview_iterator<sequence_type,
+                            typename mpl::advance<iterator_type, Dist>::type> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return type(i.seq);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return type(i.seq);
+                    }
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif

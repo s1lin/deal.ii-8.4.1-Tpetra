@@ -18,7 +18,9 @@
 #include <boost/fusion/container/deque/deque.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/generation/detail/preprocessed/deque_tie.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/deque_tie" FUSION_MAX_DEQUE_SIZE_STR ".hpp")
@@ -80,9 +82,9 @@ namespace boost { namespace fusion
     namespace result_of
     {
         template <BOOST_PP_ENUM_PARAMS(N, typename T)>
-        #define TEXT(z, n, text) , text
+#define TEXT(z, n, text) , text
         struct deque_tie< BOOST_PP_ENUM_PARAMS(N, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_DEQUE_SIZE, TEXT, void_) >
-        #undef TEXT
+#undef TEXT
         {
             typedef deque<BOOST_PP_ENUM(N, BOOST_FUSION_REF, _)> type;
         };

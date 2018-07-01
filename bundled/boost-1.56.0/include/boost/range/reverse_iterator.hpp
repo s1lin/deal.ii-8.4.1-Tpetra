@@ -21,20 +21,18 @@
 #include <boost/iterator/reverse_iterator.hpp>
 
 
-namespace boost
-{
+namespace boost {
     //////////////////////////////////////////////////////////////////////////
     // default
     //////////////////////////////////////////////////////////////////////////
-    
-    template< typename T >
-    struct range_reverse_iterator
-    {
-        typedef reverse_iterator< 
-            BOOST_DEDUCED_TYPENAME range_iterator<
-                BOOST_DEDUCED_TYPENAME remove_reference<T>::type>::type > type;
+
+    template<typename T>
+    struct range_reverse_iterator {
+        typedef reverse_iterator<
+                BOOST_DEDUCED_TYPENAME range_iterator<
+        BOOST_DEDUCED_TYPENAME remove_reference<T>::type>::type > type;
     };
-    
+
 
 } // namespace boost
 

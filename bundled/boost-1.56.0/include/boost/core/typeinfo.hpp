@@ -119,28 +119,25 @@ template<class T> struct core_typeid_< T const volatile >: core_typeid_< T >
 #include <boost/core/demangle.hpp>
 #include <typeinfo>
 
-namespace boost
-{
+namespace boost {
 
-namespace core
-{
+    namespace core {
 
 #if defined( BOOST_NO_STD_TYPEINFO )
 
-typedef ::type_info typeinfo;
+        typedef ::type_info typeinfo;
 
 #else
 
-typedef std::type_info typeinfo;
+        typedef std::type_info typeinfo;
 
 #endif
 
-inline std::string demangled_name( core::typeinfo const & ti )
-{
-    return core::demangle( ti.name() );
-}
+        inline std::string demangled_name(core::typeinfo const &ti) {
+            return core::demangle(ti.name());
+        }
 
-} // namespace core
+    } // namespace core
 
 } // namespace boost
 

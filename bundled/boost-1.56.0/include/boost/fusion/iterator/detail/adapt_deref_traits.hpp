@@ -10,26 +10,27 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    struct adapt_deref_traits
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef typename
-                result_of::deref<typename Iterator::first_type>::type
-            type;
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            struct adapt_deref_traits {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename
+                    result_of::deref<typename Iterator::first_type>::type
+                            type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type
-            call(Iterator const& i)
-            {
-                return *i.first;
-            }
-        };
-    };
-}}}
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return *i.first;
+                    }
+                };
+            };
+        }
+    }
+}
 
 #endif
 

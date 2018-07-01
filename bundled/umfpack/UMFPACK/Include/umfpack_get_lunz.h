@@ -9,44 +9,44 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_get_lunz
-(
-    int *lnz,
-    int *unz,
-    int *n_row,
-    int *n_col,
-    int *nz_udiag,
-    void *Numeric
-) ;
+        (
+                int *lnz,
+                int *unz,
+                int *n_row,
+                int *n_col,
+                int *nz_udiag,
+                void *Numeric
+        );
 
 UF_long umfpack_dl_get_lunz
-(
-    UF_long *lnz,
-    UF_long *unz,
-    UF_long *n_row,
-    UF_long *n_col,
-    UF_long *nz_udiag,
-    void *Numeric
-) ;
+        (
+                UF_long *lnz,
+                UF_long *unz,
+                UF_long *n_row,
+                UF_long *n_col,
+                UF_long *nz_udiag,
+                void *Numeric
+        );
 
 int umfpack_zi_get_lunz
-(
-    int *lnz,
-    int *unz,
-    int *n_row,
-    int *n_col,
-    int *nz_udiag,
-    void *Numeric
-) ;
+        (
+                int *lnz,
+                int *unz,
+                int *n_row,
+                int *n_col,
+                int *nz_udiag,
+                void *Numeric
+        );
 
 UF_long umfpack_zl_get_lunz
-(
-    UF_long *lnz,
-    UF_long *unz,
-    UF_long *n_row,
-    UF_long *n_col,
-    UF_long *nz_udiag,
-    void *Numeric
-) ;
+        (
+                UF_long *lnz,
+                UF_long *unz,
+                UF_long *n_row,
+                UF_long *n_col,
+                UF_long *nz_udiag,
+                void *Numeric
+        );
 
 /*
 double int Syntax:

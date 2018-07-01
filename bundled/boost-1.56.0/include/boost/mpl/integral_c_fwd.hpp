@@ -20,10 +20,11 @@
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
 #if BOOST_WORKAROUND(__HP_aCC, <= 53800)
-// the type of non-type template arguments may not depend on template arguments
-template< typename T, long N > struct integral_c;
+    // the type of non-type template arguments may not depend on template arguments
+    template< typename T, long N > struct integral_c;
 #else
-template< typename T, T N > struct integral_c;
+    template<typename T, T N>
+    struct integral_c;
 #endif
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE

@@ -10,115 +10,108 @@
 #include <boost/spirit/home/support/iterators/multi_pass_fwd.hpp>
 #include <boost/spirit/home/support/iterators/detail/multi_pass.hpp>
 
-namespace boost { namespace spirit { namespace iterator_policies
-{
-    ///////////////////////////////////////////////////////////////////////////
-    //  class istream
-    //  Implementation of the InputPolicy used by multi_pass
-    // 
-    //  The istream encapsulates an std::basic_istream
-    ///////////////////////////////////////////////////////////////////////////
-    struct istream
-    {
-        ///////////////////////////////////////////////////////////////////////
-        template <typename T>
-        class unique // : public detail::default_input_policy
-        {
-        private:
-            typedef typename T::char_type result_type;
+namespace boost {
+    namespace spirit {
+        namespace iterator_policies {
+            ///////////////////////////////////////////////////////////////////////////
+            //  class istream
+            //  Implementation of the InputPolicy used by multi_pass
+            //
+            //  The istream encapsulates an std::basic_istream
+            ///////////////////////////////////////////////////////////////////////////
+            struct istream {
+                ///////////////////////////////////////////////////////////////////////
+                template<typename T>
+                class unique // : public detail::default_input_policy
+                {
+                private:
+                    typedef typename T::char_type result_type;
 
-        public:
-            typedef typename T::off_type difference_type;
-            typedef typename T::off_type distance_type;
-            typedef result_type const* pointer;
-            typedef result_type const& reference;
-            typedef result_type value_type;
+                public:
+                    typedef typename T::off_type difference_type;
+                    typedef typename T::off_type distance_type;
+                    typedef result_type const *pointer;
+                    typedef result_type const &reference;
+                    typedef result_type value_type;
 
-        protected:
-            unique() {}
-            explicit unique(T&) {}
+                protected:
+                    unique() {}
 
-            void swap(unique&) {}
+                    explicit unique(T &) {}
 
-        public:
-            template <typename MultiPass>
-            static void destroy(MultiPass&) {}
+                    void swap(unique &) {}
 
-            template <typename MultiPass>
-            static typename MultiPass::reference get_input(MultiPass& mp)
-            {
-                if (!mp.shared()->initialized_)
-                    mp.shared()->read_one();
-                return mp.shared()->curtok_;
-            }
+                public:
+                    template<typename MultiPass>
+                    static void destroy(MultiPass &) {}
 
-            template <typename MultiPass>
-            static void advance_input(MultiPass& mp)
-            {
-                // We invalidate the currently cached input character to avoid
-                // reading more input from the underlying iterator than 
-                // required. Without this we would always read ahead one 
-                // character, even if this character never gets consumed by the 
-                // client.
-                mp.shared()->peek_one();
-            }
+                    template<typename MultiPass>
+                    static typename MultiPass::reference get_input(MultiPass &mp) {
+                        if (!mp.shared()->initialized_)
+                            mp.shared()->read_one();
+                        return mp.shared()->curtok_;
+                    }
 
-            // test, whether we reached the end of the underlying stream
-            template <typename MultiPass>
-            static bool input_at_eof(MultiPass const& mp) 
-            {
-                return mp.shared()->eof_reached_;
-            }
+                    template<typename MultiPass>
+                    static void advance_input(MultiPass &mp) {
+                        // We invalidate the currently cached input character to avoid
+                        // reading more input from the underlying iterator than
+                        // required. Without this we would always read ahead one
+                        // character, even if this character never gets consumed by the
+                        // client.
+                        mp.shared()->peek_one();
+                    }
 
-            template <typename MultiPass>
-            static bool input_is_valid(MultiPass const& mp, value_type const&) 
-            {
-                return mp.shared()->initialized_;
-            }
+                    // test, whether we reached the end of the underlying stream
+                    template<typename MultiPass>
+                    static bool input_at_eof(MultiPass const &mp) {
+                        return mp.shared()->eof_reached_;
+                    }
 
-            // no unique data elements
-        };
+                    template<typename MultiPass>
+                    static bool input_is_valid(MultiPass const &mp, value_type const &) {
+                        return mp.shared()->initialized_;
+                    }
 
-        ///////////////////////////////////////////////////////////////////////
-        template <typename T>
-        struct shared
-        {
-        private:
-            typedef typename T::char_type result_type;
+                    // no unique data elements
+                };
 
-        public:
-            explicit shared(T& input) 
-              : input_(input), curtok_(-1)
-              , initialized_(false), eof_reached_(false) 
-            {
-                peek_one();   // istreams may be at eof right in the beginning
-            }
+                ///////////////////////////////////////////////////////////////////////
+                template<typename T>
+                struct shared {
+                private:
+                    typedef typename T::char_type result_type;
 
-            void read_one()
-            {
-                if (!(input_ >> curtok_)) {
-                    initialized_ = false;
-                    eof_reached_ = true;
-                }
-                else {
-                    initialized_ = true;
-                }
-            }
+                public:
+                    explicit shared(T &input)
+                            : input_(input), curtok_(-1), initialized_(false), eof_reached_(false) {
+                        peek_one();   // istreams may be at eof right in the beginning
+                    }
 
-            void peek_one()
-            {
-                input_.peek();    // try for eof
-                initialized_ = false;
-                eof_reached_ = input_.eof();
-            }
+                    void read_one() {
+                        if (!(input_ >> curtok_)) {
+                            initialized_ = false;
+                            eof_reached_ = true;
+                        } else {
+                            initialized_ = true;
+                        }
+                    }
 
-            T& input_;
-            result_type curtok_;
-            bool initialized_;
-            bool eof_reached_;
-        };
-    };
+                    void peek_one() {
+                        input_.peek();    // try for eof
+                        initialized_ = false;
+                        eof_reached_ = input_.eof();
+                    }
 
-}}}
+                    T &input_;
+                    result_type curtok_;
+                    bool initialized_;
+                    bool eof_reached_;
+                };
+            };
+
+        }
+    }
+}
 
 #endif

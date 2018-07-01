@@ -15,21 +15,25 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<mass_dimension,cgs::system>     mass;
-    
-BOOST_UNITS_STATIC_CONSTANT(gram,mass); 
-BOOST_UNITS_STATIC_CONSTANT(grams,mass);    
-BOOST_UNITS_STATIC_CONSTANT(gramme,mass);   
-BOOST_UNITS_STATIC_CONSTANT(grammes,mass);  
+            typedef unit <mass_dimension, cgs::system> mass;
+
+            BOOST_UNITS_STATIC_CONSTANT(gram, mass
+            );
+            BOOST_UNITS_STATIC_CONSTANT(grams, mass
+            );
+            BOOST_UNITS_STATIC_CONSTANT(gramme, mass
+            );
+            BOOST_UNITS_STATIC_CONSTANT(grammes, mass
+            );
 
 
-} // namespace cgs
+        } // namespace cgs
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

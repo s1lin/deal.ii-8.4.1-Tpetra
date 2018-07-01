@@ -14,37 +14,39 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct as_set
-        {
-            typedef typename detail::as_set<result_of::size<Sequence>::value> gen;
-            typedef typename gen::
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence>
+            struct as_set {
+                typedef typename detail::as_set<result_of::size<Sequence>::value> gen;
+                typedef typename gen::
                 template apply<typename result_of::begin<Sequence>::type>::type
-            type;
-        };
-    }
+                        type;
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::as_set<Sequence>::type
-    as_set(Sequence& seq)
-    {
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::as_set<Sequence>::type
+        as_set(Sequence
+        & seq) {
         typedef typename result_of::as_set<Sequence>::gen gen;
-        return gen::call(fusion::begin(seq));
+        return
+
+        gen::call (fusion::begin(seq));
     }
 
-    template <typename Sequence>
+    template<typename Sequence>
     BOOST_FUSION_GPU_ENABLED
     inline typename result_of::as_set<Sequence const>::type
-    as_set(Sequence const& seq)
-    {
-        typedef typename result_of::as_set<Sequence const>::gen gen;
-        return gen::call(fusion::begin(seq));
-    }
+    as_set(Sequence
+    const& seq) {
+    typedef typename result_of::as_set<Sequence const>::gen gen;
+    return
+
+    gen::call (fusion::begin(seq));
+}
 }}
 
 #endif

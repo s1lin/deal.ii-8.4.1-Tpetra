@@ -25,66 +25,67 @@
 #if BOOST_NUMERIC_ODEINT_CXX11
 #include <functional>
 #else
+
 #include <boost/ref.hpp>
+
 #endif
 
 namespace boost {
 
 #if BOOST_NUMERIC_ODEINT_CXX11
-template<typename T> class reference_wrapper;
+    template<typename T> class reference_wrapper;
 
-template<typename T> class unwrap_reference;
+    template<typename T> class unwrap_reference;
 #endif
 
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
 
 #if BOOST_NUMERIC_ODEINT_CXX11
 
-template<typename T>
-class unwrap_reference
-{
-public:
-    typedef typename std::remove_reference<T>::type type;
-};
+            template<typename T>
+            class unwrap_reference
+            {
+            public:
+                typedef typename std::remove_reference<T>::type type;
+            };
 
-template<typename T>
-class unwrap_reference< std::reference_wrapper<T> >
-{
-public:
-    typedef typename std::remove_reference<T>::type type;
-};
+            template<typename T>
+            class unwrap_reference< std::reference_wrapper<T> >
+            {
+            public:
+                typedef typename std::remove_reference<T>::type type;
+            };
 
-template<typename T>
-class unwrap_reference< boost::reference_wrapper<T> >
-{
-public:
-        typedef typename boost::unwrap_reference<T>::type type;
-};
+            template<typename T>
+            class unwrap_reference< boost::reference_wrapper<T> >
+            {
+            public:
+                    typedef typename boost::unwrap_reference<T>::type type;
+            };
 
 #else
 
-using ::boost::unwrap_reference;
+            using ::boost::unwrap_reference;
 
 #endif
 
-namespace detail
-{
+            namespace detail {
 
 #if BOOST_NUMERIC_ODEINT_CXX11
 
-using ::std::ref;
+                using ::std::ref;
 
 #else
 
-using ::boost::ref;
+                using ::boost::ref;
 
 #endif
-}
+            }
 
-}
-}
+        }
+    }
 }
 
 

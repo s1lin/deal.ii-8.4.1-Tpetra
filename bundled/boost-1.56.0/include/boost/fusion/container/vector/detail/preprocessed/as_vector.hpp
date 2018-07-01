@@ -8,7 +8,9 @@
 ==============================================================================*/
 
 #if FUSION_MAX_VECTOR_SIZE <= 10
+
 #include <boost/fusion/container/vector/detail/preprocessed/as_vector10.hpp>
+
 #elif FUSION_MAX_VECTOR_SIZE <= 20
 #include <boost/fusion/container/vector/detail/preprocessed/as_vector20.hpp>
 #elif FUSION_MAX_VECTOR_SIZE <= 30

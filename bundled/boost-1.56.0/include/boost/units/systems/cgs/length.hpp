@@ -15,20 +15,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<length_dimension,cgs::system>   length;
-    
-BOOST_UNITS_STATIC_CONSTANT(centimeter,length); 
-BOOST_UNITS_STATIC_CONSTANT(centimeters,length);    
-BOOST_UNITS_STATIC_CONSTANT(centimetre,length); 
-BOOST_UNITS_STATIC_CONSTANT(centimetres,length);    
+            typedef unit <length_dimension, cgs::system> length;
 
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(centimeter, length
+            );
+            BOOST_UNITS_STATIC_CONSTANT(centimeters, length
+            );
+            BOOST_UNITS_STATIC_CONSTANT(centimetre, length
+            );
+            BOOST_UNITS_STATIC_CONSTANT(centimetres, length
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

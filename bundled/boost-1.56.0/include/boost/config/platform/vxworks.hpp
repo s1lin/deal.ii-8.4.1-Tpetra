@@ -109,6 +109,7 @@
 // Block out all versions before vxWorks 6.x, as these don't work:
 // Include header with the vxWorks version information and query them
 #include <version.h>
+
 #if !defined(_WRS_VXWORKS_MAJOR) || (_WRS_VXWORKS_MAJOR < 6)
 #  error "The vxWorks version you're using is so badly outdated,\
           it doesn't work at all with boost, sorry, no chance!"
@@ -128,11 +129,11 @@
 
 // Special behaviour for DKMs:
 #ifdef _WRS_KERNEL
-  // DKMs do not have the <cwchar>-header,
-  // but apparently they do have an intrinsic wchar_t meanwhile!
+// DKMs do not have the <cwchar>-header,
+// but apparently they do have an intrinsic wchar_t meanwhile!
 #  define BOOST_NO_CWCHAR
 
-  // Lots of wide-functions and -headers are unavailable for DKMs as well:
+// Lots of wide-functions and -headers are unavailable for DKMs as well:
 #  define BOOST_NO_CWCTYPE
 #  define BOOST_NO_SWPRINTF
 #  define BOOST_NO_STD_WSTRING
@@ -177,7 +178,7 @@
 
 // Functionality available for DKMs only:
 #ifdef _WRS_KERNEL
-  // Luckily, at the moment there seems to be none!
+// Luckily, at the moment there seems to be none!
 #endif
 
 // These #defines allow posix_features to work, since vxWorks doesn't
@@ -249,41 +250,41 @@ extern "C" {
 // TODO: getprlimit() and setprlimit() do exist for RTPs only, for whatever reason.
 //       Thus for DKMs there would have to be another implementation.
 #ifdef __RTP__
-  inline int getrlimit(int resource, struct rlimit *rlp){
-    return getprlimit(0, 0, resource, rlp);
-  }
+inline int getrlimit(int resource, struct rlimit *rlp){
+  return getprlimit(0, 0, resource, rlp);
+}
 
-  inline int setrlimit(int resource, const struct rlimit *rlp){
-    return setprlimit(0, 0, resource, const_cast<struct rlimit*>(rlp));
-  }
+inline int setrlimit(int resource, const struct rlimit *rlp){
+  return setprlimit(0, 0, resource, const_cast<struct rlimit*>(rlp));
+}
 #endif
 
 // vxWorks has ftruncate() only, so we do simulate truncate():
-inline int truncate(const char *p, off_t l){
-  int fd = open(p, O_WRONLY);
-  if (fd == -1){
-    errno = EACCES;
-    return -1;
-  }
-  if (ftruncate(fd, l) == -1){
-    close(fd);
-    errno = EACCES;
-    return -1;
-  }
-  return close(fd);
+inline int truncate(const char *p, off_t l) {
+    int fd = open(p, O_WRONLY);
+    if (fd == -1) {
+        errno = EACCES;
+        return -1;
+    }
+    if (ftruncate(fd, l) == -1) {
+        close(fd);
+        errno = EACCES;
+        return -1;
+    }
+    return close(fd);
 }
 
 // Fake symlink handling by dummy functions:
-inline int symlink(const char*, const char*){
-  // vxWorks has no symlinks -> always return an error!
-  errno = EACCES;
-  return -1;
+inline int symlink(const char *, const char *) {
+    // vxWorks has no symlinks -> always return an error!
+    errno = EACCES;
+    return -1;
 }
 
-inline ssize_t readlink(const char*, char*, size_t){
-  // vxWorks has no symlinks -> always return an error!
-  errno = EACCES;
-  return -1;
+inline ssize_t readlink(const char *, char *, size_t) {
+    // vxWorks has no symlinks -> always return an error!
+    errno = EACCES;
+    return -1;
 }
 
 // vxWorks claims to implement gettimeofday in sys/time.h
@@ -291,11 +292,11 @@ inline ssize_t readlink(const char*, char*, size_t){
 // https://support.windriver.com/olsPortal/faces/maintenance/techtipDetail_noHeader.jspx?docId=16442&contentId=WR_TECHTIP_006256
 // We implement a surrogate version here via clock_gettime:
 inline int gettimeofday(struct timeval *tv, void * /*tzv*/) {
-  struct timespec ts;
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  tv->tv_sec  = ts.tv_sec;
-  tv->tv_usec = ts.tv_nsec / 1000;
-  return 0;
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    tv->tv_sec = ts.tv_sec;
+    tv->tv_usec = ts.tv_nsec / 1000;
+    return 0;
 }
 
 // vxWorks does provide neither struct tms nor function times()!
@@ -308,23 +309,23 @@ inline int gettimeofday(struct timeval *tv, void * /*tzv*/) {
 // not be possible to correctly use user and system times! But
 // as vxWorks is lacking the ability to calculate user and system
 // process times there seems to be no other possible solution.
-struct tms{
-  clock_t tms_utime;  // User CPU time
-  clock_t tms_stime;  // System CPU time
-  clock_t tms_cutime; // User CPU time of terminated child processes
-  clock_t tms_cstime; // System CPU time of terminated child processes
+struct tms {
+    clock_t tms_utime;  // User CPU time
+    clock_t tms_stime;  // System CPU time
+    clock_t tms_cutime; // User CPU time of terminated child processes
+    clock_t tms_cstime; // System CPU time of terminated child processes
 };
 
-inline clock_t times(struct tms *t){
-  struct timespec ts;
-  clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
-  clock_t ticks(static_cast<clock_t>(static_cast<double>(ts.tv_sec)  * CLOCKS_PER_SEC +
-                                     static_cast<double>(ts.tv_nsec) * CLOCKS_PER_SEC / 1000000.0));
-  t->tms_utime  = ticks/2U;
-  t->tms_stime  = ticks/2U;
-  t->tms_cutime = 0; // vxWorks is lacking the concept of a child process!
-  t->tms_cstime = 0; // -> Set the wait times for childs to 0
-  return ticks;
+inline clock_t times(struct tms *t) {
+    struct timespec ts;
+    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
+    clock_t ticks(static_cast<clock_t>(static_cast<double>(ts.tv_sec) * CLOCKS_PER_SEC +
+                                       static_cast<double>(ts.tv_nsec) * CLOCKS_PER_SEC / 1000000.0));
+    t->tms_utime = ticks / 2U;
+    t->tms_stime = ticks / 2U;
+    t->tms_cutime = 0; // vxWorks is lacking the concept of a child process!
+    t->tms_cstime = 0; // -> Set the wait times for childs to 0
+    return ticks;
 }
 
 } // extern "C"
@@ -335,11 +336,11 @@ namespace std {
     using ::getrlimit;
     using ::setrlimit;
 # endif
-  using ::truncate;
-  using ::symlink;
-  using ::readlink;
-  using ::times;
-  using ::gettimeofday;
+    using ::truncate;
+    using ::symlink;
+    using ::readlink;
+    using ::times;
+    using ::gettimeofday;
 }
 
 // Some more macro-magic:

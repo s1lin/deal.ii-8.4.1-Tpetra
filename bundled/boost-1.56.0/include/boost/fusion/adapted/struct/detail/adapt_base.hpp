@@ -70,7 +70,7 @@
         typedef TAG type;                                                       \
     };
 #else
-#   define BOOST_FUSION_ADAPT_STRUCT_TAG_OF_SPECIALIZATION(                     \
+#   define BOOST_FUSION_ADAPT_STRUCT_TAG_OF_SPECIALIZATION(\
         MODIFIER, TEMPLATE_PARAMS_SEQ, NAME_SEQ, TAG)                           \
                                                                                 \
     template<                                                                   \
@@ -82,7 +82,7 @@
     };
 #endif
 
-#define BOOST_FUSION_ADAPT_STRUCT_BASE_UNPACK_AND_CALL(R,DATA,I,ATTRIBUTE)      \
+#define BOOST_FUSION_ADAPT_STRUCT_BASE_UNPACK_AND_CALL(R, DATA, I, ATTRIBUTE)      \
     BOOST_PP_TUPLE_ELEM(3,0,DATA)(                                              \
         BOOST_PP_TUPLE_ELEM(3,1,DATA),                                          \
         BOOST_PP_TUPLE_ELEM(3,2,DATA),                                          \
@@ -106,8 +106,8 @@
 #   define BOOST_FUSION_ADAPT_STRUCT_MSVC_REDEFINE_TEMPLATE_PARAMS(SEQ)
 #endif
 
-#define BOOST_FUSION_ADAPT_STRUCT_C_BASE(                                       \
-    TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,PREFIX,ATTRIBUTE,ATTRIBUTE_TUPEL_SIZE)       \
+#define BOOST_FUSION_ADAPT_STRUCT_C_BASE(\
+    TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, PREFIX, ATTRIBUTE, ATTRIBUTE_TUPEL_SIZE)       \
                                                                                 \
     template<                                                                   \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_TEMPLATE_PARAMS(TEMPLATE_PARAMS_SEQ)   \
@@ -167,12 +167,12 @@
         }                                                                       \
     };
 
-#define BOOST_FUSION_ADAPT_STRUCT_BASE(                                         \
-    TEMPLATE_PARAMS_SEQ,                                                        \
-    NAME_SEQ,                                                                   \
-    TAG,                                                                        \
-    IS_VIEW,                                                                    \
-    ATTRIBUTES_SEQ,                                                             \
+#define BOOST_FUSION_ADAPT_STRUCT_BASE(\
+    TEMPLATE_PARAMS_SEQ, \
+    NAME_SEQ, \
+    TAG, \
+    IS_VIEW, \
+    ATTRIBUTES_SEQ, \
     ATTRIBUTES_CALLBACK)                                                        \
                                                                                 \
 namespace boost                                                                 \

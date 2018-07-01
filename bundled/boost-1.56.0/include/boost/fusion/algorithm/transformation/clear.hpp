@@ -10,25 +10,26 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/vector/vector10.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct clear
-        {
-            typedef vector0<> type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence>
+            struct clear {
+                typedef vector0<> type;
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::clear<Sequence const>::type
-    clear(Sequence const& /*seq*/)
-    {
-        return vector0<>();
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::clear<Sequence const>::type
+        clear(Sequence
+        const& /*seq*/) {
+        return
+
+        vector0<>();
     }
-}}
+}
+}
 
 #endif
 

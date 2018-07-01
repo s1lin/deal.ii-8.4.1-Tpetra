@@ -57,8 +57,10 @@
 #  define BOOST_NO_DEDUCED_TYPENAME
 // workaround for missing WCHAR_MAX/WCHAR_MIN:
 #ifdef __cplusplus
+
 #include <climits>
 #include <cwchar>
+
 #else
 #include <limits.h>
 #include <wchar.h>
@@ -75,12 +77,13 @@
 #if (__BORLANDC__ <= 0x564)
 
 #  if defined(NDEBUG) && defined(__cplusplus)
-      // fix broken <cstring> so that Boost.test works:
+// fix broken <cstring> so that Boost.test works:
 #     include <cstring>
 #     undef strcmp
 #  endif
-   // fix broken errno declaration:
+// fix broken errno declaration:
 #  include <errno.h>
+
 #  ifndef errno
 #     define errno errno
 #  endif
@@ -90,7 +93,7 @@
 //
 // new bug in 5.61:
 #if (__BORLANDC__ >= 0x561) && (__BORLANDC__ <= 0x580)
-   // this seems to be needed by the command line compiler, but not the IDE:
+// this seems to be needed by the command line compiler, but not the IDE:
 #  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
 
@@ -105,17 +108,17 @@
 #  ifdef _WIN32
 #     define BOOST_NO_SWPRINTF
 #  elif defined(linux) || defined(__linux__) || defined(__linux)
-      // we should really be able to do without this
-      // but the wcs* functions aren't imported into std::
+// we should really be able to do without this
+// but the wcs* functions aren't imported into std::
 #     define BOOST_NO_STDC_NAMESPACE
-      // _CPPUNWIND doesn't get automatically set for some reason:
+// _CPPUNWIND doesn't get automatically set for some reason:
 #     pragma defineonoption BOOST_CPPUNWIND -x
 #  endif
 #endif
 
 #if (__BORLANDC__ <= 0x613)  // Beman has asked Alisdair for more info
-   // we shouldn't really need this - but too many things choke
-   // without it, this needs more investigation:
+// we shouldn't really need this - but too many things choke
+// without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  define BOOST_NO_IS_ABSTRACT
 #  define BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
@@ -210,7 +213,7 @@
 #  else
 #     define BOOST_NO_LONG_LONG
 #  endif
-   // On non-Win32 platforms let the platform config figure this out:
+// On non-Win32 platforms let the platform config figure this out:
 #  ifdef _WIN32
 #      define BOOST_HAS_STDINT_H
 #  endif
@@ -224,6 +227,7 @@
 // namespace std, so you end up having to use illegal constructs like
 // std::DBL_MAX, as a fix we'll just include float.h and have done with:
 #include <float.h>
+
 #endif
 //
 // __int64:

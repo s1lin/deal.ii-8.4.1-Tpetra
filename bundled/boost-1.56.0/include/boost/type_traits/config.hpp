@@ -10,7 +10,9 @@
 #define BOOST_TT_CONFIG_HPP_INCLUDED
 
 #ifndef BOOST_CONFIG_HPP
+
 #include <boost/config.hpp>
+
 #endif
 
 #include <boost/detail/workaround.hpp>
@@ -27,7 +29,7 @@
 #endif
 
 # if (BOOST_WORKAROUND(__MWERKS__, < 0x3000)                         \
-    || BOOST_WORKAROUND(__IBMCPP__, < 600 )                         \
+ || BOOST_WORKAROUND(__IBMCPP__, < 600 )                         \
     || BOOST_WORKAROUND(__BORLANDC__, < 0x5A0)                      \
     || defined(__ghs)                                               \
     || BOOST_WORKAROUND(__HP_aCC, < 60700)           \

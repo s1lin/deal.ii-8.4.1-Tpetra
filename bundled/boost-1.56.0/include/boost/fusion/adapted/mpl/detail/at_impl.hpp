@@ -11,32 +11,30 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/at.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct mpl_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct mpl_sequence_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct at_impl;
 
-        template <>
-        struct at_impl<mpl_sequence_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply
-            {
-                typedef typename mpl::at<Sequence, N>::type type;
-                
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence)
-                {
-                    return type();
-                }
+            template<>
+            struct at_impl<mpl_sequence_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename mpl::at<Sequence, N>::type type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence)
+                            {
+                                    return type();
+                            }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

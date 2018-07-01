@@ -12,20 +12,19 @@
 
 #include <boost/spirit/home/support/unused.hpp>
 
-namespace boost { namespace spirit { namespace karma
-{
-    // forward declaration only
-    template <
-        typename OutputIterator, typename T1 = unused_type
-      , typename T2 = unused_type, typename T3 = unused_type
-      , typename T4 = unused_type>
-    struct rule;
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            // forward declaration only
+            template<
+                    typename OutputIterator, typename T1 = unused_type, typename T2 = unused_type, typename T3 = unused_type, typename T4 = unused_type>
+            struct rule;
 
-    template <
-        typename OutputIterator, typename T1 = unused_type
-      , typename T2 = unused_type, typename T3 = unused_type
-      , typename T4 = unused_type> 
-    struct grammar;
-}}}
+            template<
+                    typename OutputIterator, typename T1 = unused_type, typename T2 = unused_type, typename T3 = unused_type, typename T4 = unused_type>
+            struct grammar;
+        }
+    }
+}
 
 #endif

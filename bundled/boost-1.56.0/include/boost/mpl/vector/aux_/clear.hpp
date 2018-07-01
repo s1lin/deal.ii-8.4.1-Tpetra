@@ -20,36 +20,37 @@
 #include <boost/mpl/aux_/config/typeof.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
 #if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 
-template<>
-struct clear_impl< aux::vector_tag >
-{
-    template< typename Vector > struct apply
-    {
-        typedef vector0<> type;
-    };
-};
+        template<>
+        struct clear_impl< aux::vector_tag >
+        {
+            template< typename Vector > struct apply
+            {
+                typedef vector0<> type;
+            };
+        };
 
 #else
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-template< long N >
-struct clear_impl< aux::vector_tag<N> >
-{
-    template< typename Vector > struct apply
-    {
-        typedef vector0<> type;
+        template<long N>
+        struct clear_impl<aux::vector_tag < N> > {
+        template<typename Vector>
+        struct apply {
+            typedef vector0<> type;
+        };
     };
-};
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
 
-}}
+}
+}
 
 #endif // BOOST_MPL_VECTOR_AUX_CLEAR_HPP_INCLUDED

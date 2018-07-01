@@ -13,67 +13,67 @@
 #include <boost/fusion/sequence/intrinsic_fwd.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
-namespace boost { namespace fusion
-{
-    // Special tags:
-    struct sequence_facade_tag;
-    struct iterator_range_tag;
+namespace boost {
+    namespace fusion {
+        // Special tags:
+        struct sequence_facade_tag;
+        struct iterator_range_tag;
 
-    // segments: returns a sequence of sequences
-    namespace extension
-    {
-        template <typename Tag>
-        struct segments_impl
-        {
-            template <typename Sequence>
-            struct apply {};
-        };
+        // segments: returns a sequence of sequences
+        namespace extension {
+            template<typename Tag>
+            struct segments_impl {
+                template<typename Sequence>
+                struct apply {
+                };
+            };
 
-        template <>
-        struct segments_impl<sequence_facade_tag>
-        {
-            template <typename Sequence>
-            struct apply : Sequence::template segments<Sequence> {};
-        }; 
+            template<>
+            struct segments_impl<sequence_facade_tag> {
+                template<typename Sequence>
+                struct apply : Sequence::template segments<Sequence> {
+                };
+            };
 
-        template <>
-        struct segments_impl<iterator_range_tag>;
-    }
+            template<>
+            struct segments_impl<iterator_range_tag>;
+        }
 
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct segments
-        {
-            typedef typename traits::tag_of<Sequence>::type tag_type;
+        namespace result_of {
+            template<typename Sequence>
+            struct segments {
+                typedef typename traits::tag_of<Sequence>::type tag_type;
 
-            typedef typename
+                typedef typename
                 extension::segments_impl<tag_type>::template apply<Sequence>::type
-            type;
-        };
-    }
+                        type;
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename
-        lazy_disable_if<
-            is_const<Sequence>
-          , result_of::segments<Sequence>
-        >::type
-    segments(Sequence& seq)
-    {
-        typedef typename traits::tag_of<Sequence>::type tag_type;
-        return extension::segments_impl<tag_type>::template apply<Sequence>::call(seq);
-    }
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename
+                lazy_disable_if<
+                is_const < Sequence>
+        , result_of::segments<Sequence>
+        >
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::segments<Sequence const>::type
-    segments(Sequence const& seq)
-    {
+        ::type
+        segments(Sequence &seq) {
+            typedef typename traits::tag_of<Sequence>::type tag_type;
+            return extension::segments_impl<tag_type>::template apply<Sequence>::call(seq);
+        }
+
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::segments<Sequence const>::type
+        segments(Sequence
+        const& seq) {
         typedef typename traits::tag_of<Sequence const>::type tag_type;
-        return extension::segments_impl<tag_type>::template apply<Sequence const>::call(seq);
+        return
+        extension::segments_impl<tag_type>::template apply<Sequence const>::call(seq);
     }
-}}
+}
+}
 
 #endif

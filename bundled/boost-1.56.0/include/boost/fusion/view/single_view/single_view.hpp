@@ -27,40 +27,41 @@
 #  pragma warning (disable: 4512) // assignment operator could not be generated.
 #endif
 
-namespace boost { namespace fusion
-{
-    struct single_view_tag;
-    struct random_access_traversal_tag;
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_tag;
+        struct random_access_traversal_tag;
+        struct fusion_sequence_tag;
 
-    template <typename T>
-    struct single_view : sequence_base<single_view<T> >
-    {
-        typedef single_view_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef random_access_traversal_tag category;
-        typedef mpl::true_ is_view;
-        typedef mpl::int_<1> size;
-        typedef T value_type;
+        template<typename T>
+        struct single_view : sequence_base<single_view<T> > {
+            typedef single_view_tag fusion_tag;
+            typedef fusion_sequence_tag tag; // this gets picked up by MPL
+            typedef random_access_traversal_tag category;
+            typedef mpl::true_ is_view;
+            typedef mpl::int_<1> size;
+            typedef T value_type;
 
+            BOOST_FUSION_GPU_ENABLED
+            single_view()
+                    : val() {}
+
+            BOOST_FUSION_GPU_ENABLED explicit single_view(typename detail::call_param<T>::type in_val)
+                    : val(in_val) {}
+
+            value_type val;
+        };
+
+        template<typename T>
         BOOST_FUSION_GPU_ENABLED
-        single_view()
-            : val() {}
-
-        BOOST_FUSION_GPU_ENABLED explicit single_view(typename detail::call_param<T>::type in_val)
-            : val(in_val) {}
-
-        value_type val;
-    };
-    
-    template <typename T>
-    BOOST_FUSION_GPU_ENABLED
-    inline single_view<typename detail::as_fusion_element<T>::type>
-    make_single_view(T const& v)
-    {
-        return single_view<typename detail::as_fusion_element<T>::type>(v);
+        inline single_view<typename detail::as_fusion_element<T>::type>
+        make_single_view(T
+        const& v) {
+        return
+        single_view<typename detail::as_fusion_element<T>::type>(v);
     }
-}}
+}
+}
 
 #if defined (BOOST_MSVC)
 #  pragma warning(pop)

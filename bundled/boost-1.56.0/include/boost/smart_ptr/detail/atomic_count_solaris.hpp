@@ -15,44 +15,38 @@
 
 #include <atomic.h>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class atomic_count
-{
-public:
+        class atomic_count {
+        public:
 
-    explicit atomic_count( uint32_t v ): value_( v )
-    {
-    }
+            explicit atomic_count(uint32_t v) : value_(v) {
+            }
 
-    long operator++()
-    {
-        return atomic_inc_32_nv( &value_ );
-    }
+            long operator++() {
+                return atomic_inc_32_nv(&value_);
+            }
 
-    long operator--()
-    {
-        return atomic_dec_32_nv( &value_ );
-    }
+            long operator--() {
+                return atomic_dec_32_nv(&value_);
+            }
 
-    operator uint32_t() const
-    {
-        return static_cast<uint32_t const volatile &>( value_ );
-    }
+            operator uint32_t() const {
+                return static_cast<uint32_t const volatile &>( value_ );
+            }
 
-private:
+        private:
 
-    atomic_count( atomic_count const & );
-    atomic_count & operator=( atomic_count const & );
+            atomic_count(atomic_count const &);
 
-    uint32_t value_;
-};
+            atomic_count &operator=(atomic_count const &);
 
-} // namespace detail
+            uint32_t value_;
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

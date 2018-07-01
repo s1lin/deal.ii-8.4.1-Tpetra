@@ -47,26 +47,26 @@ extern "C" {
 /* define UF_long */
 #include "UFconfig.h"
 
-int amd_order		    /* returns AMD_OK, AMD_OK_BUT_JUMBLED,
+int amd_order            /* returns AMD_OK, AMD_OK_BUT_JUMBLED,
 			     * AMD_INVALID, or AMD_OUT_OF_MEMORY */
-(
-    int n,		    /* A is n-by-n.  n must be >= 0. */
-    const int Ap [ ],	    /* column pointers for A, of size n+1 */
-    const int Ai [ ],	    /* row indices of A, of size nz = Ap [n] */
-    int P [ ],		    /* output permutation, of size n */
-    double Control [ ],	    /* input Control settings, of size AMD_CONTROL */
-    double Info [ ]	    /* output Info statistics, of size AMD_INFO */
-) ;
+        (
+                int n,            /* A is n-by-n.  n must be >= 0. */
+                const int Ap[],        /* column pointers for A, of size n+1 */
+                const int Ai[],        /* row indices of A, of size nz = Ap [n] */
+                int P[],            /* output permutation, of size n */
+                double Control[],        /* input Control settings, of size AMD_CONTROL */
+                double Info[]        /* output Info statistics, of size AMD_INFO */
+        );
 
-UF_long amd_l_order	    /* see above for description of arguments */
-(
-    UF_long n,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    UF_long P [ ],
-    double Control [ ],
-    double Info [ ]
-) ;
+UF_long amd_l_order        /* see above for description of arguments */
+        (
+                UF_long n,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                UF_long P[],
+                double Control[],
+                double Info[]
+        );
 
 /* Input arguments (not modified):
  *
@@ -222,7 +222,7 @@ UF_long amd_l_order	    /* see above for description of arguments */
  *
  *	Info [14..19] are not used in the current version, but may be used in
  *	    future versions.
- */    
+ */
 
 /* ------------------------------------------------------------------------- */
 /* direct interface to AMD */
@@ -237,42 +237,42 @@ UF_long amd_l_order	    /* see above for description of arguments */
  * description of each parameter. */
 
 void amd_2
-(
-    int n,
-    int Pe [ ],
-    int Iw [ ],
-    int Len [ ],
-    int iwlen,
-    int pfree,
-    int Nv [ ],
-    int Next [ ], 
-    int Last [ ],
-    int Head [ ],
-    int Elen [ ],
-    int Degree [ ],
-    int W [ ],
-    double Control [ ],
-    double Info [ ]
-) ;
+        (
+                int n,
+                int Pe[],
+                int Iw[],
+                int Len[],
+                int iwlen,
+                int pfree,
+                int Nv[],
+                int Next[],
+                int Last[],
+                int Head[],
+                int Elen[],
+                int Degree[],
+                int W[],
+                double Control[],
+                double Info[]
+        );
 
 void amd_l2
-(
-    UF_long n,
-    UF_long Pe [ ],
-    UF_long Iw [ ],
-    UF_long Len [ ],
-    UF_long iwlen,
-    UF_long pfree,
-    UF_long Nv [ ],
-    UF_long Next [ ], 
-    UF_long Last [ ],
-    UF_long Head [ ],
-    UF_long Elen [ ],
-    UF_long Degree [ ],
-    UF_long W [ ],
-    double Control [ ],
-    double Info [ ]
-) ;
+        (
+                UF_long n,
+                UF_long Pe[],
+                UF_long Iw[],
+                UF_long Len[],
+                UF_long iwlen,
+                UF_long pfree,
+                UF_long Nv[],
+                UF_long Next[],
+                UF_long Last[],
+                UF_long Head[],
+                UF_long Elen[],
+                UF_long Degree[],
+                UF_long W[],
+                double Control[],
+                double Info[]
+        );
 
 /* ------------------------------------------------------------------------- */
 /* amd_valid */
@@ -289,20 +289,20 @@ void amd_l2
  */
 
 int amd_valid
-(
-    int n_row,		    /* # of rows */
-    int n_col,		    /* # of columns */
-    const int Ap [ ],	    /* column pointers, of size n_col+1 */
-    const int Ai [ ]	    /* row indices, of size Ap [n_col] */
-) ;
+        (
+                int n_row,            /* # of rows */
+                int n_col,            /* # of columns */
+                const int Ap[],        /* column pointers, of size n_col+1 */
+                const int Ai[]        /* row indices, of size Ap [n_col] */
+        );
 
 UF_long amd_l_valid
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[]
+        );
 
 /* ------------------------------------------------------------------------- */
 /* AMD memory manager and printf routines */
@@ -315,63 +315,63 @@ UF_long amd_l_valid
 #define EXTERN extern
 #endif
 
-EXTERN void *(*amd_malloc) (size_t) ;		    /* pointer to malloc */
-EXTERN void (*amd_free) (void *) ;		    /* pointer to free */
-EXTERN void *(*amd_realloc) (void *, size_t) ;	    /* pointer to realloc */
-EXTERN void *(*amd_calloc) (size_t, size_t) ;	    /* pointer to calloc */
-EXTERN int (*amd_printf) (const char *, ...) ;	    /* pointer to printf */
+EXTERN void *(*amd_malloc)(size_t);            /* pointer to malloc */
+EXTERN void (*amd_free)(void *);            /* pointer to free */
+EXTERN void *(*amd_realloc)(void *, size_t);        /* pointer to realloc */
+EXTERN void *(*amd_calloc)(size_t, size_t);        /* pointer to calloc */
+EXTERN int (*amd_printf)(const char *, ...);        /* pointer to printf */
 
 /* ------------------------------------------------------------------------- */
 /* AMD Control and Info arrays */
 /* ------------------------------------------------------------------------- */
 
 /* amd_defaults:  sets the default control settings */
-void amd_defaults   (double Control [ ]) ;
-void amd_l_defaults (double Control [ ]) ;
+void amd_defaults(double Control[]);
+void amd_l_defaults(double Control[]);
 
 /* amd_control: prints the control settings */
-void amd_control    (double Control [ ]) ;
-void amd_l_control  (double Control [ ]) ;
+void amd_control(double Control[]);
+void amd_l_control(double Control[]);
 
 /* amd_info: prints the statistics */
-void amd_info       (double Info [ ]) ;
-void amd_l_info     (double Info [ ]) ;
+void amd_info(double Info[]);
+void amd_l_info(double Info[]);
 
-#define AMD_CONTROL 5	    /* size of Control array */
-#define AMD_INFO 20	    /* size of Info array */
+#define AMD_CONTROL 5        /* size of Control array */
+#define AMD_INFO 20        /* size of Info array */
 
 /* contents of Control */
-#define AMD_DENSE 0	    /* "dense" if degree > Control [0] * sqrt (n) */
+#define AMD_DENSE 0        /* "dense" if degree > Control [0] * sqrt (n) */
 #define AMD_AGGRESSIVE 1    /* do aggressive absorption if Control [1] != 0 */
 
 /* default Control settings */
-#define AMD_DEFAULT_DENSE 10.0	    /* default "dense" degree 10*sqrt(n) */
+#define AMD_DEFAULT_DENSE 10.0        /* default "dense" degree 10*sqrt(n) */
 #define AMD_DEFAULT_AGGRESSIVE 1    /* do aggressive absorption by default */
 
 /* contents of Info */
-#define AMD_STATUS 0	    /* return value of amd_order and amd_l_order */
-#define AMD_N 1		    /* A is n-by-n */
-#define AMD_NZ 2	    /* number of nonzeros in A */ 
-#define AMD_SYMMETRY 3	    /* symmetry of pattern (1 is sym., 0 is unsym.) */
-#define AMD_NZDIAG 4	    /* # of entries on diagonal */
+#define AMD_STATUS 0        /* return value of amd_order and amd_l_order */
+#define AMD_N 1            /* A is n-by-n */
+#define AMD_NZ 2        /* number of nonzeros in A */
+#define AMD_SYMMETRY 3        /* symmetry of pattern (1 is sym., 0 is unsym.) */
+#define AMD_NZDIAG 4        /* # of entries on diagonal */
 #define AMD_NZ_A_PLUS_AT 5  /* nz in A+A' */
-#define AMD_NDENSE 6	    /* number of "dense" rows/columns in A */
-#define AMD_MEMORY 7	    /* amount of memory used by AMD */
-#define AMD_NCMPA 8	    /* number of garbage collections in AMD */
-#define AMD_LNZ 9	    /* approx. nz in L, excluding the diagonal */
-#define AMD_NDIV 10	    /* number of fl. point divides for LU and LDL' */
+#define AMD_NDENSE 6        /* number of "dense" rows/columns in A */
+#define AMD_MEMORY 7        /* amount of memory used by AMD */
+#define AMD_NCMPA 8        /* number of garbage collections in AMD */
+#define AMD_LNZ 9        /* approx. nz in L, excluding the diagonal */
+#define AMD_NDIV 10        /* number of fl. point divides for LU and LDL' */
 #define AMD_NMULTSUBS_LDL 11 /* number of fl. point (*,-) pairs for LDL' */
 #define AMD_NMULTSUBS_LU 12  /* number of fl. point (*,-) pairs for LU */
-#define AMD_DMAX 13	     /* max nz. in any column of L, incl. diagonal */
+#define AMD_DMAX 13         /* max nz. in any column of L, incl. diagonal */
 
 /* ------------------------------------------------------------------------- */
 /* return values of AMD */
 /* ------------------------------------------------------------------------- */
 
-#define AMD_OK 0		/* success */
-#define AMD_OUT_OF_MEMORY -1	/* malloc failed, or problem too large */
-#define AMD_INVALID -2		/* input arguments are not valid */
-#define AMD_OK_BUT_JUMBLED 1	/* input matrix is OK for amd_order, but
+#define AMD_OK 0        /* success */
+#define AMD_OUT_OF_MEMORY -1    /* malloc failed, or problem too large */
+#define AMD_INVALID -2        /* input arguments are not valid */
+#define AMD_OK_BUT_JUMBLED 1    /* input matrix is OK for amd_order, but
     * columns were not sorted, and/or duplicate entries were present.  AMD had
     * to do extra work before ordering the matrix.  This is a warning, not an
     * error.  */
@@ -399,7 +399,7 @@ void amd_l_info     (double Info [ ]) ;
  */
 
 #define AMD_DATE "May 31, 2007"
-#define AMD_VERSION_CODE(main,sub) ((main) * 1000 + (sub))
+#define AMD_VERSION_CODE(main, sub) ((main) * 1000 + (sub))
 #define AMD_MAIN_VERSION 2
 #define AMD_SUB_VERSION 2
 #define AMD_SUBSUB_VERSION 0

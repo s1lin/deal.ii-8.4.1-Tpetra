@@ -9,32 +9,32 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_col_to_triplet
-(
-    int n_col,
-    const int Ap [ ],
-    int Tj [ ]
-) ;
+        (
+                int n_col,
+                const int Ap[],
+                int Tj[]
+        );
 
 UF_long umfpack_dl_col_to_triplet
-(
-    UF_long n_col,
-    const UF_long Ap [ ],
-    UF_long Tj [ ]
-) ;
+        (
+                UF_long n_col,
+                const UF_long Ap[],
+                UF_long Tj[]
+        );
 
 int umfpack_zi_col_to_triplet
-(
-    int n_col,
-    const int Ap [ ],
-    int Tj [ ]
-) ;
+        (
+                int n_col,
+                const int Ap[],
+                int Tj[]
+        );
 
 UF_long umfpack_zl_col_to_triplet
-(
-    UF_long n_col,
-    const UF_long Ap [ ],
-    UF_long Tj [ ]
-) ;
+        (
+                UF_long n_col,
+                const UF_long Ap[],
+                UF_long Tj[]
+        );
 
 /*
 double int Syntax:

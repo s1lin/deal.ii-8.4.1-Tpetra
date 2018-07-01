@@ -7,6 +7,7 @@
 #define BOOST_FUNCTIONAL_HASH_DETAIL_FLOAT_FUNCTIONS_HPP
 
 #include <boost/config.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -112,37 +113,51 @@ namespace boost {
     namespace hash_detail {
 
         // Returned by dummy versions of the float functions.
-    
+
         struct not_found {
             // Implicitly convertible to float and long double in order to avoid
             // a compile error when the dummy float functions are used.
 
             inline operator float() const { return 0; }
+
             inline operator long double() const { return 0; }
         };
-          
+
         // A type for detecting the return type of functions.
 
-        template <typename T> struct is;
-        template <> struct is<float> { char x[10]; };
-        template <> struct is<double> { char x[20]; };
-        template <> struct is<long double> { char x[30]; };
-        template <> struct is<boost::hash_detail::not_found> { char x[40]; };
-            
+        template<typename T>
+        struct is;
+        template<>
+        struct is<float> {
+            char x[10];
+        };
+        template<>
+        struct is<double> {
+            char x[20];
+        };
+        template<>
+        struct is<long double> {
+            char x[30];
+        };
+        template<>
+        struct is<boost::hash_detail::not_found> {
+            char x[40];
+        };
+
         // Used to convert the return type of a function to a type for sizeof.
 
-        template <typename T> is<T> float_type(T);
+        template<typename T>
+        is<T> float_type(T);
 
         // call_ldexp
         //
         // This will get specialized for float and long double
-        
-        template <typename Float> struct call_ldexp
-        {
+
+        template<typename Float>
+        struct call_ldexp {
             typedef double float_type;
-            
-            inline double operator()(double a, int b) const
-            {
+
+            inline double operator()(double a, int b) const {
                 using namespace std;
                 return ldexp(a, b);
             }
@@ -152,19 +167,18 @@ namespace boost {
         //
         // This will get specialized for float and long double
 
-        template <typename Float> struct call_frexp
-        {
+        template<typename Float>
+        struct call_frexp {
             typedef double float_type;
-            
-            inline double operator()(double a, int* b) const
-            {
+
+            inline double operator()(double a, int *b) const {
                 using namespace std;
                 return frexp(a, b);
             }
         };
     }
 }
-            
+
 // A namespace for dummy functions to detect when the actual function we want
 // isn't available. ldexpl, ldexpf etc. might be added tby the macros below.
 //
@@ -173,8 +187,11 @@ namespace boost {
 // (since the arguments are built in types, ADL can't be used).
 
 namespace boost_hash_detect_float_functions {
-    template <class Float> boost::hash_detail::not_found ldexp(Float, int);
-    template <class Float> boost::hash_detail::not_found frexp(Float, int*);    
+    template<class Float>
+    boost::hash_detail::not_found ldexp(Float, int);
+
+    template<class Float>
+    boost::hash_detail::not_found frexp(Float, int *);
 }
 
 // Macros for generating specializations of call_ldexp and call_frexp.
@@ -298,21 +315,19 @@ BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpl, long double, int*)
 #undef BOOST_HASH_CALL_FLOAT_FUNC
 
 
-namespace boost
-{
-    namespace hash_detail
-    {
-        template <typename Float1, typename Float2>
+namespace boost {
+    namespace hash_detail {
+        template<typename Float1, typename Float2>
         struct select_hash_type_impl {
             typedef double type;
         };
 
-        template <>
+        template<>
         struct select_hash_type_impl<float, float> {
             typedef float type;
         };
 
-        template <>
+        template<>
         struct select_hash_type_impl<long double, long double> {
             typedef long double type;
         };
@@ -322,12 +337,13 @@ namespace boost
         //
         // If there is support for a particular floating point type, use that
         // otherwise use double (there's always support for double).
-             
-        template <typename Float>
+
+        template<typename Float>
         struct select_hash_type : select_hash_type_impl<
                 BOOST_DEDUCED_TYPENAME call_ldexp<Float>::float_type,
                 BOOST_DEDUCED_TYPENAME call_frexp<Float>::float_type
-            > {};            
+        > {
+        };
     }
 }
 

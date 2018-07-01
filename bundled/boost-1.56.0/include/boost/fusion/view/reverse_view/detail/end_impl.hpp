@@ -7,36 +7,34 @@
 #if !defined(FUSION_END_IMPL_07202005_0851)
 #define FUSION_END_IMPL_07202005_0851
 
-namespace boost { namespace fusion
-{
-    struct reverse_view_tag;
+namespace boost {
+    namespace fusion {
+        struct reverse_view_tag;
 
-    template <typename Iterator>
-    struct reverse_view_iterator;
+        template<typename Iterator>
+        struct reverse_view_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
 
-        template <>
-        struct end_impl<reverse_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef reverse_view_iterator<typename Sequence::first_type> type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence const& s)
-                {
-                    return type(s.first());
-                }
+            template<>
+            struct end_impl<reverse_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef reverse_view_iterator<typename Sequence::first_type> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence const& s)
+                    {
+                        return type(s.first());
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

@@ -38,13 +38,12 @@ GLOBAL int umf_realloc_fail, umf_realloc_lo, umf_realloc_hi ;
 #endif
 
 GLOBAL void *UMF_malloc
-(
-    Int n_objects,
-    size_t size_of_object
-)
-{
-    size_t size ;
-    void *p ;
+        (
+                Int n_objects,
+                size_t size_of_object
+        ) {
+    size_t size;
+    void *p;
 
 #ifdef UMF_TCOV_TEST
     /* For exhaustive statement coverage testing only! */
@@ -52,40 +51,40 @@ GLOBAL void *UMF_malloc
     umf_fail-- ;
     if (umf_fail <= umf_fail_hi && umf_fail >= umf_fail_lo)
     {
-	DEBUG0 (("umf_malloc: Pretend to fail %d %d %d\n",
-	    umf_fail, umf_fail_hi, umf_fail_lo)) ;
-	return ((void *) NULL) ;
+    DEBUG0 (("umf_malloc: Pretend to fail %d %d %d\n",
+        umf_fail, umf_fail_hi, umf_fail_lo)) ;
+    return ((void *) NULL) ;
     }
 #endif
 
-    DEBUG0 (("UMF_malloc: ")) ;
+    DEBUG0 (("UMF_malloc: "));
 
     /* make sure that we allocate something */
-    n_objects = MAX (1, n_objects) ;
+    n_objects = MAX (1, n_objects);
 
-    size = (size_t) n_objects ;
-    ASSERT (size_of_object > 1) ;
-    if (size > Int_MAX / size_of_object)
-    {
-	/* object is too big for integer pointer arithmetic */
-	return ((void *) NULL) ;
+    size = (size_t) n_objects;
+    ASSERT (size_of_object > 1);
+    if (size > Int_MAX / size_of_object) {
+        /* object is too big for integer pointer arithmetic */
+        return ((void *) NULL);
     }
-    size *= size_of_object ;
+    size *= size_of_object;
 
     /* see AMD/Source/amd_global.c for the memory allocator selection */
-    p = amd_malloc (size) ;
+    p = amd_malloc(size);
 
-    DEBUG0 ((ID "\n", (Int) p)) ;
+    DEBUG0 ((ID
+                    "\n", (Int) p));
 
 #if defined (UMF_MALLOC_COUNT) || !defined (NDEBUG)
     if (p)
     {
-	/* One more object has been malloc'ed.  Keep track of the count. */
-	/* (purely for sanity checks). */
-	UMF_malloc_count++ ;
-	DEBUG0 (("  successful, new malloc count: " ID "\n", UMF_malloc_count)) ;
+    /* One more object has been malloc'ed.  Keep track of the count. */
+    /* (purely for sanity checks). */
+    UMF_malloc_count++ ;
+    DEBUG0 (("  successful, new malloc count: " ID "\n", UMF_malloc_count)) ;
     }
 #endif
 
-    return (p) ;
+    return (p);
 }

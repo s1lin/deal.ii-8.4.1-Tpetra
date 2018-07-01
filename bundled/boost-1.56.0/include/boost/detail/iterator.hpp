@@ -10,16 +10,14 @@
 
 #include <iterator>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-using std::iterator_traits;
-using std::distance;
+        using std::iterator_traits;
+        using std::distance;
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace boost
 

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_AST_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_AST_FWD
+
 #include <boost/spirit/home/classic/tree/ast_fwd.hpp>
+
 #endif

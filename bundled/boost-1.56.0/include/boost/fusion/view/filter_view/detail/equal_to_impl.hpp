@@ -8,27 +8,26 @@
 #if !defined(BOOST_FUSION_EQUAL_TO_IMPL_02012005_2133)
 #define BOOST_FUSION_EQUAL_TO_IMPL_02012005_2133
 
-namespace boost { namespace fusion 
-{
-    struct filter_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct filter_view_iterator_tag;
 
-    namespace extension
-    {
-        template<typename I1, typename I2>
-        struct equal_to;
-
-        template<typename Tag>
-        struct equal_to_impl;
-
-        template<>
-        struct equal_to_impl<filter_view_iterator_tag>
-        {
+        namespace extension {
             template<typename I1, typename I2>
-            struct apply
-                : result_of::equal_to<typename I1::first_type, typename I2::first_type>
-            {};
-        };
+            struct equal_to;
+
+            template<typename Tag>
+            struct equal_to_impl;
+
+            template<>
+            struct equal_to_impl<filter_view_iterator_tag> {
+                template<typename I1, typename I2>
+                struct apply
+                        : result_of::equal_to<typename I1::first_type, typename I2::first_type> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

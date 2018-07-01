@@ -22,9 +22,9 @@
 
 // make sure our local macros wont override something :
 #if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
-  || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION ) \
-    || defined(BOOST_NO_TEMPLATE_STD_STREAM) \
-    || defined(BOOST_FORMAT_STREAMBUF_DEFINED) || defined(BOOST_FORMAT_OSTREAM_DEFINED)
+ || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION ) \
+ || defined(BOOST_NO_TEMPLATE_STD_STREAM) \
+ || defined(BOOST_FORMAT_STREAMBUF_DEFINED) || defined(BOOST_FORMAT_OSTREAM_DEFINED)
 #error "boost::format uses a local macro that is already defined."
 #endif
 
@@ -38,14 +38,14 @@
 #endif
 
 #if defined(BOOST_NO_STD_LOCALE) || \
- ( BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
-   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) )  )
+ (BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
+ || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))
 // some future __BORLANDC__ >0x564  versions might not need this
 // 0x570 is Borland's kylix branch
 #define BOOST_NO_LOCALE_ISDIGIT
 #endif
 
-#if  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) ) || BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
+#if  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)) || BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1300))
 #define BOOST_NO_OVERLOAD_FOR_NON_CONST
 #endif
 
@@ -74,20 +74,26 @@ namespace boost {
   // -end N.S. boost
 #endif // needs_using_declaration
 
-#if ! defined(BOOST_NO_STD_LOCALE)
+#if !defined(BOOST_NO_STD_LOCALE)
+
 #include <locale>
+
 #endif
 
 
 // ***  hide std::locale if it doesnt exist. 
 // this typedef is either std::locale or int, avoids placing ifdefs everywhere
-namespace boost { namespace io { namespace detail {
-#if ! defined(BOOST_NO_STD_LOCALE)
-    typedef BOOST_IO_STD locale locale_t;
-#else 
-    typedef int          locale_t;
+namespace boost {
+    namespace io {
+        namespace detail {
+#if !defined(BOOST_NO_STD_LOCALE)
+            typedef BOOST_IO_STD locale locale_t;
+#else
+            typedef int          locale_t;
 #endif
-} } }
+        }
+    }
+}
 
 
 // ----------------------------------------------------------------------------

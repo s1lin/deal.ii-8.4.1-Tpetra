@@ -22,28 +22,23 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(State)
-    , typename BOOST_MPL_AUX_NA_PARAM(ForwardOp)
-    >
-struct iter_fold
-{
-    typedef typename aux::iter_fold_impl<
-          ::boost::mpl::O1_size<Sequence>::value
-        , typename begin<Sequence>::type
-        , typename end<Sequence>::type
-        , State
-        , typename lambda<ForwardOp>::type
-        >::state type;
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence), typename BOOST_MPL_AUX_NA_PARAM(State), typename BOOST_MPL_AUX_NA_PARAM(ForwardOp)
+        >
+        struct iter_fold {
+            typedef typename aux::iter_fold_impl<
+                    ::boost::mpl::O1_size<Sequence>::value, typename begin<Sequence>::type, typename end<Sequence>::type, State, typename lambda<ForwardOp>::type
+            >::state type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,iter_fold,(Sequence,State,ForwardOp))
-};
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(3,iter_fold,(Sequence,State,ForwardOp))
+        };
 
-BOOST_MPL_AUX_NA_SPEC(3, iter_fold)
+        BOOST_MPL_AUX_NA_SPEC(3, iter_fold)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_ITER_FOLD_HPP_INCLUDED

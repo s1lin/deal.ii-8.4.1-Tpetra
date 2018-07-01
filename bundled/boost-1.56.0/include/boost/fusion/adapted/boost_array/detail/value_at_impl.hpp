@@ -8,25 +8,24 @@
 #if !defined(BOOST_FUSION_VALUE_AT_IMPL_27122005_1256)
 #define BOOST_FUSION_VALUE_AT_IMPL_27122005_1256
 
-namespace boost { namespace fusion {
-    
-    struct boost_array_tag;
+namespace boost {
+    namespace fusion {
 
-    namespace extension
-    {
-        template<typename T>
-        struct value_at_impl;
+        struct boost_array_tag;
 
-        template <>
-        struct value_at_impl<boost_array_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply 
-            {
-                typedef typename Sequence::value_type type;
+        namespace extension {
+            template<typename T>
+            struct value_at_impl;
+
+            template<>
+            struct value_at_impl<boost_array_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename Sequence::value_type type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

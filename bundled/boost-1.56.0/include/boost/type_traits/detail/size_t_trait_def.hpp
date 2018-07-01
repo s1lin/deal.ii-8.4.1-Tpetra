@@ -23,7 +23,7 @@
 #define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) /**/
 
 
-#define BOOST_TT_AUX_SIZE_T_TRAIT_DEF1(trait,T,C) \
+#define BOOST_TT_AUX_SIZE_T_TRAIT_DEF1(trait, T, C) \
 template< typename T > struct trait \
     : public ::boost::integral_constant<std::size_t,C> \
 { \
@@ -34,7 +34,7 @@ public:\
 BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
 /**/
 
-#define BOOST_TT_AUX_SIZE_T_TRAIT_SPEC1(trait,spec,C) \
+#define BOOST_TT_AUX_SIZE_T_TRAIT_SPEC1(trait, spec, C) \
 template<> struct trait<spec> \
     : public ::boost::integral_constant<std::size_t,C> \
 { \
@@ -43,7 +43,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_SIZE_T_TRAIT_PARTIAL_SPEC1_1(param,trait,spec,C) \
+#define BOOST_TT_AUX_SIZE_T_TRAIT_PARTIAL_SPEC1_1(param, trait, spec, C) \
 template< param > struct trait<spec> \
     : public ::boost::integral_constant<std::size_t,C> \
 { \

@@ -17,19 +17,19 @@
 #endif
 #include <boost/container/vector.hpp>
 #else
+
 #include <vector>
+
 #endif
 
-namespace boost
-{
-  namespace csbl
-  {
+namespace boost {
+    namespace csbl {
 #if defined BOOST_THREAD_USES_BOOST_VECTOR
-    using ::boost::container::vector;
+        using ::boost::container::vector;
 #else
-    using ::std::vector;
+        using ::std::vector;
 #endif
 
-  }
+    }
 }
 #endif // header

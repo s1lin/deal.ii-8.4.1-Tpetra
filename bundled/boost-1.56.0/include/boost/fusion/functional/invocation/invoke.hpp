@@ -50,139 +50,145 @@
 #include <boost/fusion/functional/invocation/limits.hpp>
 #include <boost/fusion/functional/invocation/detail/that_ptr.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Function, class Sequence> struct invoke;
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Function, class Sequence>
+            struct invoke;
+        }
 
-    //~ template <typename Function, class Sequence>
-    //~ inline typename result_of::invoke<Function, Sequence>::type
-    //~ invoke(Function, Sequence &);
+        //~ template <typename Function, class Sequence>
+        //~ inline typename result_of::invoke<Function, Sequence>::type
+        //~ invoke(Function, Sequence &);
 
-    //~ template <typename Function, class Sequence>
-    //~ inline typename result_of::invoke<Function, Sequence const>::type
-    //~ invoke(Function, Sequence const &);
+        //~ template <typename Function, class Sequence>
+        //~ inline typename result_of::invoke<Function, Sequence const>::type
+        //~ invoke(Function, Sequence const &);
 
-    //----- ---- --- -- - -  -   -
+        //----- ---- --- -- - -  -   -
 
-    namespace detail
-    {
-        namespace ft = function_types;
+        namespace detail {
+            namespace ft = function_types;
 
-        template<
-            typename Function, class Sequence,
-            int N = result_of::size<Sequence>::value,
-            bool CBI = ft::is_callable_builtin<Function>::value,
-            bool RandomAccess = traits::is_random_access<Sequence>::value
+            template<
+                    typename Function, class Sequence,
+                    int N = result_of::size<Sequence>::value,
+                    bool CBI = ft::is_callable_builtin<Function>::value,
+                    bool RandomAccess = traits::is_random_access<Sequence>::value
             >
-        struct invoke_impl;
+            struct invoke_impl;
 
-        template <class Sequence, int N>
-        struct invoke_param_types;
+            template<class Sequence, int N>
+            struct invoke_param_types;
 
-        template <typename T, class Sequence>
-        struct invoke_data_member;
+            template<typename T, class Sequence>
+            struct invoke_data_member;
 
-        template <typename Function, class Sequence, int N, bool RandomAccess>
-        struct invoke_fn_ptr;
+            template<typename Function, class Sequence, int N, bool RandomAccess>
+            struct invoke_fn_ptr;
 
-        template <typename Function, class Sequence, int N, bool RandomAccess>
-        struct invoke_mem_fn;
+            template<typename Function, class Sequence, int N, bool RandomAccess>
+            struct invoke_mem_fn;
 
-        #define  BOOST_PP_FILENAME_1 <boost/fusion/functional/invocation/invoke.hpp>
-        #define  BOOST_PP_ITERATION_LIMITS (0, BOOST_FUSION_INVOKE_MAX_ARITY)
-        #include BOOST_PP_ITERATE()
+#define  BOOST_PP_FILENAME_1 <boost/fusion/functional/invocation/invoke.hpp>
+#define  BOOST_PP_ITERATION_LIMITS (0, BOOST_FUSION_INVOKE_MAX_ARITY)
 
-        template <typename F, class Sequence, int N, bool RandomAccess>
-        struct invoke_nonmember_builtin
-        // use same implementation as for function objects but...
-            : invoke_fn_ptr< // ...work around boost::result_of bugs
-                typename mpl::eval_if< ft::is_function<F>,
-                    boost::add_reference<F>, boost::remove_cv<F> >::type,
-                Sequence, N, RandomAccess >
-        { };
+#include BOOST_PP_ITERATE()
 
-        template <typename Function, class Sequence, int N, bool RandomAccess>
-        struct invoke_impl<Function,Sequence,N,true,RandomAccess>
-            : mpl::if_< ft::is_member_function_pointer<Function>,
-                invoke_mem_fn<Function,Sequence,N,RandomAccess>,
-                invoke_nonmember_builtin<Function,Sequence,N,RandomAccess>
-            >::type
-        { };
+            template<typename F, class Sequence, int N, bool RandomAccess>
+            struct invoke_nonmember_builtin
+                // use same implementation as for function objects but...
+                    : invoke_fn_ptr< // ...work around boost::result_of bugs
+                            typename mpl::eval_if<ft::is_function < F>,
+                            boost::add_reference<F>, boost::remove_cv<F> >::type,
+                      Sequence, N, RandomAccess > {};
 
-        template <typename Function, class Sequence, bool RandomAccess>
-        struct invoke_impl<Function,Sequence,1,true,RandomAccess>
-            : mpl::eval_if< ft::is_member_pointer<Function>,
-                mpl::if_< ft::is_member_function_pointer<Function>,
-                    invoke_mem_fn<Function,Sequence,1,RandomAccess>,
-                    invoke_data_member<Function, Sequence> >,
-                mpl::identity< invoke_nonmember_builtin<
-                    Function,Sequence,1,RandomAccess> >
-            >::type
-        { };
+        template<typename Function, class Sequence, int N, bool RandomAccess>
+        struct invoke_impl<Function, Sequence, N, true, RandomAccess>
+                : mpl::if_<ft::is_member_function_pointer < Function>,
+                  invoke_mem_fn<Function, Sequence, N, RandomAccess>,
+                  invoke_nonmember_builtin<Function, Sequence, N, RandomAccess>
+        >::type {};
 
-        template <typename T, class C, class Sequence>
-        struct invoke_data_member< T C::*, Sequence >
-        {
-        private:
+    template<typename Function, class Sequence, bool RandomAccess>
+    struct invoke_impl<Function, Sequence, 1, true, RandomAccess>
+            : mpl::eval_if<ft::is_member_pointer < Function>,
+              mpl::if_<ft::is_member_function_pointer < Function>,
+              invoke_mem_fn<Function, Sequence, 1, RandomAccess>,
+              invoke_data_member<Function, Sequence> >,
+    mpl::identity <invoke_nonmember_builtin<
+            Function, Sequence, 1, RandomAccess>>
+    >::type {};
 
-            typedef typename result_of::front<Sequence>::type that;
+template<typename T, class C, class Sequence>
+struct invoke_data_member<T C::*, Sequence> {
+private:
 
-            typedef mpl::or_< boost::is_convertible<that,C*>,
-                              boost::is_convertible<that,C&>,
-                              non_const_pointee<that> > non_const_cond;
+    typedef typename result_of::front<Sequence>::type that;
 
-            typedef typename mpl::eval_if< non_const_cond,
-                mpl::identity<C>, add_const<C> >::type qualified_class;
+    typedef mpl::or_ <boost::is_convertible<that, C *>,
+    boost::is_convertible<that, C &>,
+    non_const_pointee<that>> non_const_cond;
 
-            typedef typename mpl::eval_if< non_const_cond,
-                mpl::identity<T>, add_const<T> >::type qualified_type;
+    typedef typename mpl::eval_if<non_const_cond,
+            mpl::identity < C>, add_const <C> >::type qualified_class;
 
-        public:
+    typedef typename mpl::eval_if<non_const_cond,
+            mpl::identity < T>, add_const <T> >::type qualified_type;
 
-            typedef typename boost::add_reference<qualified_type>::type
-                result_type;
+public:
 
-            BOOST_FUSION_GPU_ENABLED
-            static inline result_type call(T C::* f, Sequence & s)
-            {
-                typename result_of::front<Sequence>::type c = fusion::front(s);
-                return that_ptr<qualified_class>::get(c)->*f;
-            }
-        };
-    }
+    typedef typename boost::add_reference<qualified_type>::type
+            result_type;
 
-    namespace result_of
+    BOOST_FUSION_GPU_ENABLED
+    static inline result_type
+    call(T C:: *f, Sequence & s)
     {
-        template <typename Function, class Sequence> struct invoke
-        {
-            typedef typename detail::invoke_impl<
+        typename result_of::front<Sequence>::type c = fusion::front(s);
+        return that_ptr<qualified_class>::get(c)->*f;
+    }
+};
+}
+
+namespace result_of {
+    template<typename Function, class Sequence>
+    struct invoke {
+        typedef typename detail::invoke_impl<
                 typename boost::remove_reference<Function>::type, Sequence
-              >::result_type type;
-        };
-    }
+        >::result_type type;
+    };
+}
 
-    template <typename Function, class Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::invoke<Function,Sequence>::type
-    invoke(Function f, Sequence & s)
-    {
-        return detail::invoke_impl<
-                typename boost::remove_reference<Function>::type,Sequence
-            >::call(f,s);
-    }
+template<typename Function, class Sequence>
+BOOST_FUSION_GPU_ENABLED
+inline typename result_of::invoke<Function, Sequence>::type
+invoke(Function
+f,
+Sequence &s
+)
+{
+return
+detail::invoke_impl<
+        typename boost::remove_reference<Function>::type, Sequence
+>::call(f, s
+);
+}
 
-    template <typename Function, class Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::invoke<Function,Sequence const>::type
-    invoke(Function f, Sequence const & s)
-    {
-        return detail::invoke_impl<
-                typename boost::remove_reference<Function>::type,Sequence const
-            >::call(f,s);
-    }
+template<typename Function, class Sequence>
+BOOST_FUSION_GPU_ENABLED
+inline typename result_of::invoke<Function, Sequence const>::type
+invoke(Function
+f,
+Sequence const &s
+)
+{
+return
+detail::invoke_impl<
+        typename boost::remove_reference<Function>::type, Sequence const
+>::call(f, s
+);
+}
 
 }}
 

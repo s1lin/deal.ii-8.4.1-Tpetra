@@ -17,13 +17,13 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for luminous flux : I QS
-typedef derived_dimension<luminous_intensity_base_dimension,1,
-                          solid_angle_base_dimension,1>::type luminous_flux_dimension;
+        typedef derived_dimension<luminous_intensity_base_dimension, 1,
+                solid_angle_base_dimension, 1>::type luminous_flux_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

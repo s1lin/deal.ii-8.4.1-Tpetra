@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_NO_ACTIONS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_NO_ACTIONS
+
 #include <boost/spirit/home/classic/core/composite/no_actions.hpp>
+
 #endif

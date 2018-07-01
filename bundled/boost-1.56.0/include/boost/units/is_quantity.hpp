@@ -21,19 +21,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Check that a type is a quantity.
-template<typename T>
-struct is_quantity :
-    public mpl::false_
-{ };
+        template<typename T>
+        struct is_quantity :
+                public mpl::false_ {
+        };
 
-template<class Unit,
-         class Y>
-struct is_quantity< quantity<Unit,Y> > : 
-    public mpl::true_
-{ };
+        template<class Unit,
+                class Y>
+        struct is_quantity<quantity < Unit, Y> > :
+        public mpl::true_ {
+    };
 
 } // namespace units
 

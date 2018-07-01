@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_INTERSECTION
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_INTERSECTION
+
 #include <boost/spirit/home/classic/core/composite/intersection.hpp>
+
 #endif

@@ -17,13 +17,13 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for angular acceleration : T^-2 QP
-typedef derived_dimension<time_base_dimension,-2,
-                          plane_angle_base_dimension,1>::type angular_acceleration_dimension; 
+        typedef derived_dimension<time_base_dimension, -2,
+                plane_angle_base_dimension, 1>::type angular_acceleration_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

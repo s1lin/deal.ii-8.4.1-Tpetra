@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SWAP_ACTOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SWAP_ACTOR
+
 #include <boost/spirit/home/classic/actor/swap_actor.hpp>
+
 #endif

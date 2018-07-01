@@ -29,107 +29,112 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/or.hpp>
 
-namespace boost { namespace fusion
-{
-    struct void_;
-    struct cons_tag;
-    struct forward_traversal_tag;
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct void_;
+        struct cons_tag;
+        struct forward_traversal_tag;
+        struct fusion_sequence_tag;
 
-    template <typename Car, typename Cdr /*= nil_*/>
-    struct cons : sequence_base<cons<Car, Cdr> >
-    {
-        typedef mpl::int_<Cdr::size::value+1> size;
-        typedef cons_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::false_ is_view;
-        typedef forward_traversal_tag category;
-        typedef Car car_type;
-        typedef Cdr cdr_type;
+        template<typename Car, typename Cdr /*= nil_*/>
+        struct cons : sequence_base<cons<Car, Cdr> > {
+            typedef mpl::int_<Cdr::size::value + 1> size;
+            typedef cons_tag fusion_tag;
+            typedef fusion_sequence_tag tag; // this gets picked up by MPL
+            typedef mpl::false_ is_view;
+            typedef forward_traversal_tag category;
+            typedef Car car_type;
+            typedef Cdr cdr_type;
 
-        BOOST_FUSION_GPU_ENABLED
-        cons()
-            : car(), cdr() {}
+            BOOST_FUSION_GPU_ENABLED
+            cons()
+                    : car(), cdr() {}
 
-        BOOST_FUSION_GPU_ENABLED
-        explicit cons(typename detail::call_param<Car>::type in_car)
-            : car(in_car), cdr() {}
+            BOOST_FUSION_GPU_ENABLED
+            explicit cons(typename detail::call_param<Car>::type in_car)
+                    : car(in_car), cdr() {}
 
-        BOOST_FUSION_GPU_ENABLED
-        cons(
-            typename detail::call_param<Car>::type in_car
-          , typename detail::call_param<Cdr>::type in_cdr)
-            : car(in_car), cdr(in_cdr) {}
-        
-        template <typename Car2, typename Cdr2>
-        BOOST_FUSION_GPU_ENABLED
-        cons(cons<Car2, Cdr2> const& rhs)
-            : car(rhs.car), cdr(rhs.cdr) {}
+            BOOST_FUSION_GPU_ENABLED
+            cons(
+                    typename detail::call_param<Car>::type in_car, typename detail::call_param<Cdr>::type in_cdr)
+                    : car(in_car), cdr(in_cdr) {}
 
-        BOOST_FUSION_GPU_ENABLED
-        cons(cons const& rhs)
-            : car(rhs.car), cdr(rhs.cdr) {}
+            template<typename Car2, typename Cdr2>
+            BOOST_FUSION_GPU_ENABLED
+            cons(cons<Car2, Cdr2> const &rhs)
+                    : car(rhs.car), cdr(rhs.cdr) {}
 
-        template <typename Sequence>
-        BOOST_FUSION_GPU_ENABLED
-        cons(
-            Sequence const& seq
-          , typename boost::disable_if<
-                mpl::or_<
-                    is_convertible<Sequence, cons> // use copy ctor instead
-                  , is_convertible<Sequence, Car>  // use copy to car instead
-                > 
+            BOOST_FUSION_GPU_ENABLED
+            cons(cons const &rhs)
+                    : car(rhs.car), cdr(rhs.cdr) {}
+
+            template<typename Sequence>
+            BOOST_FUSION_GPU_ENABLED
+            cons(
+                    Sequence const &seq, typename boost::disable_if<
+                    mpl::or_ <
+                    is_convertible < Sequence, cons> // use copy ctor instead,
+                    is_convertible <Sequence, Car>  // use copy to car instead
+
+            >
             >::type* /*dummy*/ = 0
-        )
-            : car(*fusion::begin(seq))
+            )
+            :
+
+            car (*fusion::begin(seq))
             , cdr(fusion::next(fusion::begin(seq)), mpl::true_()) {}
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        cons(Iterator const& iter, mpl::true_ /*this_is_an_iterator*/)
-            : car(*iter)
-            , cdr(fusion::next(iter), mpl::true_()) {}
+            template<typename Iterator>
+            BOOST_FUSION_GPU_ENABLED
+            cons(Iterator const &iter, mpl::true_ /*this_is_an_iterator*/)
+                    : car(*iter), cdr(fusion::next(iter), mpl::true_()) {}
 
-        template <typename Car2, typename Cdr2>
-        BOOST_FUSION_GPU_ENABLED
-        cons& operator=(cons<Car2, Cdr2> const& rhs)
-        {
-            car = rhs.car;
-            cdr = rhs.cdr;
-            return *this;
-        }
+            template<typename Car2, typename Cdr2>
+            BOOST_FUSION_GPU_ENABLED
+                    cons
+            &
 
-        BOOST_FUSION_GPU_ENABLED
-        cons& operator=(cons const& rhs)
-        {
-            car = rhs.car;
-            cdr = rhs.cdr;
-            return *this;
-        }
+            operator=(cons<Car2, Cdr2> const &rhs) {
+                car = rhs.car;
+                cdr = rhs.cdr;
+                return *this;
+            }
 
-        template <typename Sequence>
-        BOOST_FUSION_GPU_ENABLED
-        typename boost::disable_if<is_convertible<Sequence, Car>, cons&>::type
-        operator=(Sequence const& seq)
-        {
-            typedef typename result_of::begin<Sequence const>::type Iterator;
-            Iterator iter = fusion::begin(seq);
-            this->assign_from_iter(iter);
-            return *this;
-        }
+            BOOST_FUSION_GPU_ENABLED
+                    cons
+            &
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        void assign_from_iter(Iterator const& iter)
-        {
-            car = *iter;
-            cdr.assign_from_iter(fusion::next(iter));
-        }
+            operator=(cons const &rhs) {
+                car = rhs.car;
+                cdr = rhs.cdr;
+                return *this;
+            }
 
-        car_type car;
-        cdr_type cdr;
-    };
-}}
+            template<typename Sequence>
+            BOOST_FUSION_GPU_ENABLED
+            typename boost::disable_if<is_convertible < Sequence, Car>, cons
+            &>
+
+            ::type
+            operator=(Sequence const &seq) {
+                typedef typename result_of::begin<Sequence const>::type Iterator;
+                Iterator iter = fusion::begin(seq);
+                this->assign_from_iter(iter);
+                return *this;
+            }
+
+            template<typename Iterator>
+            BOOST_FUSION_GPU_ENABLED
+            void assign_from_iter(Iterator const &iter) {
+                car = *iter;
+                cdr.assign_from_iter(fusion::next(iter));
+            }
+
+            car_type car;
+            cdr_type cdr;
+        };
+    }
+}
 
 #endif
 

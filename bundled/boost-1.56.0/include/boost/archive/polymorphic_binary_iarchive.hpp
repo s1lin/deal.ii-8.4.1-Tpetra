@@ -25,20 +25,19 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
-class polymorphic_binary_iarchive : 
-    public detail::polymorphic_iarchive_route<binary_iarchive>
-{
-public:
-    polymorphic_binary_iarchive(std::istream & is, unsigned int flags = 0) :
-        detail::polymorphic_iarchive_route<binary_iarchive>(is, flags)
-    {}
-    ~polymorphic_binary_iarchive(){}
-};
+        class polymorphic_binary_iarchive :
+                public detail::polymorphic_iarchive_route<binary_iarchive> {
+        public:
+            polymorphic_binary_iarchive(std::istream &is, unsigned int flags = 0) :
+                    detail::polymorphic_iarchive_route<binary_iarchive>(is, flags) {}
 
-} // namespace archive
+            ~polymorphic_binary_iarchive() {}
+        };
+
+    } // namespace archive
 } // namespace boost
 
 #ifdef BOOST_MSVC
@@ -47,7 +46,7 @@ public:
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(
-    boost::archive::polymorphic_binary_iarchive
+        boost::archive::polymorphic_binary_iarchive
 )
 
 #endif // BOOST_ARCHIVE_POLYMORPHIC_BINARY_IARCHIVE_HPP

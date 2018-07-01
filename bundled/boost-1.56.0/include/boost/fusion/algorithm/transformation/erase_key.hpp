@@ -13,24 +13,26 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename Key>
-        struct erase_key
-          : erase<Sequence, typename find<Sequence, Key>::type>
-        {};
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename Key>
+            struct erase_key
+                    : erase<Sequence, typename find<Sequence, Key>::type> {
+            };
+        }
 
-    template <typename Key, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::erase_key<Sequence const, Key>::type
-    erase_key(Sequence const& seq)
-    {
-        return erase(seq, find<Key>(seq));
+        template<typename Key, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::erase_key<Sequence const, Key>::type
+        erase_key(Sequence
+        const& seq) {
+        return
+        erase(seq, find<Key>(seq)
+        );
     }
-}}
+}
+}
 
 #endif
 

@@ -19,13 +19,16 @@
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/vector.hpp>
 
-namespace boost { namespace fusion
-{
-    struct void_;
-}}
+namespace boost {
+    namespace fusion {
+        struct void_;
+    }
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque_initial_size.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/deque_initial_size" FUSION_MAX_DEQUE_SIZE_STR ".hpp")

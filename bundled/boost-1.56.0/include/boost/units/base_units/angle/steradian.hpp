@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace angle {
+        namespace angle {
 
-struct steradian_base_unit : public base_unit<steradian_base_unit, solid_angle_dimension, -1>
-{
-    static std::string name()   { return("steradian"); }
-    static std::string symbol() { return("sr"); }
-};
+            struct steradian_base_unit : public base_unit<steradian_base_unit, solid_angle_dimension, -1> {
+                static std::string name() { return ("steradian"); }
 
-} // namespace angle
+                static std::string symbol() { return ("sr"); }
+            };
 
-} // namespace units
+        } // namespace angle
+
+    } // namespace units
 
 } // namespace boost
 

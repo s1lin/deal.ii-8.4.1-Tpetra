@@ -16,20 +16,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<conductance_dimension,si::system>    conductance;
+            typedef unit <conductance_dimension, si::system> conductance;
 
-BOOST_UNITS_STATIC_CONSTANT(siemen,conductance);    
-BOOST_UNITS_STATIC_CONSTANT(siemens,conductance);   
-BOOST_UNITS_STATIC_CONSTANT(mho,conductance);   
-BOOST_UNITS_STATIC_CONSTANT(mhos,conductance);  
+            BOOST_UNITS_STATIC_CONSTANT(siemen, conductance
+            );
+            BOOST_UNITS_STATIC_CONSTANT(siemens, conductance
+            );
+            BOOST_UNITS_STATIC_CONSTANT(mho, conductance
+            );
+            BOOST_UNITS_STATIC_CONSTANT(mhos, conductance
+            );
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

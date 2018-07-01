@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_CORE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_CORE
+
 #include <boost/spirit/home/classic/core.hpp>
+
 #endif

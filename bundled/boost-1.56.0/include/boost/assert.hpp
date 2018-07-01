@@ -30,12 +30,12 @@
 #undef BOOST_ASSERT
 #undef BOOST_ASSERT_MSG
 
-#if defined(BOOST_DISABLE_ASSERTS) || ( defined(BOOST_ENABLE_ASSERT_DEBUG_HANDLER) && defined(NDEBUG) )
+#if defined(BOOST_DISABLE_ASSERTS) || (defined(BOOST_ENABLE_ASSERT_DEBUG_HANDLER) && defined(NDEBUG))
 
 # define BOOST_ASSERT(expr) ((void)0)
 # define BOOST_ASSERT_MSG(expr, msg) ((void)0)
 
-#elif defined(BOOST_ENABLE_ASSERT_HANDLER) || ( defined(BOOST_ENABLE_ASSERT_DEBUG_HANDLER) && !defined(NDEBUG) )
+#elif defined(BOOST_ENABLE_ASSERT_HANDLER) || (defined(BOOST_ENABLE_ASSERT_DEBUG_HANDLER) && !defined(NDEBUG))
 
 #include <boost/config.hpp> // for BOOST_LIKELY
 #include <boost/current_function.hpp>
@@ -65,7 +65,7 @@ namespace boost
 #undef BOOST_VERIFY
 #undef BOOST_VERIFY_MSG
 
-#if defined(BOOST_DISABLE_ASSERTS) || ( !defined(BOOST_ENABLE_ASSERT_HANDLER) && defined(NDEBUG) )
+#if defined(BOOST_DISABLE_ASSERTS) || (!defined(BOOST_ENABLE_ASSERT_HANDLER) && defined(NDEBUG))
 
 # define BOOST_VERIFY(expr) ((void)(expr))
 # define BOOST_VERIFY_MSG(expr, msg) ((void)(expr))

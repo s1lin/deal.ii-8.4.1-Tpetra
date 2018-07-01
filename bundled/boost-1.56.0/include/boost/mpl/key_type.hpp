@@ -21,22 +21,21 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(AssociativeSequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(T)
-    >
-struct key_type
-    : apply_wrap2< 
-          key_type_impl< typename sequence_tag<AssociativeSequence>::type >
-        , AssociativeSequence, T>
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,key_type,(AssociativeSequence,T))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(AssociativeSequence), typename BOOST_MPL_AUX_NA_PARAM(T)
+        >
+        struct key_type
+                : apply_wrap2<
+                        key_type_impl < typename sequence_tag<AssociativeSequence>::type>, AssociativeSequence, T> {
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,key_type,(AssociativeSequence,T))
+    };
 
-BOOST_MPL_AUX_NA_SPEC(2, key_type)
+    BOOST_MPL_AUX_NA_SPEC(2, key_type)
 
-}}
+}
+}
 
 #endif // BOOST_MPL_KEY_TYPE_HPP_INCLUDED

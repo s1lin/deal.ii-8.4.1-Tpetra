@@ -9,26 +9,34 @@
 #include <pthread.h>
 #include <boost/throw_exception.hpp>
 #include <boost/thread/exceptions.hpp>
+
 #if defined BOOST_THREAD_PROVIDES_NESTED_LOCKS
 #include <boost/thread/lock_types.hpp>
 #endif
+
 #include <boost/thread/thread_time.hpp>
 #include <boost/assert.hpp>
+
 #ifndef _WIN32
+
 #include <unistd.h>
+
 #endif
+
 #include <boost/date_time/posix_time/conversion.hpp>
 #include <errno.h>
 #include <boost/thread/pthread/timespec.hpp>
 #include <boost/thread/pthread/pthread_mutex_scoped_lock.hpp>
+
 #ifdef BOOST_THREAD_USES_CHRONO
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/chrono/ceil.hpp>
 #endif
+
 #include <boost/thread/detail/delete.hpp>
 
 #ifdef _POSIX_TIMEOUTS
-#if _POSIX_TIMEOUTS >= 0 && _POSIX_TIMEOUTS>=200112L
+#if _POSIX_TIMEOUTS >= 0 && _POSIX_TIMEOUTS >= 200112L
 #ifndef BOOST_PTHREAD_HAS_TIMEDLOCK
 #define BOOST_PTHREAD_HAS_TIMEDLOCK
 #endif
@@ -42,10 +50,8 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-    class recursive_mutex
-    {
+namespace boost {
+    class recursive_mutex {
     private:
         pthread_mutex_t m;
 #ifndef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
@@ -56,8 +62,8 @@ namespace boost
 #endif
     public:
         BOOST_THREAD_NO_COPYABLE(recursive_mutex)
-        recursive_mutex()
-        {
+
+        recursive_mutex() {
 #ifdef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
             pthread_mutexattr_t attr;
 
@@ -81,23 +87,23 @@ namespace boost
             }
             BOOST_VERIFY(!pthread_mutexattr_destroy(&attr));
 #else
-            int const res=pthread_mutex_init(&m,NULL);
-            if(res)
-            {
-                boost::throw_exception(thread_resource_error(res, "boost:: recursive_mutex constructor failed in pthread_mutex_init"));
+            int const res = pthread_mutex_init(&m, NULL);
+            if (res) {
+                boost::throw_exception(
+                        thread_resource_error(res, "boost:: recursive_mutex constructor failed in pthread_mutex_init"));
             }
-            int const res2=pthread_cond_init(&cond,NULL);
-            if(res2)
-            {
+            int const res2 = pthread_cond_init(&cond, NULL);
+            if (res2) {
                 BOOST_VERIFY(!pthread_mutex_destroy(&m));
-                boost::throw_exception(thread_resource_error(res2, "boost:: recursive_mutex constructor failed in pthread_cond_init"));
+                boost::throw_exception(
+                        thread_resource_error(res2, "boost:: recursive_mutex constructor failed in pthread_cond_init"));
             }
-            is_locked=false;
-            count=0;
+            is_locked = false;
+            count = 0;
 #endif
         }
-        ~recursive_mutex()
-        {
+
+        ~recursive_mutex() {
             BOOST_VERIFY(!pthread_mutex_destroy(&m));
 #ifndef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
             BOOST_VERIFY(!pthread_cond_destroy(&cond));
@@ -129,44 +135,38 @@ namespace boost
         }
 
 #else
-        void lock()
-        {
+
+        void lock() {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(is_locked && pthread_equal(owner,pthread_self()))
-            {
+            if (is_locked && pthread_equal(owner, pthread_self())) {
                 ++count;
                 return;
             }
 
-            while(is_locked)
-            {
-                BOOST_VERIFY(!pthread_cond_wait(&cond,&m));
+            while (is_locked) {
+                BOOST_VERIFY(!pthread_cond_wait(&cond, &m));
             }
-            is_locked=true;
+            is_locked = true;
             ++count;
-            owner=pthread_self();
+            owner = pthread_self();
         }
 
-        void unlock()
-        {
+        void unlock() {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(!--count)
-            {
-                is_locked=false;
+            if (!--count) {
+                is_locked = false;
             }
             BOOST_VERIFY(!pthread_cond_signal(&cond));
         }
 
-        bool try_lock()
-        {
+        bool try_lock() {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(is_locked && !pthread_equal(owner,pthread_self()))
-            {
+            if (is_locked && !pthread_equal(owner, pthread_self())) {
                 return false;
             }
-            is_locked=true;
+            is_locked = true;
             ++count;
-            owner=pthread_self();
+            owner = pthread_self();
             return true;
         }
 
@@ -180,8 +180,7 @@ namespace boost
 
     typedef recursive_mutex recursive_try_mutex;
 
-    class recursive_timed_mutex
-    {
+    class recursive_timed_mutex {
     private:
         pthread_mutex_t m;
 #ifndef BOOST_USE_PTHREAD_RECURSIVE_TIMEDLOCK
@@ -192,8 +191,8 @@ namespace boost
 #endif
     public:
         BOOST_THREAD_NO_COPYABLE(recursive_timed_mutex)
-        recursive_timed_mutex()
-        {
+
+        recursive_timed_mutex() {
 #ifdef BOOST_USE_PTHREAD_RECURSIVE_TIMEDLOCK
             pthread_mutexattr_t attr;
 
@@ -216,23 +215,23 @@ namespace boost
             }
             BOOST_VERIFY(!pthread_mutexattr_destroy(&attr));
 #else
-            int const res=pthread_mutex_init(&m,NULL);
-            if(res)
-            {
-                boost::throw_exception(thread_resource_error(res, "boost:: recursive_timed_mutex constructor failed in pthread_mutex_init"));
+            int const res = pthread_mutex_init(&m, NULL);
+            if (res) {
+                boost::throw_exception(thread_resource_error(res,
+                                                             "boost:: recursive_timed_mutex constructor failed in pthread_mutex_init"));
             }
-            int const res2=pthread_cond_init(&cond,NULL);
-            if(res2)
-            {
+            int const res2 = pthread_cond_init(&cond, NULL);
+            if (res2) {
                 BOOST_VERIFY(!pthread_mutex_destroy(&m));
-                boost::throw_exception(thread_resource_error(res2, "boost:: recursive_timed_mutex constructor failed in pthread_cond_init"));
+                boost::throw_exception(thread_resource_error(res2,
+                                                             "boost:: recursive_timed_mutex constructor failed in pthread_cond_init"));
             }
-            is_locked=false;
-            count=0;
+            is_locked = false;
+            count = 0;
 #endif
         }
-        ~recursive_timed_mutex()
-        {
+
+        ~recursive_timed_mutex() {
             BOOST_VERIFY(!pthread_mutex_destroy(&m));
 #ifndef BOOST_USE_PTHREAD_RECURSIVE_TIMEDLOCK
             BOOST_VERIFY(!pthread_cond_destroy(&cond));
@@ -275,70 +274,63 @@ namespace boost
     public:
 
 #else
-        void lock()
-        {
+
+        void lock() {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(is_locked && pthread_equal(owner,pthread_self()))
-            {
+            if (is_locked && pthread_equal(owner, pthread_self())) {
                 ++count;
                 return;
             }
 
-            while(is_locked)
-            {
-                BOOST_VERIFY(!pthread_cond_wait(&cond,&m));
+            while (is_locked) {
+                BOOST_VERIFY(!pthread_cond_wait(&cond, &m));
             }
-            is_locked=true;
+            is_locked = true;
             ++count;
-            owner=pthread_self();
+            owner = pthread_self();
         }
 
-        void unlock()
-        {
+        void unlock() {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(!--count)
-            {
-                is_locked=false;
+            if (!--count) {
+                is_locked = false;
             }
             BOOST_VERIFY(!pthread_cond_signal(&cond));
         }
 
-        bool try_lock() BOOST_NOEXCEPT
-        {
+        bool try_lock()
+
+        BOOST_NOEXCEPT {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(is_locked && !pthread_equal(owner,pthread_self()))
-            {
+            if (is_locked && !pthread_equal(owner, pthread_self())) {
                 return false;
             }
-            is_locked=true;
+            is_locked = true;
             ++count;
-            owner=pthread_self();
+            owner = pthread_self();
             return true;
         }
 
     private:
-        bool do_try_lock_until(struct timespec const &timeout)
-        {
+        bool do_try_lock_until(struct timespec const &timeout) {
             boost::pthread::pthread_mutex_scoped_lock const local_lock(&m);
-            if(is_locked && pthread_equal(owner,pthread_self()))
-            {
+            if (is_locked && pthread_equal(owner, pthread_self())) {
                 ++count;
                 return true;
             }
-            while(is_locked)
-            {
-                int const cond_res=pthread_cond_timedwait(&cond,&m,&timeout);
-                if(cond_res==ETIMEDOUT)
-                {
+            while (is_locked) {
+                int const cond_res = pthread_cond_timedwait(&cond, &m, &timeout);
+                if (cond_res == ETIMEDOUT) {
                     return false;
                 }
                 BOOST_ASSERT(!cond_res);
             }
-            is_locked=true;
+            is_locked = true;
             ++count;
-            owner=pthread_self();
+            owner = pthread_self();
             return true;
         }
+
     public:
 
 #endif
@@ -381,9 +373,9 @@ namespace boost
 #endif
 
 #define BOOST_THREAD_DEFINES_RECURSIVE_TIMED_MUTEX_NATIVE_HANDLE
-        typedef pthread_mutex_t* native_handle_type;
-        native_handle_type native_handle()
-        {
+        typedef pthread_mutex_t *native_handle_type;
+
+        native_handle_type native_handle() {
             return &m;
         }
 

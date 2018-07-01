@@ -11,53 +11,55 @@
 #include <boost/fusion/algorithm/iteration/fold_fwd.hpp>
 #include <boost/fusion/support/segmented_fold_until.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename Fun>
-    struct segmented_fold_fun
-    {
-        BOOST_FUSION_GPU_ENABLED
-        explicit segmented_fold_fun(Fun const& f)
-          : fun(f)
-        {}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename Fun>
+            struct segmented_fold_fun {
+                BOOST_FUSION_GPU_ENABLED
+                explicit segmented_fold_fun(Fun const &f)
+                        : fun(f) {}
 
-        Fun const& fun;
+                Fun const &fun;
 
-        template <typename Sequence, typename State, typename Context>
-        struct apply
-        {
-            typedef typename result_of::fold<Sequence, State, Fun>::type type;
-            typedef mpl::true_ continue_type;
+                template<typename Sequence, typename State, typename Context>
+                struct apply {
+                    typedef typename result_of::fold<Sequence, State, Fun>::type type;
+                    typedef mpl::true_ continue_type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type call(Sequence& seq, State const& state, Context const&, segmented_fold_fun const& fun)
-            {
-                return fusion::fold(seq, state, fun.fun);
-            }
-        };
-    };
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq, State const &state, Context const&, segmented_fold_fun const &fun)
+                    {
+                        return fusion::fold(seq, state, fun.fun);
+                    }
+                };
+            };
 
-    // The default implementation of this lives in detail/fold.hpp
-    template <typename Sequence, typename State, typename Fun, bool IsSegmented>
-    struct result_of_fold;
+            // The default implementation of this lives in detail/fold.hpp
+            template<typename Sequence, typename State, typename Fun, bool IsSegmented>
+            struct result_of_fold;
 
-    template <typename Sequence, typename State, typename Fun>
-    struct result_of_fold<Sequence, State, Fun, true>
-    {
-        typedef
-            typename result_of::segmented_fold_until<
-                Sequence,
-                State,
-                segmented_fold_fun<Fun>
-            >::type
-        type;
+            template<typename Sequence, typename State, typename Fun>
+            struct result_of_fold<Sequence, State, Fun, true> {
+                typedef
+                typename result_of::segmented_fold_until<
+                        Sequence,
+                        State,
+                        segmented_fold_fun<Fun>
+                >::type
+                        type;
 
-        BOOST_FUSION_GPU_ENABLED
-        static type call(State& state, Sequence& seq, Fun fun)
-        {
-            return fusion::segmented_fold_until(seq, state, segmented_fold_fun<Fun>(fun));
+                BOOST_FUSION_GPU_ENABLED
+                static type
+                call(State& state, Sequence &seq, Fun
+                fun)
+                {
+                    return fusion::segmented_fold_until(seq, state, segmented_fold_fun<Fun>(fun));
+                }
+            };
         }
-    };
-}}}
+    }
+}
 
 #endif

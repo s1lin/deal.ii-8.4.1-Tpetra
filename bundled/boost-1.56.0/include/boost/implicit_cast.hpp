@@ -7,24 +7,24 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
-template<class T> struct icast_identity
-{
-    typedef T type;
-};
+        template<class T>
+        struct icast_identity {
+            typedef T type;
+        };
 
-} // namespace detail
+    } // namespace detail
 
 // implementation originally suggested by C. Green in
 // http://lists.boost.org/MailArchives/boost/msg00886.php
 
 // The use of identity creates a non-deduced form, so that the
 // explicit template argument must be supplied
-template <typename T>
-inline T implicit_cast (typename boost::detail::icast_identity<T>::type x) {
-    return x;
-}
+    template<typename T>
+    inline T implicit_cast(typename boost::detail::icast_identity<T>::type x) {
+        return x;
+    }
 
 // incomplete return type now is here
 //template <typename T>

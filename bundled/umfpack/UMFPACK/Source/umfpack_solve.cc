@@ -46,39 +46,38 @@ UMFPACK_wsolve
 #else
 UMFPACK_solve
 #endif
-(
-    Int sys,
-    const Int Ap [ ],
-    const Int Ai [ ],
-    const double Ax [ ],
+        (
+                Int sys,
+                const Int Ap[],
+                const Int Ai[],
+                const double Ax[],
 #ifdef COMPLEX
-    const double Az [ ],
+        const double Az [ ],
 #endif
-    double Xx [ ],
+                double Xx[],
 #ifdef COMPLEX
-    double Xz [ ],
+        double Xz [ ],
 #endif
-    const double Bx [ ],
+                const double Bx[],
 #ifdef COMPLEX
-    const double Bz [ ],
+        const double Bz [ ],
 #endif
-    void *NumericHandle,
-    const double Control [UMFPACK_CONTROL],
-    double User_Info [UMFPACK_INFO]
+                void *NumericHandle,
+                const double Control[UMFPACK_CONTROL],
+                double User_Info[UMFPACK_INFO]
 #ifdef WSOLVE
-    , Int Pattern [ ],
-    double W [ ]
+        , Int Pattern[],
+                double W[]
 #endif
-)
-{
+) {
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    double Info2 [UMFPACK_INFO], stats [2] ;
-    double *Info ;
-    NumericType *Numeric ;
-    Int n, i, irstep, status ;
+    double Info2[UMFPACK_INFO], stats[2];
+    double *Info;
+    NumericType *Numeric;
+    Int n, i, irstep, status;
 #ifndef WSOLVE
     Int *Pattern, wsize ;
     double *W ;
@@ -88,7 +87,7 @@ UMFPACK_solve
     /* get the amount of time used by the process so far */
     /* ---------------------------------------------------------------------- */
 
-    umfpack_tic (stats) ;
+    umfpack_tic(stats);
 
 #ifndef WSOLVE
 #ifndef NDEBUG
@@ -100,66 +99,56 @@ UMFPACK_solve
     /* get parameters */
     /* ---------------------------------------------------------------------- */
 
-    irstep = GET_CONTROL (UMFPACK_IRSTEP, UMFPACK_DEFAULT_IRSTEP) ;
+    irstep = GET_CONTROL (UMFPACK_IRSTEP, UMFPACK_DEFAULT_IRSTEP);
 
-    if (User_Info != (double *) NULL)
-    {
-	/* return Info in user's array */
-	Info = User_Info ;
-	/* clear the parts of Info that are set by UMFPACK_solve */
-	for (i = UMFPACK_IR_TAKEN ; i <= UMFPACK_SOLVE_TIME ; i++)
-	{
-	    Info [i] = EMPTY ;
-	}
-    }
-    else
-    {
-	/* no Info array passed - use local one instead */
-	Info = Info2 ;
-	for (i = 0 ; i < UMFPACK_INFO ; i++)
-	{
-	    Info [i] = EMPTY ;
-	}
+    if (User_Info != (double *) NULL) {
+        /* return Info in user's array */
+        Info = User_Info;
+        /* clear the parts of Info that are set by UMFPACK_solve */
+        for (i = UMFPACK_IR_TAKEN; i <= UMFPACK_SOLVE_TIME; i++) {
+            Info[i] = EMPTY;
+        }
+    } else {
+        /* no Info array passed - use local one instead */
+        Info = Info2;
+        for (i = 0; i < UMFPACK_INFO; i++) {
+            Info[i] = EMPTY;
+        }
     }
 
-    Info [UMFPACK_STATUS] = UMFPACK_OK ;
-    Info [UMFPACK_SOLVE_FLOPS] = 0 ;
+    Info[UMFPACK_STATUS] = UMFPACK_OK;
+    Info[UMFPACK_SOLVE_FLOPS] = 0;
 
-    Numeric = (NumericType *) NumericHandle ;
-    if (!UMF_valid_numeric (Numeric))
-    {
-	Info [UMFPACK_STATUS] = UMFPACK_ERROR_invalid_Numeric_object ;
-	return (UMFPACK_ERROR_invalid_Numeric_object) ;
+    Numeric = (NumericType *) NumericHandle;
+    if (!UMF_valid_numeric(Numeric)) {
+        Info[UMFPACK_STATUS] = UMFPACK_ERROR_invalid_Numeric_object;
+        return (UMFPACK_ERROR_invalid_Numeric_object);
     }
 
-    Info [UMFPACK_NROW] = Numeric->n_row ;
-    Info [UMFPACK_NCOL] = Numeric->n_col ;
+    Info[UMFPACK_NROW] = Numeric->n_row;
+    Info[UMFPACK_NCOL] = Numeric->n_col;
 
-    if (Numeric->n_row != Numeric->n_col)
-    {
-	/* only square systems can be handled */
-	Info [UMFPACK_STATUS] = UMFPACK_ERROR_invalid_system ;
-	return (UMFPACK_ERROR_invalid_system) ;
+    if (Numeric->n_row != Numeric->n_col) {
+        /* only square systems can be handled */
+        Info[UMFPACK_STATUS] = UMFPACK_ERROR_invalid_system;
+        return (UMFPACK_ERROR_invalid_system);
     }
-    n = Numeric->n_row ;
+    n = Numeric->n_row;
     if (Numeric->nnzpiv < n
-	|| SCALAR_IS_ZERO (Numeric->rcond) || SCALAR_IS_NAN (Numeric->rcond))
-    {
-	/* turn off iterative refinement if A is singular */
-	/* or if U has NaN's on the diagonal. */
-	irstep = 0 ;
+        || SCALAR_IS_ZERO (Numeric->rcond) || SCALAR_IS_NAN (Numeric->rcond)) {
+        /* turn off iterative refinement if A is singular */
+        /* or if U has NaN's on the diagonal. */
+        irstep = 0;
     }
 
-    if (!Xx || !Bx)
-    {
-	Info [UMFPACK_STATUS] = UMFPACK_ERROR_argument_missing ;
-	return (UMFPACK_ERROR_argument_missing) ;
+    if (!Xx || !Bx) {
+        Info[UMFPACK_STATUS] = UMFPACK_ERROR_argument_missing;
+        return (UMFPACK_ERROR_argument_missing);
     }
 
-    if (sys >= UMFPACK_Pt_L)
-    {
-	/* no iterative refinement except for nonsingular Ax=b, A'x=b, A.'x=b */
-	irstep = 0 ;
+    if (sys >= UMFPACK_Pt_L) {
+        /* no iterative refinement except for nonsingular Ax=b, A'x=b, A.'x=b */
+        irstep = 0;
     }
 
     /* ---------------------------------------------------------------------- */
@@ -168,10 +157,9 @@ UMFPACK_solve
 
 #ifdef WSOLVE
 
-    if (!W || !Pattern)
-    {
-	Info [UMFPACK_STATUS] = UMFPACK_ERROR_argument_missing ;
-	return (UMFPACK_ERROR_argument_missing) ;
+    if (!W || !Pattern) {
+        Info[UMFPACK_STATUS] = UMFPACK_ERROR_argument_missing;
+        return (UMFPACK_ERROR_argument_missing);
     }
 
 #else
@@ -179,20 +167,20 @@ UMFPACK_solve
 #ifdef COMPLEX
     if (irstep > 0)
     {
-	wsize = 10*n ;		/* W, X, Z, S, Y, B2 */
+    wsize = 10*n ;		/* W, X, Z, S, Y, B2 */
     }
     else
     {
-	wsize = 4*n ;		/* W, X */
+    wsize = 4*n ;		/* W, X */
     }
 #else
     if (irstep > 0)
     {
-	wsize = 5*n ;		/* W, Z, S, Y, B2 */
+    wsize = 5*n ;		/* W, Z, S, Y, B2 */
     }
     else
     {
-	wsize = n ;		/* W */
+    wsize = n ;		/* W */
     }
 #endif
 
@@ -200,24 +188,24 @@ UMFPACK_solve
     W = (double *) UMF_malloc (wsize, sizeof (double)) ;
     if (!W || !Pattern)
     {
-	DEBUGm4 (("out of memory: solve work\n")) ;
-	Info [UMFPACK_STATUS] = UMFPACK_ERROR_out_of_memory ;
-	(void) UMF_free ((void *) W) ;
-	(void) UMF_free ((void *) Pattern) ;
-	return (UMFPACK_ERROR_out_of_memory) ;
+    DEBUGm4 (("out of memory: solve work\n")) ;
+    Info [UMFPACK_STATUS] = UMFPACK_ERROR_out_of_memory ;
+    (void) UMF_free ((void *) W) ;
+    (void) UMF_free ((void *) Pattern) ;
+    return (UMFPACK_ERROR_out_of_memory) ;
     }
 
-#endif	/* WSOLVE */
+#endif    /* WSOLVE */
 
     /* ---------------------------------------------------------------------- */
     /* solve the system */
     /* ---------------------------------------------------------------------- */
 
-    status = UMF_solve (sys, Ap, Ai, Ax, Xx, Bx,
+    status = UMF_solve(sys, Ap, Ai, Ax, Xx, Bx,
 #ifdef COMPLEX
-	Az, Xz, Bz,
+            Az, Xz, Bz,
 #endif
-	Numeric, irstep, Info, Pattern, W) ;
+                       Numeric, irstep, Info, Pattern, W);
 
     /* ---------------------------------------------------------------------- */
     /* free the workspace (if allocated) */
@@ -233,13 +221,12 @@ UMFPACK_solve
     /* get the time used by UMFPACK_*solve */
     /* ---------------------------------------------------------------------- */
 
-    Info [UMFPACK_STATUS] = status ;
-    if (status >= 0)
-    {
-	umfpack_toc (stats) ;
-	Info [UMFPACK_SOLVE_WALLTIME] = stats [0] ;
-	Info [UMFPACK_SOLVE_TIME] = stats [1] ;
+    Info[UMFPACK_STATUS] = status;
+    if (status >= 0) {
+        umfpack_toc(stats);
+        Info[UMFPACK_SOLVE_WALLTIME] = stats[0];
+        Info[UMFPACK_SOLVE_TIME] = stats[1];
     }
 
-    return (status) ;
+    return (status);
 }

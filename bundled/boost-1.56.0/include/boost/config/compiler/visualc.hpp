@@ -62,7 +62,7 @@
 #endif
 
 #if _MSC_VER < 1600  // 150X == VC++ 9.0
-   // A bug in VC9:
+// A bug in VC9:
 #  define BOOST_NO_ADL_BARRIER
 #endif
 
@@ -175,7 +175,7 @@
 //// http://msdn.microsoft.com/en-us/library/hh409293.aspx 
 //// 
 #ifdef _MSC_VER
-  #define BOOST_NO_CXX11_DEFAULTED_FUNCTIONS 
+#define BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #endif
 
 // C++11 features not supported by any versions
@@ -210,7 +210,7 @@
 // IOW, you can't use these 'versions' in any sensible way. Sorry.
 # if defined(UNDER_CE)
 #   if _MSC_VER < 1400
-      // Note: I'm not aware of any CE compiler with version 13xx
+// Note: I'm not aware of any CE compiler with version 13xx
 #      if defined(BOOST_ASSERT_CONFIG)
 #         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
 #      else
@@ -235,7 +235,7 @@
 #   endif
 # else
 #   if _MSC_VER < 1310
-      // Note: Versions up to 7.0 aren't supported.
+// Note: Versions up to 7.0 aren't supported.
 #     define BOOST_COMPILER_VERSION 5.0
 #   elif _MSC_VER < 1300
 #     define BOOST_COMPILER_VERSION 6.0

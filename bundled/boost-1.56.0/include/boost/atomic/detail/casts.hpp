@@ -24,38 +24,44 @@
 #endif
 
 namespace boost {
-namespace atomics {
-namespace detail {
+    namespace atomics {
+        namespace detail {
 
-template< typename To, typename From >
-BOOST_FORCEINLINE To union_cast(From const& from) BOOST_NOEXCEPT
-{
-    union
-    {
-        To as_to;
-        From as_from;
-    }
-    caster = {};
-    caster.as_from = from;
-    return caster.as_to;
-}
+            template<typename To, typename From>
+            BOOST_FORCEINLINE To
+            union_cast(From
+            const& from) BOOST_NOEXCEPT {
+            union {
+                To as_to;
+                From as_from;
+            }
+                    caster = {};
+            caster.
+            as_from = from;
+            return caster.
+            as_to;
+        }
 
-template< typename To, typename From >
-BOOST_FORCEINLINE To memcpy_cast(From const& from) BOOST_NOEXCEPT
-{
-    struct
-    {
-        To to;
-    }
-    value = {};
-    std::memcpy
-    (
-        &reinterpret_cast< char& >(value.to),
-        &reinterpret_cast< const char& >(from),
+        template<typename To, typename From>
+        BOOST_FORCEINLINE To
+        memcpy_cast(From
+        const& from) BOOST_NOEXCEPT {
+        struct {
+            To to;
+        }
+                value = {};
+        std::memcpy
+        (
+        &reinterpret_cast
+        <char &>(value
+        .to),
+        &reinterpret_cast
+        <const char &>(from),
         (sizeof(From) < sizeof(To) ? sizeof(From) : sizeof(To))
-    );
-    return value.to;
-}
+        );
+        return value.
+        to;
+    }
 
 } // namespace detail
 } // namespace atomics

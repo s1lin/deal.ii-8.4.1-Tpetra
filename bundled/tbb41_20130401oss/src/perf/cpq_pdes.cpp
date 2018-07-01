@@ -68,13 +68,13 @@ public:
 class timestamp_compare {
 public:
     bool operator()(event e1, event e2) {
-        return e2.timestamp<e1.timestamp;
+        return e2.timestamp < e1.timestamp;
     }
 };
 
 spin_mutex *my_mutex;
-std::priority_queue<event, std::vector<event>, timestamp_compare > *stl_cpq;
-concurrent_priority_queue<event, timestamp_compare > *lfc_pq;
+std::priority_queue<event, std::vector<event>, timestamp_compare> *stl_cpq;
+concurrent_priority_queue <event, timestamp_compare> *lfc_pq;
 
 unsigned int one_us_iters = 429; // default value
 
@@ -84,17 +84,16 @@ void calibrate_busy_wait() {
     tbb::tick_count t0, t1;
 
     t0 = tbb::tick_count::now();
-    for (volatile unsigned int i=0; i<1000000; ++i) continue;
+    for (volatile unsigned int i = 0; i < 1000000; ++i) continue;
     t1 = tbb::tick_count::now();
-    
-    one_us_iters = (1000000.0/(t1-t0).seconds())*0.000001;
+
+    one_us_iters = (1000000.0 / (t1 - t0).seconds()) * 0.000001;
     printf("one_us_iters: %d\n", one_us_iters);
 }
 
-void busy_wait(double us)
-{
-    unsigned int iter = us*one_us_iters;
-    for (volatile unsigned int i=0; i<iter; ++i) continue;
+void busy_wait(double us) {
+    unsigned int iter = us * one_us_iters;
+    for (volatile unsigned int i = 0; i < iter; ++i) continue;
 }
 
 
@@ -102,18 +101,16 @@ void do_push(event elem, int nThr, int impl) {
     if (impl == IMPL_STL) {
         if (nThr == 1) {
             stl_cpq->push(elem);
-        }
-        else {
+        } else {
             tbb::spin_mutex::scoped_lock myLock(*my_mutex);
             stl_cpq->push(elem);
         }
-    }
-    else {
+    } else {
         lfc_pq->push(elem);
     }
 }
 
-bool do_pop(event& elem, int nThr, int impl) {
+bool do_pop(event &elem, int nThr, int impl) {
     if (impl == IMPL_STL) {
         if (nThr == 1) {
             if (!stl_cpq->empty()) {
@@ -121,8 +118,7 @@ bool do_pop(event& elem, int nThr, int impl) {
                 stl_cpq->pop();
                 return true;
             }
-        }
-        else {
+        } else {
             tbb::spin_mutex::scoped_lock myLock(*my_mutex);
             if (!stl_cpq->empty()) {
                 elem = stl_cpq->top();
@@ -130,8 +126,7 @@ bool do_pop(event& elem, int nThr, int impl) {
                 return true;
             }
         }
-    }
-    else {
+    } else {
         if (lfc_pq->try_pop(elem)) {
             return true;
         }
@@ -143,15 +138,14 @@ struct TestPDESloadBody : NoAssign {
     int nThread;
     int implementation;
 
-    TestPDESloadBody(int nThread_, int implementation_) : 
-        nThread(nThread_), implementation(implementation_) {}
-    
+    TestPDESloadBody(int nThread_, int implementation_) :
+            nThread(nThread_), implementation(implementation_) {}
+
     void operator()(const int threadID) const {
         if (threadID == nThread) {
             sleep(throughput_window);
             done = true;
-        }
-        else {
+        } else {
             event e, tmp;
             unsigned int num_operations = 0;
             for (;;) {
@@ -159,17 +153,17 @@ struct TestPDESloadBody : NoAssign {
                 if (do_pop(e, nThread, implementation)) {
                     num_operations++;
                     // do the event
-                    busy_wait(e.elapse*contention_unit);
+                    busy_wait(e.elapse * contention_unit);
                     while (e.spawn > 0) {
-                        tmp.spawn = ((e.spawn+1-min_spawn) % ((max_spawn-min_spawn)+1))+min_spawn;
+                        tmp.spawn = ((e.spawn + 1 - min_spawn) % ((max_spawn - min_spawn) + 1)) + min_spawn;
                         tmp.timestamp = e.timestamp + e.elapse;
                         e.timestamp = tmp.timestamp;
-                        e.elapse = ((e.elapse+1-min_elapse) % ((max_elapse-min_elapse)+1))+min_elapse;
+                        e.elapse = ((e.elapse + 1 - min_elapse) % ((max_elapse - min_elapse) + 1)) + min_elapse;
                         tmp.elapse = e.elapse;
                         do_push(tmp, nThread, implementation);
                         num_operations++;
                         e.spawn--;
-                        busy_wait(e.elapse*contention_unit);
+                        busy_wait(e.elapse * contention_unit);
                         if (done) break;
                     }
                 }
@@ -182,10 +176,10 @@ struct TestPDESloadBody : NoAssign {
 
 void preload_queue(int nThr, int impl) {
     event an_event;
-    for (int i=0; i<num_initial_events; ++i) {
+    for (int i = 0; i < num_initial_events; ++i) {
         an_event.timestamp = 0;
-        an_event.elapse = (int)rand() % (max_elapse+1);
-        an_event.spawn = (int)rand() % (max_spawn+1);
+        an_event.elapse = (int) rand() % (max_elapse + 1);
+        an_event.spawn = (int) rand() % (max_spawn + 1);
         do_push(an_event, nThr, impl);
     }
 }
@@ -195,25 +189,25 @@ void TestPDESload(int nThreads) {
 
     operation_count = 0;
     done = false;
-    stl_cpq = new std::priority_queue<event, std::vector<event>, timestamp_compare >;
+    stl_cpq = new std::priority_queue<event, std::vector<event>, timestamp_compare>;
     preload_queue(nThreads, IMPL_STL);
     TestPDESloadBody my_stl_test(nThreads, IMPL_STL);
     start = tbb::tick_count::now();
-    NativeParallelFor(nThreads+1, my_stl_test);
+    NativeParallelFor(nThreads + 1, my_stl_test);
     delete stl_cpq;
 
-    REPORT(" %10d", operation_count/throughput_window);
-    
+    REPORT(" %10d", operation_count / throughput_window);
+
     operation_count = 0;
     done = false;
-    lfc_pq = new concurrent_priority_queue<event, timestamp_compare >;
+    lfc_pq = new concurrent_priority_queue<event, timestamp_compare>;
     preload_queue(nThreads, IMPL_CPQ);
     TestPDESloadBody my_cpq_test(nThreads, IMPL_CPQ);
     start = tbb::tick_count::now();
-    NativeParallelFor(nThreads+1, my_cpq_test);
+    NativeParallelFor(nThreads + 1, my_cpq_test);
     delete lfc_pq;
 
-    REPORT(" %10d\n", operation_count/throughput_window);
+    REPORT(" %10d\n", operation_count / throughput_window);
 }
 
 int TestMain() {
@@ -221,15 +215,15 @@ int TestMain() {
     if (MinThread < 1)
         MinThread = 1;
     //calibrate_busy_wait();
-    cache_aligned_allocator<spin_mutex> my_mutex_allocator;
-    my_mutex = (spin_mutex *)my_mutex_allocator.allocate(1);
+    cache_aligned_allocator <spin_mutex> my_mutex_allocator;
+    my_mutex = (spin_mutex *) my_mutex_allocator.allocate(1);
 
     REPORT("#Thr ");
     REPORT("STL        ");
 #ifdef LINEARIZABLE
-    REPORT("CPQ_L\n"); 
+    REPORT("CPQ_L\n");
 #else
-    REPORT("CPQ_N\n"); 
+    REPORT("CPQ_N\n");
 #endif
     for (int p = MinThread; p <= MaxThread; ++p) {
         TestPDESload(p);

@@ -11,52 +11,49 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/distance.hpp>
 
-namespace boost { namespace fusion {
-    
-    struct transform_view_iterator_tag;
-    struct transform_view_iterator2_tag;
+namespace boost {
+    namespace fusion {
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct distance_impl;
+        struct transform_view_iterator_tag;
+        struct transform_view_iterator2_tag;
 
-        // Unary Version
-        template<>
-        struct distance_impl<transform_view_iterator_tag>
-        {
-            template<typename First, typename Last>
-            struct apply
-                : result_of::distance<typename First::first_type, typename Last::first_type>
-            {
-                BOOST_FUSION_GPU_ENABLED
-                static 
-                typename result_of::distance<typename First::first_type, typename Last::first_type>::type
-                call(First const& first, Last const& last)
-                {
-                    return boost::fusion::distance(first.first, last.first);
-                }
+        namespace extension {
+            template<typename Tag>
+            struct distance_impl;
+
+            // Unary Version
+            template<>
+            struct distance_impl<transform_view_iterator_tag> {
+                template<typename First, typename Last>
+                struct apply
+                        : result_of::distance<typename First::first_type, typename Last::first_type> {
+                    BOOST_FUSION_GPU_ENABLED
+                    static
+                    typename result_of::distance<typename First::first_type, typename Last::first_type>::type
+                    call(First const& first, Last const &last)
+                    {
+                        return boost::fusion::distance(first.first, last.first);
+                    }
+                };
             };
-        };
 
-        // Binary Version
-        template<>
-        struct distance_impl<transform_view_iterator2_tag>
-        {
-            template<typename First, typename Last>
-            struct apply
-                : result_of::distance<typename First::first1_type, typename Last::first1_type>
-            {
-                BOOST_FUSION_GPU_ENABLED
-                static 
-                typename result_of::distance<typename First::first1_type, typename Last::first1_type>::type
-                call(First const& first, Last const& last)
-                {
-                    return boost::fusion::distance(first.first1, last.first1);
-                }
+            // Binary Version
+            template<>
+            struct distance_impl<transform_view_iterator2_tag> {
+                template<typename First, typename Last>
+                struct apply
+                        : result_of::distance<typename First::first1_type, typename Last::first1_type> {
+                    BOOST_FUSION_GPU_ENABLED
+                    static
+                    typename result_of::distance<typename First::first1_type, typename Last::first1_type>::type
+                    call(First const& first, Last const &last)
+                    {
+                        return boost::fusion::distance(first.first1, last.first1);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

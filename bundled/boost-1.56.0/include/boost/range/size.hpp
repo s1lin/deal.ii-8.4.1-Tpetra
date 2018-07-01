@@ -24,36 +24,35 @@
 #include <boost/cstdint.hpp>
 #include <boost/utility.hpp>
 
-namespace boost
-{
-    namespace range_detail
-    {
+namespace boost {
+    namespace range_detail {
 
         template<class SinglePassRange>
         inline typename ::boost::enable_if<
-            has_member_size<SinglePassRange>,
-            typename range_size<const SinglePassRange>::type
-        >::type
-        range_calculate_size(const SinglePassRange& rng)
-        {
+                has_member_size < SinglePassRange>,
+        typename range_size<const SinglePassRange>::type
+        >
+
+        ::type
+        range_calculate_size(const SinglePassRange &rng) {
             return rng.size();
         }
 
         template<class SinglePassRange>
         inline typename disable_if<
-            has_member_size<SinglePassRange>,
-            typename range_size<const SinglePassRange>::type
-        >::type
-        range_calculate_size(const SinglePassRange& rng)
-        {
+                has_member_size < SinglePassRange>,
+        typename range_size<const SinglePassRange>::type
+        >
+
+        ::type
+        range_calculate_size(const SinglePassRange &rng) {
             return std::distance(boost::begin(rng), boost::end(rng));
         }
     }
 
     template<class SinglePassRange>
     inline typename range_size<const SinglePassRange>::type
-    size(const SinglePassRange& rng)
-    {
+    size(const SinglePassRange &rng) {
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
     !BOOST_WORKAROUND(__GNUC__, < 3) \
     /**/

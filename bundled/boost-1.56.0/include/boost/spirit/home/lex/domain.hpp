@@ -15,17 +15,21 @@
 #include <boost/spirit/home/support/meta_compiler.hpp>
 #include <boost/spirit/home/support/info.hpp>
 
-namespace boost { namespace spirit { namespace lex
-{
-    // lex's domain
-    struct domain {};
+namespace boost {
+    namespace spirit {
+        namespace lex {
+            // lex's domain
+            struct domain {
+            };
 
-    // bring in some of spirit parts into spirit::lex
-    using spirit::unused;
-    using spirit::unused_type;
-    using spirit::compile;
-    using spirit::info;
+            // bring in some of spirit parts into spirit::lex
+            using spirit::unused;
+            using spirit::unused_type;
+            using spirit::compile;
+            using spirit::info;
 
-}}}
+        }
+    }
+}
 
 #endif

@@ -43,61 +43,62 @@
 #include "boost/iterator.hpp"
 
 namespace boost {
-namespace detail {
-namespace multi_array {
+    namespace detail {
+        namespace multi_array {
 //--------------------------------------------------
 // copy_n (not part of the C++ standard)
 #if 1
 
-template <class InputIter, class Size, class OutputIter>
-OutputIter copy_n(InputIter first, Size count,
-                  OutputIter result) {
-  for ( ; count > 0; --count) {
-    *result = *first;
-    ++first;
-    ++result;
-  }
-  return result;
-}
+            template<class InputIter, class Size, class OutputIter>
+            OutputIter copy_n(InputIter first, Size count,
+                              OutputIter result) {
+                for (; count > 0; --count) {
+                    *result = *first;
+                    ++first;
+                    ++result;
+                }
+                return result;
+            }
+
 #else // !1
 
-template <class InputIter, class Size, class OutputIter>
-OutputIter copy_n__(InputIter first, Size count,
-                                       OutputIter result,
-                                       std::input_iterator_tag) {
-  for ( ; count > 0; --count) {
-    *result = *first;
-    ++first;
-    ++result;
-  }
-  return result;
-}
+            template <class InputIter, class Size, class OutputIter>
+            OutputIter copy_n__(InputIter first, Size count,
+                                                   OutputIter result,
+                                                   std::input_iterator_tag) {
+              for ( ; count > 0; --count) {
+                *result = *first;
+                ++first;
+                ++result;
+              }
+              return result;
+            }
 
-template <class RAIter, class Size, class OutputIter>
-inline OutputIter
-copy_n__(RAIter first, Size count,
-         OutputIter result,
-         std::random_access_iterator_tag) {
-  RAIter last = first + count;
-  return std::copy(first, last, result);
-}
+            template <class RAIter, class Size, class OutputIter>
+            inline OutputIter
+            copy_n__(RAIter first, Size count,
+                     OutputIter result,
+                     std::random_access_iterator_tag) {
+              RAIter last = first + count;
+              return std::copy(first, last, result);
+            }
 
-template <class InputIter, class Size, class OutputIter>
-inline OutputIter
-copy_n__(InputIter first, Size count, OutputIter result) {
-  typedef typename std::iterator_traits<InputIter>::iterator_category cat;
-  return copy_n__(first, count, result, cat());
-}
+            template <class InputIter, class Size, class OutputIter>
+            inline OutputIter
+            copy_n__(InputIter first, Size count, OutputIter result) {
+              typedef typename std::iterator_traits<InputIter>::iterator_category cat;
+              return copy_n__(first, count, result, cat());
+            }
 
-template <class InputIter, class Size, class OutputIter>
-inline OutputIter
-copy_n(InputIter first, Size count, OutputIter result) {
-  return copy_n__(first, count, result);
-}
+            template <class InputIter, class Size, class OutputIter>
+            inline OutputIter
+            copy_n(InputIter first, Size count, OutputIter result) {
+              return copy_n__(first, count, result);
+            }
 
 #endif // 1
-} // namespace multi_array
-} // namespace detail
+        } // namespace multi_array
+    } // namespace detail
 } // namespace boost
 
 #endif // BOOST_ALGORITHM_RG071801_HPP

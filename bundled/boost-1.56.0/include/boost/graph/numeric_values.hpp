@@ -9,8 +9,7 @@
 
 #include <limits>
 
-namespace boost
-{
+namespace boost {
 
 #define BOOST_GRAPH_SPECIALIZE_NUMERIC_FLOAT(type) \
     template <> struct numeric_values<type> { \
@@ -28,22 +27,21 @@ namespace boost
      * infinity for various types. For example, the class is specialized for
      * floating point types to use the built in notion of infinity.
      */
-    template <typename T>
-    struct numeric_values
-    {
+    template<typename T>
+    struct numeric_values {
         typedef T value_type;
 
-        static T zero()
-        { return T(); }
+        static T zero() { return T(); }
 
-        static T infinity()
-        { return (std::numeric_limits<T>::max)(); }
+        static T infinity() { return (std::numeric_limits<T>::max)(); }
     };
 
     // Specializations for floating point types refer to 0.0 and their infinity
     // value defined by numeric_limits.
     BOOST_GRAPH_SPECIALIZE_NUMERIC_FLOAT(float)
+
     BOOST_GRAPH_SPECIALIZE_NUMERIC_FLOAT(double)
+
     BOOST_GRAPH_SPECIALIZE_NUMERIC_FLOAT(long double)
 
 #undef BOOST_GRAPH_SPECIALIZE_NUMERIC_VALUE

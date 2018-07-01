@@ -318,11 +318,11 @@
 // Interface
 //==============================================================================
 // Creates a rule parser. Use at namespace scope.
-#   define BOOST_SPIRIT_RULE_PARSER(name,params,actions,members,rule)          \
+#   define BOOST_SPIRIT_RULE_PARSER(name, params, actions, members, rule)          \
       BOOST_SPIRIT_RP_IMPL_I(name,params,actions,members,rule)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Creates a non-templated rule parser. Use at namespace scope.
-#   define BOOST_SPIRIT_OPAQUE_RULE_PARSER(name,params,members,rule)           \
+#   define BOOST_SPIRIT_OPAQUE_RULE_PARSER(name, params, members, rule)           \
       BOOST_SPIRIT_RP_OPAQUE_IMPL_I(name,params,members,rule)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Defines an action placeholder. Use at namespace scope.
@@ -330,17 +330,18 @@
       BOOST_SPIRIT_RP_AP_IMPL(name,::BOOST_SPIRIT_CLASSIC_NS::type_of)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Utilities to embed parsers by reference.
-namespace boost
-{
-  namespace spirit
-  {
-    BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+namespace boost {
+    namespace spirit {
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template<class P> class parser_reference;
-    template<class P> parser_reference<P> embed_by_reference(parser<P> const &);
+        template<class P>
+        class parser_reference;
 
-    BOOST_SPIRIT_CLASSIC_NAMESPACE_END
-  }
+        template<class P> parser_reference<P> embed_by_reference(parser < P >
+        const &);
+
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+    }
 }
 //==============================================================================
 // Implementation
@@ -350,7 +351,7 @@ namespace boost
 // RP_REGISTER_TEMPLATE
 //
 // Boost.Typeof registration from within BOOST_SPIRIT__NAMESPACE
-#   define BOOST_SPIRIT_RP_REGISTER_TEMPLATE(name,params)                      \
+#   define BOOST_SPIRIT_RP_REGISTER_TEMPLATE(name, params)                      \
       BOOST_SPIRIT_RP_EMIT(NS_CLOSE,BOOST_SPIRIT__NAMESPACE,-)                 \
     BOOST_TYPEOF_REGISTER_TEMPLATE(                                            \
         BOOST_SPIRIT_RP_EMIT(NS_QUALIFY,BOOST_SPIRIT__NAMESPACE,-) name,       \
@@ -369,7 +370,7 @@ namespace boost
 // RP_AP_IMPL
 //
 // The action placeholder definition
-#   define BOOST_SPIRIT_RP_AP_IMPL(name,ns)                                    \
+#   define BOOST_SPIRIT_RP_AP_IMPL(name, ns)                                    \
       namespace __action_placeholder                                           \
       {                                                                        \
         struct name                                                            \
@@ -390,14 +391,14 @@ namespace boost
 // RP_IMPL_I
 //
 // Does some precalculation so RP_IMPL_II can look cleaner
-#   define BOOST_SPIRIT_RP_IMPL_I(name,pars,acts,mbrs,expr)                    \
+#   define BOOST_SPIRIT_RP_IMPL_I(name, pars, acts, mbrs, expr)                    \
       BOOST_SPIRIT_RP_IMPL_II(name, name ## _t ,                               \
                               pars, BOOST_SPIRIT_RP_ARRAY_SIZE(pars),          \
                               acts, BOOST_SPIRIT_RP_ARRAY_SIZE(acts),          \
                               mbrs, BOOST_SPIRIT_RP_ARRAY_SIZE(mbrs), expr)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_IMPL_II
-#   define BOOST_SPIRIT_RP_IMPL_II(name,name_t,pars,np,acts,na,mbrs,nm,x)      \
+#   define BOOST_SPIRIT_RP_IMPL_II(name, name_t, pars, np, acts, na, mbrs, nm, x)      \
       BOOST_PP_IIF(BOOST_PP_OR(np,na),BOOST_SPIRIT_RP_IMPL_III,                \
                                       BOOST_SPIRIT_RP_OPAQUE_IMPL_II)          \
                                          (name,name_t,pars,np,acts,na,mbrs,nm,x)
@@ -405,7 +406,7 @@ namespace boost
 // RP_IMPL_III
 //
 // The rule parser definition
-#   define BOOST_SPIRIT_RP_IMPL_III(name,name_t,pars,np,acts,na,mbrs,nm,x)     \
+#   define BOOST_SPIRIT_RP_IMPL_III(name, name_t, pars, np, acts, na, mbrs, nm, x)     \
                                                                                \
       template< BOOST_SPIRIT_RP_TPL_PARAMS(pars,acts,typename __,1) >          \
       class name_t                                                             \
@@ -475,14 +476,14 @@ namespace boost
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_OPAQUE_IMPL_I
 //
-#   define BOOST_SPIRIT_RP_OPAQUE_IMPL_I(name,pars,mbrs,expr)                  \
+#   define BOOST_SPIRIT_RP_OPAQUE_IMPL_I(name, pars, mbrs, expr)                  \
       BOOST_SPIRIT_RP_OPAQUE_IMPL_II(name, name ## _t,                         \
                                      pars,BOOST_SPIRIT_RP_ARRAY_SIZE(pars),-,-,\
                                      mbrs,BOOST_SPIRIT_RP_ARRAY_SIZE(mbrs),expr)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_OPAQUE_IMPL_II
 //
-#   define BOOST_SPIRIT_RP_OPAQUE_IMPL_II(name,name_t,pars,np,_1,_2,mbrs,nm,x) \
+#   define BOOST_SPIRIT_RP_OPAQUE_IMPL_II(name, name_t, pars, np, _1, _2, mbrs, nm, x) \
       class name_t;                                                            \
                                                                                \
       BOOST_SPIRIT_RP_REGISTER_TYPE(name_t)                                    \
@@ -539,7 +540,7 @@ namespace boost
 // RP_AP_HANDLER
 //
 // Part of the rule parser definition for handling action placeholders
-#   define BOOST_SPIRIT_RP_AP_HANDLER(name_t,np,acts,na,ns)                    \
+#   define BOOST_SPIRIT_RP_AP_HANDLER(name_t, np, acts, na, ns)                    \
       private:                                                                 \
         template<typename A> struct __rebound_1st                              \
         {                                                                      \
@@ -587,7 +588,7 @@ namespace boost
 // RP_AP_EXTRA_MBRS
 //
 // Extra members we need for rebinding if there are action placeholders
-#   define BOOST_SPIRIT_RP_AP_EXTRA_MBRS(np,na)                                \
+#   define BOOST_SPIRIT_RP_AP_EXTRA_MBRS(np, na)                                \
       private:                                                                 \
         BOOST_PP_REPEAT(np,BOOST_SPIRIT_RP_PM_MBRS,-)                          \
         BOOST_PP_REPEAT(na,BOOST_SPIRIT_RP_AP_MBRS,-)
@@ -595,30 +596,30 @@ namespace boost
 // RP_PM_MBRS
 //
 // Member variables to remember parameters if there are action placeholder
-#   define BOOST_SPIRIT_RP_PM_MBRS(z,i,d) __T ## i __p ## i ;
+#   define BOOST_SPIRIT_RP_PM_MBRS(z, i, d) __T ## i __p ## i ;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_AP_MBRS
 //
 // Member variables to remember action placeholder substitutes
-#   define BOOST_SPIRIT_RP_AP_MBRS(z,i,d) __A ## i __a ## i ;
+#   define BOOST_SPIRIT_RP_AP_MBRS(z, i, d) __A ## i __a ## i ;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_CTOR
 //
 // Expands to a fragment of a constructor (parameters or init-list)
-#   define BOOST_SPIRIT_RP_CTOR(what,pars,np,acts)                             \
+#   define BOOST_SPIRIT_RP_CTOR(what, pars, np, acts)                             \
       BOOST_SPIRIT_RP_EMIT(PM_CTOR_ ## what,pars,__T)                          \
       BOOST_SPIRIT_RP_EMIT(AP_CTOR_ ## what,acts,np)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_CTOR_COMMA
 //
 // RP_CTOR with a trailing comma
-#   define BOOST_SPIRIT_RP_CTOR_COMMA(what,pars,np,acts)                       \
+#   define BOOST_SPIRIT_RP_CTOR_COMMA(what, pars, np, acts)                       \
       BOOST_SPIRIT_RP_CTOR(what,pars,np,acts) ,
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_TPL_PARAMS
 //
 // Expands to the template parameters or arguments of the rule parser template
-#   define BOOST_SPIRIT_RP_TPL_PARAMS(pars,acts,prefix,defaults)               \
+#   define BOOST_SPIRIT_RP_TPL_PARAMS(pars, acts, prefix, defaults)               \
       prefix ## Dummy                                                          \
       BOOST_SPIRIT_RP_EMIT(PM_TEMPLATE_PARAMS,pars,prefix ## T)                \
       BOOST_SPIRIT_RP_EMIT(AP_TEMPLATE_PARAMS,acts,(prefix ## A,defaults))
@@ -626,7 +627,7 @@ namespace boost
 // RP_GEN_FUNC
 //
 // Generator function
-#   define BOOST_SPIRIT_RP_GEN_FUNC(name,name_t,np,na)                         \
+#   define BOOST_SPIRIT_RP_GEN_FUNC(name, name_t, np, na)                         \
       template< BOOST_PP_ENUM_PARAMS(np,typename T) >                          \
       inline name_t < void BOOST_PP_ENUM_TRAILING_PARAMS(np,T) >               \
       name( BOOST_PP_ENUM_BINARY_PARAMS(np,T, const & p) )                     \
@@ -637,7 +638,7 @@ namespace boost
 // RP_GEN_OPAQUE
 //
 // non-templated version for opaque rule parsers.
-#   define BOOST_SPIRIT_RP_GEN_OPAQUE(name,name_t,np,pars)                     \
+#   define BOOST_SPIRIT_RP_GEN_OPAQUE(name, name_t, np, pars)                     \
       inline name_t name( BOOST_SPIRIT_RP_EMIT(PM_OPAQUE_GEN_PARAMS,pars,p))   \
       { return name_t (BOOST_PP_ENUM_PARAMS(np,p)); }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -645,14 +646,14 @@ namespace boost
 //
 // Global variable -- used instead of the generator function if there are no
 // parameters
-#   define BOOST_SPIRIT_RP_GLOB_VAR(name,name_t,np,na)                         \
+#   define BOOST_SPIRIT_RP_GLOB_VAR(name, name_t, np, na)                         \
       static name_t <void> const name = name_t <void>(BOOST_PP_ENUM_PARAMS(na, \
                 ::BOOST_SPIRIT_CLASSIC_NS::type_of::nop_functor() BOOST_PP_INTERCEPT) );
 
 // RP_GLOB_OPAQUE
 //
 // non-templated version for opaque rule parsers.
-#   define BOOST_SPIRIT_RP_GLOB_OPAQUE(name,name_t,np,pars)                    \
+#   define BOOST_SPIRIT_RP_GLOB_OPAQUE(name, name_t, np, pars)                    \
       static name_t const name = name_t () ;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // PP_EMIT operations (fragment emittion based on array input)
@@ -660,59 +661,59 @@ namespace boost
 // - - Namespace handling
 
 // NS_OPEN
-#   define BOOST_SPIRIT_RP__NS_OPEN(r,data,i,elem)                             \
+#   define BOOST_SPIRIT_RP__NS_OPEN(r, data, i, elem)                             \
       namespace BOOST_SPIRIT_RP_OPTIONAL(elem) {
 
 // NS_QUALIFY
-#   define BOOST_SPIRIT_RP__NS_QUALIFY(r,data,i,elem)                          \
+#   define BOOST_SPIRIT_RP__NS_QUALIFY(r, data, i, elem)                          \
       BOOST_SPIRIT_RP_OPTIONAL(elem ::)
 
 // NS_CLOSE
-#   define BOOST_SPIRIT_RP__NS_CLOSE(r,data,i,elem) }
+#   define BOOST_SPIRIT_RP__NS_CLOSE(r, data, i, elem) }
 
 // - - Parameter handling
 
 // PM_STATIC
-#   define BOOST_SPIRIT_RP__PM_STATIC(r,data,i,elem)                           \
+#   define BOOST_SPIRIT_RP__PM_STATIC(r, data, i, elem)                           \
       static typename ::boost::call_traits< data ## i >::reference elem ;
 
 // PM_CTOR_PARAMS
-#   define BOOST_SPIRIT_RP__PM_CTOR_PARAMS(r,data,i,elem)                      \
+#   define BOOST_SPIRIT_RP__PM_CTOR_PARAMS(r, data, i, elem)                      \
       BOOST_PP_COMMA_IF(i)                                                     \
       typename ::boost::call_traits< data ## i >::param_type elem
 
 // PM_CTOR_ARGS
-#   define BOOST_SPIRIT_RP__PM_CTOR_ARGS(r,data,i,elem)                        \
+#   define BOOST_SPIRIT_RP__PM_CTOR_ARGS(r, data, i, elem)                        \
       BOOST_PP_COMMA_IF(i) elem
 
 // PM_CTOR_INIT_LIST
-#   define BOOST_SPIRIT_RP__PM_CTOR_INIT_LIST(r,data,i,elem)                   \
+#   define BOOST_SPIRIT_RP__PM_CTOR_INIT_LIST(r, data, i, elem)                   \
       BOOST_PP_COMMA_IF(i) __p ## i ( elem )
 
 // PM_CTOR_COPY_INIT_LIST
-#   define BOOST_SPIRIT_RP__PM_CTOR_COPY_INIT_LIST(r,data,i,elem)              \
+#   define BOOST_SPIRIT_RP__PM_CTOR_COPY_INIT_LIST(r, data, i, elem)              \
       BOOST_PP_COMMA_IF(i) __p ## i ( that. __p ## i )
 
 
 // PM_TEMPLATE_PARAMS
-#   define BOOST_SPIRIT_RP__PM_TEMPLATE_PARAMS(r,data,i,elem) , data ## i
+#   define BOOST_SPIRIT_RP__PM_TEMPLATE_PARAMS(r, data, i, elem) , data ## i
 
 // - strictly typed parameters of the opaque rule_parser
 
 // PM_OPAQUE_STATIC
-#   define BOOST_SPIRIT_RP__PM_OPAQUE_STATIC(r,data,i,elem)                    \
+#   define BOOST_SPIRIT_RP__PM_OPAQUE_STATIC(r, data, i, elem)                    \
       static ::boost::call_traits<                                             \
           BOOST_SPIRIT_RP_TYPE(BOOST_PP_TUPLE_ELEM(2,0,elem))                  \
         >::reference BOOST_PP_TUPLE_ELEM(2,1,elem) ;
 
 // PM_OPAQUE_CTOR_PARAMS
-#   define BOOST_SPIRIT_RP__PM_OPAQUE_CTOR_PARAMS(r,data,i,elem)               \
+#   define BOOST_SPIRIT_RP__PM_OPAQUE_CTOR_PARAMS(r, data, i, elem)               \
       BOOST_PP_COMMA_IF(i) ::boost::call_traits<                               \
           BOOST_SPIRIT_RP_TYPE(BOOST_PP_TUPLE_ELEM(2,0,elem))                  \
         >::param_type BOOST_PP_TUPLE_ELEM(2,1,elem)
 
 // PM_OPAQUE_GEN_PARAMS
-#   define BOOST_SPIRIT_RP__PM_OPAQUE_GEN_PARAMS(r,data,i,elem)                \
+#   define BOOST_SPIRIT_RP__PM_OPAQUE_GEN_PARAMS(r, data, i, elem)                \
       BOOST_PP_COMMA_IF(i) ::boost::call_traits<                               \
           BOOST_SPIRIT_RP_TYPE(BOOST_PP_TUPLE_ELEM(2,0,elem))                  \
         >::param_type data ## i
@@ -720,62 +721,62 @@ namespace boost
 // - - Member variable handling
 
 // MV_NONSTATIC
-#   define BOOST_SPIRIT_RP__MV_NONSTATIC(r,data,i,elem)                        \
+#   define BOOST_SPIRIT_RP__MV_NONSTATIC(r, data, i, elem)                        \
       data() BOOST_SPIRIT_RP_TYPE(BOOST_PP_TUPLE_ELEM(3,0,elem))               \
         BOOST_PP_TUPLE_ELEM(3,1,elem) ;
 
 // MV_STATIC
-#   define BOOST_SPIRIT_RP__MV_STATIC(r,data,i,elem)                           \
+#   define BOOST_SPIRIT_RP__MV_STATIC(r, data, i, elem)                           \
       static data() ::boost::call_traits<                                      \
             data() BOOST_SPIRIT_RP_TYPE(BOOST_PP_TUPLE_ELEM(3,0,elem))         \
         >::reference BOOST_PP_TUPLE_ELEM(3,1,elem) ;
 
 // MV_CTOR_INIT_LIST
-#   define BOOST_SPIRIT_RP__MV_CTOR_INIT_LIST(r,data,i,elem)                   \
+#   define BOOST_SPIRIT_RP__MV_CTOR_INIT_LIST(r, data, i, elem)                   \
       BOOST_PP_COMMA_IF(i)                                                     \
       BOOST_PP_TUPLE_ELEM(3,1,elem) BOOST_PP_TUPLE_ELEM(3,2,elem)
 
 // MV_CTOR_COPY_INIT_LIST
-#   define BOOST_SPIRIT_RP__MV_CTOR_COPY_INIT_LIST(r,data,i,elem)              \
+#   define BOOST_SPIRIT_RP__MV_CTOR_COPY_INIT_LIST(r, data, i, elem)              \
       BOOST_PP_COMMA_IF(i)                                                     \
       BOOST_PP_TUPLE_ELEM(3,1,elem) (data . BOOST_PP_TUPLE_ELEM(3,1,elem))
 
 // - - Action placeholder handling
 
 // AP_STATIC
-#   define BOOST_SPIRIT_RP__AP_STATIC(r,data,i,elem) static __A ## i & elem ;
+#   define BOOST_SPIRIT_RP__AP_STATIC(r, data, i, elem) static __A ## i & elem ;
 
 // AP_CTOR_PARAMS
-#   define BOOST_SPIRIT_RP__AP_CTOR_PARAMS(r,data,i,elem)                      \
+#   define BOOST_SPIRIT_RP__AP_CTOR_PARAMS(r, data, i, elem)                      \
       BOOST_SPIRIT_RP_COMMA_IF_OR(data,i)                                      \
       typename ::boost::call_traits< __A ## i >::param_type elem
 
 // AP_CTOR_ARGS
-#   define BOOST_SPIRIT_RP__AP_CTOR_ARGS(r,data,i,elem)                        \
+#   define BOOST_SPIRIT_RP__AP_CTOR_ARGS(r, data, i, elem)                        \
       BOOST_SPIRIT_RP_COMMA_IF_OR(data,i) elem
 
 // AP_CTOR_INIT_LIST
-#   define BOOST_SPIRIT_RP__AP_CTOR_INIT_LIST(r,data,i,elem)                   \
+#   define BOOST_SPIRIT_RP__AP_CTOR_INIT_LIST(r, data, i, elem)                   \
       BOOST_SPIRIT_RP_COMMA_IF_OR(data,i) __a ## i ( elem )
 
 // AP_CTOR_COPY_INIT_LIST
-#   define BOOST_SPIRIT_RP__AP_CTOR_COPY_INIT_LIST(r,data,i,elem)              \
+#   define BOOST_SPIRIT_RP__AP_CTOR_COPY_INIT_LIST(r, data, i, elem)              \
       BOOST_SPIRIT_RP_COMMA_IF_OR(data,i) __a ## i ( that. __a ## i )
 
 // AP_TEMPLATE_PARAMS
-#   define BOOST_SPIRIT_RP__AP_TEMPLATE_PARAMS(r,data,i,elem)                  \
+#   define BOOST_SPIRIT_RP__AP_TEMPLATE_PARAMS(r, data, i, elem)                  \
       , BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,data),i)                          \
       BOOST_PP_EXPR_IIF(BOOST_PP_TUPLE_ELEM(2,1,data),                         \
           = ::BOOST_SPIRIT_CLASSIC_NS::type_of::nop_functor)
 
 // AP_REBOUND_ARGS
-#   define BOOST_SPIRIT_RP__AP_REBOUND_ARGS(r,data,i,elem)                     \
+#   define BOOST_SPIRIT_RP__AP_REBOUND_ARGS(r, data, i, elem)                     \
       BOOST_PP_COMMA_IF(i)                                                     \
       ::BOOST_SPIRIT_CLASSIC_NS::type_of::get_placeholdee< __action_placeholder:: elem > \
                                                            ( __a ## i , data )
 
 // AP_REBOUND_TPL_ARGS
-#   define BOOST_SPIRIT_RP__AP_REBOUND_TPL_ARGS(r,data,i,elem)                 \
+#   define BOOST_SPIRIT_RP__AP_REBOUND_TPL_ARGS(r, data, i, elem)                 \
       , typename ::BOOST_SPIRIT_CLASSIC_NS::type_of::placeholdee<                        \
                   __action_placeholder:: elem , __A ## i, data >::type
 
@@ -791,13 +792,13 @@ namespace boost
 //
 // Iterates an optional array. That is you can pass e.g.'-' or 'none' to denote
 // emptiness.
-#   define BOOST_SPIRIT_RP_ARRAY_FOR_EACH_I(macro,data,optional_array)         \
+#   define BOOST_SPIRIT_RP_ARRAY_FOR_EACH_I(macro, data, optional_array)         \
       BOOST_PP_IIF(BOOST_PP_IS_BINARY(optional_array),                         \
                    BOOST_SPIRIT_RP_ARRAY_FOR_EACH_I_IMPL,                      \
                    BOOST_PP_TUPLE_EAT(3))(macro,data,optional_array)
 
 // RP_ARRAY_FOR_EACH_I_IMPL
-#   define BOOST_SPIRIT_RP_ARRAY_FOR_EACH_I_IMPL(macro,data,array)             \
+#   define BOOST_SPIRIT_RP_ARRAY_FOR_EACH_I_IMPL(macro, data, array)             \
       BOOST_SPIRIT_RP_IF(BOOST_PP_ARRAY_SIZE(array),PP_SEQ_FOR_EACH_I,3)       \
         (macro,data, BOOST_SPIRIT_RP_IF(BOOST_PP_ARRAY_SIZE(array),            \
                                         PP_TUPLE_TO_SEQ,2) array)
@@ -833,7 +834,7 @@ namespace boost
 //
 // Expands to nothing if both arguments are zero, otherwise expands to a comma.
 //
-#   define BOOST_SPIRIT_RP_COMMA_IF_OR(a,b)                                    \
+#   define BOOST_SPIRIT_RP_COMMA_IF_OR(a, b)                                    \
       BOOST_PP_IIF(BOOST_PP_OR(a,b),BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // RP_IF
@@ -844,297 +845,300 @@ namespace boost
 //
 //   BOOST_PP_IF(cond,BOOST_name,BOOST_PP_TUPLE_EAT(arity))
 //
-#   define BOOST_SPIRIT_RP_IF(cond,name,arity) \
+#   define BOOST_SPIRIT_RP_IF(cond, name, arity) \
       BOOST_PP_IF(cond,BOOST_ ## name,BOOST_PP_TUPLE_EAT(arity))
 
 //------------------------------------------------------------------------------
 // Wrapper and gernator function to embed a parser by reference
 //------------------------------------------------------------------------------
 
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-  // Wrapper to embed a parser by reference
+        // Wrapper to embed a parser by reference
 
-  template<class P> class parser_reference
-    : public parser< parser_reference<P> >
-  {
-    P const & ref_that;
-  public:
-    parser_reference(P & that)
-    // we allow implicit conversion but forbid temporaries.
-      : ref_that(that)
-    { }
+        template<class P>
+        class parser_reference
+                : public parser<parser_reference<P> > {
+            P const &ref_that;
+        public:
+            parser_reference(P &that)
+            // we allow implicit conversion but forbid temporaries.
+                    : ref_that(that) {}
 
-    typedef parser_reference<P>           self_t;
-    typedef self_t const &                embed_t;
-    typedef typename P::parser_category_t parser_category_t;
+            typedef parser_reference<P> self_t;
+            typedef self_t const &embed_t;
+            typedef typename P::parser_category_t parser_category_t;
 
-    template<typename ScannerT> struct result
-    { typedef typename P::BOOST_NESTED_TEMPLATE result<ScannerT>::type type; };
+            template<typename ScannerT>
+            struct result {
+                typedef typename P::BOOST_NESTED_TEMPLATE result
+                <ScannerT>::type
+                type;
+            };
 
-    template<typename ScannerT>
-    typename result<ScannerT>::type
-    parse(ScannerT const & scan) const
-    { return this->ref_that.parse(scan); }
-  };
+            template<typename ScannerT>
+            typename result<ScannerT>::type
+            parse(ScannerT const &scan) const { return this->ref_that.parse(scan); }
+        };
 
-  template<class P> parser_reference<P>
-  embed_by_reference(::BOOST_SPIRIT_CLASSIC_NS::parser<P> & p)
-  { return p; }
+        template<class P>
+        parser_reference<P>
+        embed_by_reference(::BOOST_SPIRIT_CLASSIC_NS::parser <P> &p) { return p; }
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-} } // namespace ::BOOST_SPIRIT_CLASSIC_NS
+    }
+} // namespace ::BOOST_SPIRIT_CLASSIC_NS
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(BOOST_SPIRIT_CLASSIC_NS::parser_reference, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(BOOST_SPIRIT_CLASSIC_NS::parser_reference,
+1)
 
 //------------------------------------------------------------------------------
 // Expression templates for action placeholders.
 //------------------------------------------------------------------------------
 
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-namespace type_of {
+        namespace type_of {
 
-  // No-operation functor
+            // No-operation functor
 
-  struct nop_functor
-  {
-    template<typename T>
-    bool operator()(T const &) const
-    { return false; }
-    template<typename T, typename U>
-    bool operator()(T const &, U const &) const
-    { return false; }
+            struct nop_functor {
+                template<typename T>
+                bool operator()(T const &) const { return false; }
 
-    typedef bool result_type;
-  };
+                template<typename T, typename U>
+                bool operator()(T const &, U const &) const { return false; }
 
-  // Composite action
+                typedef bool result_type;
+            };
 
-  template<typename Action1, typename Action2>
-  class composite_action
-  {
-    Action1 fnc_a1;
-    Action2 fnc_a2;
-  public:
-    composite_action(Action1 const & a1, Action2 const & a2)
-      : fnc_a1(a1), fnc_a2(a2)
-    { }
+            // Composite action
 
-    template<typename T>
-    void operator()(T const & inp) const
-    { fnc_a1(inp); fnc_a2(inp); }
+            template<typename Action1, typename Action2>
+            class composite_action {
+                Action1 fnc_a1;
+                Action2 fnc_a2;
+            public:
+                composite_action(Action1 const &a1, Action2 const &a2)
+                        : fnc_a1(a1), fnc_a2(a2) {}
 
-    template<typename T, typename U>
-    void operator()(T const & inp1, U const inp2) const
-    { fnc_a1(inp1, inp2); fnc_a2(inp1, inp2); }
-  };
+                template<typename T>
+                void operator()(T const &inp) const {
+                    fnc_a1(inp);
+                    fnc_a2(inp);
+                }
 
-  // Action concatenation (and optimize away nop_functorS)
+                template<typename T, typename U>
+                void operator()(T const &inp1, U const inp2) const {
+                    fnc_a1(inp1, inp2);
+                    fnc_a2(inp1, inp2);
+                }
+            };
 
-  template<typename Action1, typename Action2>
-  struct action_concatenator
-  {
-    typedef composite_action<Action1,Action2> type;
+            // Action concatenation (and optimize away nop_functorS)
 
-    static type concatenate(Action1 const & a1, Action2 const & a2)
-    { return composite_action<Action1,Action2>(a1,a2); }
-  };
-  template<typename Action> struct action_concatenator<nop_functor, Action>
-  {
-    typedef Action type;
+            template<typename Action1, typename Action2>
+            struct action_concatenator {
+                typedef composite_action<Action1, Action2> type;
 
-    static type concatenate(nop_functor const &, Action const & a)
-    { return a; }
-  };
-  template<typename Action> struct action_concatenator<Action, nop_functor>
-  {
-    typedef Action type;
+                static type
+                concatenate(Action1 const &a1, Action2 const &a2) { return composite_action<Action1, Action2>(a1, a2); }
+            };
 
-    static type concatenate(Action const & a, nop_functor const &)
-    { return a; }
-  };
-  template<> struct action_concatenator<nop_functor, nop_functor>
-  {
-    typedef nop_functor type;
+            template<typename Action>
+            struct action_concatenator<nop_functor, Action> {
+                typedef Action type;
 
-    static type concatenate(nop_functor const &, nop_functor const &)
-    { return nop_functor(); }
-  };
+                static type concatenate(nop_functor const &, Action const &a) { return a; }
+            };
 
-  template<typename Action1, typename Action2>
-  typename action_concatenator<Action1,Action2>::type
-  concatenate_actions(Action1 const & a1, Action2 const & a2)
-  {
-    return action_concatenator<Action1,Action2>::concatenate(a1,a2);
-  }
+            template<typename Action>
+            struct action_concatenator<Action, nop_functor> {
+                typedef Action type;
 
-  // Action chains
+                static type concatenate(Action const &a, nop_functor const &) { return a; }
+            };
 
-  enum action_chain_mode { replace, append };
+            template<>
+            struct action_concatenator<nop_functor, nop_functor> {
+                typedef nop_functor type;
 
-  template<class Placeholder, action_chain_mode Mode, typename Action>
-  class action_chain
-  {
-    Action fnc_action;
-  public:
-    action_chain(Action const & a)
-      : fnc_action(a)
-    { }
+                static type concatenate(nop_functor const &, nop_functor const &) { return nop_functor(); }
+            };
 
-    typedef Action action_type;
+            template<typename Action1, typename Action2>
+            typename action_concatenator<Action1, Action2>::type
+            concatenate_actions(Action1 const &a1, Action2 const &a2) {
+                return action_concatenator<Action1, Action2>::concatenate(a1, a2);
+            }
 
-    Action const & action() const { return fnc_action; }
-  };
+            // Action chains
 
-  // This operator adds actions to an action chain definition
-  template<class PH, action_chain_mode M, typename A1, typename A2>
-  action_chain<PH, M, typename action_concatenator<A1,A2>::type>
-  operator, (action_chain<PH,M,A1> const & chain, A2 const & a)
-  {
-    return action_chain<PH,M,typename action_concatenator<A1,A2>::type>
-        ( concatenate_actions(chain.action(), a) );
-  }
+            enum action_chain_mode {
+                replace, append
+            };
 
-  // Expression template for mutiple action chain assignments
-  template<class ChainOrChains, class LastChain>
-  class action_chains
-  {
-    ChainOrChains obj_head;
-    LastChain     obj_tail;
-  public:
-    action_chains(ChainOrChains const & head, LastChain const & tail)
-      : obj_head(head), obj_tail(tail)
-    { }
+            template<class Placeholder, action_chain_mode Mode, typename Action>
+            class action_chain {
+                Action fnc_action;
+            public:
+                action_chain(Action const &a)
+                        : fnc_action(a) {}
 
-    typedef ChainOrChains head_type;
-    typedef LastChain     tail_type;
+                typedef Action action_type;
 
-    head_type const & head() const { return obj_head; }
-    tail_type const & tail() const { return obj_tail; }
-  };
+                Action const &action() const { return fnc_action; }
+            };
 
-  // Action chain concatenation
-  template<class Head, class Tail>
-  action_chains<Head,Tail> make_chain(Head const & h, Tail const & t)
-  { return action_chains<Head,Tail>(h,t); }
+            // This operator adds actions to an action chain definition
+            template<class PH, action_chain_mode M, typename A1, typename A2>
+            action_chain<PH, M, typename action_concatenator<A1, A2>::type>
+            operator,(action_chain<PH, M, A1> const &chain, A2 const &a) {
+                return action_chain<PH, M, typename action_concatenator<A1, A2>::type>
+                        (concatenate_actions(chain.action(), a));
+            }
 
-  template<class PH1, action_chain_mode M1, typename A1,
-           class PH2, action_chain_mode M2, typename A2>
-  action_chains< action_chain<PH1,M1,A1>, action_chain<PH2,M2,A2> >
-  operator, (action_chain<PH1,M1,A1> const & h,
-             action_chain<PH2,M2,A2> const & t)
-  { return make_chain(h,t); }
+            // Expression template for mutiple action chain assignments
+            template<class ChainOrChains, class LastChain>
+            class action_chains {
+                ChainOrChains obj_head;
+                LastChain obj_tail;
+            public:
+                action_chains(ChainOrChains const &head, LastChain const &tail)
+                        : obj_head(head), obj_tail(tail) {}
 
-  template<class Head, class Tail,class PH, action_chain_mode M, typename A>
-  action_chains< action_chains<Head,Tail>, action_chain<PH,M,A> >
-  operator, (action_chains<Head,Tail> const & h, action_chain<PH,M,A> const & t)
-  { return make_chain(h,t); }
+                typedef ChainOrChains head_type;
+                typedef LastChain tail_type;
+
+                head_type const &head() const { return obj_head; }
+
+                tail_type const &tail() const { return obj_tail; }
+            };
+
+            // Action chain concatenation
+            template<class Head, class Tail>
+            action_chains<Head, Tail> make_chain(Head const &h, Tail const &t) {
+                return action_chains<Head, Tail>(h, t);
+            }
+
+            template<class PH1, action_chain_mode M1, typename A1,
+                    class PH2, action_chain_mode M2, typename A2>
+            action_chains<action_chain<PH1, M1, A1>, action_chain<PH2, M2, A2> >
+            operator,(action_chain<PH1, M1, A1> const &h,
+                      action_chain<PH2, M2, A2> const &t) { return make_chain(h, t); }
+
+            template<class Head, class Tail, class PH, action_chain_mode M, typename A>
+            action_chains<action_chains<Head, Tail>, action_chain<PH, M, A> >
+            operator,(action_chains<Head, Tail> const &h, action_chain<PH, M, A> const &t) { return make_chain(h, t); }
 
 
-  // Extract the (maybe composite) action associated with an action
-  // placeholders from the chains with a fold algorithm.
-  template<class Placeholder, typename StartAction, class NewChainOrChains>
-  struct placeholdee
-  {
-    typedef StartAction type;
+            // Extract the (maybe composite) action associated with an action
+            // placeholders from the chains with a fold algorithm.
+            template<class Placeholder, typename StartAction, class NewChainOrChains>
+            struct placeholdee {
+                typedef StartAction type;
 
-    static type get(StartAction const & a, NewChainOrChains const &)
-    { return a; }
-  };
+                static type get(StartAction const &a, NewChainOrChains const &) { return a; }
+            };
 
-  template<class Placeholder, // <-- non-deduced
-           typename StartAction, class NewChainOrChains>
-  typename placeholdee<Placeholder,StartAction,NewChainOrChains>::type
-  get_placeholdee(StartAction const & a, NewChainOrChains const & c)
-  { return placeholdee<Placeholder,StartAction,NewChainOrChains>::get(a,c); }
+            template<class Placeholder, // <-- non-deduced
+                    typename StartAction, class NewChainOrChains>
+            typename placeholdee<Placeholder, StartAction, NewChainOrChains>::type
+            get_placeholdee(StartAction const &a, NewChainOrChains const &c) {
+                return placeholdee<Placeholder, StartAction, NewChainOrChains>::get(a, c);
+            }
 
-  template<class Placeholder, typename StartAction, class Head, class Tail>
-  struct placeholdee
-            < Placeholder, StartAction, action_chains<Head,Tail> >
-  {
-    typedef typename placeholdee<Placeholder,
-      typename placeholdee<Placeholder,StartAction,Head>::type, Tail >::type
-    type;
+            template<class Placeholder, typename StartAction, class Head, class Tail>
+            struct placeholdee
+                    <Placeholder, StartAction, action_chains<Head, Tail> > {
+                typedef typename placeholdee<Placeholder,
+                        typename placeholdee<Placeholder, StartAction, Head>::type, Tail>::type
+                        type;
 
-    static type get(StartAction const & a, action_chains<Head,Tail> const & c)
-    {
-      return get_placeholdee<Placeholder>(
-        get_placeholdee<Placeholder>(a,c.head()), c.tail() );
+                static type get(StartAction const &a, action_chains<Head, Tail> const &c) {
+                    return get_placeholdee<Placeholder>(
+                            get_placeholdee<Placeholder>(a, c.head()), c.tail());
+                }
+            };
+
+            template<class Placeholder, typename StartAction, typename A>
+            struct placeholdee
+                    <Placeholder, StartAction, action_chain<Placeholder, replace, A> > {
+                typedef A type;
+
+                static type get(StartAction const &,
+                                action_chain<Placeholder, replace, A> const &c) { return c.action(); }
+            };
+
+            template<class Placeholder, typename StartAction, typename A>
+            struct placeholdee
+                    <Placeholder, StartAction, action_chain<Placeholder, append, A> > {
+                typedef typename action_concatenator<StartAction, A>::type type;
+
+                static type get(StartAction const &a,
+                                action_chain<Placeholder, append, A> const &c) {
+                    return concatenate_actions(a, c.action());
+                }
+            };
+
+        }
+
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+
     }
-  };
-
-  template<class Placeholder, typename StartAction, typename A>
-  struct placeholdee
-            < Placeholder, StartAction, action_chain<Placeholder,replace,A> >
-  {
-    typedef A type;
-
-    static type get(StartAction const &,
-                    action_chain<Placeholder,replace,A> const & c)
-    { return c.action(); }
-  };
-
-  template<class Placeholder, typename StartAction, typename A>
-  struct placeholdee
-            < Placeholder, StartAction, action_chain<Placeholder,append,A> >
-  {
-    typedef typename action_concatenator<StartAction,A>::type type;
-
-    static type get(StartAction const & a,
-                    action_chain<Placeholder,append,A> const & c)
-    { return concatenate_actions(a,c.action()); }
-  };
-
-}
-
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
-
-} } // namespace ::BOOST_SPIRIT_CLASSIC_NS::type_of
+} // namespace ::BOOST_SPIRIT_CLASSIC_NS::type_of
 
 BOOST_TYPEOF_REGISTER_TYPE(BOOST_SPIRIT_CLASSIC_NS::type_of::nop_functor)
-BOOST_TYPEOF_REGISTER_TEMPLATE(BOOST_SPIRIT_CLASSIC_NS::type_of::composite_action,2)
+BOOST_TYPEOF_REGISTER_TEMPLATE(BOOST_SPIRIT_CLASSIC_NS::type_of::composite_action,
+2)
 
 //------------------------------------------------------------------------------
 // Misc.utilities
 //------------------------------------------------------------------------------
 
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-namespace type_of {
+        namespace type_of {
 
-  // Utility function to create a dependency to a template argument.
+            // Utility function to create a dependency to a template argument.
 
-  template<typename T, typename X>
-  X const & depend_on_type(X const & x)
-  { return x; }
+            template<typename T, typename X>
+            X const &depend_on_type(X const &x) { return x; }
 
-  // Utility to allow use parenthesized type expressions with commas inside
-  // as a type within macros. Thanks to Dave Abrahams for telling me this nice
-  // trick.
+            // Utility to allow use parenthesized type expressions with commas inside
+            // as a type within macros. Thanks to Dave Abrahams for telling me this nice
+            // trick.
 
-  #define BOOST_SPIRIT_RP_TYPE(x) \
+#define BOOST_SPIRIT_RP_TYPE(x) \
     ::BOOST_SPIRIT_CLASSIC_NS::type_of::remove_special_fptr \
       < ::BOOST_SPIRIT_CLASSIC_NS::type_of::special_result & (*) x >::type
 
-  struct special_result;
+            struct special_result;
 
-  template<typename T> struct remove_special_fptr { };
-  template<typename T> struct remove_special_fptr< special_result & (*)(T) >
-  { typedef T type; };
+            template<typename T>
+            struct remove_special_fptr {
+            };
+            template<typename T>
+            struct remove_special_fptr<special_result &(*)(T)> {
+                typedef T type;
+            };
 
-}
+        }
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-} } // namespace ::BOOST_SPIRIT_CLASSIC_NS::type_of
+    }
+} // namespace ::BOOST_SPIRIT_CLASSIC_NS::type_of
 
 //------------------------------------------------------------------------------
 #endif

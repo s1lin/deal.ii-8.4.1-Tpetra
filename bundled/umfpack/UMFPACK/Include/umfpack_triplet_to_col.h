@@ -9,60 +9,60 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_triplet_to_col
-(
-    int n_row,
-    int n_col,
-    int nz,
-    const int Ti [ ],
-    const int Tj [ ],
-    const double Tx [ ],
-    int Ap [ ],
-    int Ai [ ],
-    double Ax [ ],
-    int Map [ ]
-) ;
+        (
+                int n_row,
+                int n_col,
+                int nz,
+                const int Ti[],
+                const int Tj[],
+                const double Tx[],
+                int Ap[],
+                int Ai[],
+                double Ax[],
+                int Map[]
+        );
 
 UF_long umfpack_dl_triplet_to_col
-(
-    UF_long n_row,
-    UF_long n_col,
-    UF_long nz,
-    const UF_long Ti [ ],
-    const UF_long Tj [ ],
-    const double Tx [ ],
-    UF_long Ap [ ],
-    UF_long Ai [ ],
-    double Ax [ ],
-    UF_long Map [ ]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                UF_long nz,
+                const UF_long Ti[],
+                const UF_long Tj[],
+                const double Tx[],
+                UF_long Ap[],
+                UF_long Ai[],
+                double Ax[],
+                UF_long Map[]
+        );
 
 int umfpack_zi_triplet_to_col
-(
-    int n_row,
-    int n_col,
-    int nz,
-    const int Ti [ ],
-    const int Tj [ ],
-    const double Tx [ ], const double Tz [ ],
-    int Ap [ ],
-    int Ai [ ],
-    double Ax [ ], double Az [ ],
-    int Map [ ]
-) ;
+        (
+                int n_row,
+                int n_col,
+                int nz,
+                const int Ti[],
+                const int Tj[],
+                const double Tx[], const double Tz[],
+                int Ap[],
+                int Ai[],
+                double Ax[], double Az[],
+                int Map[]
+        );
 
 UF_long umfpack_zl_triplet_to_col
-(
-    UF_long n_row,
-    UF_long n_col,
-    UF_long nz,
-    const UF_long Ti [ ],
-    const UF_long Tj [ ],
-    const double Tx [ ], const double Tz [ ],
-    UF_long Ap [ ],
-    UF_long Ai [ ],
-    double Ax [ ], double Az [ ],
-    UF_long Map [ ]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                UF_long nz,
+                const UF_long Ti[],
+                const UF_long Tj[],
+                const double Tx[], const double Tz[],
+                UF_long Ap[],
+                UF_long Ai[],
+                double Ax[], double Az[],
+                UF_long Map[]
+        );
 
 /*
 double int Syntax:

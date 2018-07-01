@@ -38,7 +38,8 @@
 #elif defined( __SNC__ )
 # include <boost/smart_ptr/detail/sp_counted_base_snc_ps3.hpp>
 
-#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) ) && !defined(__PATHSCALE__)
+#elif defined( __GNUC__ ) && (defined( __i386__ ) || defined( __x86_64__ )) && !defined(__PATHSCALE__)
+
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp>
 
 #elif defined(__HP_aCC) && defined(__ia64)

@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-struct kelvin_base_unit : public base_unit<kelvin_base_unit, temperature_dimension, -5>
-{
-    static std::string name()   { return("kelvin"); }
-    static std::string symbol() { return("K"); }
-};
+            struct kelvin_base_unit : public base_unit<kelvin_base_unit, temperature_dimension, -5> {
+                static std::string name() { return ("kelvin"); }
 
-} // namespace si
+                static std::string symbol() { return ("K"); }
+            };
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

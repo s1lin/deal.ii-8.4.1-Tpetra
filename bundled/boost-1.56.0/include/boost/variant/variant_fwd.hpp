@@ -57,7 +57,7 @@
 #include "boost/variant/detail/substitute_fwd.hpp"
 
 #if defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE) \
-  && !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+ && !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
 #   define BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
 #endif
 
@@ -73,10 +73,10 @@
     MSVC2013 has variadic templates, but they have issues.
 */
 #if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) \
-  || (defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)) \
-  || (defined(_MSC_VER) && (_MSC_VER <= 1800)) \
-  || defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE) \
-  || defined (BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+ || (defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)) \
+ || (defined(_MSC_VER) && (_MSC_VER <= 1800)) \
+ || defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE) \
+ || defined (BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
 
 #ifndef BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES
 #   define BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES
@@ -85,6 +85,7 @@
 #endif
 
 #if !defined(BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES)
+
 #include <boost/preprocessor/seq/size.hpp>
 
 #define BOOST_VARIANT_CLASS_OR_TYPENAME_TO_SEQ_class class)(
@@ -176,7 +177,8 @@
 
 namespace boost {
 
-namespace detail { namespace variant {
+    namespace detail {
+        namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class void_ and class template convert_void
@@ -190,19 +192,17 @@ namespace detail { namespace variant {
 // defaulting of template parameters to mpl::void_).
 //
 
-struct void_;
+            struct void_;
 
-template <typename T>
-struct convert_void
-{
-    typedef T type;
-};
+            template<typename T>
+            struct convert_void {
+                typedef T type;
+            };
 
-template <>
-struct convert_void< void_ >
-{
-    typedef mpl::na type;
-};
+            template<>
+            struct convert_void<void_> {
+                typedef mpl::na type;
+            };
 
 ///////////////////////////////////////////////////////////////////////////////
 // (workaround) BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
@@ -212,11 +212,11 @@ struct convert_void< void_ >
 //
 
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-// (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES)
-//
-// Defines void types that are each unique and specializations of
-// convert_void that yields mpl::na for each voidNN type.
-//
+            // (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES)
+            //
+            // Defines void types that are each unique and specializations of
+            // convert_void that yields mpl::na for each voidNN type.
+            //
 
 #define BOOST_VARIANT_DETAIL_DEFINE_VOID_N(z,N,_)          \
     struct BOOST_PP_CAT(void,N);                           \
@@ -228,27 +228,28 @@ struct convert_void< void_ >
     };                                                     \
     /**/
 
-BOOST_PP_REPEAT(
-      BOOST_VARIANT_LIMIT_TYPES
-    , BOOST_VARIANT_DETAIL_DEFINE_VOID_N
-    , _
-    )
+            BOOST_PP_REPEAT(
+                  BOOST_VARIANT_LIMIT_TYPES
+                , BOOST_VARIANT_DETAIL_DEFINE_VOID_N
+                , _
+                )
 
 #undef BOOST_VARIANT_DETAIL_DEFINE_VOID_N
 
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 
-}} // namespace detail::variant
+        }
+    } // namespace detail::variant
 
 #if !defined(BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES)
 #   define BOOST_VARIANT_AUX_DECLARE_PARAMS BOOST_VARIANT_ENUM_PARAMS(typename T)
 #else // defined(BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES)
 
-///////////////////////////////////////////////////////////////////////////////
-// (detail) macro BOOST_VARIANT_AUX_DECLARE_PARAM
-//
-// Template parameter list for variant and recursive_variant declarations.
-//
+    ///////////////////////////////////////////////////////////////////////////////
+    // (detail) macro BOOST_VARIANT_AUX_DECLARE_PARAM
+    //
+    // Template parameter list for variant and recursive_variant declarations.
+    //
 
 #if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
@@ -288,7 +289,8 @@ BOOST_PP_REPEAT(
 // or
 //   variant<T0,T1,...,Tn>  (where T0 is NOT a type-sequence)
 //
-template < BOOST_VARIANT_AUX_DECLARE_PARAMS > class variant;
+    template<BOOST_VARIANT_AUX_DECLARE_PARAMS>
+    class variant;
 
 ///////////////////////////////////////////////////////////////////////////////
 // metafunction make_recursive_variant
@@ -296,7 +298,8 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > class variant;
 // Exposes a boost::variant with recursive_variant_ tags (below) substituted
 // with the variant itself (wrapped as needed with boost::recursive_wrapper).
 //
-template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct make_recursive_variant;
+    template<BOOST_VARIANT_AUX_DECLARE_PARAMS>
+    struct make_recursive_variant;
 
 #undef BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL
 #undef BOOST_VARIANT_AUX_DECLARE_PARAMS
@@ -307,7 +310,8 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct make_recursive_variant;
 // Tag type indicates where recursive variant substitution should occur.
 //
 #if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
-    struct recursive_variant_ {};
+    struct recursive_variant_ {
+    };
 #else
     typedef mpl::arg<1> recursive_variant_;
 #endif
@@ -317,14 +321,16 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct make_recursive_variant;
 //
 // Result is a variant w/ types of the specified type sequence.
 //
-template <typename Types> struct make_variant_over;
+    template<typename Types>
+    struct make_variant_over;
 
 ///////////////////////////////////////////////////////////////////////////////
 // metafunction make_recursive_variant_over
 //
 // Result is a recursive variant w/ types of the specified type sequence.
 //
-template <typename Types> struct make_recursive_variant_over;
+    template<typename Types>
+    struct make_recursive_variant_over;
 
 } // namespace boost
 

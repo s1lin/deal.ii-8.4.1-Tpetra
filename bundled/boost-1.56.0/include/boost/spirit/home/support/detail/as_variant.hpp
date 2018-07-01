@@ -26,22 +26,23 @@
 #include <boost/mpl/limits/list.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace spirit { namespace detail
-{
-    template <int size>
-    struct as_variant_impl;
+namespace boost {
+    namespace spirit {
+        namespace detail {
+            template<int size>
+            struct as_variant_impl;
 
 #if !defined(BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES)
 #else
-    template <>
-    struct as_variant_impl<0>
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef variant<> type;
-        };
-    };
+            template <>
+            struct as_variant_impl<0>
+            {
+                template <typename Iterator>
+                struct apply
+                {
+                    typedef variant<> type;
+                };
+            };
 #endif
 
 #define BOOST_FUSION_NEXT_ITERATOR(z, n, data)                                  \
@@ -70,22 +71,21 @@ namespace boost { namespace spirit { namespace detail
 #undef BOOST_FUSION_NEXT_CALL_ITERATOR
 #undef BOOST_FUSION_VALUE_OF_ITERATOR
 
-    template <typename Sequence>
-    struct as_variant
-    {
-        // build a variant generator being able to generate a variant holding
-        // all of the types as given in the typelist
-        typedef typename
-            detail::as_variant_impl<fusion::result_of::size<Sequence>::value>
-        gen;
+            template<typename Sequence>
+            struct as_variant {
+                // build a variant generator being able to generate a variant holding
+                // all of the types as given in the typelist
+                typedef typename
+                detail::as_variant_impl<fusion::result_of::size<Sequence>::value>
+                        gen;
 
-        // use this generator to create the actual variant
-        typedef typename gen::template apply<
-                typename fusion::result_of::begin<Sequence>::type
-            >::type
-        type;
-    };
-}}}
+                // use this generator to create the actual variant
+                typedef typename gen::template apply<
+                        typename fusion::result_of::begin<Sequence>::type
+                >::type
+                        type;
+            };
+        }}}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)

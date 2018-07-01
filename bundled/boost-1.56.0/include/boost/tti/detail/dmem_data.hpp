@@ -83,7 +83,7 @@
 
 #include <boost/tti/detail/dmem_fun.hpp>
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_OP(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_OP(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_C> \
   struct BOOST_PP_CAT(trait,_detail_hmd_op) : \
@@ -97,123 +97,115 @@
 #define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_INVOKE_ENCLOSING_CLASS(trait) \
   template<class BOOST_TTI_DETAIL_TP_ET,class BOOST_TTI_DETAIL_TP_TYPE> \
   struct BOOST_PP_CAT(trait,_detail_hmd_invoke_enclosing_class) : \
-  	BOOST_PP_CAT(trait,_detail_hmd_op) \
-		< \
-		typename BOOST_TTI_NAMESPACE::detail::ptmd<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_TYPE>::type, \
-		typename boost::remove_const<BOOST_TTI_DETAIL_TP_ET>::type \
-		> \
-  	{ \
-  	}; \
+    BOOST_PP_CAT(trait,_detail_hmd_op) \
+        < \
+        typename BOOST_TTI_NAMESPACE::detail::ptmd<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_TYPE>::type, \
+        typename boost::remove_const<BOOST_TTI_DETAIL_TP_ET>::type \
+        > \
+    { \
+    }; \
 /**/
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_INVOKE_PT_MEMBER(trait) \
   template<class BOOST_TTI_DETAIL_TP_ET,class BOOST_TTI_DETAIL_TP_TYPE> \
   struct BOOST_PP_CAT(trait,_detail_hmd_invoke_pt_member) : \
-	BOOST_PP_CAT(trait,_detail_hmd_op) \
-		< \
-		typename BOOST_TTI_NAMESPACE::detail::dmem_get_type<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_TYPE>::type, \
-		typename boost::remove_const \
-			< \
-			typename BOOST_TTI_NAMESPACE::detail::dmem_get_enclosing<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_TYPE>::type \
-			>::type \
-		> \
-  	{ \
-  	}; \
+    BOOST_PP_CAT(trait,_detail_hmd_op) \
+        < \
+        typename BOOST_TTI_NAMESPACE::detail::dmem_get_type<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_TYPE>::type, \
+        typename boost::remove_const \
+            < \
+            typename BOOST_TTI_NAMESPACE::detail::dmem_get_enclosing<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_TYPE>::type \
+            >::type \
+        > \
+    { \
+    }; \
 /**/
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_WITH_ENCLOSING_CLASS(trait) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_INVOKE_ENCLOSING_CLASS(trait) \
   template<class BOOST_TTI_DETAIL_TP_ET,class BOOST_TTI_DETAIL_TP_TYPE> \
   struct BOOST_PP_CAT(trait,_detail_hmd_with_enclosing_class) : \
-	boost::mpl::eval_if \
-		< \
- 		boost::is_class<BOOST_TTI_DETAIL_TP_ET>, \
- 		BOOST_PP_CAT(trait,_detail_hmd_invoke_enclosing_class) \
- 			< \
- 			BOOST_TTI_DETAIL_TP_ET, \
- 			BOOST_TTI_DETAIL_TP_TYPE \
- 			>, \
- 		boost::mpl::false_ \
-		> \
-  	{ \
-  	}; \
+    boost::mpl::eval_if \
+        < \
+        boost::is_class<BOOST_TTI_DETAIL_TP_ET>, \
+        BOOST_PP_CAT(trait,_detail_hmd_invoke_enclosing_class) \
+            < \
+            BOOST_TTI_DETAIL_TP_ET, \
+            BOOST_TTI_DETAIL_TP_TYPE \
+            >, \
+        boost::mpl::false_ \
+        > \
+    { \
+    }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_OP(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_WITH_ENCLOSING_CLASS(trait) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA_INVOKE_PT_MEMBER(trait) \
   template<class BOOST_TTI_DETAIL_TP_ET,class BOOST_TTI_DETAIL_TP_TYPE> \
   struct BOOST_PP_CAT(trait,_detail_hmd) : \
- 	boost::mpl::eval_if \
- 		< \
-		boost::is_same<BOOST_TTI_DETAIL_TP_TYPE,BOOST_TTI_NAMESPACE::detail::deftype>, \
- 		BOOST_PP_CAT(trait,_detail_hmd_invoke_pt_member) \
- 			< \
- 			BOOST_TTI_DETAIL_TP_ET, \
- 			BOOST_TTI_DETAIL_TP_TYPE \
- 			>, \
- 		BOOST_PP_CAT(trait,_detail_hmd_with_enclosing_class) \
- 			< \
- 			BOOST_TTI_DETAIL_TP_ET, \
- 			BOOST_TTI_DETAIL_TP_TYPE \
- 			> \
- 		> \
+    boost::mpl::eval_if \
+        < \
+        boost::is_same<BOOST_TTI_DETAIL_TP_TYPE,BOOST_TTI_NAMESPACE::detail::deftype>, \
+        BOOST_PP_CAT(trait,_detail_hmd_invoke_pt_member) \
+            < \
+            BOOST_TTI_DETAIL_TP_ET, \
+            BOOST_TTI_DETAIL_TP_TYPE \
+            >, \
+        BOOST_PP_CAT(trait,_detail_hmd_with_enclosing_class) \
+            < \
+            BOOST_TTI_DETAIL_TP_ET, \
+            BOOST_TTI_DETAIL_TP_TYPE \
+            > \
+        > \
     { \
     }; \
 /**/
 
-namespace boost
-  {
-  namespace tti
-    {
-    namespace detail
-      {
-      
-      template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R>
-      struct ptmd
-        {
-        typedef BOOST_TTI_DETAIL_TP_R BOOST_TTI_DETAIL_TP_T::* type;
+namespace boost {
+    namespace tti {
+        namespace detail {
+
+            template<class BOOST_TTI_DETAIL_TP_T, class BOOST_TTI_DETAIL_TP_R>
+            struct ptmd {
+                typedef BOOST_TTI_DETAIL_TP_R BOOST_TTI_DETAIL_TP_T::* type;
+            };
+
+            template<class BOOST_TTI_DETAIL_TP_T>
+            struct dmem_check_ptmd :
+                    boost::mpl::identity<BOOST_TTI_DETAIL_TP_T> {
+                BOOST_MPL_ASSERT((boost::function_types::is_member_object_pointer<BOOST_TTI_DETAIL_TP_T>));
+            };
+
+            template<class BOOST_TTI_DETAIL_TP_T>
+            struct dmem_check_ptec :
+                    BOOST_TTI_NAMESPACE::detail::class_type<BOOST_TTI_DETAIL_TP_T> {
+                BOOST_MPL_ASSERT((boost::function_types::is_member_object_pointer<BOOST_TTI_DETAIL_TP_T>));
+            };
+
+            template<class BOOST_TTI_DETAIL_TP_T, class BOOST_TTI_DETAIL_TP_T2>
+            struct dmem_get_type :
+                    boost::mpl::eval_if
+                            <
+                                    boost::is_same<BOOST_TTI_DETAIL_TP_T2, BOOST_TTI_NAMESPACE::detail::deftype>,
+                                    BOOST_TTI_NAMESPACE::detail::dmem_check_ptmd < BOOST_TTI_DETAIL_TP_T>,
+                    BOOST_TTI_NAMESPACE::detail::ptmd<BOOST_TTI_DETAIL_TP_T, BOOST_TTI_DETAIL_TP_T2>
+            > {
         };
-        
-      template<class BOOST_TTI_DETAIL_TP_T>
-      struct dmem_check_ptmd :
-        boost::mpl::identity<BOOST_TTI_DETAIL_TP_T>
-        {
-        BOOST_MPL_ASSERT((boost::function_types::is_member_object_pointer<BOOST_TTI_DETAIL_TP_T>));
-        };
-        
-      template<class BOOST_TTI_DETAIL_TP_T>
-      struct dmem_check_ptec :
-        BOOST_TTI_NAMESPACE::detail::class_type<BOOST_TTI_DETAIL_TP_T>
-        {
-        BOOST_MPL_ASSERT((boost::function_types::is_member_object_pointer<BOOST_TTI_DETAIL_TP_T>));
-        };
-        
-      template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_T2>
-      struct dmem_get_type :
-        boost::mpl::eval_if
-          <
-          boost::is_same<BOOST_TTI_DETAIL_TP_T2,BOOST_TTI_NAMESPACE::detail::deftype>,
-          BOOST_TTI_NAMESPACE::detail::dmem_check_ptmd<BOOST_TTI_DETAIL_TP_T>,
-          BOOST_TTI_NAMESPACE::detail::ptmd<BOOST_TTI_DETAIL_TP_T,BOOST_TTI_DETAIL_TP_T2>
-          >
-        {
-        };
-        
-      template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_T2>
-      struct dmem_get_enclosing :
-        boost::mpl::eval_if
-          <
-          boost::is_same<BOOST_TTI_DETAIL_TP_T2,BOOST_TTI_NAMESPACE::detail::deftype>,
-          BOOST_TTI_NAMESPACE::detail::dmem_check_ptec<BOOST_TTI_DETAIL_TP_T>,
-          boost::mpl::identity<BOOST_TTI_DETAIL_TP_T>
-          >
-        {
-        };
-        
-      }
-    }
-  }
-  
+
+        template<class BOOST_TTI_DETAIL_TP_T, class BOOST_TTI_DETAIL_TP_T2>
+        struct dmem_get_enclosing :
+                boost::mpl::eval_if
+                        <
+                                boost::is_same<BOOST_TTI_DETAIL_TP_T2, BOOST_TTI_NAMESPACE::detail::deftype>,
+                                BOOST_TTI_NAMESPACE::detail::dmem_check_ptec < BOOST_TTI_DETAIL_TP_T>,
+                boost::mpl::identity<BOOST_TTI_DETAIL_TP_T>
+        > {
+    };
+
+}
+}
+}
+
 #endif // BOOST_TTI_DETAIL_MEM_DATA_HPP

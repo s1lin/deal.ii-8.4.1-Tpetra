@@ -205,8 +205,10 @@
 
 #elif defined(BOOST_TYPEOF_NATIVE)
 #   define BOOST_TYPEOF_TEXT "using native typeof"
+
 #   include <boost/typeof/message.hpp>
 #   include <boost/typeof/native.hpp>
+
 #else
 #   error typeof configuration error
 #endif

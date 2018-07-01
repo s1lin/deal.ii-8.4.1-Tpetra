@@ -12,7 +12,7 @@
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 #include <boost/fusion/adapted/struct/detail/define_struct_inline.hpp>
 
-#define BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE(                                  \
+#define BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE(\
     TEMPLATE_PARAMS_SEQ, NAME, ATTRIBUTES)                                      \
                                                                                 \
     BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE_IMPL(                                 \

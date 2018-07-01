@@ -89,19 +89,19 @@ Availability:
 /* ------------------ */
 
 /* error codes returned in stats [3]: */
-#define COLAMD_OK				(0)
-#define COLAMD_ERROR_jumbled_matrix		(-11)
-#define COLAMD_ERROR_A_not_present		(-1)
-#define COLAMD_ERROR_p_not_present		(-2)
-#define COLAMD_ERROR_nrow_negative		(-3)
-#define COLAMD_ERROR_ncol_negative		(-4)
-#define COLAMD_ERROR_nnz_negative		(-5)
-#define COLAMD_ERROR_p0_nonzero			(-6)
-#define COLAMD_ERROR_A_too_small		(-7)
-#define COLAMD_ERROR_col_length_negative	(-8)
-#define COLAMD_ERROR_row_index_out_of_bounds	(-9)
-#define COLAMD_ERROR_out_of_memory		(-10)
-#define COLAMD_ERROR_internal_error		(-999)
+#define COLAMD_OK                (0)
+#define COLAMD_ERROR_jumbled_matrix        (-11)
+#define COLAMD_ERROR_A_not_present        (-1)
+#define COLAMD_ERROR_p_not_present        (-2)
+#define COLAMD_ERROR_nrow_negative        (-3)
+#define COLAMD_ERROR_ncol_negative        (-4)
+#define COLAMD_ERROR_nnz_negative        (-5)
+#define COLAMD_ERROR_p0_nonzero            (-6)
+#define COLAMD_ERROR_A_too_small        (-7)
+#define COLAMD_ERROR_col_length_negative    (-8)
+#define COLAMD_ERROR_row_index_out_of_bounds    (-9)
+#define COLAMD_ERROR_out_of_memory        (-10)
+#define COLAMD_ERROR_internal_error        (-999)
 
 /* ========================================================================== */
 /* === Row and Column structures ============================================ */
@@ -111,70 +111,62 @@ Availability:
 /* reference these structures.  They are used only for the COLAMD_RECOMMENDED */
 /* macro. */
 
-typedef struct Colamd_Col_struct
-{
-    Int start ;		/* index for A of first row in this column, or DEAD */
-			/* if column is dead */
-    Int length ;	/* number of rows in this column */
-    union
-    {
-	Int thickness ;	/* number of original columns represented by this */
-			/* col, if the column is alive */
-	Int parent ;	/* parent in parent tree super-column structure, if */
-			/* the column is dead */
-    } shared1 ;
-    union
-    {
-	Int score ;	/* the score used to maintain heap, if col is alive */
-	Int order ;	/* pivot ordering of this column, if col is dead */
-    } shared2 ;
-    union
-    {
-	Int headhash ;	/* head of a hash bucket, if col is at the head of */
-			/* a degree list */
-	Int hash ;	/* hash value, if col is not in a degree list */
-	Int prev ;	/* previous column in degree list, if col is in a */
-			/* degree list (but not at the head of a degree list) */
-    } shared3 ;
-    union
-    {
-	Int degree_next ;	/* next column, if col is in a degree list */
-	Int hash_next ;		/* next column, if col is in a hash list */
-    } shared4 ;
+typedef struct Colamd_Col_struct {
+    Int start;        /* index for A of first row in this column, or DEAD */
+    /* if column is dead */
+    Int length;    /* number of rows in this column */
+    union {
+        Int thickness;    /* number of original columns represented by this */
+        /* col, if the column is alive */
+        Int parent;    /* parent in parent tree super-column structure, if */
+        /* the column is dead */
+    } shared1;
+    union {
+        Int score;    /* the score used to maintain heap, if col is alive */
+        Int order;    /* pivot ordering of this column, if col is dead */
+    } shared2;
+    union {
+        Int headhash;    /* head of a hash bucket, if col is at the head of */
+        /* a degree list */
+        Int hash;    /* hash value, if col is not in a degree list */
+        Int prev;    /* previous column in degree list, if col is in a */
+        /* degree list (but not at the head of a degree list) */
+    } shared3;
+    union {
+        Int degree_next;    /* next column, if col is in a degree list */
+        Int hash_next;        /* next column, if col is in a hash list */
+    } shared4;
 
     /* ------------------ */
     /* added for UMFPACK: */
-    Int nextcol ;	/* next column in this supercolumn */
-    Int lastcol ;	/* last column in this supercolumn */
+    Int nextcol;    /* next column in this supercolumn */
+    Int lastcol;    /* last column in this supercolumn */
     /* ------------------ */
 
-} Colamd_Col ;
+} Colamd_Col;
 
-typedef struct Colamd_Row_struct
-{
-    Int start ;		/* index for A of first col in this row */
-    Int length ;	/* number of principal columns in this row */
-    union
-    {
-	Int degree ;	/* number of principal & non-principal columns in row */
-	Int p ;		/* used as a row pointer in init_rows_cols () */
-    } shared1 ;
-    union
-    {
-	Int mark ;	/* for computing set differences and marking dead rows*/
-	Int first_column ;/* first column in row (used in garbage collection) */
-    } shared2 ;
+typedef struct Colamd_Row_struct {
+    Int start;        /* index for A of first col in this row */
+    Int length;    /* number of principal columns in this row */
+    union {
+        Int degree;    /* number of principal & non-principal columns in row */
+        Int p;        /* used as a row pointer in init_rows_cols () */
+    } shared1;
+    union {
+        Int mark;    /* for computing set differences and marking dead rows*/
+        Int first_column;/* first column in row (used in garbage collection) */
+    } shared2;
 
     /* ------------------ */
     /* added for UMFPACK: */
-    Int thickness ;	/* number of original rows represented by this row */
-			/* that are not yet pivotal */
-    Int front ;		/* -1 if an original row */
-			/* k if this row represents the kth frontal matrix */
-			/* where k goes from 0 to at most n_col-1 */
+    Int thickness;    /* number of original rows represented by this row */
+    /* that are not yet pivotal */
+    Int front;        /* -1 if an original row */
+    /* k if this row represents the kth frontal matrix */
+    /* where k goes from 0 to at most n_col-1 */
     /* ------------------ */
 
-} Colamd_Row ;
+} Colamd_Row;
 
 
 
@@ -203,15 +195,15 @@ typedef struct Colamd_Row_struct
 /* UMFPACK:  make sure Alen is >= 5*n_col + size of Col and Row structures.
  * Alen is typically about 2.2*nz + 9*n_col + 6*n_row, or 2.2nz+15n for
  * square matrices. */
-#define UMF_COLAMD_RECOMMENDED(nnz, n_row, n_col)	\
-(							\
-((nnz) < 0 || (n_row) < 0 || (n_col) < 0)		\
-?							\
-    (-1)						\
-:							\
-    (MAX (2 * (nnz), 4 * (n_col)) +			\
-    (Int) UMF_COLAMD_C (n_col) +			\
-    (Int) UMF_COLAMD_R (n_row) + (n_col) + ((nnz) / 5))	\
+#define UMF_COLAMD_RECOMMENDED(nnz, n_row, n_col)    \
+(                            \
+((nnz) < 0 || (n_row) < 0 || (n_col) < 0)        \
+?                            \
+    (-1)                        \
+:                            \
+    (MAX (2 * (nnz), 4 * (n_col)) +            \
+    (Int) UMF_COLAMD_C (n_col) +            \
+    (Int) UMF_COLAMD_R (n_row) + (n_col) + ((nnz) / 5))    \
 )
 
 /* ========================================================================== */
@@ -220,31 +212,26 @@ typedef struct Colamd_Row_struct
 
 /* colamd_recommended removed for UMFPACK */
 
-void UMF_colamd_set_defaults	/* sets default parameters */
-(				/* knobs argument is modified on output */
-    double knobs [COLAMD_KNOBS]	/* parameter settings for colamd */
-) ;
+void UMF_colamd_set_defaults    /* sets default parameters */
+        (                /* knobs argument is modified on output */
+                double knobs[COLAMD_KNOBS]    /* parameter settings for colamd */
+        );
 
-Int UMF_colamd			/* returns (1) if successful, (0) otherwise*/
-(				/* A and p arguments are modified on output */
-    Int n_row,			/* number of rows in A */
-    Int n_col,			/* number of columns in A */
-    Int Alen,			/* size of the array A */
-    Int A [],			/* row indices of A, of size Alen */
-    Int p [],			/* column pointers of A, of size n_col+1 */
-    double knobs [COLAMD_KNOBS],/* parameter settings for colamd */
-    Int stats [COLAMD_STATS]	/* colamd output statistics and error codes */
-    /* ------------------ */
-    /* added for UMFPACK: */
-    , Int Front_npivcol [ ]
-    , Int Front_nrows [ ]
-    , Int Front_ncols [ ]
-    , Int Front_parent [ ]
-    , Int Front_cols [ ]
-    , Int *p_nfr
-    , Int InFront [ ]
-    /* ------------------ */
-) ;
+Int UMF_colamd            /* returns (1) if successful, (0) otherwise*/
+        (                /* A and p arguments are modified on output */
+                Int n_row,            /* number of rows in A */
+                Int n_col,            /* number of columns in A */
+                Int Alen,            /* size of the array A */
+                Int A[],            /* row indices of A, of size Alen */
+                Int p[],            /* column pointers of A, of size n_col+1 */
+                double knobs[COLAMD_KNOBS],/* parameter settings for colamd */
+                Int stats[COLAMD_STATS]    /* colamd output statistics and error codes */
+                /* ------------------ */
+                /* added for UMFPACK: */
+                , Int Front_npivcol[], Int Front_nrows[], Int Front_ncols[], Int Front_parent[], Int Front_cols[],
+                Int *p_nfr, Int InFront[]
+                /* ------------------ */
+        );
 
 /* symamd deleted for UMFPACK */
 

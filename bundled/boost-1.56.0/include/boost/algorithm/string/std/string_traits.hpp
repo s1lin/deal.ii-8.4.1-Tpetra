@@ -21,20 +21,20 @@ namespace boost {
 //  std::basic_string<> traits  -----------------------------------------------//
 
 
-    // native replace trait
+        // native replace trait
         template<typename T, typename TraitsT, typename AllocT>
-        class has_native_replace< std::basic_string<T, TraitsT, AllocT> >
-        {
+        class has_native_replace<std::basic_string<T, TraitsT, AllocT> > {
         public:
-#if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+#if BOOST_WORKAROUND(__IBMCPP__, <= 600 )
             enum { value = true } ;
 #else
-            BOOST_STATIC_CONSTANT(bool, value=true);
+
+            BOOST_STATIC_CONSTANT(bool, value= true);
+
 #endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
 
-        typedef mpl::bool_<has_native_replace<T>::value> type;
+            typedef mpl::bool_ <has_native_replace<T>::value> type;
         };
-
 
 
     } // namespace algorithm

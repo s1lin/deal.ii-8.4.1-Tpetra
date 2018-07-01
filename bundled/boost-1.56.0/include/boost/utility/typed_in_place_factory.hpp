@@ -17,10 +17,12 @@
 
 namespace boost {
 
-class typed_in_place_factory_base {} ;
+    class typed_in_place_factory_base {
+    };
 
 #define  BOOST_PP_ITERATION_LIMITS (0, BOOST_MAX_INPLACE_FACTORY_ARITY)
 #define  BOOST_PP_FILENAME_1 <boost/utility/typed_in_place_factory.hpp>
+
 #include BOOST_PP_ITERATE()
 
 } // namespace boost
@@ -28,7 +30,7 @@ class typed_in_place_factory_base {} ;
 #include <boost/utility/detail/in_place_factory_suffix.hpp>
 
 #define BOOST_UTILITY_TYPED_INPLACE_FACTORY_04APR2007_HPP
-#else 
+#else
 #define N BOOST_PP_ITERATION()
 
 template< class T BOOST_PP_ENUM_TRAILING_PARAMS(N,class A) >

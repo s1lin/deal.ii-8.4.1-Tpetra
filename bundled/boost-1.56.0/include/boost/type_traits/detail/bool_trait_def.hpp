@@ -53,10 +53,10 @@
 
 #ifndef BOOST_TT_AUX_BOOL_C_BASE
 #   define BOOST_TT_AUX_BOOL_C_BASE(C) : public ::boost::integral_constant<bool,C>
-#endif 
+#endif
 
 
-#define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait, T, C) \
 template< typename T > struct trait \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -69,7 +69,7 @@ BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
 /**/
 
 
-#define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait,T1,T2,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait, T1, T2, C) \
 template< typename T1, typename T2 > struct trait \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -81,7 +81,7 @@ public:\
 BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,trait) \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_DEF3(trait,T1,T2,T3,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_DEF3(trait, T1, T2, T3, C) \
 template< typename T1, typename T2, typename T3 > struct trait \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -93,7 +93,7 @@ public:\
 BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(3,trait) \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait, sp, C) \
 template<> struct trait< sp > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -103,7 +103,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait,sp1,sp2,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait, sp1, sp2, C) \
 template<> struct trait< sp1,sp2 > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -113,7 +113,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(trait,sp,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(trait, sp, C) \
 template<> struct trait##_impl< sp > \
 { \
 public:\
@@ -121,7 +121,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait,sp1,sp2,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait, sp1, sp2, C) \
 template<> struct trait##_impl< sp1,sp2 > \
 { \
 public:\
@@ -129,7 +129,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(param,trait,sp,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(param, trait, sp, C) \
 template< param > struct trait< sp > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -138,7 +138,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(param1,param2,trait,sp,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(param1, param2, trait, sp, C) \
 template< param1, param2 > struct trait< sp > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -147,7 +147,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(param,trait,sp1,sp2,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(param, trait, sp1, sp2, C) \
 template< param > struct trait< sp1,sp2 > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -157,7 +157,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(param1,param2,trait,sp1,sp2,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(param1, param2, trait, sp1, sp2, C) \
 template< param1, param2 > struct trait< sp1,sp2 > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
@@ -166,7 +166,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(param,trait,sp1,sp2,C) \
+#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(param, trait, sp1, sp2, C) \
 template< param > struct trait##_impl< sp1,sp2 > \
 { \
 public:\
@@ -175,7 +175,7 @@ public:\
 /**/
 
 #ifndef BOOST_NO_CV_SPECIALIZATIONS
-#   define BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(trait,sp,value) \
+#   define BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(trait, sp, value) \
     BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp,value) \
     BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp const,value) \
     BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp volatile,value) \

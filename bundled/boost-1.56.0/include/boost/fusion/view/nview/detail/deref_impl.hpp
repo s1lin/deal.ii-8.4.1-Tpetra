@@ -12,39 +12,38 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/container/vector.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nview_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_iterator_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct deref_impl;
+        namespace extension {
+            template<typename Tag>
+            struct deref_impl;
 
-        template<>
-        struct deref_impl<nview_iterator_tag>
-        {
-            template<typename Iterator>
-            struct apply
-            {
-                typedef typename Iterator::first_type first_type;
-                typedef typename Iterator::sequence_type sequence_type;
+            template<>
+            struct deref_impl<nview_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename Iterator::first_type first_type;
+                    typedef typename Iterator::sequence_type sequence_type;
 
-                typedef typename result_of::deref<first_type>::type index;
-                typedef typename result_of::at<
-                    typename sequence_type::sequence_type, index>::type type;
+                    typedef typename result_of::deref<first_type>::type index;
+                    typedef typename result_of::at<
+                            typename sequence_type::sequence_type, index>::type type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type call(Iterator const& i)
-                {
-                    return at<index>(i.seq.seq);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return at<index>(i.seq.seq);
+                    }
+                };
             };
-        };
+
+        }
 
     }
-
-}}
+}
 
 #endif
 

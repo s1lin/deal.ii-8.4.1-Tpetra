@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<resistance_dimension,si::system>    resistance;
+            typedef unit <resistance_dimension, si::system> resistance;
 
-BOOST_UNITS_STATIC_CONSTANT(ohm,resistance);    
-BOOST_UNITS_STATIC_CONSTANT(ohms,resistance);   
-                                            
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(ohm, resistance
+            );
+            BOOST_UNITS_STATIC_CONSTANT(ohms, resistance
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

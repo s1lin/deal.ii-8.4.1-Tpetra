@@ -12,16 +12,19 @@
 
 #include <boost/spirit/home/support/detail/scoped_enum_emulation.hpp>
 
-namespace boost { namespace spirit { namespace karma
-{
-    ///////////////////////////////////////////////////////////////////////////
-    BOOST_SCOPED_ENUM_START(delimit_flag) 
-    { 
-        predelimit,         // force predelimiting in generate_delimited()
-        dont_predelimit     // inhibit predelimiting in generate_delimited()
-    };
-    BOOST_SCOPED_ENUM_END
-}}}
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            ///////////////////////////////////////////////////////////////////////////
+            BOOST_SCOPED_ENUM_START(delimit_flag)
+                    {
+                            predelimit,         // force predelimiting in generate_delimited()
+                            dont_predelimit     // inhibit predelimiting in generate_delimited()
+                    };
+            BOOST_SCOPED_ENUM_END
+        }
+    }
+}
 
 #endif
 

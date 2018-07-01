@@ -11,50 +11,42 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-    namespace pthread
-    {
-        class pthread_mutex_scoped_lock
-        {
-            pthread_mutex_t* m;
+namespace boost {
+    namespace pthread {
+        class pthread_mutex_scoped_lock {
+            pthread_mutex_t *m;
             bool locked;
         public:
-            explicit pthread_mutex_scoped_lock(pthread_mutex_t* m_):
-                m(m_),locked(true)
-            {
+            explicit pthread_mutex_scoped_lock(pthread_mutex_t *m_) :
+                    m(m_), locked(true) {
                 BOOST_VERIFY(!pthread_mutex_lock(m));
             }
-            void unlock()
-            {
+
+            void unlock() {
                 BOOST_VERIFY(!pthread_mutex_unlock(m));
-                locked=false;
+                locked = false;
             }
-            
-            ~pthread_mutex_scoped_lock()
-            {
-                if(locked)
-                {
+
+            ~pthread_mutex_scoped_lock() {
+                if (locked) {
                     unlock();
                 }
             }
-            
+
         };
 
-        class pthread_mutex_scoped_unlock
-        {
-            pthread_mutex_t* m;
+        class pthread_mutex_scoped_unlock {
+            pthread_mutex_t *m;
         public:
-            explicit pthread_mutex_scoped_unlock(pthread_mutex_t* m_):
-                m(m_)
-            {
+            explicit pthread_mutex_scoped_unlock(pthread_mutex_t *m_) :
+                    m(m_) {
                 BOOST_VERIFY(!pthread_mutex_unlock(m));
             }
-            ~pthread_mutex_scoped_unlock()
-            {
+
+            ~pthread_mutex_scoped_unlock() {
                 BOOST_VERIFY(!pthread_mutex_lock(m));
             }
-            
+
         };
     }
 }

@@ -19,18 +19,18 @@
 
 
 namespace boost {
-namespace detail { namespace variant {
+    namespace detail {
+        namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class over_sequence
 //
 // Wrapper used to indicate bounded types for variant are from type sequence.
 //
-template <typename Types>
-struct over_sequence
-{
-    typedef Types type;
-};
+            template<typename Types>
+            struct over_sequence {
+                typedef Types type;
+            };
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction is_over_sequence (modeled on code by David Abrahams)
@@ -39,20 +39,19 @@ struct over_sequence
 //
 
 
-template <typename T>
-struct is_over_sequence
-    : mpl::false_
-{
-};
+            template<typename T>
+            struct is_over_sequence
+                    : mpl::false_ {
+            };
 
-template <typename Types>
-struct is_over_sequence< over_sequence<Types> >
-    : mpl::true_
-{
-};
+            template<typename Types>
+            struct is_over_sequence<over_sequence<Types> >
+                    : mpl::true_ {
+            };
 
 
-}} // namespace detail::variant
+        }
+    } // namespace detail::variant
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_OVER_SEQUENCE_HPP

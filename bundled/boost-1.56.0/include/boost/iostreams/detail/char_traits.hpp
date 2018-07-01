@@ -18,6 +18,7 @@
 
 #include <iosfwd>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
+
 #ifdef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # include <boost/config.hpp> // Make sure size_t is in std.
 # include <cstddef>

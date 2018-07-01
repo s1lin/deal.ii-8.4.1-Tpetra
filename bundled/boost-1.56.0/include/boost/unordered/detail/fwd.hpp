@@ -7,17 +7,17 @@
 #define BOOST_UNORDERED_FWD_HPP_INCLUDED
 
 #include <boost/config.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 #pragma once
 #endif
 
-namespace boost
-{
-namespace unordered
-{
-    struct piecewise_construct_t {};
-    const piecewise_construct_t piecewise_construct = piecewise_construct_t();
-}
+namespace boost {
+    namespace unordered {
+        struct piecewise_construct_t {
+        };
+        const piecewise_construct_t piecewise_construct = piecewise_construct_t();
+    }
 }
 
 #endif

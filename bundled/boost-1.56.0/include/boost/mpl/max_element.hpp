@@ -23,50 +23,42 @@
 #include <boost/mpl/aux_/common_name_wknd.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-BOOST_MPL_AUX_COMMON_NAME_WKND(max_element)
+        BOOST_MPL_AUX_COMMON_NAME_WKND(max_element)
 
-namespace aux {
+        namespace aux {
 
-template< typename Predicate >
-struct select_max
-{
-    template< typename OldIterator, typename Iterator >
-    struct apply
-    {
-        typedef typename apply2<
-              Predicate
-            , typename deref<OldIterator>::type
-            , typename deref<Iterator>::type
-            >::type condition_;
+            template<typename Predicate>
+            struct select_max {
+                template<typename OldIterator, typename Iterator>
+                struct apply {
+                    typedef typename apply2<
+                            Predicate, typename deref<OldIterator>::type, typename deref<Iterator>::type
+                    >::type condition_;
 
-        typedef typename if_<
-              condition_
-            , Iterator
-            , OldIterator
-            >::type type;
-    };
-};
+                    typedef typename if_<
+                            condition_, Iterator, OldIterator
+                    >::type type;
+                };
+            };
 
-} // namespace aux 
+        } // namespace aux
 
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename Predicate = less<_,_>
-    >
-struct max_element
-    : iter_fold<
-          Sequence
-        , typename begin<Sequence>::type
-        , protect< aux::select_max<Predicate> >
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence), typename Predicate = less <_, _>
         >
-{
-};
+        struct max_element
+                : iter_fold<
+                        Sequence, typename begin<Sequence>::type, protect < aux::select_max<Predicate> >
+        > {
+    };
 
-BOOST_MPL_AUX_NA_SPEC(1, max_element)
+    BOOST_MPL_AUX_NA_SPEC(1, max_element)
 
-}}
+}
+}
 
 #endif // BOOST_MPL_MAX_ELEMENT_HPP_INCLUDED

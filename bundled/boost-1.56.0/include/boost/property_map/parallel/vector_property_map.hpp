@@ -29,30 +29,32 @@ namespace boost {
  * property maps via the same syntax used to create external
  * sequential property maps.
  */
-template<typename T, typename ProcessGroup, typename GlobalMap, 
-         typename StorageMap>
-class vector_property_map<T, 
-                          local_property_map<ProcessGroup, GlobalMap,
-                                             StorageMap> >
-  : public parallel::distributed_property_map<
-             ProcessGroup, GlobalMap, vector_property_map<T, StorageMap> >
-{
-  typedef vector_property_map<T, StorageMap> local_iterator_map;
+    template<typename T, typename ProcessGroup, typename GlobalMap,
+            typename StorageMap>
+    class vector_property_map<T,
+            local_property_map < ProcessGroup, GlobalMap,
+            StorageMap>
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap, 
-                                             local_iterator_map> inherited;
+    >
+    : public parallel::distributed_property_map <
+    ProcessGroup, GlobalMap, vector_property_map<T, StorageMap>> {
+    typedef vector_property_map<T, StorageMap> local_iterator_map;
 
-  typedef local_property_map<ProcessGroup, GlobalMap, StorageMap> index_map_type;
+    typedef parallel::distributed_property_map <ProcessGroup, GlobalMap,
+    local_iterator_map> inherited;
 
-public:
-  vector_property_map(const index_map_type& index = index_map_type())
-    : inherited(index.process_group(), index.global(),
-                local_iterator_map(index.base())) { }
+    typedef local_property_map <ProcessGroup, GlobalMap, StorageMap> index_map_type;
 
-  vector_property_map(unsigned inital_size, 
-                      const index_map_type& index = index_map_type())
-    : inherited(index.process_group(),  index.global(),
-                local_iterator_map(inital_size, index.base())) { }
+    public:
+
+    vector_property_map(const index_map_type &index = index_map_type())
+            : inherited(index.process_group(), index.global(),
+                        local_iterator_map(index.base())) {}
+
+    vector_property_map(unsigned inital_size,
+                        const index_map_type &index = index_map_type())
+            : inherited(index.process_group(), index.global(),
+                        local_iterator_map(inital_size, index.base())) {}
 };
 
 /** Distributed vector property map.
@@ -66,37 +68,40 @@ public:
  * property maps via the same syntax used to create external
  * sequential property maps.
  */
-template<typename T, typename ProcessGroup, typename GlobalMap, 
-         typename StorageMap>
+template<typename T, typename ProcessGroup, typename GlobalMap,
+        typename StorageMap>
 class vector_property_map<
-        T, 
-        parallel::distributed_property_map<
-          ProcessGroup,
-          GlobalMap,
-          StorageMap
-        >
-      > 
-  : public parallel::distributed_property_map<
-             ProcessGroup, GlobalMap, vector_property_map<T, StorageMap> >
+        T,
+        parallel::distributed_property_map <
+        ProcessGroup,
+        GlobalMap,
+        StorageMap
+>
+
+>
+: public parallel::distributed_property_map <
+ProcessGroup, GlobalMap, vector_property_map<T, StorageMap>>
 {
-  typedef vector_property_map<T, StorageMap> local_iterator_map;
+typedef vector_property_map<T, StorageMap> local_iterator_map;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap, 
-                                             local_iterator_map> inherited;
+typedef parallel::distributed_property_map <ProcessGroup, GlobalMap,
+local_iterator_map> inherited;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap, 
-                                             StorageMap>
-    index_map_type;
+typedef parallel::distributed_property_map <ProcessGroup, GlobalMap,
+StorageMap>
+        index_map_type;
 
 public:
-  vector_property_map(const index_map_type& index = index_map_type())
-    : inherited(index.process_group(), index.global(),
-                local_iterator_map(index.base())) { }
 
-  vector_property_map(unsigned inital_size, 
-                      const index_map_type& index = index_map_type())
-    : inherited(index.process_group(), index.global(),
-                local_iterator_map(inital_size, index.base())) { }
+vector_property_map(const index_map_type &index = index_map_type())
+        : inherited(index.process_group(), index.global(),
+                    local_iterator_map(index.base())) {}
+
+vector_property_map(unsigned inital_size,
+                    const index_map_type &index = index_map_type())
+        : inherited(index.process_group(), index.global(),
+                    local_iterator_map(inital_size, index.base())) {}
+
 };
 
 }

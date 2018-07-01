@@ -16,22 +16,24 @@
 
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename IntegerType
-    , IntegerType N
-    , IntegerType D = 1
-    >
-struct rational_c
-{
-    BOOST_STATIC_CONSTANT(IntegerType, numerator = N);
-    BOOST_STATIC_CONSTANT(IntegerType, denominator = D);
-    
-    typedef rational_c<IntegerType,N,D> type;
-    rational_c() {}
-};
+        template<
+                typename IntegerType, IntegerType N, IntegerType D = 1
+        >
+        struct rational_c {
+            BOOST_STATIC_CONSTANT(IntegerType, numerator = N
+            );
+            BOOST_STATIC_CONSTANT(IntegerType, denominator = D
+            );
 
-}}
+            typedef rational_c<IntegerType, N, D> type;
+
+            rational_c() {}
+        };
+
+    }
+}
 
 #endif // BOOST_MPL_RATIONAL_C_HPP_INCLUDED

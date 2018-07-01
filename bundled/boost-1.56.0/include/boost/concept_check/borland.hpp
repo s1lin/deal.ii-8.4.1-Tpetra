@@ -6,16 +6,17 @@
 
 namespace boost {
 
-template <class ModelFn>
-struct concept_check;
+    template<class ModelFn>
+    struct concept_check;
 
-template <class Model>
-struct concept_check<void(*)(Model)>
-{
-    enum { instantiate = sizeof((((Model*)0)->~Model()), 3) };
-};
+    template<class Model>
+    struct concept_check<void (*)(Model)> {
+        enum {
+            instantiate = sizeof((((Model *) 0)->~Model()), 3)
+        };
+    };
 
-#  define BOOST_CONCEPT_ASSERT( ModelInParens )                     \
+#  define BOOST_CONCEPT_ASSERT(ModelInParens)                     \
   enum { BOOST_PP_CAT(boost_concept_check,__LINE__) =               \
          boost::concept_check<void(*)ModelInParens>::instantiate    \
   }

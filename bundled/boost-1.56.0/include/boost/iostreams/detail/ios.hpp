@@ -10,24 +10,29 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
-                 
+#endif
+
 #include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
+
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # if !BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
 #  include <ios>
 # else
+
 #  include <istream>
 #  include <ostream>
+
 # endif
-#else 
+#else
 # include <exception>
 # include <iosfwd>
-#endif 
+#endif
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost {
+    namespace iostreams {
+        namespace detail {
 
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
 # define BOOST_IOSTREAMS_BASIC_IOS(ch, tr)  std::basic_ios< ch, tr >
@@ -51,16 +56,18 @@ namespace boost { namespace iostreams { namespace detail {
 #define BOOST_IOSTREAMS_BASIC_IOS(ch, tr)  std::ios
 #define BOOST_IOSTREAMS_FAILURE            boost::iostreams::detail::failure
 
-class failure : std::exception {    
-public:
-    explicit failure(const std::string& what_arg) : what_(what_arg) { }
-    const char* what() const { return what_.c_str(); }
-private:
-    std::string what_;
-};
+            class failure : std::exception {
+            public:
+                explicit failure(const std::string& what_arg) : what_(what_arg) { }
+                const char* what() const { return what_.c_str(); }
+            private:
+                std::string what_;
+            };
 
 #endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
-} } } // End namespace failure, iostreams, boost.
+        }
+    }
+} // End namespace failure, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_IOS_HPP_INCLUDED

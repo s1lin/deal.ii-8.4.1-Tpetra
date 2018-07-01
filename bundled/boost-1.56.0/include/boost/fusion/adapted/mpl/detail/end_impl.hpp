@@ -13,35 +13,33 @@
 #include <boost/mpl/end.hpp>
 #include <boost/type_traits/add_const.hpp>
 
-namespace boost { namespace fusion
-{
-    struct mpl_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct mpl_sequence_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
 
-        template <>
-        struct end_impl<mpl_sequence_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename mpl::end<
-                    typename remove_const<Sequence>::type
-                >::type iterator;
-                typedef mpl_iterator<iterator> type;
-                
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence)
-                {
-                    return type();
-                }
+            template<>
+            struct end_impl<mpl_sequence_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename mpl::end<
+                            typename remove_const<Sequence>::type
+                    >::type iterator;
+                    typedef mpl_iterator <iterator> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence)
+                            {
+                                    return type();
+                            }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

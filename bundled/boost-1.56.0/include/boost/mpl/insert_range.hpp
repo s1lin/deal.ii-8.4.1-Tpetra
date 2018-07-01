@@ -20,22 +20,21 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(Pos)
-    , typename BOOST_MPL_AUX_NA_PARAM(Range)
-    >
-struct insert_range
-    : insert_range_impl< typename sequence_tag<Sequence>::type >
-        ::template apply< Sequence,Pos,Range >
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,insert_range,(Sequence,Pos,Range))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence), typename BOOST_MPL_AUX_NA_PARAM(Pos), typename BOOST_MPL_AUX_NA_PARAM(Range)
+        >
+        struct insert_range
+                : insert_range_impl<typename sequence_tag<Sequence>::type>
+                  ::template apply<Sequence, Pos, Range> {
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(3,insert_range,(Sequence,Pos,Range))
+        };
 
-BOOST_MPL_AUX_NA_SPEC(3, insert_range)
+        BOOST_MPL_AUX_NA_SPEC(3, insert_range)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_INSERT_RANGE_HPP_INCLUDED

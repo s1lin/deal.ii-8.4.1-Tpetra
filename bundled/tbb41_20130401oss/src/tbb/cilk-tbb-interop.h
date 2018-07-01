@@ -58,7 +58,7 @@ enum __cilk_tbb_stack_op {
     CILK_TBB_STACK_RELEASE // releasing stack
 };
 
-typedef __cilk_tbb_retcode (*__cilk_tbb_pfn_stack_op)(enum __cilk_tbb_stack_op, void* data);
+typedef __cilk_tbb_retcode (*__cilk_tbb_pfn_stack_op)(enum __cilk_tbb_stack_op, void *data);
 
 typedef __cilk_tbb_retcode (*__cilk_tbb_pfn_unwatch_stacks)(void *data);
 
@@ -99,20 +99,20 @@ typedef __cilk_tbb_retcode (*__cilk_tbb_pfn_unwatch_stacks)(void *data);
 */
 struct __cilk_tbb_stack_op_thunk {
     __cilk_tbb_pfn_stack_op routine;
-    void* data;                 /* Set by TBB */
+    void *data;                 /* Set by TBB */
 };
 
 /* Thunk invoked by TBB when it is no longer interested in watching the stack bound to the current thread. */
 struct __cilk_tbb_unwatch_thunk {
     __cilk_tbb_pfn_unwatch_stacks routine;
-    void* data;      
+    void *data;
 };
 
 /* Defined by cilkrts, called by TBB.
    Requests that cilkrts invoke __cilk_tbb_stack_op_thunk when it orphans a stack. 
    cilkrts sets *u to a thunk that TBB should call when it is no longer interested in watching the stack. */
 CILK_EXPORT
-__cilk_tbb_retcode __cilkrts_watch_stack(struct __cilk_tbb_unwatch_thunk* u,
+__cilk_tbb_retcode __cilkrts_watch_stack(struct __cilk_tbb_unwatch_thunk *u,
                                          struct __cilk_tbb_stack_op_thunk o);
 
 #ifdef __cplusplus

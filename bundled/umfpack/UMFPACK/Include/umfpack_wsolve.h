@@ -9,64 +9,64 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_wsolve
-(
-    int sys,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    double X [ ],
-    const double B [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO],
-    int Wi [ ],
-    double W [ ]
-) ;
+        (
+                int sys,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                double X[],
+                const double B[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO],
+                int Wi[],
+                double W[]
+        );
 
 UF_long umfpack_dl_wsolve
-(
-    UF_long sys,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    double X [ ],
-    const double B [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO],
-    UF_long Wi [ ],
-    double W [ ]
-) ;
+        (
+                UF_long sys,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                double X[],
+                const double B[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO],
+                UF_long Wi[],
+                double W[]
+        );
 
 int umfpack_zi_wsolve
-(
-    int sys,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    double Xx [ ],	 double Xz [ ],
-    const double Bx [ ], const double Bz [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO],
-    int Wi [ ],
-    double W [ ]
-) ;
+        (
+                int sys,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                double Xx[], double Xz[],
+                const double Bx[], const double Bz[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO],
+                int Wi[],
+                double W[]
+        );
 
 UF_long umfpack_zl_wsolve
-(
-    UF_long sys,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    double Xx [ ],	 double Xz [ ],
-    const double Bx [ ], const double Bz [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO],
-    UF_long Wi [ ],
-    double W [ ]
-) ;
+        (
+                UF_long sys,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                double Xx[], double Xz[],
+                const double Bx[], const double Bz[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO],
+                UF_long Wi[],
+                double W[]
+        );
 
 /*
 double int Syntax:

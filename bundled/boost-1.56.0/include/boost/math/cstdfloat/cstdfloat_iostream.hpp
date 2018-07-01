@@ -10,29 +10,29 @@
 // Implement quadruple-precision I/O stream operations.
 
 #ifndef _BOOST_CSTDFLOAT_IOSTREAM_2014_02_15_HPP_
-  #define _BOOST_CSTDFLOAT_IOSTREAM_2014_02_15_HPP_
+#define _BOOST_CSTDFLOAT_IOSTREAM_2014_02_15_HPP_
 
-  #include <boost/math/cstdfloat/cstdfloat_types.hpp>
-  #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
-  #include <boost/math/cstdfloat/cstdfloat_cmath.hpp>
+#include <boost/math/cstdfloat/cstdfloat_types.hpp>
+#include <boost/math/cstdfloat/cstdfloat_limits.hpp>
+#include <boost/math/cstdfloat/cstdfloat_cmath.hpp>
 
-  #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
-  #error You can not use <boost/math/cstdfloat/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
-  #endif
+#if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
+#error You can not use <boost/math/cstdfloat/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
+#endif
 
-  #if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
+#if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
-  #include <cstddef>
-  #include <istream>
-  #include <ostream>
-  #include <sstream>
-  #include <stdexcept>
-  #include <string>
-  #include <boost/static_assert.hpp>
-  #include <boost/throw_exception.hpp>
+#include <cstddef>
+#include <istream>
+#include <ostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <boost/static_assert.hpp>
+#include <boost/throw_exception.hpp>
 
 //  #if (0)
-  #if defined(__GNUC__)
+#if defined(__GNUC__)
 
   // Forward declarations of quadruple-precision string functions.
   extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...) throw();
@@ -157,7 +157,7 @@
   }
 
 //  #elif defined(__GNUC__)
-  #elif defined(BOOST_INTEL)
+#elif defined(BOOST_INTEL)
 
   // The section for I/O stream support for the ICC compiler is particularly
   // long, because these functions must be painstakingly synthesized from
@@ -168,9 +168,9 @@
   // used in Boost.Multiprecision by John Maddock and Christopher Kormanyos.
   // This methodology has been slightly modified here for boost::float128_t.
 
-  #include <cstring>
-  #include <cctype>
-  #include <boost/lexical_cast.hpp>
+#include <cstring>
+#include <cctype>
+#include <boost/lexical_cast.hpp>
 
   namespace boost { namespace math { namespace cstdfloat { namespace detail {
 
@@ -764,8 +764,8 @@
     }
   }
 
-  #endif // Use __GNUC__ or BOOST_INTEL libquadmath
+#endif // Use __GNUC__ or BOOST_INTEL libquadmath
 
-  #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
+#endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
 #endif // _BOOST_CSTDFLOAT_IOSTREAM_2014_02_15_HPP_

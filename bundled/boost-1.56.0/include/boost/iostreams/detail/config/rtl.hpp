@@ -49,9 +49,9 @@
          (!defined(_FILE_OFFSET_BITS) || _FILE_OFFSET_BITS != 64) || \
      defined(_AIX) && !defined(_LARGE_FILES) || \
      defined(BOOST_IOSTREAMS_HAS_LARGE_FILE_EXTENSIONS)
-     /**/
+/**/
 
-    /* Systems with transitional extensions for large file support */
+/* Systems with transitional extensions for large file support */
 
 #  define BOOST_IOSTREAMS_FD_SEEK      lseek64
 #  define BOOST_IOSTREAMS_FD_TRUNCATE  ftruncate64

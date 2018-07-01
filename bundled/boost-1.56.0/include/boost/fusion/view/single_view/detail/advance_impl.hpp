@@ -11,39 +11,37 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/plus.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct single_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_iterator_tag;
 
-    template <typename SingleView, typename Pos>
-    struct single_view_iterator;
+        template<typename SingleView, typename Pos>
+        struct single_view_iterator;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct advance_impl;
+        namespace extension {
+            template<typename Tag>
+            struct advance_impl;
 
-        template<>
-        struct advance_impl<single_view_iterator_tag>
-        {
-            template<typename Iterator, typename Dist>
-            struct apply
-            {
-                typedef single_view_iterator<
-                    typename Iterator::single_view_type,
-                    typename mpl::plus<typename Iterator::position, Dist>::type>
-                type;
+            template<>
+            struct advance_impl<single_view_iterator_tag> {
+                template<typename Iterator, typename Dist>
+                struct apply {
+                    typedef single_view_iterator<
+                            typename Iterator::single_view_type,
+                            typename mpl::plus<typename Iterator::position, Dist>::type>
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return type(i.view);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return type(i.view);
+                    }
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif

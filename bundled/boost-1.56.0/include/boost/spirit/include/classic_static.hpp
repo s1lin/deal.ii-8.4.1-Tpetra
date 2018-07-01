@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_STATIC
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_STATIC
+
 #include <boost/spirit/home/classic/core/non_terminal/impl/static.hpp>
+
 #endif

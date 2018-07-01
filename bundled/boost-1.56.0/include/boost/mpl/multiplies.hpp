@@ -23,7 +23,8 @@
 
 // backward compatibility header, deprecated
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #   define AUX778076_OP_ARITY BOOST_MPL_LIMIT_METAFUNCTION_ARITY
@@ -31,23 +32,24 @@ namespace boost { namespace mpl {
 #   define AUX778076_OP_ARITY 2
 #endif
 
-template<
-      BOOST_MPL_PP_DEFAULT_PARAMS(AUX778076_OP_ARITY, typename N, na)
-    >
-struct multiplies
-    : times< BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N) >
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(
-          AUX778076_OP_ARITY
-        , multiplies
-        , ( BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N) )
-        )
-};
+        template<
+                BOOST_MPL_PP_DEFAULT_PARAMS(AUX778076_OP_ARITY, typename N, na )
+        >
+        struct multiplies
+                : times<BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N)> {
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(
+                    AUX778076_OP_ARITY
+            , multiplies
+            , ( BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N))
+            )
+        };
 
-BOOST_MPL_AUX_NA_SPEC(AUX778076_OP_ARITY, multiplies)
+        BOOST_MPL_AUX_NA_SPEC(AUX778076_OP_ARITY, multiplies
+        )
 
 #undef AUX778076_OP_ARITY
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_MULTIPLIES_HPP_INCLUDED

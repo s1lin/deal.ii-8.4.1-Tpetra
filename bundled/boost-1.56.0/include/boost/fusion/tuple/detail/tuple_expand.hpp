@@ -15,6 +15,7 @@
 #define BOOST_PP_FILENAME_1 \
     <boost/fusion/tuple/detail/tuple_expand.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_VECTOR_SIZE)
+
 #include BOOST_PP_ITERATE()
 
 #endif

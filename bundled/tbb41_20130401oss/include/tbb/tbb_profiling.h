@@ -30,7 +30,7 @@
 #define __TBB_profiling_H
 
 // Check if the tools support is enabled
-#if (_WIN32||_WIN64||__linux__) && !__MINGW32__ && TBB_USE_THREADING_TOOLS
+#if (_WIN32 || _WIN64 || __linux__) && !__MINGW32__ && TBB_USE_THREADING_TOOLS
 
 #if _WIN32||_WIN64
 #include <stdlib.h>  /* mbstowcs_s */
@@ -63,7 +63,7 @@ namespace tbb {
 /** Should be used in the "tbb" namespace only.
     Don't place semicolon after it to avoid compiler warnings. **/
 #if _WIN32||_WIN64
-    #define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)                       \
+#define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)                       \
         namespace profiling {                                                       \
             inline void set_name( sync_object_type& obj, const wchar_t* name ) {    \
                 tbb::internal::itt_set_sync_name_v3( &obj, name );                  \
@@ -77,7 +77,7 @@ namespace tbb {
             }                                                                       \
         }
 #else /* !WIN */
-    #define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)                       \
+#define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)                       \
         namespace profiling {                                                       \
             inline void set_name( sync_object_type& obj, const char* name ) {       \
                 tbb::internal::itt_set_sync_name_v3( &obj, name );                  \
@@ -87,14 +87,14 @@ namespace tbb {
 
 #else /* no tools support */
 
-#if _WIN32||_WIN64
-    #define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)               \
+#if _WIN32 || _WIN64
+#define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)               \
         namespace profiling {                                               \
             inline void set_name( sync_object_type&, const wchar_t* ) {}    \
             inline void set_name( sync_object_type&, const char* ) {}       \
         }
 #else /* !WIN */
-    #define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)               \
+#define __TBB_DEFINE_PROFILING_SET_NAME(sync_object_type)               \
         namespace profiling {                                               \
             inline void set_name( sync_object_type&, const char* ) {}       \
         }
@@ -107,17 +107,22 @@ namespace tbb {
 namespace tbb {
     namespace internal {
 
-        enum notify_type {prepare=0, cancel, acquired, releasing};
+        enum notify_type {
+            prepare = 0, cancel, acquired, releasing
+        };
         const uintptr_t NUM_NOTIFY_TYPES = 4; // set to # elements in enum above
 
         void __TBB_EXPORTED_FUNC call_itt_notify_v5(int t, void *ptr);
+
         void __TBB_EXPORTED_FUNC itt_store_pointer_with_release_v3(void *dst, void *src);
-        void* __TBB_EXPORTED_FUNC itt_load_pointer_with_acquire_v3(const void *src);
-        void* __TBB_EXPORTED_FUNC itt_load_pointer_v3( const void* src );
+
+        void *__TBB_EXPORTED_FUNC itt_load_pointer_with_acquire_v3(const void *src);
+
+        void *__TBB_EXPORTED_FUNC itt_load_pointer_v3(const void *src);
 
         // two template arguments are to workaround /Wp64 warning with tbb::atomic specialized for unsigned type
-        template <typename T, typename U>
-        inline void itt_store_word_with_release(tbb::atomic<T>& dst, U src) {
+        template<typename T, typename U>
+        inline void itt_store_word_with_release(tbb::atomic<T> &dst, U src) {
 #if TBB_USE_THREADING_TOOLS
             // This assertion should be replaced with static_assert
             __TBB_ASSERT(sizeof(T) == sizeof(void *), "Type must be word-sized.");
@@ -127,19 +132,19 @@ namespace tbb {
 #endif // TBB_USE_THREADING_TOOLS
         }
 
-        template <typename T>
-        inline T itt_load_word_with_acquire(const tbb::atomic<T>& src) {
+        template<typename T>
+        inline T itt_load_word_with_acquire(const tbb::atomic<T> &src) {
 #if TBB_USE_THREADING_TOOLS
             // This assertion should be replaced with static_assert
             __TBB_ASSERT(sizeof(T) == sizeof(void *), "Type must be word-sized.");
 #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
             // Workaround for overzealous compiler warnings
-            #pragma warning (push)
-            #pragma warning (disable: 4311)
+#pragma warning (push)
+#pragma warning (disable: 4311)
 #endif
             T result = (T)itt_load_pointer_with_acquire_v3(&src);
 #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
-            #pragma warning (pop)
+#pragma warning (pop)
 #endif
             return result;
 #else
@@ -147,19 +152,19 @@ namespace tbb {
 #endif // TBB_USE_THREADING_TOOLS
         }
 
-        template <typename T>
-        inline void itt_store_word_with_release(T& dst, T src) {
+        template<typename T>
+        inline void itt_store_word_with_release(T &dst, T src) {
 #if TBB_USE_THREADING_TOOLS
             // This assertion should be replaced with static_assert
             __TBB_ASSERT(sizeof(T) == sizeof(void *), "Type must be word-sized.");
             itt_store_pointer_with_release_v3(&dst, (void *)src);
 #else
-            __TBB_store_with_release(dst, src); 
+            __TBB_store_with_release(dst, src);
 #endif // TBB_USE_THREADING_TOOLS
         }
 
-        template <typename T>
-        inline T itt_load_word_with_acquire(const T& src) {
+        template<typename T>
+        inline T itt_load_word_with_acquire(const T &src) {
 #if TBB_USE_THREADING_TOOLS
             // This assertion should be replaced with static_assert
             __TBB_ASSERT(sizeof(T) == sizeof(void *), "Type must be word-sized");
@@ -169,8 +174,8 @@ namespace tbb {
 #endif // TBB_USE_THREADING_TOOLS
         }
 
-        template <typename T>
-        inline void itt_hide_store_word(T& dst, T src) {
+        template<typename T>
+        inline void itt_hide_store_word(T &dst, T src) {
 #if TBB_USE_THREADING_TOOLS
             // This assertion should be replaced with static_assert
             __TBB_ASSERT(sizeof(T) == sizeof(void *), "Type must be word-sized");
@@ -180,8 +185,8 @@ namespace tbb {
 #endif
         }
 
-        template <typename T>
-        inline T itt_hide_load_word(const T& src) {
+        template<typename T>
+        inline T itt_hide_load_word(const T &src) {
 #if TBB_USE_THREADING_TOOLS
             // This assertion should be replaced with static_assert
             __TBB_ASSERT(sizeof(T) == sizeof(void *), "Type must be word-sized.");
@@ -196,7 +201,9 @@ namespace tbb {
             call_itt_notify_v5((int)t, ptr);
         }
 #else
+
         inline void call_itt_notify(notify_type /*t*/, void * /*ptr*/) {}
+
 #endif // TBB_USE_THREADING_TOOLS
 
     } // namespace internal

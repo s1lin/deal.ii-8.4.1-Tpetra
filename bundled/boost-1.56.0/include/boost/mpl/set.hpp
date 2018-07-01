@@ -15,6 +15,7 @@
 // $Revision$
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
+
 #   include <boost/mpl/limits/set.hpp>
 #   include <boost/mpl/aux_/na.hpp>
 #   include <boost/mpl/aux_/config/preprocessor.hpp>
@@ -34,15 +35,17 @@
 #endif
 
 #   include BOOST_PP_STRINGIZE(boost/mpl/set/AUX778076_SET_HEADER)
+
 #   undef AUX778076_SET_HEADER
 #endif
 
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \
-    && !defined(BOOST_MPL_PREPROCESSING_MODE)
+ && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER set.hpp
+
 #   include <boost/mpl/aux_/include_preprocessed.hpp>
 
 #else

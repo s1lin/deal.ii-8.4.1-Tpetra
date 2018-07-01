@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_FLUSH_MULTI_PASS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_FLUSH_MULTI_PASS
+
 #include <boost/spirit/home/classic/utility/flush_multi_pass.hpp>
+
 #endif

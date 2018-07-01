@@ -10,38 +10,38 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_get_determinant
-(
-    double *Mx,
-    double *Ex,
-    void *NumericHandle,
-    double User_Info [UMFPACK_INFO]
-) ;
+        (
+                double *Mx,
+                double *Ex,
+                void *NumericHandle,
+                double User_Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_dl_get_determinant
-(
-    double *Mx,
-    double *Ex,
-    void *NumericHandle,
-    double User_Info [UMFPACK_INFO]
-) ;
+        (
+                double *Mx,
+                double *Ex,
+                void *NumericHandle,
+                double User_Info[UMFPACK_INFO]
+        );
 
 int umfpack_zi_get_determinant
-(
-    double *Mx,
-    double *Mz,
-    double *Ex,
-    void *NumericHandle,
-    double User_Info [UMFPACK_INFO]
-) ;
+        (
+                double *Mx,
+                double *Mz,
+                double *Ex,
+                void *NumericHandle,
+                double User_Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_zl_get_determinant
-(
-    double *Mx,
-    double *Mz,
-    double *Ex,
-    void *NumericHandle,
-    double User_Info [UMFPACK_INFO]
-) ;
+        (
+                double *Mx,
+                double *Mz,
+                double *Ex,
+                void *NumericHandle,
+                double User_Info[UMFPACK_INFO]
+        );
 
 /*
 double int Syntax:

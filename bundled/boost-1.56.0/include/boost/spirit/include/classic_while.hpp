@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_WHILE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_WHILE
+
 #include <boost/spirit/home/classic/dynamic/while.hpp>
+
 #endif

@@ -43,6 +43,7 @@
  * because of the binomial library used there which relies on unsupported SSE functions
  */
 #include <boost/numeric/odeint/stepper/bulirsch_stoer_dense_out.hpp>
+
 #endif
 
 #include <boost/numeric/odeint/stepper/symplectic_euler.hpp>

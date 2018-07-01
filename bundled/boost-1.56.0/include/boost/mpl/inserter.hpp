@@ -15,18 +15,18 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename Sequence
-    , typename Operation
-    >
-struct inserter
-{
-    typedef Sequence    state;
-    typedef Operation   operation;
-};
+        template<
+                typename Sequence, typename Operation
+        >
+        struct inserter {
+            typedef Sequence state;
+            typedef Operation operation;
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_INSERTER_HPP_INCLUDED

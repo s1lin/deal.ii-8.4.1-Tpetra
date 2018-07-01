@@ -9,24 +9,24 @@
 /* -------------------------------------------------------------------------- */
 
 void umfpack_di_free_numeric
-(
-    void **Numeric
-) ;
+        (
+                void **Numeric
+        );
 
 void umfpack_dl_free_numeric
-(
-    void **Numeric
-) ;
+        (
+                void **Numeric
+        );
 
 void umfpack_zi_free_numeric
-(
-    void **Numeric
-) ;
+        (
+                void **Numeric
+        );
 
 void umfpack_zl_free_numeric
-(
-    void **Numeric
-) ;
+        (
+                void **Numeric
+        );
 
 /*
 double int Syntax:

@@ -27,45 +27,50 @@
 #include <boost/mpl/inherit.hpp>
 #include <boost/mpl/identity.hpp>
 
-namespace boost { namespace fusion
-{
-    struct reverse_view_tag;
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct reverse_view_tag;
+        struct fusion_sequence_tag;
 
-    template <typename Sequence>
-    struct reverse_view : sequence_base<reverse_view<Sequence> >
-    {
-        typedef reverse_view_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::true_ is_view;
+        template<typename Sequence>
+        struct reverse_view : sequence_base<reverse_view<Sequence> > {
+            typedef reverse_view_tag fusion_tag;
+            typedef fusion_sequence_tag tag; // this gets picked up by MPL
+            typedef mpl::true_ is_view;
 
-        typedef Sequence seq_type;
-        typedef typename traits::category_of<Sequence>::type category;
-        typedef typename result_of::begin<Sequence>::type first_type;
-        typedef typename result_of::end<Sequence>::type last_type;
-        typedef typename result_of::size<Sequence>::type size;
+            typedef Sequence seq_type;
+            typedef typename traits::category_of<Sequence>::type category;
+            typedef typename result_of::begin<Sequence>::type first_type;
+            typedef typename result_of::end<Sequence>::type last_type;
+            typedef typename result_of::size<Sequence>::type size;
 
-        BOOST_STATIC_ASSERT((
-            is_base_of<
-                bidirectional_traversal_tag
-              , typename traits::category_of<first_type>::type>::value));
+            BOOST_STATIC_ASSERT((
+                    is_base_of<
+                            bidirectional_traversal_tag, typename traits::category_of<first_type>::type>::value));
 
-        BOOST_FUSION_GPU_ENABLED
-        reverse_view(Sequence& in_seq)
-            : seq(in_seq)
-        {}
+            BOOST_FUSION_GPU_ENABLED
+            reverse_view(Sequence &in_seq)
+                    : seq(in_seq) {}
 
-        BOOST_FUSION_GPU_ENABLED
-        first_type first() const { return fusion::begin(seq); }
-        BOOST_FUSION_GPU_ENABLED
-        last_type last() const { return fusion::end(seq); }
-        typename mpl::if_<traits::is_view<Sequence>, Sequence, Sequence&>::type seq;
+            BOOST_FUSION_GPU_ENABLED
+                    first_type
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        reverse_view& operator= (reverse_view const&);
-    };
-}}
+            first() const { return fusion::begin(seq); }
+
+            BOOST_FUSION_GPU_ENABLED
+                    last_type
+
+            last() const { return fusion::end(seq); }
+
+            typename mpl::if_<traits::is_view < Sequence>, Sequence, Sequence&>
+            ::type seq;
+
+        private:
+            // silence MSVC warning C4512: assignment operator could not be generated
+            reverse_view &operator=(reverse_view const &);
+        };
+    }
+}
 
 #endif
 

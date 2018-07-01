@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_TRAVERSE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_TRAVERSE
+
 #include <boost/spirit/home/classic/meta/traverse.hpp>
+
 #endif

@@ -20,57 +20,47 @@
 #include "boost/optional/optional.hpp"
 #include "boost/utility/value_init.hpp"
 
-namespace boost
-{
+namespace boost {
 
-template<class CharType, class CharTrait, class T>
-inline
-std::basic_ostream<CharType, CharTrait>&
-operator<<(std::basic_ostream<CharType, CharTrait>& out, optional<T> const& v)
-{
-  if ( out.good() )
-  {
-    if ( !v )
-         out << "--" ;
-    else out << ' ' << *v ;
-  }
-
-  return out;
-}
-
-template<class CharType, class CharTrait, class T>
-inline
-std::basic_istream<CharType, CharTrait>&
-operator>>(std::basic_istream<CharType, CharTrait>& in, optional<T>& v)
-{
-  if (in.good())
-  {
-    int d = in.get();
-    if (d == ' ')
-    {
-      T x;
-      in >> x;
-      v = x;
-    }
-    else
-    {
-      if (d == '-')
-      {
-        d = in.get();
-
-        if (d == '-')
-        {
-          v = none;
-          return in;
+    template<class CharType, class CharTrait, class T>
+    inline
+    std::basic_ostream<CharType, CharTrait> &
+    operator<<(std::basic_ostream<CharType, CharTrait> &out, optional <T> const &v) {
+        if (out.good()) {
+            if (!v)
+                out << "--";
+            else out << ' ' << *v;
         }
-      }
 
-      in.setstate( std::ios::failbit );
+        return out;
     }
-  }
 
-  return in;
-}
+    template<class CharType, class CharTrait, class T>
+    inline
+    std::basic_istream<CharType, CharTrait> &
+    operator>>(std::basic_istream<CharType, CharTrait> &in, optional <T> &v) {
+        if (in.good()) {
+            int d = in.get();
+            if (d == ' ') {
+                T x;
+                in >> x;
+                v = x;
+            } else {
+                if (d == '-') {
+                    d = in.get();
+
+                    if (d == '-') {
+                        v = none;
+                        return in;
+                    }
+                }
+
+                in.setstate(std::ios::failbit);
+            }
+        }
+
+        return in;
+    }
 
 } // namespace boost
 

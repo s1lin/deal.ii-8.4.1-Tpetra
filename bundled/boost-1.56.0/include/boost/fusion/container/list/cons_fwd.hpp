@@ -8,16 +8,17 @@
 #if !defined(BOOST_FUSION_CONS_FWD_HPP_INCLUDED)
 #define BOOST_FUSION_CONS_FWD_HPP_INCLUDED
 
-namespace boost { namespace fusion
-{
-    struct nil_;
-    #ifndef nil
-    typedef nil_ nil;
-    #endif
+namespace boost {
+    namespace fusion {
+        struct nil_;
+#ifndef nil
+        typedef nil_ nil;
+#endif
 
-    template <typename Car, typename Cdr = nil_>
-    struct cons;
-}}
+        template<typename Car, typename Cdr = nil_>
+        struct cons;
+    }
+}
 
 #endif
 

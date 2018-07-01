@@ -7,15 +7,16 @@
 #if !defined(FUSION_TRANSFORM_VIEW_FORWARD_01052006_1839)
 #define FUSION_TRANSFORM_VIEW_FORWARD_01052006_1839
 
-namespace boost { namespace fusion
-{
-    struct void_;
-    struct transform_view_tag;
-    struct transform_view2_tag;
+namespace boost {
+    namespace fusion {
+        struct void_;
+        struct transform_view_tag;
+        struct transform_view2_tag;
 
-    template <typename A, typename B, typename C = void_>
-    struct transform_view;
-}}
+        template<typename A, typename B, typename C = void_>
+        struct transform_view;
+    }
+}
 
 #endif
 

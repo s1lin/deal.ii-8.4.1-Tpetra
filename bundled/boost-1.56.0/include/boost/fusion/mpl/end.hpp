@@ -13,20 +13,19 @@
 #include <boost/fusion/adapted/mpl/detail/end_impl.hpp>
 #include <boost/fusion/iterator/mpl/fusion_iterator.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct end_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct end_impl;
 
-    template <>
-    struct end_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply
-        {
-            typedef fusion_iterator<typename fusion::result_of::end<Sequence>::type> type;
+        template<>
+        struct end_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply {
+                typedef fusion_iterator<typename fusion::result_of::end<Sequence>::type> type;
+            };
         };
-    };
-}}
+    }
+}
 
 #endif

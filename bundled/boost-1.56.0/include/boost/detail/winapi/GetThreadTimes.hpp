@@ -16,22 +16,25 @@
 #endif
 
 namespace boost {
-namespace detail {
-namespace winapi {
+    namespace detail {
+        namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetThreadTimes;
+            using ::GetThreadTimes;
 #else
-    extern "C" __declspec(dllimport) BOOL_ WINAPI
-        GetThreadTimes(
-            HANDLE_ hThread,
+            extern "C" __declspec(dllimport) BOOL_ WINAPI
+            GetThreadTimes(
+                    HANDLE_
+            hThread,
             LPFILETIME_ lpCreationTime,
-            LPFILETIME_ lpExitTime,
+                    LPFILETIME_
+            lpExitTime,
             LPFILETIME_ lpKernelTime,
-            LPFILETIME_ lpUserTime
-        );
+                    LPFILETIME_
+            lpUserTime
+            );
 #endif
-}
-}
+        }
+    }
 }
 
 #endif // BOOST_DETAIL_WINAPI_GETTHREADTIMES_HPP

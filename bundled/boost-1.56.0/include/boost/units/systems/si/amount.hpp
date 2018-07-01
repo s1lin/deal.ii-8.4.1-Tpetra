@@ -15,18 +15,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<amount_dimension,si::system>    amount;
+            typedef unit <amount_dimension, si::system> amount;
 
-BOOST_UNITS_STATIC_CONSTANT(mole,amount);
-BOOST_UNITS_STATIC_CONSTANT(moles,amount);
+            BOOST_UNITS_STATIC_CONSTANT(mole, amount
+            );
+            BOOST_UNITS_STATIC_CONSTANT(moles, amount
+            );
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

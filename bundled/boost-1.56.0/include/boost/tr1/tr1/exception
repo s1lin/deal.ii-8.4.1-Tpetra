@@ -21,10 +21,13 @@
 #endif
 
 #  include <boost/tr1/detail/config_all.hpp>
+
 #  if defined(BOOST_HAS_INCLUDE_NEXT) && !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT)
 #     include_next <exception>
 #  else
+
 #     include BOOST_TR1_STD_HEADER(exception)
+
 #  endif
 
 #ifdef BOOST_TR1_NO_exception_RECURSION3

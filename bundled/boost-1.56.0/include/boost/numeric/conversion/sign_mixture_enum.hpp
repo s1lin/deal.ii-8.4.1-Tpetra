@@ -10,17 +10,14 @@
 #ifndef BOOST_NUMERIC_CONVERSION_SIGN_MIXTURE_ENUM_FLC_12NOV2002_HPP
 #define BOOST_NUMERIC_CONVERSION_SIGN_MIXTURE_ENUM_FLC_12NOV2002_HPP
 
-namespace boost { namespace numeric
-{
-  enum sign_mixture_enum
-  {
-     unsigned_to_unsigned
-    ,signed_to_signed
-    ,signed_to_unsigned
-    ,unsigned_to_signed
-  } ;
+namespace boost {
+    namespace numeric {
+        enum sign_mixture_enum {
+            unsigned_to_unsigned, signed_to_signed, signed_to_unsigned, unsigned_to_signed
+        };
 
-} } // namespace boost::numeric
+    }
+} // namespace boost::numeric
 
 #endif
 //

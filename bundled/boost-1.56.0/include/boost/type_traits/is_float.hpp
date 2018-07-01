@@ -15,10 +15,14 @@
 namespace boost {
 
 //* is a type T a floating-point type described in the standard (3.9.1p8)
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_float,T,false)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_float,float,true)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_float,double,true)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_float,long double,true)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_float, T,
+    false)
+    BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_float,
+    float,true)
+    BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_float,
+    double,true)
+    BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_float,
+    long double,true)
 
 } // namespace boost
 

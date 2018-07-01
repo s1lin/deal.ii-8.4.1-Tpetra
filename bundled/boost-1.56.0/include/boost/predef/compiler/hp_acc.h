@@ -51,7 +51,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_HPACC_NAME "HP aC++"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_HPACC,BOOST_COMP_HPACC_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_HPACC,
+BOOST_COMP_HPACC_NAME)
 
 #ifdef BOOST_COMP_HPACC_EMULATED
 #include <boost/predef/detail/test.h>

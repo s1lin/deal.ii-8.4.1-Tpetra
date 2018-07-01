@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SWITCH
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SWITCH
+
 #include <boost/spirit/home/classic/dynamic/switch.hpp>
+
 #endif

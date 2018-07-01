@@ -7,24 +7,27 @@
 # include <boost/preprocessor/cat.hpp>
 # include <boost/concept/detail/backward_compatibility.hpp>
 
-namespace boost { namespace concepts {
+namespace boost {
+    namespace concepts {
 
-template <class ModelFnPtr>
-struct require;
+        template<class ModelFnPtr>
+        struct require;
 
-template <class Model>
-struct require<void(*)(Model)>
-{
-    enum { instantiate = sizeof((((Model*)0)->~Model()), 3) };
-};
+        template<class Model>
+        struct require<void (*)(Model)> {
+            enum {
+                instantiate = sizeof((((Model *) 0)->~Model()), 3)
+            };
+        };
 
-#  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )         \
+#  define BOOST_CONCEPT_ASSERT_FN(ModelFnPtr)         \
   enum                                                  \
   {                                                     \
       BOOST_PP_CAT(boost_concept_check,__LINE__) =      \
       boost::concepts::require<ModelFnPtr>::instantiate  \
   }
 
-}} // namespace boost::concept
+    }
+} // namespace boost::concept
 
 #endif // BOOST_CONCEPT_DETAIL_BORLAND_DWA2006429_HPP

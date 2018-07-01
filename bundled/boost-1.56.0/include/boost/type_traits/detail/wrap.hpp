@@ -9,10 +9,13 @@
 #define BOOST_TT_DETAIL_WRAP_HPP_INCLUDED
 
 namespace boost {
-namespace type_traits {
+    namespace type_traits {
 
-template <class T> struct wrap {};
+        template<class T>
+        struct wrap {
+        };
 
-}} // namespace boost::type_traits
+    }
+} // namespace boost::type_traits
 
 #endif // BOOST_TT_DETAIL_WRAP_HPP_INCLUDED

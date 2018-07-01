@@ -12,7 +12,7 @@
 
 #include <utility>
 
-#define BGL_CAT(x,y) x ## y
+#define BGL_CAT(x, y) x ## y
 #define BGL_RANGE(linenum) BGL_CAT(bgl_range_,linenum)
 #define BGL_FIRST(linenum) (BGL_RANGE(linenum).first)
 #define BGL_LAST(linenum) (BGL_RANGE(linenum).second)

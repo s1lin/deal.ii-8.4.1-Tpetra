@@ -14,9 +14,12 @@
 
 namespace boost {
 
-namespace detail { struct none_helper{}; }
+    namespace detail {
+        struct none_helper {
+        };
+    }
 
-typedef int detail::none_helper::*none_t ;
+    typedef int detail::none_helper::*none_t;
 
 } // namespace boost
 

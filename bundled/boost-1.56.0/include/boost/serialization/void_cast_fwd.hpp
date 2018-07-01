@@ -21,17 +21,22 @@
 #include <boost/serialization/force_include.hpp>
 
 namespace boost {
-namespace serialization {
-namespace void_cast_detail{
-class void_caster;
-} // namespace void_cast_detail
-template<class Derived, class Base>
-BOOST_DLLEXPORT 
-inline const void_cast_detail::void_caster & void_cast_register(
-    const Derived * dnull = NULL, 
-    const Base * bnull = NULL
-) BOOST_USED;
-} // namespace serialization
+    namespace serialization {
+        namespace void_cast_detail {
+            class void_caster;
+        } // namespace void_cast_detail
+        template<class Derived, class Base>
+        BOOST_DLLEXPORT
+        inline const void_cast_detail::void_caster
+        &
+
+        void_cast_register(
+                const Derived *dnull = NULL,
+                const Base *bnull = NULL
+        )
+
+        BOOST_USED;
+    } // namespace serialization
 } // namespace boost
 
 #endif // BOOST_SERIALIZATION_VOID_CAST_HPP

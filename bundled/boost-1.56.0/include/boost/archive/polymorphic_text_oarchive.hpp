@@ -20,19 +20,19 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/detail/polymorphic_oarchive_route.hpp>
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
-typedef detail::polymorphic_oarchive_route<
-    text_oarchive_impl<text_oarchive> 
-> polymorphic_text_oarchive;
+        typedef detail::polymorphic_oarchive_route <
+        text_oarchive_impl<text_oarchive>
+        > polymorphic_text_oarchive;
 
-} // namespace archive
+    } // namespace archive
 } // namespace boost
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(
-    boost::archive::polymorphic_text_oarchive
+        boost::archive::polymorphic_text_oarchive
 )
 
 #endif // BOOST_ARCHIVE_POLYMORPHIC_TEXT_OARCHIVE_HPP

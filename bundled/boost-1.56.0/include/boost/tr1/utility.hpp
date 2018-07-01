@@ -5,6 +5,7 @@
 
 #ifndef BOOST_TR1_UTILITY_HPP_INCLUDED
 #  define BOOST_TR1_UTILITY_HPP_INCLUDED
+
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_UTILITY

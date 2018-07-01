@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_POSITIVE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_POSITIVE
+
 #include <boost/spirit/home/classic/core/composite/positive.hpp>
+
 #endif

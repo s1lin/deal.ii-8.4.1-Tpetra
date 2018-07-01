@@ -22,11 +22,10 @@
 #include <boost/compute.hpp>
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
-struct compute_algebra
-{
+            struct compute_algebra {
 
 #define BOOST_ODEINT_COMPUTE_STATE_PARAM(z, n, unused)                         \
             StateType ## n &s ## n,
@@ -41,25 +40,27 @@ struct compute_algebra
         op( BOOST_PP_ENUM_PARAMS(n, s) );                                      \
     }
 
-BOOST_PP_REPEAT_FROM_TO(3, 9, BOOST_ODEINT_COMPUTE_ALGEBRA, ~)
+                BOOST_PP_REPEAT_FROM_TO(3, 9, BOOST_ODEINT_COMPUTE_ALGEBRA,
+                ~
+                )
 
 #undef BOOST_ODEINT_COMPUTE_ALGEBRA
 #undef BOOST_ODEINT_COMPUTE_STATE_PARAM
 
-    template < class S >
-    static typename S::value_type norm_inf( const S &s ) {
-        typedef typename S::value_type value_type;
+                template<class S>
+                static typename S::value_type norm_inf(const S &s) {
+                    typedef typename S::value_type value_type;
 
-        BOOST_COMPUTE_FUNCTION(value_type, max_abs, (value_type, value_type),
-        {
-            return max(_1, fabs(_2));
-        });
+                    BOOST_COMPUTE_FUNCTION(value_type, max_abs, (value_type, value_type),
+                                           {
+                                                   return max(_1, fabs(_2));
+                                           });
 
-        return boost::compute::accumulate(s.begin(), s.end(), value_type(), max_abs);
-    }
-};
-} // odeint
-} // numeric
+                    return boost::compute::accumulate(s.begin(), s.end(), value_type(), max_abs);
+                }
+            };
+        } // odeint
+    } // numeric
 } // boost
 
 #endif

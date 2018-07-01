@@ -18,7 +18,8 @@
 #include "boost/assert.hpp"
 
 namespace boost {
-namespace detail { namespace variant {
+    namespace detail {
+        namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) function template forced_return
@@ -32,71 +33,70 @@ namespace detail { namespace variant {
 
 // "standard" implementation:
 
-template <typename T>
-inline T forced_return()
-{
-    // logical error: should never be here! (see above)
-    BOOST_ASSERT(false);
+            template<typename T>
+            inline T forced_return() {
+                // logical error: should never be here! (see above)
+                BOOST_ASSERT(false);
 
-    T (*dummy_function_ptr)() = 0;
-    return dummy_function_ptr();
-}
+                T (*dummy_function_ptr)() = 0;
+                return dummy_function_ptr();
+            }
 
-template <>
-inline void forced_return<void>()
-{
-    // logical error: should never be here! (see above)
-    BOOST_ASSERT(false);
-}
+            template<>
+            inline void forced_return<void>() {
+                // logical error: should never be here! (see above)
+                BOOST_ASSERT(false);
+            }
 
 #elif !defined(BOOST_MSVC)
 
-// workaround implementation
-//
-// TODO: Determine the most efficient way to handle this -- as below? by
-// throwing? by recursive call to forced_return itself? etc.
-//
+            // workaround implementation
+            //
+            // TODO: Determine the most efficient way to handle this -- as below? by
+            // throwing? by recursive call to forced_return itself? etc.
+            //
 
-template <typename T>
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
-forced_return()
-{
-    // logical error: should never be here! (see above)
-    BOOST_ASSERT(false);
+            template <typename T>
+            inline
+                BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
+            forced_return()
+            {
+                // logical error: should never be here! (see above)
+                BOOST_ASSERT(false);
 
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T) (*dummy)() = 0;
-    return dummy();
-}
+                BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T) (*dummy)() = 0;
+                return dummy();
+            }
 
 #else // defined(BOOST_MSVC)
 
 # pragma warning( push )
 # pragma warning( disable : 4702 ) // unreachable code
-// msvc-specific implementation
-//
-// Leverages __declspec(noreturn) for optimized implementation.
-//
+            // msvc-specific implementation
+            //
+            // Leverages __declspec(noreturn) for optimized implementation.
+            //
 
-__declspec(noreturn)
-inline void forced_return_no_return() {};
+            __declspec(noreturn)
+            inline void forced_return_no_return() {};
 
-template <typename T>
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
-forced_return()
-{
-    // logical error: should never be here! (see above)
-    BOOST_ASSERT(false);
+            template <typename T>
+            inline
+                BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
+            forced_return()
+            {
+                // logical error: should never be here! (see above)
+                BOOST_ASSERT(false);
 
-    forced_return_no_return();
-}
+                forced_return_no_return();
+            }
 
 # pragma warning( pop )
 
 #endif // BOOST_MSVC optimization
 
-}} // namespace detail::variant
+        }
+    } // namespace detail::variant
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_FORCED_RETURN_HPP

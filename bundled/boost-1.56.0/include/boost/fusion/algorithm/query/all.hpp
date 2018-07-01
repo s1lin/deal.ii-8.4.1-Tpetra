@@ -12,25 +12,23 @@
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/algorithm/query/detail/all.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename F>
-        struct all
-        {
-            typedef bool type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename F>
+            struct all {
+                typedef bool type;
+            };
+        }
 
-    template <typename Sequence, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    inline bool
-    all(Sequence const& seq, F f)
-    {
-        return detail::all(seq, f, typename traits::category_of<Sequence>::type());
+        template<typename Sequence, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        inline bool
+        all(Sequence const &seq, F f) {
+            return detail::all(seq, f, typename traits::category_of<Sequence>::type());
+        }
     }
-}}
+}
 
 #endif
 

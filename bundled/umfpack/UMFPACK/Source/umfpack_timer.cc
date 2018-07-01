@@ -74,9 +74,8 @@ double umfpack_timer ( void )
 
 #include <time.h>
 
-double umfpack_timer ( void )
-{
-    return (((double) (clock ( ))) / ((double) (CLOCKS_PER_SEC))) ;
+double umfpack_timer(void) {
+    return (((double) (clock())) / ((double) (CLOCKS_PER_SEC)));
 }
 
 #endif

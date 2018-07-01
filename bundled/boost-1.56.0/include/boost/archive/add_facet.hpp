@@ -21,33 +21,33 @@
 #include <boost/detail/workaround.hpp>
 
 // does STLport uses native STL for locales?
-#if (defined(__SGI_STL_PORT)&& defined(_STLP_NO_OWN_IOSTREAMS))
+#if (defined(__SGI_STL_PORT) && defined(_STLP_NO_OWN_IOSTREAMS))
 // and this native STL lib is old Dinkumware (has not defined _CPPLIB_VER)
 #  if (defined(_YVALS) && !defined(__IBMCPP__)) || !defined(_CPPLIB_VER)
 #    define BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT
 #  endif
 #endif
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
-template<class Facet>
-inline std::locale * 
-add_facet(const std::locale &l, Facet * f){
-    return
-        #if defined BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT 
-            // std namespace used for native locale
-            new std::locale(std::_Addfac(l, f));
-        #elif BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) // old Dinkumwar
-            // std namespace used for native locale
-            new std::locale(std::_Addfac(l, f));
-        #else
-            // standard compatible
-            new std::locale(l, f);
-        #endif
-}
+        template<class Facet>
+        inline std::locale *
+        add_facet(const std::locale &l, Facet *f) {
+            return
+#if defined BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT
+                // std namespace used for native locale
+                new std::locale(std::_Addfac(l, f));
+#elif BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) // old Dinkumwar
+                // std namespace used for native locale
+                new std::locale(std::_Addfac(l, f));
+#else
+                // standard compatible
+                    new std::locale(l, f);
+#endif
+        }
 
-} // namespace archive
+    } // namespace archive
 } // namespace boost
 
 #undef BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT

@@ -33,73 +33,73 @@
 #include <boost/serialization/level_enum.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-struct basic_traits;
+        struct basic_traits;
 
 // default serialization implementation level
-template<class T>
-struct implementation_level_impl {
-    template<class U>
-    struct traits_class_level {
-        typedef typename U::level type;
-    };
+        template<class T>
+        struct implementation_level_impl {
+            template<class U>
+            struct traits_class_level {
+                typedef typename U::level type;
+            };
 
-    typedef mpl::integral_c_tag tag;
-    // note: at least one compiler complained w/o the full qualification
-    // on basic traits below
-    typedef
-        typename mpl::eval_if<
-            is_base_and_derived<boost::serialization::basic_traits, T>,
-            traits_class_level< T >,
-        //else
-        typename mpl::eval_if<
-            is_fundamental< T >,
-            mpl::int_<primitive_type>,
-        //else
-        typename mpl::eval_if<
-            is_class< T >,
-            mpl::int_<object_class_info>,
-        //else
-        typename mpl::eval_if<
-            is_array< T >,
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
-                mpl::int_<not_serializable>,
-            #else
-                mpl::int_<object_serializable>,
-            #endif
-        //else
-        typename mpl::eval_if<
-            is_enum< T >,
+            typedef mpl::integral_c_tag tag;
+            // note: at least one compiler complained w/o the full qualification
+            // on basic traits below
+            typedef
+            typename mpl::eval_if<
+                    is_base_and_derived < boost::serialization::basic_traits, T>,
+            traits_class_level<T>,
+            //else
+            typename mpl::eval_if<
+                    is_fundamental < T>,
+            mpl::int_ <primitive_type>,
+            //else
+            typename mpl::eval_if<
+                    is_class < T>,
+            mpl::int_ <object_class_info>,
+            //else
+            typename mpl::eval_if<
+                    is_array < T>,
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
+            mpl::int_<not_serializable>,
+#else
+            mpl::int_ <object_serializable>,
+#endif
+            //else
+            typename mpl::eval_if<
+                    is_enum < T>,
             //#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
             //    mpl::int_<not_serializable>,
             //#else
-                mpl::int_<primitive_type>,
+            mpl::int_ <primitive_type>,
             //#endif
-        //else
-            mpl::int_<not_serializable>
-        >
-        >
-        >
-        >
-        >::type type;
-        // vc 7.1 doesn't like enums here
-    BOOST_STATIC_CONSTANT(int, value = type::value);
-};
+            //else
+            mpl::int_ <not_serializable>
+            >
+            >
+            >
+            >
+            >
+            ::type type;
 
-template<class T>
-struct implementation_level : 
-    public implementation_level_impl<const T>
-{
-};
+            // vc 7.1 doesn't like enums here
+            BOOST_STATIC_CONSTANT(int, value = type::value);
+        };
 
-template<class T, int L>
-inline bool operator>=(implementation_level< T > t, enum level_type l)
-{
-    return t.value >= (int)l;
-}
+        template<class T>
+        struct implementation_level :
+                public implementation_level_impl<const T> {
+        };
 
-} // namespace serialization
+        template<class T, int L>
+        inline bool operator>=(implementation_level<T> t, enum level_type l) {
+            return t.value >= (int) l;
+        }
+
+    } // namespace serialization
 } // namespace boost
 
 // specify the level of serialization implementation for the class
@@ -119,6 +119,6 @@ inline bool operator>=(implementation_level< T > t, enum level_type l)
     };                                                   \
     }                                                    \
     }
-    /**/
+/**/
 
 #endif // BOOST_SERIALIZATION_LEVEL_HPP

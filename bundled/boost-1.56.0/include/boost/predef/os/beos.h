@@ -25,9 +25,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_OS_BEOS BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && ( \
+#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && (\
     defined(__BEOS__) \
-    )
+)
 #   undef BOOST_OS_BEOS
 #   define BOOST_OS_BEOS BOOST_VERSION_NUMBER_AVAILABLE
 #endif
@@ -40,7 +40,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_BEOS_NAME "BeOS"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_OS_BEOS,BOOST_OS_BEOS_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_OS_BEOS,
+BOOST_OS_BEOS_NAME)
 
 
 #endif

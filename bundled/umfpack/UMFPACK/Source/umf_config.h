@@ -176,7 +176,7 @@
 /* Sun Solaris, SGI Irix, Linux, Compaq Alpha, and IBM RS 6000 all have */
 /* getrusage.  It's in BSD unix, so perhaps all unix systems have it. */
 #if defined (UMF_SOL2) || defined (UMF_SGI) || defined (UMF_LINUX) \
-|| defined (UMF_ALPHA) || defined (UMF_AIX) || defined (UMF_CYGWIN)
+ || defined (UMF_ALPHA) || defined (UMF_AIX) || defined (UMF_CYGWIN)
 #define GETRUSAGE
 #endif
 
@@ -201,10 +201,10 @@
 { \
     double alpha [2] = {-1,0}, beta [2] = {1,0} ; \
     BLAS_zgemm ("N", "T", m, n, k, alpha, (double *) A, ldac, \
-	(double *) B, ldb, beta, (double *) C, ldac) ; \
+    (double *) B, ldb, beta, (double *) C, ldac) ; \
 }
 #else
-#define BLAS_GEMM(m,n,k,A,B,ldb,C,ldac) \
+#define BLAS_GEMM(m, n, k, A, B, ldb, C, ldac) \
 { \
     double alpha = -1, beta = 1 ; \
     BLAS_dgemm ("N", "T", m, n, k, &alpha, A, ldac, B, ldb, &beta, C, ldac) ; \
@@ -225,10 +225,10 @@
 { \
     double alpha [2] = {-1,0} ; \
     BLAS_zgeru (m, n, alpha, (double *) x, 1, (double *) y, 1, \
-	(double *) A, d) ; \
+    (double *) A, d) ; \
 }
 #else
-#define BLAS_GER(m,n,x,y,A,d) \
+#define BLAS_GER(m, n, x, y, A, d) \
 { \
     double alpha = -1 ; \
     BLAS_dger (m, n, &alpha, x, 1, y, 1, A, d) ; \
@@ -248,10 +248,10 @@
 { \
     double alpha [2] = {-1,0}, beta [2] = {1,0} ; \
     BLAS_zgemv ("N", m, n, alpha, (double *) A, d, (double *) x, 1, beta, \
-	(double *) y, 1) ; \
+    (double *) y, 1) ; \
 }
 #else
-#define BLAS_GEMV(m,n,A,x,y,d) \
+#define BLAS_GEMV(m, n, A, x, y, d) \
 { \
     double alpha = -1, beta = 1 ; \
     BLAS_dgemv ("N", m, n, &alpha, A, d, x, 1, &beta, y, 1) ; \
@@ -272,7 +272,7 @@
     BLAS_ztrsv ("L", "N", "U", m, (double *) A, d, (double *) b, 1) ; \
 }
 #else
-#define BLAS_TRSV(m,A,b,d) \
+#define BLAS_TRSV(m, A, b, d) \
 { \
     BLAS_dtrsv ("L", "N", "U", m, A, d, b, 1) ; \
 }
@@ -291,10 +291,10 @@
 { \
     double alpha [2] = {1,0} ; \
     BLAS_ztrsm ("R", "L", "T", "U", m, n, alpha, (double *) A, lda, \
-	(double *) B, ldb) ; \
+    (double *) B, ldb) ; \
 }
 #else
-#define BLAS_TRSM_RIGHT(m,n,A,lda,B,ldb) \
+#define BLAS_TRSM_RIGHT(m, n, A, lda, B, ldb) \
 { \
     double alpha = 1 ; \
     BLAS_dtrsm ("R", "L", "T", "U", m, n, &alpha, A, lda, B, ldb) ; \
@@ -316,7 +316,7 @@
     BLAS_zscal (n, alpha, (double *) x, 1) ; \
 }
 #else
-#define BLAS_SCAL(n,s,x) \
+#define BLAS_SCAL(n, s, x) \
 { \
     double alpha = REAL_COMPONENT (s) ; \
     BLAS_dscal (n, &alpha, (double *) x, 1) ; \

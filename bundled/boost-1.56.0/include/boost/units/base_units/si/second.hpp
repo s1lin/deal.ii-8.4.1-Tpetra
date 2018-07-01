@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-struct second_base_unit : public base_unit<second_base_unit, time_dimension, -7>
-{
-    static std::string name()   { return("second"); }
-    static std::string symbol() { return("s"); }
-};
+            struct second_base_unit : public base_unit<second_base_unit, time_dimension, -7> {
+                static std::string name() { return ("second"); }
 
-} // namespace si
+                static std::string symbol() { return ("s"); }
+            };
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

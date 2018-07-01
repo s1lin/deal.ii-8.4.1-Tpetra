@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of solid angle
-struct solid_angle_base_dimension : 
-    boost::units::base_dimension<solid_angle_base_dimension,-1> 
-{ };               
+        struct solid_angle_base_dimension :
+                boost::units::base_dimension<solid_angle_base_dimension, -1> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::solid_angle_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// base dimension of solid angle (QS)
-typedef solid_angle_base_dimension::dimension_type    solid_angle_dimension;
+        typedef solid_angle_base_dimension::dimension_type solid_angle_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

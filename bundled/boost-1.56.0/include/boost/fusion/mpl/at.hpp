@@ -11,24 +11,23 @@
 #include <boost/mpl/at.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 
-namespace boost { 
-namespace fusion
-{
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct fusion_sequence_tag;
+    }
+
+    namespace mpl {
+        template<typename Tag>
+        struct at_impl;
+
+        template<>
+        struct at_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence, typename N>
+            struct apply : fusion::result_of::value_at<Sequence, N> {
+            };
+        };
+    }
 }
-
-namespace mpl
-{
-    template <typename Tag>
-    struct at_impl;
-
-    template <>
-    struct at_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence, typename N>
-        struct apply : fusion::result_of::value_at<Sequence, N> {};
-    };
-}}
 
 #endif
 

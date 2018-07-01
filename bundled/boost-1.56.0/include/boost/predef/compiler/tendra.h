@@ -43,7 +43,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_COMP_TENDRA_NAME "TenDRA C/C++"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_TENDRA,BOOST_COMP_TENDRA_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_TENDRA,
+BOOST_COMP_TENDRA_NAME)
 
 #ifdef BOOST_COMP_TENDRA_EMULATED
 #include <boost/predef/detail/test.h>

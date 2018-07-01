@@ -6,19 +6,29 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LIST_DETAIL_FOLD_LEFT_HPP
 # define BOOST_PREPROCESSOR_LIST_DETAIL_FOLD_LEFT_HPP
 #
+
+
 # include <boost/preprocessor/control/expr_iif.hpp>
 # include <boost/preprocessor/control/iif.hpp>
 # include <boost/preprocessor/list/adt.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
+
 #
+
 # define BOOST_PP_LIST_FOLD_LEFT_1(o, s, l) BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), BOOST_PP_LIST_FOLD_LEFT_2, BOOST_PP_TUPLE_ELEM_3_1)(o, BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), o, BOOST_PP_TUPLE_ELEM_3_1)(2, s, BOOST_PP_LIST_FIRST(l)), BOOST_PP_LIST_REST(l))
 # define BOOST_PP_LIST_FOLD_LEFT_2(o, s, l) BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), BOOST_PP_LIST_FOLD_LEFT_3, BOOST_PP_TUPLE_ELEM_3_1)(o, BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), o, BOOST_PP_TUPLE_ELEM_3_1)(3, s, BOOST_PP_LIST_FIRST(l)), BOOST_PP_LIST_REST(l))
 # define BOOST_PP_LIST_FOLD_LEFT_3(o, s, l) BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), BOOST_PP_LIST_FOLD_LEFT_4, BOOST_PP_TUPLE_ELEM_3_1)(o, BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), o, BOOST_PP_TUPLE_ELEM_3_1)(4, s, BOOST_PP_LIST_FIRST(l)), BOOST_PP_LIST_REST(l))
@@ -276,4 +286,5 @@
 # define BOOST_PP_LIST_FOLD_LEFT_255(o, s, l) BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), BOOST_PP_LIST_FOLD_LEFT_256, BOOST_PP_TUPLE_ELEM_3_1)(o, BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), o, BOOST_PP_TUPLE_ELEM_3_1)(256, s, BOOST_PP_LIST_FIRST(l)), BOOST_PP_LIST_REST(l))
 # define BOOST_PP_LIST_FOLD_LEFT_256(o, s, l) BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), BOOST_PP_LIST_FOLD_LEFT_257, BOOST_PP_TUPLE_ELEM_3_1)(o, BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(l), o, BOOST_PP_TUPLE_ELEM_3_1)(257, s, BOOST_PP_LIST_FIRST(l)), BOOST_PP_LIST_REST(l))
 #
+
 # endif

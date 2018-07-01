@@ -11,7 +11,9 @@
 #include <boost/fusion/container/map/map.hpp>
 
 #if !defined(BOOST_FUSION_HAS_VARIADIC_MAP)
+
 # include <boost/fusion/container/generation/detail/pp_map_tie.hpp>
+
 #else
 
 ///////////////////////////////////////////////////////////////////////////////

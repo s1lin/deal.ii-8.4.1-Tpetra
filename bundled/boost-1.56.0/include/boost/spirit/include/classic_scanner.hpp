@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SCANNER
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SCANNER
+
 #include <boost/spirit/home/classic/core/scanner/scanner.hpp>
+
 #endif

@@ -8,22 +8,23 @@
 #if !defined(BOOST_FUSION_SIZE_IMPL_27122005_1251)
 #define BOOST_FUSION_SIZE_IMPL_27122005_1251
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct boost_array_tag;
+        struct boost_array_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct size_impl;
+        namespace extension {
+            template<typename T>
+            struct size_impl;
 
-        template<>
-        struct size_impl<boost_array_tag>
-        {
-            template<typename Sequence>
-            struct apply : mpl::int_<Sequence::static_size> {};
-        };
+            template<>
+            struct size_impl<boost_array_tag> {
+                template<typename Sequence>
+                struct apply : mpl::int_<Sequence::static_size> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

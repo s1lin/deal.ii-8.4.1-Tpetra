@@ -5,15 +5,16 @@
 
 #ifndef BOOST_TR1_FUNCTIONAL_HPP_INCLUDED
 #  define BOOST_TR1_FUNCTIONAL_HPP_INCLUDED
+
 #  include <boost/tr1/detail/config.hpp>
 #  include <functional>
 
 #if defined(BOOST_HAS_TR1_REFERENCE_WRAPPER) \
-   || defined(BOOST_HAS_TR1_RESULT_OF)\
-   || defined(BOOST_HAS_TR1_MEM_FN)\
-   || defined(BOOST_HAS_TR1_BIND)\
-   || defined(BOOST_HAS_TR1_FUNCTION)\
-   || defined(BOOST_HAS_TR1_HASH)
+ || defined(BOOST_HAS_TR1_RESULT_OF)\
+ || defined(BOOST_HAS_TR1_MEM_FN)\
+ || defined(BOOST_HAS_TR1_BIND)\
+ || defined(BOOST_HAS_TR1_FUNCTION)\
+ || defined(BOOST_HAS_TR1_HASH)
 #  if defined(BOOST_HAS_INCLUDE_NEXT) && !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT)
 #     include_next BOOST_TR1_HEADER(functional)
 #  else
@@ -26,18 +27,20 @@
 
 #include <boost/ref.hpp>
 
-namespace std{ namespace tr1{
+namespace std {
+    namespace tr1 {
 
-   using ::boost::reference_wrapper;
-   using ::boost::ref;
-   using ::boost::cref;
+        using ::boost::reference_wrapper;
+        using ::boost::ref;
+        using ::boost::cref;
 
-} }
+    }
+}
 
 #endif  // BOOST_HAS_TR1_REFERENCE_WRAPPER
 
 #if !defined(BOOST_HAS_TR1_RESULT_OF)\
-   && !defined(BOOST_NO_SFINAE)
+ && !defined(BOOST_NO_SFINAE)
 
 //
 // we can only actually include result_of.hpp if the compiler
@@ -45,14 +48,16 @@ namespace std{ namespace tr1{
 //
 #include <boost/utility/result_of.hpp>
 
-namespace std{ namespace tr1{
+namespace std {
+    namespace tr1 {
 
-   template<class F>
-   struct result_of
-     : ::boost::tr1_result_of<F>
-   {};
+        template<class F>
+        struct result_of
+                : ::boost::tr1_result_of<F> {
+        };
 
-} }
+    }
+}
 
 #endif // BOOST_HAS_TR1_RESULT_OF
 
@@ -60,11 +65,13 @@ namespace std{ namespace tr1{
 // mem_fn:
 #include <boost/mem_fn.hpp>
 
-namespace std{ namespace tr1{
+namespace std {
+    namespace tr1 {
 
-using boost::mem_fn;
+        using boost::mem_fn;
 
-} }
+    }
+}
 
 #endif // BOOST_HAS_TR1_MEM_FN
 
@@ -73,26 +80,28 @@ using boost::mem_fn;
 // Bind:
 #include <boost/bind.hpp>
 
-namespace std{ namespace tr1{
+namespace std {
+    namespace tr1 {
 
-   using ::boost::is_bind_expression;
-   using ::boost::is_placeholder;
-   using ::boost::bind;
-   namespace placeholders {
+        using ::boost::is_bind_expression;
+        using ::boost::is_placeholder;
+        using ::boost::bind;
+        namespace placeholders {
 #ifndef BOOST_BIND_NO_PLACEHOLDERS
-      using ::_1;
-      using ::_2;
-      using ::_3;
-      using ::_4;
-      using ::_5;
-      using ::_6;
-      using ::_7;
-      using ::_8;
-      using ::_9;
+            using ::_1;
+            using ::_2;
+            using ::_3;
+            using ::_4;
+            using ::_5;
+            using ::_6;
+            using ::_7;
+            using ::_8;
+            using ::_9;
 #endif
-   } // placeholders
+        } // placeholders
 
-} }
+    }
+}
 
 #endif
 
@@ -121,19 +130,21 @@ namespace std{ namespace tr1{
 // we forward declare boost::hash and include
 // the actual header later.
 //
-namespace boost{
-template <class T> struct hash;
+namespace boost {
+    template<class T>
+    struct hash;
 }
 
-namespace std{ namespace tr1{
-   //using ::boost::hash;
+namespace std {
+    namespace tr1 {
+        //using ::boost::hash;
 
-   template <class T>
-   struct hash : public boost::hash<T>
-   {
-   };
+        template<class T>
+        struct hash : public boost::hash<T> {
+        };
 
-}}
+    }
+}
 
 #include <boost/functional/hash.hpp>
 

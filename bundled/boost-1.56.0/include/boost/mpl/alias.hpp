@@ -15,7 +15,7 @@
 // $Revision$
 
 namespace {
-namespace mpl = boost::mpl;
+    namespace mpl = boost::mpl;
 }
 
 #endif // BOOST_MPL_ALIAS_HPP_INCLUDED

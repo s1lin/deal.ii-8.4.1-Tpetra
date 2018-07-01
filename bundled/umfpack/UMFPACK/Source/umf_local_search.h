@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_local_search
-(
-    NumericType *Numeric,
-    WorkType *Work,
-    SymbolicType *Symbolic
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work,
+                SymbolicType *Symbolic
+        );

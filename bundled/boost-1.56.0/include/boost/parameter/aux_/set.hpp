@@ -8,7 +8,7 @@
 # include <boost/detail/workaround.hpp>
 
 # if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
-  && !BOOST_WORKAROUND(__GNUC__, < 3)
+ && !BOOST_WORKAROUND(__GNUC__, < 3)
 #  include <boost/mpl/insert.hpp>
 #  include <boost/mpl/set/set0.hpp>
 #  include <boost/mpl/has_key.hpp>
@@ -39,26 +39,28 @@ struct has_key_
 #  include <boost/mpl/not.hpp>
 #  include <boost/mpl/push_front.hpp>
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost {
+    namespace parameter {
+        namespace aux {
 
-typedef mpl::list0<> set0;
+            typedef mpl::list0<> set0;
 
-template <class Set, class K>
-struct insert_
-{
-    typedef typename mpl::push_front<Set, K>::type type;
-};
+            template<class Set, class K>
+            struct insert_ {
+                typedef typename mpl::push_front<Set, K>::type type;
+            };
 
-template <class Set, class K>
-struct has_key_
-{
-    typedef typename mpl::find<Set, K>::type iter;
-    typedef mpl::not_<
-        is_same<iter, typename mpl::end<Set>::type> 
-    > type;
-};
+            template<class Set, class K>
+            struct has_key_ {
+                typedef typename mpl::find<Set, K>::type iter;
+                typedef mpl::not_ <
+                is_same<iter, typename mpl::end<Set>::type>
+                > type;
+            };
 
-}}} // namespace boost::parameter::aux
+        }
+    }
+} // namespace boost::parameter::aux
 
 # endif
 

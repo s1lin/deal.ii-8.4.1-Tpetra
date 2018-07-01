@@ -24,18 +24,17 @@
 #include <boost/numeric/odeint/algebra/operations_dispatcher.hpp>
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
 // specialization for Boost.Compute vector
-template< class T , class A >
-struct operations_dispatcher< boost::compute::vector< T , A > >
-{
-    typedef compute_operations operations_type;
-};
+            template<class T, class A>
+            struct operations_dispatcher<boost::compute::vector<T, A> > {
+                typedef compute_operations operations_type;
+            };
 
-} // namespace odeint
-} // namespace numeric
+        } // namespace odeint
+    } // namespace numeric
 } // namespace boost
 
 

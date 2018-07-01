@@ -16,20 +16,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<volume_dimension,cgs::system>   volume;
-    
-BOOST_UNITS_STATIC_CONSTANT(cubic_centimeter,volume);   
-BOOST_UNITS_STATIC_CONSTANT(cubic_centimeters,volume);  
-BOOST_UNITS_STATIC_CONSTANT(cubic_centimetre,volume);   
-BOOST_UNITS_STATIC_CONSTANT(cubic_centimetres,volume);  
+            typedef unit <volume_dimension, cgs::system> volume;
 
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(cubic_centimeter, volume
+            );
+            BOOST_UNITS_STATIC_CONSTANT(cubic_centimeters, volume
+            );
+            BOOST_UNITS_STATIC_CONSTANT(cubic_centimetre, volume
+            );
+            BOOST_UNITS_STATIC_CONSTANT(cubic_centimetres, volume
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

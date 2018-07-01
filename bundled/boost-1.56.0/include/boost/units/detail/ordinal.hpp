@@ -15,34 +15,36 @@
 #include <boost/mpl/bool.hpp>
 
 namespace boost {
-namespace units {
+    namespace units {
 
-namespace detail {
+        namespace detail {
 
-struct ordinal_tag {};
+            struct ordinal_tag {
+            };
 
-}
+        }
 
-template<int N>
-struct ordinal {
-    typedef detail::ordinal_tag tag;
-    static const long value = N;
-};
+        template<int N>
+        struct ordinal {
+            typedef detail::ordinal_tag tag;
+            static const long value = N;
+        };
 
-template<int N>
-const long ordinal<N>::value;
+        template<int N>
+        const long ordinal<N>::value;
 
-}
+    }
 
-namespace mpl {
+    namespace mpl {
 
-template<>
-struct less_impl<units::detail::ordinal_tag, units::detail::ordinal_tag> {
-    template<class T1, class T2>
-    struct apply : bool_<(T1::value) < (T2::value)> {};
-};
+        template<>
+        struct less_impl<units::detail::ordinal_tag, units::detail::ordinal_tag> {
+            template<class T1, class T2>
+            struct apply : bool_<(T1::value) < (T2::value)> {
+            };
+        };
 
-}
+    }
 
 }
 

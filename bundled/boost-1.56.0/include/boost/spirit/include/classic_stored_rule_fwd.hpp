@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_STORED_RULE_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_STORED_RULE_FWD
+
 #include <boost/spirit/home/classic/dynamic/stored_rule_fwd.hpp>
+
 #endif

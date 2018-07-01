@@ -96,15 +96,15 @@ namespace impl {
     template<typename CharT>
     inline void token_printer(std::ostream& o, CharT c)
     {
-    #if !defined(BOOST_SPIRIT_DEBUG_TOKEN_PRINTER)
+#if !defined(BOOST_SPIRIT_DEBUG_TOKEN_PRINTER)
 
         token_printer_aux<CharT>::print(o, c);
 
-    #else
+#else
 
         BOOST_SPIRIT_DEBUG_TOKEN_PRINTER(o, c);
 
-    #endif
+#endif
     }
 
 ///////////////////////////////////////////////////////////////////////////////

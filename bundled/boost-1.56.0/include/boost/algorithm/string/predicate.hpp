@@ -54,33 +54,33 @@ namespace boost {
               \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T, typename PredicateT>
-            inline bool starts_with( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            PredicateT Comp)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(::boost::as_literal(Input));
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(::boost::as_literal(Test));
+        inline bool starts_with(
+                const Range1T &Input,
+                const Range2T &Test,
+                PredicateT Comp) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type > lit_input(::boost::as_literal(Input));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type > lit_test(::boost::as_literal(Test));
 
-            typedef BOOST_STRING_TYPENAME 
-                range_const_iterator<Range1T>::type Iterator1T;
-            typedef BOOST_STRING_TYPENAME 
-                range_const_iterator<Range2T>::type Iterator2T;
+            typedef BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type Iterator1T;
+            typedef BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type Iterator2T;
 
-            Iterator1T InputEnd=::boost::end(lit_input);
-            Iterator2T TestEnd=::boost::end(lit_test);
+            Iterator1T InputEnd = ::boost::end(lit_input);
+            Iterator2T TestEnd = ::boost::end(lit_test);
 
-            Iterator1T it=::boost::begin(lit_input);
-            Iterator2T pit=::boost::begin(lit_test);
-            for(;
-                it!=InputEnd && pit!=TestEnd;
-                ++it,++pit)
-            {
-                if( !(Comp(*it,*pit)) )
+            Iterator1T it = ::boost::begin(lit_input);
+            Iterator2T pit = ::boost::begin(lit_test);
+            for (;
+                    it != InputEnd && pit != TestEnd;
+                    ++it, ++pit) {
+                if (!(Comp(*it, *pit)))
                     return false;
             }
 
-            return pit==TestEnd;
+            return pit == TestEnd;
         }
 
         //! 'Starts with' predicate
@@ -88,10 +88,9 @@ namespace boost {
             \overload
         */
         template<typename Range1T, typename Range2T>
-        inline bool starts_with( 
-            const Range1T& Input, 
-            const Range2T& Test)
-        {
+        inline bool starts_with(
+                const Range1T &Input,
+                const Range2T &Test) {
             return ::boost::algorithm::starts_with(Input, Test, is_equal());
         }
 
@@ -109,11 +108,10 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline bool istarts_with( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            const std::locale& Loc=std::locale())
-        {
+        inline bool istarts_with(
+                const Range1T &Input,
+                const Range2T &Test,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::starts_with(Input, Test, is_iequal(Loc));
         }
 
@@ -136,25 +134,27 @@ namespace boost {
               \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T, typename PredicateT>
-        inline bool ends_with( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            PredicateT Comp)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(::boost::as_literal(Input));
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(::boost::as_literal(Test));
+        inline bool ends_with(
+                const Range1T &Input,
+                const Range2T &Test,
+                PredicateT Comp) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type > lit_input(::boost::as_literal(Input));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type > lit_test(::boost::as_literal(Test));
 
-            typedef BOOST_STRING_TYPENAME 
-                range_const_iterator<Range1T>::type Iterator1T;
-            typedef BOOST_STRING_TYPENAME boost::detail::
-                iterator_traits<Iterator1T>::iterator_category category;
+            typedef BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type Iterator1T;
+            typedef BOOST_STRING_TYPENAME boost
+            ::detail::
+            iterator_traits<Iterator1T>::iterator_category category;
 
             return detail::
-                ends_with_iter_select( 
-                    ::boost::begin(lit_input), 
-                    ::boost::end(lit_input), 
-                    ::boost::begin(lit_test), 
-                    ::boost::end(lit_test), 
+            ends_with_iter_select(
+                    ::boost::begin(lit_input),
+                    ::boost::end(lit_input),
+                    ::boost::begin(lit_test),
+                    ::boost::end(lit_test),
                     Comp,
                     category());
         }
@@ -165,10 +165,9 @@ namespace boost {
             \overload
         */
         template<typename Range1T, typename Range2T>
-        inline bool ends_with( 
-            const Range1T& Input, 
-            const Range2T& Test)
-        {
+        inline bool ends_with(
+                const Range1T &Input,
+                const Range2T &Test) {
             return ::boost::algorithm::ends_with(Input, Test, is_equal());
         }
 
@@ -186,11 +185,10 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline bool iends_with( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            const std::locale& Loc=std::locale())
-        {
+        inline bool iends_with(
+                const Range1T &Input,
+                const Range2T &Test,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::ends_with(Input, Test, is_iequal(Loc));
         }
 
@@ -210,22 +208,23 @@ namespace boost {
                \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T, typename PredicateT>
-        inline bool contains( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            PredicateT Comp)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(::boost::as_literal(Input));
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(::boost::as_literal(Test));
+        inline bool contains(
+                const Range1T &Input,
+                const Range2T &Test,
+                PredicateT Comp) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type > lit_input(::boost::as_literal(Input));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type > lit_test(::boost::as_literal(Test));
 
-            if (::boost::empty(lit_test))
-            {
+            if (::boost::empty(lit_test)) {
                 // Empty range is contained always
                 return true;
             }
-            
+
             // Use the temporary variable to make VACPP happy
-            bool bResult=(::boost::algorithm::first_finder(lit_test,Comp)(::boost::begin(lit_input), ::boost::end(lit_input)));
+            bool bResult = (::boost::algorithm::first_finder(lit_test, Comp)(::boost::begin(lit_input),
+                                                                             ::boost::end(lit_input)));
             return bResult;
         }
 
@@ -234,10 +233,9 @@ namespace boost {
             \overload
         */
         template<typename Range1T, typename Range2T>
-        inline bool contains( 
-            const Range1T& Input, 
-            const Range2T& Test)
-        {
+        inline bool contains(
+                const Range1T &Input,
+                const Range2T &Test) {
             return ::boost::algorithm::contains(Input, Test, is_equal());
         }
 
@@ -254,11 +252,10 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline bool icontains( 
-            const Range1T& Input, 
-            const Range2T& Test, 
-            const std::locale& Loc=std::locale())
-        {
+        inline bool icontains(
+                const Range1T &Input,
+                const Range2T &Test,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::contains(Input, Test, is_iequal(Loc));
         }
 
@@ -281,33 +278,33 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T, typename PredicateT>
-        inline bool equals( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            PredicateT Comp)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(::boost::as_literal(Input));
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(::boost::as_literal(Test));
+        inline bool equals(
+                const Range1T &Input,
+                const Range2T &Test,
+                PredicateT Comp) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type > lit_input(::boost::as_literal(Input));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type > lit_test(::boost::as_literal(Test));
 
-            typedef BOOST_STRING_TYPENAME 
-                range_const_iterator<Range1T>::type Iterator1T;
-            typedef BOOST_STRING_TYPENAME 
-                range_const_iterator<Range2T>::type Iterator2T;
-                
-            Iterator1T InputEnd=::boost::end(lit_input);
-            Iterator2T TestEnd=::boost::end(lit_test);
+            typedef BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type Iterator1T;
+            typedef BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type Iterator2T;
 
-            Iterator1T it=::boost::begin(lit_input);
-            Iterator2T pit=::boost::begin(lit_test);
-            for(;
-                it!=InputEnd && pit!=TestEnd;
-                ++it,++pit)
-            {
-                if( !(Comp(*it,*pit)) )
+            Iterator1T InputEnd = ::boost::end(lit_input);
+            Iterator2T TestEnd = ::boost::end(lit_test);
+
+            Iterator1T it = ::boost::begin(lit_input);
+            Iterator2T pit = ::boost::begin(lit_test);
+            for (;
+                    it != InputEnd && pit != TestEnd;
+                    ++it, ++pit) {
+                if (!(Comp(*it, *pit)))
                     return false;
             }
 
-            return  (pit==TestEnd) && (it==InputEnd);
+            return (pit == TestEnd) && (it == InputEnd);
         }
 
         //! 'Equals' predicate
@@ -315,10 +312,9 @@ namespace boost {
             \overload
         */
         template<typename Range1T, typename Range2T>
-        inline bool equals( 
-            const Range1T& Input, 
-            const Range2T& Test)
-        {
+        inline bool equals(
+                const Range1T &Input,
+                const Range2T &Test) {
             return ::boost::algorithm::equals(Input, Test, is_equal());
         }
 
@@ -338,11 +334,10 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline bool iequals( 
-            const Range1T& Input, 
-            const Range2T& Test,
-            const std::locale& Loc=std::locale())
-        {
+        inline bool iequals(
+                const Range1T &Input,
+                const Range2T &Test,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::equals(Input, Test, is_iequal(Loc));
         }
 
@@ -368,19 +363,20 @@ namespace boost {
          */
         template<typename Range1T, typename Range2T, typename PredicateT>
         inline bool lexicographical_compare(
-            const Range1T& Arg1,
-            const Range2T& Arg2,
-            PredicateT Pred)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_arg1(::boost::as_literal(Arg1));
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_arg2(::boost::as_literal(Arg2));
+                const Range1T &Arg1,
+                const Range2T &Arg2,
+                PredicateT Pred) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range1T>::type > lit_arg1(::boost::as_literal(Arg1));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<Range2T>::type > lit_arg2(::boost::as_literal(Arg2));
 
             return std::lexicographical_compare(
-                ::boost::begin(lit_arg1),
-                ::boost::end(lit_arg1),
-                ::boost::begin(lit_arg2),
-                ::boost::end(lit_arg2),
-                Pred);
+                    ::boost::begin(lit_arg1),
+                    ::boost::end(lit_arg1),
+                    ::boost::begin(lit_arg2),
+                    ::boost::end(lit_arg2),
+                    Pred);
         }
 
         //! Lexicographical compare predicate
@@ -388,10 +384,9 @@ namespace boost {
             \overload
          */
         template<typename Range1T, typename Range2T>
-            inline bool lexicographical_compare(
-            const Range1T& Arg1,
-            const Range2T& Arg2)
-        {
+        inline bool lexicographical_compare(
+                const Range1T &Arg1,
+                const Range2T &Arg2) {
             return ::boost::algorithm::lexicographical_compare(Arg1, Arg2, is_less());
         }
 
@@ -413,13 +408,12 @@ namespace boost {
          */
         template<typename Range1T, typename Range2T>
         inline bool ilexicographical_compare(
-            const Range1T& Arg1,
-            const Range2T& Arg2,
-            const std::locale& Loc=std::locale())
-        {
+                const Range1T &Arg1,
+                const Range2T &Arg2,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::lexicographical_compare(Arg1, Arg2, is_iless(Loc));
         }
-        
+
 
 //  all predicate  -----------------------------------------------//
 
@@ -435,22 +429,21 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename RangeT, typename PredicateT>
-        inline bool all( 
-            const RangeT& Input, 
-            PredicateT Pred)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_input(::boost::as_literal(Input));
+        inline bool all(
+                const RangeT &Input,
+                PredicateT Pred) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type > lit_input(::boost::as_literal(Input));
 
-            typedef BOOST_STRING_TYPENAME 
-                range_const_iterator<RangeT>::type Iterator1T;
+            typedef BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type Iterator1T;
 
-            Iterator1T InputEnd=::boost::end(lit_input);
-            for( Iterator1T It=::boost::begin(lit_input); It!=InputEnd; ++It)
-            {
+            Iterator1T InputEnd = ::boost::end(lit_input);
+            for (Iterator1T It = ::boost::begin(lit_input); It != InputEnd; ++It) {
                 if (!Pred(*It))
                     return false;
             }
-            
+
             return true;
         }
 

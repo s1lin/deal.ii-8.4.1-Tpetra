@@ -26,26 +26,30 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// This must be in namespace boost::units so that ADL
 /// will work with friend functions defined inline.
 /// Base dimensions and base units are independent.
 /// INTERNAL ONLY
-template<long N> struct base_unit_ordinal { };
+        template<long N>
+        struct base_unit_ordinal {
+        };
 
 /// INTERNAL ONLY
-template<class T, long N> struct base_unit_pair { };
+        template<class T, long N>
+        struct base_unit_pair {
+        };
 
 /// INTERNAL ONLY
-template<class T, long N>
-struct check_base_unit {
-    enum {
-        value =
-            sizeof(boost_units_unit_is_registered(units::base_unit_ordinal<N>())) == sizeof(detail::yes) &&
-            sizeof(boost_units_unit_is_registered(units::base_unit_pair<T, N>())) != sizeof(detail::yes)
-    };
-};
+        template<class T, long N>
+        struct check_base_unit {
+            enum {
+                value =
+                sizeof(boost_units_unit_is_registered(units::base_unit_ordinal<N>())) == sizeof(detail::yes) &&
+                sizeof(boost_units_unit_is_registered(units::base_unit_pair<T, N>())) != sizeof(detail::yes)
+            };
+        };
 
 /// Defines a base unit.  To define a unit you need to provide
 /// the derived class (CRTP), a dimension list and a unique integer.
@@ -54,74 +58,77 @@ struct check_base_unit {
 /// @endcode
 /// It is designed so that you will get an error message if you try
 /// to use the same value in multiple definitions.
-template<class Derived,
-         class Dim,
-         long N
+        template<class Derived,
+                class Dim,
+                long N
 #if !defined(BOOST_UNITS_DOXYGEN) && !defined(__BORLANDC__)
-         ,
-         class = typename detail::ordinal_has_already_been_defined<
-             check_base_unit<Derived, N>::value
-         >::type
+                ,
+                class = typename detail::ordinal_has_already_been_defined<
+                        check_base_unit<Derived, N>::value
+                >::type
 #endif
->
-class base_unit : 
-    public ordinal<N> 
-{
-    public:
-        /// INTERNAL ONLY
-        typedef void boost_units_is_base_unit_type;
-        /// INTERNAL ONLY
-        typedef base_unit           this_type;
-        /// The dimensions of this base unit.
-        typedef Dim                 dimension_type;
+        >
+        class base_unit :
+                public ordinal<N> {
+        public:
+            /// INTERNAL ONLY
+            typedef void boost_units_is_base_unit_type;
+            /// INTERNAL ONLY
+            typedef base_unit this_type;
+            /// The dimensions of this base unit.
+            typedef Dim dimension_type;
 
-        /// Provided for mpl compatability.
-        typedef Derived type;
+            /// Provided for mpl compatability.
+            typedef Derived type;
 
-        /// The unit corresponding to this base unit.
+            /// The unit corresponding to this base unit.
 #ifndef BOOST_UNITS_DOXYGEN
-        typedef unit<
+            typedef unit <
             Dim,
             heterogeneous_system<
-                heterogeneous_system_impl<
-                    list<
-                        heterogeneous_system_dim<Derived,static_rational<1> >,
-                        dimensionless_type
-                    >,
-                    Dim,
-                    no_scale
-                >
+                    heterogeneous_system_impl <
+                    list <
+                    heterogeneous_system_dim < Derived, static_rational < 1>>,
+            dimensionless_type
+            >,
+            Dim,
+            no_scale
             >
-        > unit_type;
+            >
+            >
+            unit_type;
 #else
-        typedef detail::unspecified unit_type;
+            typedef detail::unspecified unit_type;
 #endif
 
-    private:
-        /// Check for C++0x.  In C++0x, we have to have identical
-        /// arguments but a different return type to trigger an
-        /// error.  Note that this is only needed for clang as
-        /// check_base_unit will trigger an error earlier
-        /// for compilers with less strict name lookup.
-        /// INTERNAL ONLY
-        friend Derived* 
-        check_double_register(const units::base_unit_ordinal<N>&) 
-        { return(0); }
+        private:
+            /// Check for C++0x.  In C++0x, we have to have identical
+            /// arguments but a different return type to trigger an
+            /// error.  Note that this is only needed for clang as
+            /// check_base_unit will trigger an error earlier
+            /// for compilers with less strict name lookup.
+            /// INTERNAL ONLY
+            friend Derived *
+            check_double_register(const units::base_unit_ordinal<N> &) { return (0); }
 
-        /// Register this ordinal
-        /// INTERNAL ONLY
-        friend detail::yes 
-        boost_units_unit_is_registered(const units::base_unit_ordinal<N>&) 
-        { detail::yes result; return(result); }
-        
-        /// But make sure we can identify the current instantiation!
-        /// INTERNAL ONLY
-        friend detail::yes 
-        boost_units_unit_is_registered(const units::base_unit_pair<Derived, N>&) 
-        { detail::yes result; return(result); }
-};
+            /// Register this ordinal
+            /// INTERNAL ONLY
+            friend detail::yes
+            boost_units_unit_is_registered(const units::base_unit_ordinal<N> &) {
+                detail::yes result;
+                return (result);
+            }
 
-} // namespace units
+            /// But make sure we can identify the current instantiation!
+            /// INTERNAL ONLY
+            friend detail::yes
+            boost_units_unit_is_registered(const units::base_unit_pair<Derived, N> &) {
+                detail::yes result;
+                return (result);
+            }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

@@ -19,188 +19,170 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-namespace executors
-{
+namespace boost {
+    namespace executors {
 
-  class loop_executor
-  {
-  public:
-    /// type-erasure to store the works to do
-    typedef  executors::work work;
-  private:
-    /// the thread safe work queue
-    sync_queue<work > work_queue;
+        class loop_executor {
+        public:
+            /// type-erasure to store the works to do
+            typedef executors::work work;
+        private:
+            /// the thread safe work queue
+            sync_queue <work> work_queue;
 
-  public:
-    /**
-     * Effects: try to execute one task.
-     * Returns: whether a task has been executed.
-     * Throws: whatever the current task constructor throws or the task() throws.
-     */
-    bool try_executing_one()
-    {
-      work task;
-      try
-      {
-        if (work_queue.try_pull_front(task) == queue_op_status::success)
-        {
-          task();
-          return true;
-        }
-        return false;
-      }
-      catch (std::exception& )
-      {
-        return false;
-      }
-      catch (...)
-      {
-        return false;
-      }
-    }
-  private:
-    /**
-     * Effects: schedule one task or yields
-     * Throws: whatever the current task constructor throws or the task() throws.
-     */
-    void schedule_one_or_yield()
-    {
-        if ( ! try_executing_one())
-        {
-          this_thread::yield();
-        }
-    }
+        public:
+            /**
+             * Effects: try to execute one task.
+             * Returns: whether a task has been executed.
+             * Throws: whatever the current task constructor throws or the task() throws.
+             */
+            bool try_executing_one() {
+                work task;
+                try {
+                    if (work_queue.try_pull_front(task) == queue_op_status::success) {
+                        task();
+                        return true;
+                    }
+                    return false;
+                }
+                catch (std::exception &) {
+                    return false;
+                }
+                catch (...) {
+                    return false;
+                }
+            }
+
+        private:
+            /**
+             * Effects: schedule one task or yields
+             * Throws: whatever the current task constructor throws or the task() throws.
+             */
+            void schedule_one_or_yield() {
+                if (!try_executing_one()) {
+                    this_thread::yield();
+                }
+            }
 
 
-    /**
-     * The main loop of the worker thread
-     */
-    void worker_thread()
-    {
-      while (!closed())
-      {
-        schedule_one_or_yield();
-      }
-      while (try_executing_one())
-      {
-      }
-    }
+            /**
+             * The main loop of the worker thread
+             */
+            void worker_thread() {
+                while (!closed()) {
+                    schedule_one_or_yield();
+                }
+                while (try_executing_one()) {
+                }
+            }
 
-  public:
-    /// loop_executor is not copyable.
-    BOOST_THREAD_NO_COPYABLE(loop_executor)
+        public:
+            /// loop_executor is not copyable.
+            BOOST_THREAD_NO_COPYABLE(loop_executor)
 
-    /**
-     * \b Effects: creates a thread pool that runs closures using one of its closure-executing methods.
-     *
-     * \b Throws: Whatever exception is thrown while initializing the needed resources.
-     */
-    loop_executor()
-    {
-    }
-    /**
-     * \b Effects: Destroys the thread pool.
-     *
-     * \b Synchronization: The completion of all the closures happen before the completion of the \c loop_executor destructor.
-     */
-    ~loop_executor()
-    {
-      // signal to all the worker thread that there will be no more submissions.
-      close();
-    }
+            /**
+             * \b Effects: creates a thread pool that runs closures using one of its closure-executing methods.
+             *
+             * \b Throws: Whatever exception is thrown while initializing the needed resources.
+             */
+            loop_executor() {
+            }
 
-    /**
-     * loop
-     */
-    void loop() { worker_thread(); }
-    /**
-     * \b Effects: close the \c loop_executor for submissions.
-     * The loop will work until there is no more closures to run.
-     */
-    void close()
-    {
-      work_queue.close();
-    }
+            /**
+             * \b Effects: Destroys the thread pool.
+             *
+             * \b Synchronization: The completion of all the closures happen before the completion of the \c loop_executor destructor.
+             */
+            ~loop_executor() {
+                // signal to all the worker thread that there will be no more submissions.
+                close();
+            }
 
-    /**
-     * \b Returns: whether the pool is closed for submissions.
-     */
-    bool closed()
-    {
-      return work_queue.closed();
-    }
+            /**
+             * loop
+             */
+            void loop() { worker_thread(); }
 
-    /**
-     * \b Requires: \c Closure is a model of \c Callable(void()) and a model of \c CopyConstructible/MoveConstructible.
-     *
-     * \b Effects: The specified \c closure will be scheduled for execution at some point in the future.
-     * If invoked closure throws an exception the \c loop_executor will call \c std::terminate, as is the case with threads.
-     *
-     * \b Synchronization: completion of \c closure on a particular thread happens before destruction of thread's thread local variables.
-     *
-     * \b Throws: \c sync_queue_is_closed if the thread pool is closed.
-     * Whatever exception that can be throw while storing the closure.
-     */
+            /**
+             * \b Effects: close the \c loop_executor for submissions.
+             * The loop will work until there is no more closures to run.
+             */
+            void close() {
+                work_queue.close();
+            }
+
+            /**
+             * \b Returns: whether the pool is closed for submissions.
+             */
+            bool closed() {
+                return work_queue.closed();
+            }
+
+            /**
+             * \b Requires: \c Closure is a model of \c Callable(void()) and a model of \c CopyConstructible/MoveConstructible.
+             *
+             * \b Effects: The specified \c closure will be scheduled for execution at some point in the future.
+             * If invoked closure throws an exception the \c loop_executor will call \c std::terminate, as is the case with threads.
+             *
+             * \b Synchronization: completion of \c closure on a particular thread happens before destruction of thread's thread local variables.
+             *
+             * \b Throws: \c sync_queue_is_closed if the thread pool is closed.
+             * Whatever exception that can be throw while storing the closure.
+             */
 
 #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-    template <typename Closure>
-    void submit(Closure & closure)
-    {
-      work w ((closure));
-      work_queue.push_back(boost::move(w));
-      //work_queue.push(work(closure)); // todo check why this doesn't work
-    }
+            template <typename Closure>
+            void submit(Closure & closure)
+            {
+              work w ((closure));
+              work_queue.push_back(boost::move(w));
+              //work_queue.push(work(closure)); // todo check why this doesn't work
+            }
 #endif
-    void submit(void (*closure)())
-    {
-      work w ((closure));
-      work_queue.push_back(boost::move(w));
-      //work_queue.push_back(work(closure)); // todo check why this doesn't work
-    }
 
-    template <typename Closure>
-    void submit(BOOST_THREAD_RV_REF(Closure) closure)
-    {
-      work w =boost::move(closure);
-      work_queue.push_back(boost::move(w));
-      //work_queue.push_back(work(boost::move(closure))); // todo check why this doesn't work
-    }
+            void submit(void (*closure)()) {
+                work w((closure));
+                work_queue.push_back(boost::move(w));
+                //work_queue.push_back(work(closure)); // todo check why this doesn't work
+            }
 
-    /**
-     * \b Requires: This must be called from an scheduled task.
-     *
-     * \b Effects: reschedule functions until pred()
-     */
-    template <typename Pred>
-    bool reschedule_until(Pred const& pred)
-    {
-      do {
-        if ( ! try_executing_one())
-        {
-          return false;
-        }
-      } while (! pred());
-      return true;
-    }
-    /**
-     * run queued closures
-     */
-    void run_queued_closures()
-    {
-      sync_queue<work>::underlying_queue_type q = work_queue.underlying_queue();
-      while (q.empty())
-      {
-        work task = q.front();
-        q.pop_front();
-        task();
-      }
-    }
+            template<typename Closure>
+            void submit(BOOST_THREAD_RV_REF(Closure) closure) {
+                work w = boost::move(closure);
+                work_queue.push_back(boost::move(w));
+                //work_queue.push_back(work(boost::move(closure))); // todo check why this doesn't work
+            }
 
-  };
-}
-using executors::loop_executor;
+            /**
+             * \b Requires: This must be called from an scheduled task.
+             *
+             * \b Effects: reschedule functions until pred()
+             */
+            template<typename Pred>
+            bool reschedule_until(Pred const &pred) {
+                do {
+                    if (!try_executing_one()) {
+                        return false;
+                    }
+                } while (!pred());
+                return true;
+            }
+
+            /**
+             * run queued closures
+             */
+            void run_queued_closures() {
+                sync_queue<work>::underlying_queue_type q = work_queue.underlying_queue();
+                while (q.empty()) {
+                    work task = q.front();
+                    q.pop_front();
+                    task();
+                }
+            }
+
+        };
+    }
+    using executors::loop_executor;
 
 }
 

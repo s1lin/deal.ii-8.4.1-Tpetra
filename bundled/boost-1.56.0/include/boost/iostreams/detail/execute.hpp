@@ -43,47 +43,53 @@
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/utility/result_of.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost {
+    namespace iostreams {
+        namespace detail {
 
 // Helper for class template execute_traits.
-template<typename Result>
-struct execute_traits_impl {
-    typedef Result result_type;
-    template<typename Op>
-    static Result execute(Op op) { return op(); }
-};
+            template<typename Result>
+            struct execute_traits_impl {
+                typedef Result result_type;
+
+                template<typename Op>
+                static Result execute(Op op) { return op(); }
+            };
 
 // Specialization for void return. For simplicity, execute() returns int 
 // for operations returning void. This could be avoided with additional work.
-template<>
-struct execute_traits_impl<void> {
-    typedef int result_type;
-    template<typename Op>
-    static int execute(Op op) { op(); return 0; }
-};
+            template<>
+            struct execute_traits_impl<void> {
+                typedef int result_type;
+
+                template<typename Op>
+                static int execute(Op op) {
+                    op();
+                    return 0;
+                }
+            };
 
 // Deduces the result type of Op and allows uniform treatment of operations 
 // returning void and non-void.
-template< typename Op, 
-          typename Result = // VC6.5 workaround.
-              #if !defined(BOOST_NO_RESULT_OF) && \
+            template<typename Op,
+                    typename Result = // VC6.5 workaround.
+#if !defined(BOOST_NO_RESULT_OF) && \
                   !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
-                  typename boost::result_of<Op()>::type
-              #else
-                  BOOST_DEDUCED_TYPENAME Op::result_type
-              #endif
-          >
-struct execute_traits 
-    : execute_traits_impl<Result>
-    { };
+                    typename boost::result_of<Op()>::type
+#else
+                    BOOST_DEDUCED_TYPENAME Op::result_type
+#endif
+            >
+            struct execute_traits
+                    : execute_traits_impl<Result> {
+            };
 
 // Implementation with no cleanup operations.
-template<typename Op>
-typename execute_traits<Op>::result_type 
-execute_all(Op op) 
-{ 
-    return execute_traits<Op>::execute(op);
-}
+            template<typename Op>
+            typename execute_traits<Op>::result_type
+            execute_all(Op op) {
+                return execute_traits<Op>::execute(op);
+            }
 
 // Implementation with one or more cleanup operations
 #define BOOST_PP_LOCAL_MACRO(n) \
@@ -109,27 +115,28 @@ execute_all(Op op)
    /**/
 
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_IOSTREAMS_MAX_EXECUTE_ARITY)
+
 #include BOOST_PP_LOCAL_ITERATE()
+
 #undef BOOST_PP_LOCAL_MACRO
 
-template<class InIt, class Op>
-Op execute_foreach(InIt first, InIt last, Op op)
-{
-    if (first == last)
-        return op;
-    try {
-        op(*first);
-    } catch (...) {
-        try {
-            ++first;
-            boost::iostreams::detail::execute_foreach(first, last, op);
-        } catch (...) { }
-        throw;
-    }
-    ++first;
-    return boost::iostreams::detail::execute_foreach(first, last, op);
-}
+            template<class InIt, class Op>
+            Op execute_foreach(InIt first, InIt last, Op op) {
+                if (first == last)
+                    return op;
+                try {
+                    op(*first);
+                } catch (...) {
+                    try {
+                        ++first;
+                        boost::iostreams::detail::execute_foreach(first, last, op);
+                    } catch (...) {}
+                    throw;
+                }
+                ++first;
+                return boost::iostreams::detail::execute_foreach(first, last, op);
+            }
 
-} } } // End namespaces detail, iostreams, boost.
+        }}} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_EXECUTE_HPP_INCLUDED

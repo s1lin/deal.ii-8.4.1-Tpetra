@@ -16,30 +16,27 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/or.hpp>
 
-namespace boost { namespace fusion
-{
-    template <typename Sequence>
-    inline std::ostream&
-    out(std::ostream& os, Sequence& seq)
-    {
-        detail::print_sequence(os, seq);
-        return os;
-    }
-    
-    namespace operators
-    {
-        template <typename Sequence>
-        inline typename
-            boost::enable_if<
-               fusion::traits::is_sequence<Sequence>
-              , std::ostream&
-            >::type
-        operator<<(std::ostream& os, Sequence const& seq)
-        {
-            return fusion::out(os, seq);
+namespace boost {
+    namespace fusion {
+        template<typename Sequence>
+        inline std::ostream &
+        out(std::ostream &os, Sequence &seq) {
+            detail::print_sequence(os, seq);
+            return os;
         }
+
+        namespace operators {
+            template<typename Sequence>
+            inline typename
+            boost::enable_if<
+                    fusion::traits::is_sequence<Sequence>, std::ostream &
+            >::type
+            operator<<(std::ostream &os, Sequence const &seq) {
+                return fusion::out(os, seq);
+            }
+        }
+        using operators::operator<<;
     }
-    using operators::operator<<;
-}}
+}
 
 #endif

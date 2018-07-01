@@ -22,18 +22,18 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Check that a type is a quantity in a specified system. 
-template<class T,class System>
-struct is_quantity_of_system :
-    public mpl::false_
-{ };
+        template<class T, class System>
+        struct is_quantity_of_system :
+                public mpl::false_ {
+        };
 
-template<class Unit,class Y,class System>
-struct is_quantity_of_system< quantity< Unit,Y>,System > :
-    public is_unit_of_system<Unit, System>
-{ };
+        template<class Unit, class Y, class System>
+        struct is_quantity_of_system<quantity < Unit, Y>,System > :
+        public is_unit_of_system <Unit, System> {
+    };
 
 } // namespace units
 

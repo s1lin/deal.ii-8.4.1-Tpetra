@@ -10,36 +10,39 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/list/cons.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nil_;
+namespace boost {
+    namespace fusion {
+        struct nil_;
 
-    namespace result_of
-    {
-        template <typename Car, typename Cdr = nil_>
-        struct cons_tie
-        {
-            typedef cons<Car&, Cdr> type;
-        };
+        namespace result_of {
+            template<typename Car, typename Cdr = nil_>
+            struct cons_tie {
+                typedef cons<Car &, Cdr> type;
+            };
+        }
+
+        // $$$ do we really want a cons_tie? $$$
+        template<typename Car>
+        BOOST_FUSION_GPU_ENABLED
+        inline cons<Car &>
+        cons_tie(Car
+        & car) {
+        return
+        cons<Car &>(car);
     }
 
     // $$$ do we really want a cons_tie? $$$
-    template <typename Car>
+    template<typename Car, typename Cdr>
     BOOST_FUSION_GPU_ENABLED
-    inline cons<Car&>
-    cons_tie(Car& car)
-    {
-        return cons<Car&>(car);
-    }
-
-    // $$$ do we really want a cons_tie? $$$
-    template <typename Car, typename Cdr>
-    BOOST_FUSION_GPU_ENABLED
-    inline cons<Car&, Cdr>
-    cons_tie(Car& car, Cdr const& cdr)
-    {
-        return cons<Car&, Cdr>(car, cdr);
-    }
+    inline cons<Car &, Cdr>
+    cons_tie(Car
+    & car,
+    Cdr const &cdr
+    ) {
+    return
+    cons<Car &, Cdr>(car, cdr
+    );
+}
 }}
 
 #endif

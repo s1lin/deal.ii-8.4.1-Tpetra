@@ -10,20 +10,21 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/detail/adapt_value_traits.hpp>
 
-namespace boost { namespace fusion
-{
-    struct joint_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct joint_view_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_of_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_of_impl;
 
-        template <>
-        struct value_of_impl<joint_view_iterator_tag>
-            : detail::adapt_value_traits {};
+            template<>
+            struct value_of_impl<joint_view_iterator_tag>
+                    : detail::adapt_value_traits {
+            };
+        }
     }
-}}
+}
 
 #endif
 

@@ -40,6 +40,7 @@
 #  endif
 
 #  include <boost/config/auto_link.hpp>
+
 #endif // autolinking on
 
 #endif // BOOST_SIGNALS_CONFIG_HPP

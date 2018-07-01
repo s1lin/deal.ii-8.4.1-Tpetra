@@ -27,30 +27,30 @@
 #include <boost/serialization/traits.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
 // note that T and const T are folded into const T so that
 // there is only one table entry per type
-template<class T>
-struct type_info_implementation {
-    template<class U>
-    struct traits_class_typeinfo_implementation {
-      typedef typename U::type_info_implementation::type type;
-    };
-    // note: at least one compiler complained w/o the full qualification
-    // on basic traits below
-    typedef 
-        typename mpl::eval_if<
-            is_base_and_derived<boost::serialization::basic_traits, T>,
-            traits_class_typeinfo_implementation< T >,
-        //else
+        template<class T>
+        struct type_info_implementation {
+            template<class U>
+            struct traits_class_typeinfo_implementation {
+                typedef typename U::type_info_implementation::type type;
+            };
+            // note: at least one compiler complained w/o the full qualification
+            // on basic traits below
+            typedef
+            typename mpl::eval_if<
+                    is_base_and_derived < boost::serialization::basic_traits, T>,
+            traits_class_typeinfo_implementation<T>,
+            //else
             mpl::identity<
-                typename extended_type_info_impl< T >::type
+                    typename extended_type_info_impl<T>::type
             >
-        >::type type;
-};
+            >::type type;
+        };
 
-} // namespace serialization
+    } // namespace serialization
 } // namespace boost
 
 // define a macro to assign a particular derivation of extended_type_info

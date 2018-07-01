@@ -21,21 +21,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace gradian {
+        namespace gradian {
 
-typedef make_system<boost::units::angle::gradian_base_unit>::type system;
+            typedef make_system<boost::units::angle::gradian_base_unit>::type system;
 
-typedef unit<dimensionless_type,system>         dimensionless;
-typedef unit<plane_angle_dimension,system>      plane_angle;          ///< angle gradian unit constant
+            typedef unit <dimensionless_type, system> dimensionless;
+            typedef unit <plane_angle_dimension, system> plane_angle;          ///< angle gradian unit constant
 
-BOOST_UNITS_STATIC_CONSTANT(gradian,plane_angle);
-BOOST_UNITS_STATIC_CONSTANT(gradians,plane_angle);
+            BOOST_UNITS_STATIC_CONSTANT(gradian, plane_angle
+            );
+            BOOST_UNITS_STATIC_CONSTANT(gradians, plane_angle
+            );
 
-} // namespace gradian
+        } // namespace gradian
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_DIFFERENCE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_DIFFERENCE
+
 #include <boost/spirit/home/classic/core/composite/difference.hpp>
+
 #endif

@@ -15,21 +15,21 @@
 ## ---------------------------------------------------------------------
 
 INCLUDE_DIRECTORIES(
-  ${BOOST_BUNDLED_INCLUDE_DIRS}
-  ${DEAL_II_INCLUDE_DIRS}
-  )
+        ${BOOST_BUNDLED_INCLUDE_DIRS}
+        ${DEAL_II_INCLUDE_DIRS}
+)
 
 SET(src_boost_iostreams
-    file_descriptor.cpp
-    gzip.cpp
-    mapped_file.cpp
-    zlib.cpp
-    )
+        file_descriptor.cpp
+        gzip.cpp
+        mapped_file.cpp
+        zlib.cpp
+        )
 
-IF(DEAL_II_WITH_BZIP2)
-  LIST(APPEND src_boost_iostreams bzip2.cpp)
-ELSE()
-  MESSAGE(STATUS "BOOST::Iostreams will not support bz2'ed streams because libbz2 or its header files could not be found")
-ENDIF()
+IF (DEAL_II_WITH_BZIP2)
+    LIST(APPEND src_boost_iostreams bzip2.cpp)
+ELSE ()
+    MESSAGE(STATUS "BOOST::Iostreams will not support bz2'ed streams because libbz2 or its header files could not be found")
+ENDIF ()
 
 DEAL_II_ADD_LIBRARY(obj_boost_iostreams OBJECT ${src_boost_iostreams})

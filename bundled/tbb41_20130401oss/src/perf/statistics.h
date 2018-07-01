@@ -66,8 +66,7 @@ typedef double value_t;
 
 */
 
-class StatisticsCollector
-{
+class StatisticsCollector {
 public:
     typedef map<string, string> Analysis_t;
     typedef vector<value_t> Results_t;
@@ -75,13 +74,12 @@ public:
 protected:
     StatisticsCollector(const StatisticsCollector &);
 
-    struct StatisticResults
-    {
-        string              Name;
-        string              Mode;
-        int                 Threads;
-        Results_t           Results;
-        Analysis_t          Analysis;
+    struct StatisticResults {
+        string Name;
+        string Mode;
+        int Threads;
+        Results_t Results;
+        Analysis_t Analysis;
     };
 
     // internal members
@@ -91,13 +89,13 @@ protected:
     const char /**Name,*/ *ResultsFmt;
     string Name;
     //! Data
-    typedef map<string, StatisticResults*> Statistics_t;
+    typedef map<string, StatisticResults *> Statistics_t;
     Statistics_t Statistics;
     typedef vector<string> RoundTitles_t;
     RoundTitles_t RoundTitles;
     //TODO: merge those into one structure
     typedef map<string, string> Formulas_t;
-    Formulas_t   Formulas;
+    Formulas_t Formulas;
     typedef set<string> AnalysisTitles_t;
     AnalysisTitles_t AnalysisTitles;
     typedef vector<pair<string, string> > RunInfo_t;
@@ -106,12 +104,19 @@ protected:
 public:
     struct TestCase {
         StatisticResults *access;
+
         TestCase() : access(0) {}
+
         TestCase(StatisticResults *link) : access(link) {}
+
         const char *getName() const { return access->Name.c_str(); }
+
         const char *getMode() const { return access->Mode.c_str(); }
-        int getThreads()       const { return access->Threads; }
+
+        int getThreads() const { return access->Threads; }
+
         const Results_t &getResults() const { return access->Results; }
+
         const Analysis_t &getAnalysis() const { return access->Analysis; }
     };
 
@@ -122,22 +127,22 @@ public:
     //! Data and output types
     enum DataOutput {
         // Verbosity level enumeration
-        Statistic = 1,     //< Analytical data - computed after all iterations and rounds passed
-        Result    = 2,     //< Testing data    - collected after all iterations passed
+                Statistic = 1,     //< Analytical data - computed after all iterations and rounds passed
+        Result = 2,     //< Testing data    - collected after all iterations passed
         Iteration = 3,     //< Verbose data    - collected at each iteration (for each size - in case of containers)
         // ExtraVerbose is not applicabe yet :) be happy, but flexibility is always welcome
 
         // Next constants are bit-fields
-        Stdout   = 1<<8,    //< Output to the console
-        TextFile = 1<<9,    //< Output to plain text file "name.txt" (delimiter is TAB by default)
-        ExcelXML = 1<<10,   //< Output to Excel-readable XML-file "name.xml"
-        HTMLFile = 1<<11,   //< Output to HTML file "name.html"
-        PivotMode= 1<<15    //< Puts all the rounds into one columt to better fit for pivot table in Excel
+                Stdout = 1 << 8,    //< Output to the console
+        TextFile = 1 << 9,    //< Output to plain text file "name.txt" (delimiter is TAB by default)
+        ExcelXML = 1 << 10,   //< Output to Excel-readable XML-file "name.xml"
+        HTMLFile = 1 << 11,   //< Output to HTML file "name.html"
+        PivotMode = 1 << 15    //< Puts all the rounds into one columt to better fit for pivot table in Excel
     };
 
     //! Constructor. Specify tests set name which used as name of output files
     StatisticsCollector(const char *name, Sorting mode = ByThreads, const char *fmt = "%g")
-        :  CurrentKey(NULL), ResultsFmt(fmt), Name(name), SortMode(mode) {}
+            : CurrentKey(NULL), ResultsFmt(fmt), Name(name), SortMode(mode) {}
 
     ~StatisticsCollector();
 
@@ -146,31 +151,43 @@ public:
 
     //! Specify next test key
     TestCase SetTestCase(const char *name, const char *mode, int threads);
+
     //! Specify next test key
     void SetTestCase(const TestCase &t) { SetTestCase(t.getName(), t.getMode(), t.getThreads()); }
+
     //! Reserve specified number of rounds. Use for effeciency. Used mostly internally
     void ReserveRounds(size_t index);
+
     //! Add result of the measure
     void AddRoundResult(const TestCase &, value_t v);
+
     //! Add result of the current measure
-    void AddRoundResult(value_t v) { if(CurrentKey) AddRoundResult(TestCase(CurrentKey), v); }
+    void AddRoundResult(value_t v) { if (CurrentKey) AddRoundResult(TestCase(CurrentKey), v); }
+
     //! Add title of round
     void SetRoundTitle(size_t index, const char *fmt, ...);
+
     //! Add numbered title of round
     void SetRoundTitle(size_t index, int num) { SetRoundTitle(index, "%d", num); }
+
     //! Get number of rounds
     size_t GetRoundsCount() const { return RoundTitles.size(); }
+
     // Set statistic value for the test
     void AddStatisticValue(const TestCase &, const char *type, const char *fmt, ...);
+
     // Set statistic value for the current test
     void AddStatisticValue(const char *type, const char *fmt, ...);
+
     //! Add Excel-processing formulas. @arg formula can contain more than one instances of
     //! ROUNDS template which transforms into the range of cells with result values
     //TODO://! #1 .. #n templates represent data cells from the first to the last
     //TODO: merge with Analisis
     void SetStatisticFormula(const char *name, const char *formula);
+
     //! Add information about run or compile parameters
     void SetRunInfo(const char *title, const char *fmt, ...);
+
     void SetRunInfo(const char *title, int num) { SetRunInfo(title, "%d", num); }
 
     //! Data output

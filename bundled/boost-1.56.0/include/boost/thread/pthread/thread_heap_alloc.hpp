@@ -7,39 +7,37 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-    namespace detail
-    {
+namespace boost {
+    namespace detail {
         template<typename T>
-        inline T* heap_new()
-        {
+        inline T *heap_new() {
             return new T();
         }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-        template<typename T,typename A1>
-        inline T* heap_new(A1&& a1)
-        {
-            return new T(static_cast<A1&&>(a1));
+
+        template<typename T, typename A1>
+        inline T *heap_new(A1 &&a1) {
+            return new T(static_cast<A1 &&>(a1));
         }
-        template<typename T,typename A1,typename A2>
-        inline T* heap_new(A1&& a1,A2&& a2)
-        {
-            return new T(static_cast<A1&&>(a1),static_cast<A2&&>(a2));
+
+        template<typename T, typename A1, typename A2>
+        inline T *heap_new(A1 &&a1, A2 &&a2) {
+            return new T(static_cast<A1 &&>(a1), static_cast<A2 &&>(a2));
         }
-        template<typename T,typename A1,typename A2,typename A3>
-        inline T* heap_new(A1&& a1,A2&& a2,A3&& a3)
-        {
-            return new T(static_cast<A1&&>(a1),static_cast<A2&&>(a2),
-                         static_cast<A3&&>(a3));
+
+        template<typename T, typename A1, typename A2, typename A3>
+        inline T *heap_new(A1 &&a1, A2 &&a2, A3 &&a3) {
+            return new T(static_cast<A1 &&>(a1), static_cast<A2 &&>(a2),
+                         static_cast<A3 &&>(a3));
         }
-        template<typename T,typename A1,typename A2,typename A3,typename A4>
-        inline T* heap_new(A1&& a1,A2&& a2,A3&& a3,A4&& a4)
-        {
-            return new T(static_cast<A1&&>(a1),static_cast<A2&&>(a2),
-                         static_cast<A3&&>(a3),static_cast<A4&&>(a4));
+
+        template<typename T, typename A1, typename A2, typename A3, typename A4>
+        inline T *heap_new(A1 &&a1, A2 &&a2, A3 &&a3, A4 &&a4) {
+            return new T(static_cast<A1 &&>(a1), static_cast<A2 &&>(a2),
+                         static_cast<A3 &&>(a3), static_cast<A4 &&>(a4));
         }
+
 #else
         template<typename T,typename A1>
         inline T* heap_new_impl(A1 a1)
@@ -220,17 +218,15 @@ namespace boost
         }
 
 #endif
+
         template<typename T>
-        inline void heap_delete(T* data)
-        {
+        inline void heap_delete(T *data) {
             delete data;
         }
 
         template<typename T>
-        struct do_heap_delete
-        {
-            void operator()(T* data) const
-            {
+        struct do_heap_delete {
+            void operator()(T *data) const {
                 detail::heap_delete(data);
             }
         };

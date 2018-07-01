@@ -19,28 +19,33 @@
 
 #include <string>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
+
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # include <cctype>
 #endif
+
 #include <boost/iostreams/detail/current_directory.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost {
+    namespace iostreams {
+        namespace detail {
 
 // Resolves the given path relative to the current working directory
-inline std::string absolute_path(const std::string& path)
-{
+            inline std::string absolute_path(const std::string &path) {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    return path.size() && (path[0] == '/' || path[0] == '\\') ||
-           path.size() > 1 && std::isalpha(path[0]) && path[1] == ':' ?
-               path :
-               current_directory() + '\\' + path;
+                return path.size() && (path[0] == '/' || path[0] == '\\') ||
+                       path.size() > 1 && std::isalpha(path[0]) && path[1] == ':' ?
+                           path :
+                           current_directory() + '\\' + path;
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS
-    return path.size() && (path[0] == '/') ?
-        path :
-        current_directory() + '/' + path;
+                return path.size() && (path[0] == '/') ?
+                       path :
+                       current_directory() + '/' + path;
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS
-}
+            }
 
-} } } // End namespaces detail, iostreams, boost.
+        }
+    }
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_ABSOLUTE_PATH_HPP_INCLUDED

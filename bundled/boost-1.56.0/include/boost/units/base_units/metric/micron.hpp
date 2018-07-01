@@ -17,20 +17,22 @@
 #include <boost/units/base_units/si/meter.hpp>
 
 namespace boost {
-namespace units {
-namespace metric {
+    namespace units {
+        namespace metric {
 
-typedef scaled_base_unit<boost::units::si::meter_base_unit, scale<10, static_rational<-6> > >  micron_base_unit;
+            typedef scaled_base_unit <boost::units::si::meter_base_unit, scale<10, static_rational < -6>> >
+            micron_base_unit;
 
-}
+        }
 
-template<>
-struct base_unit_info<metric::micron_base_unit> {
-    static const char* name()   { return("micron"); }
-    static const char* symbol() { return("u"); }
-};
+        template<>
+        struct base_unit_info<metric::micron_base_unit> {
+            static const char *name() { return ("micron"); }
 
-}
+            static const char *symbol() { return ("u"); }
+        };
+
+    }
 }
 
 #endif // BOOST_UNIT_SYSTEMS_METRIC_MICRON_HPP_INCLUDED

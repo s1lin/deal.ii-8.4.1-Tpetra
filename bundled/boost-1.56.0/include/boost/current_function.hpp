@@ -19,14 +19,11 @@
 //  http://www.boost.org/libs/assert/current_function.html
 //
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-inline void current_function_helper()
-{
+        inline void current_function_helper() {
 
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
 
@@ -62,9 +59,9 @@ inline void current_function_helper()
 
 #endif
 
-}
+        }
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace boost
 

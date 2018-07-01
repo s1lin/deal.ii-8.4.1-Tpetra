@@ -9,48 +9,48 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_report_matrix
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    int col_form,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                int col_form,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_dl_report_matrix
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    UF_long col_form,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                UF_long col_form,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 int umfpack_zi_report_matrix
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    int col_form,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                int col_form,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_zl_report_matrix
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    UF_long col_form,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                UF_long col_form,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 /*
 double int Syntax:

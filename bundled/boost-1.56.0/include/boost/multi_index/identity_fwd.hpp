@@ -13,13 +13,14 @@
 #pragma once
 #endif
 
-namespace boost{
+namespace boost {
 
-namespace multi_index{
+    namespace multi_index {
 
-template<class Type> struct identity;
+        template<class Type>
+        struct identity;
 
-} /* namespace multi_index */
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

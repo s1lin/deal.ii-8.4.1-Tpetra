@@ -10,10 +10,12 @@
 #define BOOST_TT_IS_ARITHMETIC_HPP_INCLUDED
 
 #if !defined( __CODEGEARC__ )
+
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_float.hpp>
 #include <boost/type_traits/detail/ice_or.hpp>
 #include <boost/config.hpp>
+
 #endif
 
 // should be the last #include
@@ -22,26 +24,26 @@
 namespace boost {
 
 #if !defined(__CODEGEARC__)
-namespace detail {
+    namespace detail {
 
-template< typename T >
-struct is_arithmetic_impl
-{ 
-    BOOST_STATIC_CONSTANT(bool, value = 
-        (::boost::type_traits::ice_or< 
-            ::boost::is_integral<T>::value,
-            ::boost::is_float<T>::value
-        >::value)); 
-};
+        template<typename T>
+        struct is_arithmetic_impl {
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::type_traits::ice_or<
+                    ::boost::is_integral<T>::value,
+                    ::boost::is_float<T>::value
+            >::value));
+        };
 
-} // namespace detail
+    } // namespace detail
 #endif
 
 //* is a type T an arithmetic type described in the standard (3.9.1p8)
 #if defined(__CODEGEARC__)
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_arithmetic,T,__is_arithmetic(T))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_arithmetic,T,__is_arithmetic(T))
 #else
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_arithmetic,T,::boost::detail::is_arithmetic_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_arithmetic, T, ::boost::detail::is_arithmetic_impl<T>::value
+    )
 #endif
 
 } // namespace boost

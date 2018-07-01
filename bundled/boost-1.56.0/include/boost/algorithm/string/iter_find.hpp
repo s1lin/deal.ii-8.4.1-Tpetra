@@ -64,49 +64,50 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
         */
-        template< 
-            typename SequenceSequenceT,
-            typename RangeT,
-            typename FinderT >
-        inline SequenceSequenceT&
+        template<
+                typename SequenceSequenceT,
+                typename RangeT,
+                typename FinderT>
+        inline SequenceSequenceT &
         iter_find(
-            SequenceSequenceT& Result,
-            RangeT& Input,
-            FinderT Finder )
-        {
+                SequenceSequenceT &Result,
+                RangeT &Input,
+                FinderT Finder) {
             BOOST_CONCEPT_ASSERT((
-                FinderConcept<
-                    FinderT,
-                    BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
-                ));
+                                         FinderConcept <
+                                         FinderT,
+                                                 BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type >
+            ));
 
-            iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(::boost::as_literal(Input));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type > lit_input(::boost::as_literal(Input));
 
-            typedef BOOST_STRING_TYPENAME 
-                range_iterator<RangeT>::type input_iterator_type;
-            typedef find_iterator<input_iterator_type> find_iterator_type;
+            typedef BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type input_iterator_type;
+            typedef find_iterator <input_iterator_type> find_iterator_type;
             typedef detail::copy_iterator_rangeF<
-                BOOST_STRING_TYPENAME 
+                    BOOST_STRING_TYPENAME
                     range_value<SequenceSequenceT>::type,
-                input_iterator_type> copy_range_type;
-            
-            input_iterator_type InputEnd=::boost::end(lit_input);
+                    input_iterator_type> copy_range_type;
 
-            typedef transform_iterator<copy_range_type, find_iterator_type>
-                transform_iter_type;
-    
-            transform_iter_type itBegin=
-                ::boost::make_transform_iterator( 
-                    find_iterator_type( ::boost::begin(lit_input), InputEnd, Finder ),
-                    copy_range_type());
-            
-            transform_iter_type itEnd=
-                ::boost::make_transform_iterator( 
-                    find_iterator_type(),
-                    copy_range_type());
+            input_iterator_type InputEnd = ::boost::end(lit_input);
+
+            typedef transform_iterator <copy_range_type, find_iterator_type>
+                    transform_iter_type;
+
+            transform_iter_type itBegin =
+                    ::boost::make_transform_iterator(
+                            find_iterator_type(::boost::begin(lit_input), InputEnd, Finder),
+                            copy_range_type());
+
+            transform_iter_type itEnd =
+                    ::boost::make_transform_iterator(
+                            find_iterator_type(),
+                            copy_range_type());
 
             SequenceSequenceT Tmp(itBegin, itEnd);
-                        
+
             Result.swap(Tmp);
             return Result;
         }
@@ -135,46 +136,47 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
         */
-        template< 
-            typename SequenceSequenceT,
-            typename RangeT,
-            typename FinderT >
-        inline SequenceSequenceT&
+        template<
+                typename SequenceSequenceT,
+                typename RangeT,
+                typename FinderT>
+        inline SequenceSequenceT &
         iter_split(
-            SequenceSequenceT& Result,
-            RangeT& Input,
-            FinderT Finder )
-        {
+                SequenceSequenceT &Result,
+                RangeT &Input,
+                FinderT Finder) {
             BOOST_CONCEPT_ASSERT((
-                FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
-                ));
+                                         FinderConcept < FinderT,
+                                                 BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type >
+            ));
 
-            iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(::boost::as_literal(Input));
+            iterator_range < BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type > lit_input(::boost::as_literal(Input));
 
-            typedef BOOST_STRING_TYPENAME 
-                range_iterator<RangeT>::type input_iterator_type;
-            typedef split_iterator<input_iterator_type> find_iterator_type;
+            typedef BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type input_iterator_type;
+            typedef split_iterator <input_iterator_type> find_iterator_type;
             typedef detail::copy_iterator_rangeF<
-                BOOST_STRING_TYPENAME 
+                    BOOST_STRING_TYPENAME
                     range_value<SequenceSequenceT>::type,
-                input_iterator_type> copy_range_type;
-            
-            input_iterator_type InputEnd=::boost::end(lit_input);
+                    input_iterator_type> copy_range_type;
 
-            typedef transform_iterator<copy_range_type, find_iterator_type>
-                transform_iter_type;
-    
-            transform_iter_type itBegin=
-                ::boost::make_transform_iterator( 
-                    find_iterator_type( ::boost::begin(lit_input), InputEnd, Finder ),
-                    copy_range_type() );
+            input_iterator_type InputEnd = ::boost::end(lit_input);
 
-            transform_iter_type itEnd=
-                ::boost::make_transform_iterator( 
-                    find_iterator_type(),
-                    copy_range_type() );
-            
+            typedef transform_iterator <copy_range_type, find_iterator_type>
+                    transform_iter_type;
+
+            transform_iter_type itBegin =
+                    ::boost::make_transform_iterator(
+                            find_iterator_type(::boost::begin(lit_input), InputEnd, Finder),
+                            copy_range_type());
+
+            transform_iter_type itEnd =
+                    ::boost::make_transform_iterator(
+                            find_iterator_type(),
+                            copy_range_type());
+
             SequenceSequenceT Tmp(itBegin, itEnd);
 
             Result.swap(Tmp);

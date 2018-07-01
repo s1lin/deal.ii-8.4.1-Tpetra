@@ -8,56 +8,53 @@
 # include <boost/concept/assert.hpp>
 # include <boost/preprocessor/seq/for_each.hpp>
 
-namespace boost { 
+namespace boost {
 
 // unaryfunptr_arg_type from parameter/aux_/parenthesized_type.hpp
 
-namespace ccheck_aux {
+    namespace ccheck_aux {
 
 // A metafunction that transforms void(*)(T) -> T
-template <class UnaryFunctionPointer>
-struct unaryfunptr_arg_type;
+        template<class UnaryFunctionPointer>
+        struct unaryfunptr_arg_type;
 
-template <class Arg>
-struct unaryfunptr_arg_type<void(*)(Arg)>
-{
-    typedef Arg type;
-};
+        template<class Arg>
+        struct unaryfunptr_arg_type<void (*)(Arg)> {
+            typedef Arg type;
+        };
 
-template <>
-struct unaryfunptr_arg_type<void(*)(void)>
-{
-    typedef void type;
-};
+        template<>
+        struct unaryfunptr_arg_type<void (*)(void)> {
+            typedef void type;
+        };
 
-} // namespace ccheck_aux
+    } // namespace ccheck_aux
 
 // Template for use in handwritten assertions
-template <class Model, class More>
-struct requires_ : More
-{
-    BOOST_CONCEPT_ASSERT((Model));
-};
+    template<class Model, class More>
+    struct requires_ : More {
+        BOOST_CONCEPT_ASSERT((Model));
+    };
 
 // Template for use by macros, where models must be wrapped in parens.
 // This isn't in namespace detail to keep extra cruft out of resulting
 // error messages.
-template <class ModelFn>
-struct _requires_
-{
-    enum { value = 0 };
-    BOOST_CONCEPT_ASSERT_FN(ModelFn);
-};
+    template<class ModelFn>
+    struct _requires_ {
+        enum {
+            value = 0
+        };
+        BOOST_CONCEPT_ASSERT_FN(ModelFn);
+    };
 
-template <int check, class Result>
-struct Requires_ : ::boost::ccheck_aux::unaryfunptr_arg_type<Result>
-{
-};
+    template<int check, class Result>
+    struct Requires_ : ::boost::ccheck_aux::unaryfunptr_arg_type<Result> {
+    };
 
 # if BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(1010))
 #  define BOOST_CONCEPT_REQUIRES_(r,data,t) | (::boost::_requires_<void(*)t>::value)
-# else 
-#  define BOOST_CONCEPT_REQUIRES_(r,data,t) + (::boost::_requires_<void(*)t>::value)
+# else
+#  define BOOST_CONCEPT_REQUIRES_(r, data, t) + (::boost::_requires_<void(*)t>::value)
 # endif
 
 #if defined(NDEBUG)
@@ -67,7 +64,7 @@ struct Requires_ : ::boost::ccheck_aux::unaryfunptr_arg_type<Result>
 
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
-// Same thing as below without the initial typename
+    // Same thing as below without the initial typename
 # define BOOST_CONCEPT_REQUIRES(models, result)                                \
     ::boost::Requires_<                                                        \
       (0 BOOST_PP_SEQ_FOR_EACH(BOOST_CONCEPT_REQUIRES_, ~, models)),           \
@@ -83,10 +80,10 @@ struct Requires_ : ::boost::ccheck_aux::unaryfunptr_arg_type<Result>
       void(*)result                                                                 \
     >::type
 
-#endif 
+#endif
 
 // C++0x proposed syntax changed.  This supports an older usage
-#define BOOST_CONCEPT_WHERE(models,result) BOOST_CONCEPT_REQUIRES(models,result)
+#define BOOST_CONCEPT_WHERE(models, result) BOOST_CONCEPT_REQUIRES(models,result)
 
 } // namespace boost::concept_check
 

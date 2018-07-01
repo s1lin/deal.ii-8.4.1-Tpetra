@@ -6,28 +6,41 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_SEQ_FOLD_RIGHT_HPP
 # define BOOST_PREPROCESSOR_SEQ_FOLD_RIGHT_HPP
 #
+
+
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/detail/auto_rec.hpp>
 # include <boost/preprocessor/seq/fold_left.hpp>
 # include <boost/preprocessor/seq/reverse.hpp>
 # include <boost/preprocessor/seq/seq.hpp>
+
 #
+
 # /* BOOST_PP_SEQ_FOLD_RIGHT */
+
 #
+
 # if 0
 #    define BOOST_PP_SEQ_FOLD_RIGHT(op, state, seq) ...
 # endif
 #
+
 # define BOOST_PP_SEQ_FOLD_RIGHT BOOST_PP_CAT(BOOST_PP_SEQ_FOLD_RIGHT_, BOOST_PP_AUTO_REC(BOOST_PP_SEQ_FOLD_LEFT_P, 256))
 #
+
 # define BOOST_PP_SEQ_FOLD_RIGHT_257(op, st, ss) BOOST_PP_ERROR(0x0005)
 #
+
 # define BOOST_PP_SEQ_FOLD_RIGHT_1(op, st, ss) BOOST_PP_SEQ_FOLD_LEFT_I_1(op, st, BOOST_PP_SEQ_REVERSE_S(2, ss), BOOST_PP_SEQ_SIZE(ss))
 # define BOOST_PP_SEQ_FOLD_RIGHT_2(op, st, ss) BOOST_PP_SEQ_FOLD_LEFT_I_2(op, st, BOOST_PP_SEQ_REVERSE_S(3, ss), BOOST_PP_SEQ_SIZE(ss))
 # define BOOST_PP_SEQ_FOLD_RIGHT_3(op, st, ss) BOOST_PP_SEQ_FOLD_LEFT_I_3(op, st, BOOST_PP_SEQ_REVERSE_S(4, ss), BOOST_PP_SEQ_SIZE(ss))
@@ -285,4 +298,5 @@
 # define BOOST_PP_SEQ_FOLD_RIGHT_255(op, st, ss) BOOST_PP_SEQ_FOLD_LEFT_I_255(op, st, BOOST_PP_SEQ_REVERSE_S(256, ss), BOOST_PP_SEQ_SIZE(ss))
 # define BOOST_PP_SEQ_FOLD_RIGHT_256(op, st, ss) BOOST_PP_SEQ_FOLD_LEFT_I_256(op, st, BOOST_PP_SEQ_REVERSE_S(257, ss), BOOST_PP_SEQ_SIZE(ss))
 #
+
 # endif

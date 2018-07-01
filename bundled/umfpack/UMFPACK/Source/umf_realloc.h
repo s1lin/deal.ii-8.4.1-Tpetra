@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void *UMF_realloc
-(
-    void *p,
-    Int n_objects,
-    size_t size_of_object
-) ;
+        (
+                void *p,
+                Int n_objects,
+                size_t size_of_object
+        );

@@ -5,23 +5,23 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_row_search
-(
-    NumericType *Numeric,
-    WorkType *Work,
-    SymbolicType *Symbolic,
-    Int cdeg0,
-    Int cdeg1,
-    const Int Pattern [ ],
-    const Int Pos [ ],
-    Int pivrow [2],
-    Int rdeg [2],
-    Int W_i [ ],
-    Int W_o [ ],
-    Int prior_pivrow [2],
-    const Entry Wxy [ ],
-    Int pivcol,
-    Int freebie [2]
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work,
+                SymbolicType *Symbolic,
+                Int cdeg0,
+                Int cdeg1,
+                const Int Pattern[],
+                const Int Pos[],
+                Int pivrow[2],
+                Int rdeg[2],
+                Int W_i[],
+                Int W_o[],
+                Int prior_pivrow[2],
+                const Entry Wxy[],
+                Int pivcol,
+                Int freebie[2]
+        );
 
 #define IN 0
 #define OUT 1

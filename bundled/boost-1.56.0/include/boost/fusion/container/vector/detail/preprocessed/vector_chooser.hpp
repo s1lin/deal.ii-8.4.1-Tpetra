@@ -7,7 +7,9 @@
     This is an auto-generated file. Do not edit!
 ==============================================================================*/
 #if FUSION_MAX_VECTOR_SIZE <= 10
+
 #include <boost/fusion/container/vector/detail/preprocessed/vector_chooser10.hpp>
+
 #elif FUSION_MAX_VECTOR_SIZE <= 20
 #include <boost/fusion/container/vector/detail/preprocessed/vector_chooser20.hpp>
 #elif FUSION_MAX_VECTOR_SIZE <= 30

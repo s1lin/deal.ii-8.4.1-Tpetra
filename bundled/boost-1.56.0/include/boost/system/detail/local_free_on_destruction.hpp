@@ -13,28 +13,27 @@
 #define BOOST_SYSTEM_LOCAL_FREE_ON_EXIT_HPP
 
 namespace boost {
-namespace system {
-namespace detail {
+    namespace system {
+        namespace detail {
 
-class local_free_on_destruction
-{
-public:
-  explicit local_free_on_destruction(void* p)
-    : p_(p) {}
+            class local_free_on_destruction {
+            public:
+                explicit local_free_on_destruction(void *p)
+                        : p_(p) {}
 
-  ~local_free_on_destruction()
-  {
-    ::LocalFree(p_);
-  }
+                ~local_free_on_destruction() {
+                    ::LocalFree(p_);
+                }
 
-private:
-  void* p_;
-  local_free_on_destruction(const local_free_on_destruction&);  // = deleted
-  local_free_on_destruction& operator=(const local_free_on_destruction&);  // = deleted
-};
+            private:
+                void *p_;
 
-} // namespace detail
-} // namespace system
+                local_free_on_destruction(const local_free_on_destruction &);  // = deleted
+                local_free_on_destruction &operator=(const local_free_on_destruction &);  // = deleted
+            };
+
+        } // namespace detail
+    } // namespace system
 } // namespace boost
 
 #endif  // BOOST_SYSTEM_LOCAL_FREE_ON_EXIT_HPP

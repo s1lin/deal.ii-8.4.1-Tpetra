@@ -14,57 +14,52 @@
 
 #include <boost/spirit/home/x3/core/parser.hpp>
 
-namespace boost { namespace spirit { namespace x3
-{
-    template<typename Subject>
-    struct seek_directive : unary_parser<Subject, seek_directive<Subject>>
-    {
-        typedef unary_parser<Subject, seek_directive<Subject>> base_type;
-        static bool const is_pass_through_unary = true;
-        static bool const handles_container = Subject::handles_container;
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            template<typename Subject>
+            struct seek_directive : unary_parser<Subject, seek_directive<Subject>> {
+                typedef unary_parser <Subject, seek_directive<Subject>> base_type;
+                static bool const is_pass_through_unary = true;
+                static bool const handles_container = Subject::handles_container;
 
-        seek_directive(Subject const& subject) :
-            base_type(subject) {}
+                seek_directive(Subject const &subject) :
+                        base_type(subject) {}
 
-        template<typename Iterator, typename Context
-          , typename RContext, typename Attribute>
-        bool parse(
-            Iterator& first, Iterator const& last
-          , Context const& context, RContext& rcontext, Attribute& attr) const
-        {
-            Iterator current(first);
-            for (/**/; current != last; ++current)
-            {
-                if (this->subject.parse(current, last, context, rcontext, attr))
-                {
-                    first = current;
-                    return true;
+                template<typename Iterator, typename Context, typename RContext, typename Attribute>
+                bool parse(
+                        Iterator &first, Iterator const &last, Context const &context, RContext &rcontext,
+                        Attribute &attr) const {
+                    Iterator current(first);
+                    for (/**/; current != last; ++current) {
+                        if (this->subject.parse(current, last, context, rcontext, attr)) {
+                            first = current;
+                            return true;
+                        }
+                    }
+
+                    // Test for when subjects match on input empty. Example:
+                    //     comment = "//" >> seek[eol | eoi]
+                    if (this->subject.parse(current, last, context, rcontext, attr)) {
+                        first = current;
+                        return true;
+                    }
+
+                    return false;
                 }
-            }
+            };
 
-            // Test for when subjects match on input empty. Example:
-            //     comment = "//" >> seek[eol | eoi]
-            if (this->subject.parse(current, last, context, rcontext, attr))
-            {
-                first = current;
-                return true;
-            }
+            struct seek_gen {
+                template<typename Subject>
+                seek_directive<typename extension::as_parser<Subject>::value_type>
+                operator[](Subject const &subject) const {
+                    return {as_parser(subject)};
+                }
+            };
 
-            return false;
+            seek_gen const seek = seek_gen();
         }
-    };
-
-    struct seek_gen
-    {
-        template<typename Subject>
-        seek_directive<typename extension::as_parser<Subject>::value_type>
-        operator[](Subject const& subject) const
-        {
-            return {as_parser(subject)};
-        }
-    };
-
-    seek_gen const seek = seek_gen();
-}}}
+    }
+}
 
 #endif

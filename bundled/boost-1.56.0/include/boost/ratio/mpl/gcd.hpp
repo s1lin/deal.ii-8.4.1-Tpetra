@@ -13,18 +13,17 @@
 #include <boost/ratio/mpl/numeric_cast.hpp>
 #include <boost/ratio/detail/mpl/gcd.hpp>
 
-namespace boost { 
-namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct gcd_impl< rational_c_tag,rational_c_tag >
-{
-    template< typename R1, typename R2 > struct apply
-        : ratio_gcd<R1, R2>
-    {
-    };
-};    
-}
+        template<>
+        struct gcd_impl<rational_c_tag, rational_c_tag> {
+            template<typename R1, typename R2>
+            struct apply
+                    : ratio_gcd<R1, R2> {
+            };
+        };
+    }
 }
 
 #endif  // BOOST_RATIO_MPL_GCD_HPP

@@ -32,56 +32,51 @@
 
 
 namespace boost {
-namespace numeric {
-namespace odeint {
-    
-template< class StateType , class Enabler = void >
-struct algebra_dispatcher_sfinae
-{
-    //  range_algebra is the standard algebra^
-    typedef range_algebra algebra_type;
-};
+    namespace numeric {
+        namespace odeint {
 
-template< class StateType >
-struct algebra_dispatcher : algebra_dispatcher_sfinae< StateType > { };
+            template<class StateType, class Enabler = void>
+            struct algebra_dispatcher_sfinae {
+                //  range_algebra is the standard algebra^
+                typedef range_algebra algebra_type;
+            };
+
+            template<class StateType>
+            struct algebra_dispatcher : algebra_dispatcher_sfinae<StateType> {
+            };
 
 //specialize for array
-template< class T , size_t N >
-struct algebra_dispatcher< boost::array< T , N > >
-{
-    typedef array_algebra algebra_type;
-};
+            template<class T, size_t N>
+            struct algebra_dispatcher<boost::array<T, N> > {
+                typedef array_algebra algebra_type;
+            };
 
 //specialize for some integral types
-template< typename T >
-struct algebra_dispatcher_sfinae< T , typename boost::enable_if< typename boost::is_floating_point< T >::type >::type >
-{
-    typedef vector_space_algebra algebra_type;
-};
+            template<typename T>
+            struct algebra_dispatcher_sfinae<T, typename boost::enable_if<typename boost::is_floating_point<T>::type>::type> {
+                typedef vector_space_algebra algebra_type;
+            };
 
-template< typename T >
-struct algebra_dispatcher< std::complex<T> >
-{
-    typedef vector_space_algebra algebra_type;
-};
+            template<typename T>
+            struct algebra_dispatcher<std::complex<T> > {
+                typedef vector_space_algebra algebra_type;
+            };
 
 ///* think about that again....
 // specialize for ublas vector and matrix types
-template< class T , class A >
-struct algebra_dispatcher< boost::numeric::ublas::vector< T , A > >
-{
-    typedef vector_space_algebra algebra_type;
-};
+            template<class T, class A>
+            struct algebra_dispatcher<boost::numeric::ublas::vector<T, A> > {
+                typedef vector_space_algebra algebra_type;
+            };
 
-template< class T , class L , class A >
-struct algebra_dispatcher< boost::numeric::ublas::matrix< T , L , A > >
-{
-    typedef vector_space_algebra algebra_type;
-};
+            template<class T, class L, class A>
+            struct algebra_dispatcher<boost::numeric::ublas::matrix<T, L, A> > {
+                typedef vector_space_algebra algebra_type;
+            };
 //*/
 
-}
-}
+        }
+    }
 }
 
 #endif

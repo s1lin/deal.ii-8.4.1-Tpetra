@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<impedance_dimension,si::system>    impedance;
-                                            
-} // namespace si
+            typedef unit <impedance_dimension, si::system> impedance;
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

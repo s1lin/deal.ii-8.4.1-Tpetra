@@ -42,8 +42,13 @@ namespace boost {
                program is ill-formed.
             */
             template<class T>
-            void operator()(T* ptr) const
-                BOOST_NOEXCEPT_IF(BOOST_NOEXCEPT_EXPR(ptr->~T())) {
+            void operator()(T *ptr) const
+
+            BOOST_NOEXCEPT_IF (BOOST_NOEXCEPT_EXPR(ptr ->
+
+            ~T()
+
+            )) {
                 if (ptr) {
                     ptr->~T();
                     alignment::aligned_free(ptr);

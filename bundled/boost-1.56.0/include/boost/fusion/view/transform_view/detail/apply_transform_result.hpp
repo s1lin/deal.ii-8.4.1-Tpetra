@@ -11,27 +11,26 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/utility/result_of.hpp>
 
-namespace boost { namespace fusion
-{
-    struct void_;
-    
-    namespace detail
-    {
-        template <typename F>
-        struct apply_transform_result
-        {
-            template <typename T0, typename T1 = void_>
-            struct apply
-                : boost::result_of<F(T0, T1)>
-            {};
+namespace boost {
+    namespace fusion {
+        struct void_;
 
-            template <typename T0>
-            struct apply<T0, void_>
-                : boost::result_of<F(T0)>
-            {};
-        };
+        namespace detail {
+            template<typename F>
+            struct apply_transform_result {
+                template<typename T0, typename T1 = void_>
+                struct apply
+                        : boost::result_of<F(T0, T1)> {
+                };
+
+                template<typename T0>
+                struct apply<T0, void_>
+                        : boost::result_of<F(T0)> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif
 

@@ -14,17 +14,20 @@
 #include <boost/fusion/tuple/tuple.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
-namespace boost { namespace fusion
-{
-    BOOST_FUSION_GPU_ENABLED inline tuple<>
-    make_tuple()
-    {
-        return tuple<>();
+namespace boost {
+    namespace fusion {
+        BOOST_FUSION_GPU_ENABLED inline tuple<>
+
+        make_tuple() {
+            return tuple<>();
+        }
     }
-}}
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/tuple/detail/preprocessed/make_tuple.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/make_tuple" FUSION_MAX_VECTOR_SIZE_STR ".hpp")

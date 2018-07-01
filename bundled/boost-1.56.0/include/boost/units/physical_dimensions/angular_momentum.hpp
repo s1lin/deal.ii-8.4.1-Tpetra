@@ -19,15 +19,15 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for angular momentum : L^2 M T^-1 QP^-1
-typedef derived_dimension<length_base_dimension,2,
-                          mass_base_dimension,1,
-                          time_base_dimension,-1,
-                          plane_angle_base_dimension,-1>::type angular_momentum_dimension;                
+        typedef derived_dimension<length_base_dimension, 2,
+                mass_base_dimension, 1,
+                time_base_dimension, -1,
+                plane_angle_base_dimension, -1>::type angular_momentum_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

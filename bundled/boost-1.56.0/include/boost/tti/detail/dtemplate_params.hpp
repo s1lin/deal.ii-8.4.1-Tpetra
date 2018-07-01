@@ -24,11 +24,11 @@
 
 #if !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
-#define BOOST_TTI_DETAIL_TEMPLATE_PARAMETERS(z,n,args) \
+#define BOOST_TTI_DETAIL_TEMPLATE_PARAMETERS(z, n, args) \
 BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 /**/
 
-#define BOOST_TTI_DETAIL_HAS_MEMBER_IMPLEMENTATION(args,introspect_macro) \
+#define BOOST_TTI_DETAIL_HAS_MEMBER_IMPLEMENTATION(args, introspect_macro) \
    template \
      < \
      typename BOOST_TTI_DETAIL_TP_T, \
@@ -108,7 +108,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #else // !!BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 
-#define BOOST_TTI_DETAIL_HAS_MEMBER_MULTI_SUBSTITUTE_WITH_TEMPLATE_SFINAE(z,n,args) \
+#define BOOST_TTI_DETAIL_HAS_MEMBER_MULTI_SUBSTITUTE_WITH_TEMPLATE_SFINAE(z, n, args) \
   template \
     < \
     template \
@@ -189,7 +189,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #endif // !BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS_OP(trait,name,tpArray) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS_OP(trait, name, tpArray) \
   BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(BOOST_PP_CAT(trait,_detail),name,tpArray) \
   template<class BOOST_TTI_DETAIL_TP_T> \
   struct BOOST_PP_CAT(trait,_detail_cp_op) : \
@@ -198,18 +198,18 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
     }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpArray) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait, name, tpArray) \
   BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS_OP(trait,name,tpArray) \
   template<class BOOST_TTI_DETAIL_TP_T> \
   struct trait \
     { \
     typedef typename \
-  	boost::mpl::eval_if \
-  		< \
-  		boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
-  		BOOST_PP_CAT(trait,_detail_cp_op)<BOOST_TTI_DETAIL_TP_T>, \
-  		boost::mpl::false_ \
-  		>::type type; \
+    boost::mpl::eval_if \
+        < \
+        boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
+        BOOST_PP_CAT(trait,_detail_cp_op)<BOOST_TTI_DETAIL_TP_T>, \
+        boost::mpl::false_ \
+        >::type type; \
     BOOST_STATIC_CONSTANT(bool,value=type::value); \
     }; \
 /**/
@@ -226,7 +226,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #else // BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 
-#define BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpArray) \
+#define BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(trait, name, tpArray) \
   BOOST_TTI_DETAIL_HAS_MEMBER_WITH_TEMPLATE_SFINAE \
     ( \
       ( BOOST_PP_ADD(BOOST_PP_ARRAY_SIZE(tpArray),4), ( trait, name, 1, false, BOOST_PP_ARRAY_ENUM(tpArray) ) )  \

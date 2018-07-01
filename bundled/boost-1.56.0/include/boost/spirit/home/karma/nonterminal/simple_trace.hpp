@@ -31,104 +31,97 @@
 #define BOOST_SPIRIT_DEBUG_INDENT 2
 #endif
 
-namespace boost { namespace spirit { namespace karma
-{
-    struct simple_trace
-    {
-        int& get_indent() const
-        {
-            static int indent = 0;
-            return indent;
-        }
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            struct simple_trace {
+                int &get_indent() const {
+                    static int indent = 0;
+                    return indent;
+                }
 
-        void print_indent() const
-        {
-            int n = get_indent();
-            n *= BOOST_SPIRIT_DEBUG_INDENT;
-            for (int i = 0; i != n; ++i)
-                BOOST_SPIRIT_DEBUG_OUT << ' ';
-        }
+                void print_indent() const {
+                    int n = get_indent();
+                    n *= BOOST_SPIRIT_DEBUG_INDENT;
+                    for (int i = 0; i != n; ++i)
+                        BOOST_SPIRIT_DEBUG_OUT << ' ';
+                }
 
-        template <typename Buffer>
-        void print_some(char const* tag, Buffer const& buffer) const
-        {
-            print_indent();
-            BOOST_SPIRIT_DEBUG_OUT << '<' << tag << '>' << std::flush;
-            {
-                std::ostreambuf_iterator<char> out(BOOST_SPIRIT_DEBUG_OUT);
-                buffer.buffer_copy_to(out, BOOST_SPIRIT_DEBUG_PRINT_SOME);
-            }
-            BOOST_SPIRIT_DEBUG_OUT << "</" << tag << '>' << std::endl;
-        }
-
-        template <typename OutputIterator, typename Context, typename State
-          , typename Buffer>
-        void operator()(
-            OutputIterator&, Context const& context
-          , State state, std::string const& rule_name
-          , Buffer const& buffer) const
-        {
-            switch (state)
-            {
-                case pre_generate:
+                template<typename Buffer>
+                void print_some(char const *tag, Buffer const &buffer) const {
                     print_indent();
-                    ++get_indent();
-                    BOOST_SPIRIT_DEBUG_OUT
-                        << '<' << rule_name << '>' << std::endl;
-                    print_indent();
-                    ++get_indent();
-                    BOOST_SPIRIT_DEBUG_OUT << "<try>" << std::endl;;
-                    print_indent();
-                    BOOST_SPIRIT_DEBUG_OUT << "<attributes>";
-                    traits::print_attribute(
-                        BOOST_SPIRIT_DEBUG_OUT,
-                        context.attributes
-                    );
-                    BOOST_SPIRIT_DEBUG_OUT << "</attributes>" << std::endl;
-                    if (!fusion::empty(context.locals))
+                    BOOST_SPIRIT_DEBUG_OUT << '<' << tag << '>' << std::flush;
                     {
-                        print_indent();
-                        BOOST_SPIRIT_DEBUG_OUT
-                            << "<locals>" << context.locals << "</locals>"
-                            << std::endl;
+                        std::ostreambuf_iterator<char> out(BOOST_SPIRIT_DEBUG_OUT);
+                        buffer.buffer_copy_to(out, BOOST_SPIRIT_DEBUG_PRINT_SOME);
                     }
-                    --get_indent();
-                    print_indent();
-                    BOOST_SPIRIT_DEBUG_OUT << "</try>" << std::endl;;
-                    break;
+                    BOOST_SPIRIT_DEBUG_OUT << "</" << tag << '>' << std::endl;
+                }
 
-                case successful_generate:
-                    print_indent();
-                    ++get_indent();
-                    BOOST_SPIRIT_DEBUG_OUT << "<success>" << std::endl;
-                    print_some("result", buffer);
-                    if (!fusion::empty(context.locals))
-                    {
-                        print_indent();
-                        BOOST_SPIRIT_DEBUG_OUT
-                            << "<locals>" << context.locals << "</locals>"
-                            << std::endl;
+                template<typename OutputIterator, typename Context, typename State, typename Buffer>
+                void operator()(
+                        OutputIterator &, Context const &context, State state, std::string const &rule_name,
+                        Buffer const &buffer) const {
+                    switch (state) {
+                        case pre_generate:
+                            print_indent();
+                            ++get_indent();
+                            BOOST_SPIRIT_DEBUG_OUT
+                                    << '<' << rule_name << '>' << std::endl;
+                            print_indent();
+                            ++get_indent();
+                            BOOST_SPIRIT_DEBUG_OUT << "<try>" << std::endl;;
+                            print_indent();
+                            BOOST_SPIRIT_DEBUG_OUT << "<attributes>";
+                            traits::print_attribute(
+                                    BOOST_SPIRIT_DEBUG_OUT,
+                                    context.attributes
+                            );
+                            BOOST_SPIRIT_DEBUG_OUT << "</attributes>" << std::endl;
+                            if (!fusion::empty(context.locals)) {
+                                print_indent();
+                                BOOST_SPIRIT_DEBUG_OUT
+                                        << "<locals>" << context.locals << "</locals>"
+                                        << std::endl;
+                            }
+                            --get_indent();
+                            print_indent();
+                            BOOST_SPIRIT_DEBUG_OUT << "</try>" << std::endl;;
+                            break;
+
+                        case successful_generate:
+                            print_indent();
+                            ++get_indent();
+                            BOOST_SPIRIT_DEBUG_OUT << "<success>" << std::endl;
+                            print_some("result", buffer);
+                            if (!fusion::empty(context.locals)) {
+                                print_indent();
+                                BOOST_SPIRIT_DEBUG_OUT
+                                        << "<locals>" << context.locals << "</locals>"
+                                        << std::endl;
+                            }
+                            --get_indent();
+                            print_indent();
+                            BOOST_SPIRIT_DEBUG_OUT << "</success>" << std::endl;
+                            --get_indent();
+                            print_indent();
+                            BOOST_SPIRIT_DEBUG_OUT
+                                    << "</" << rule_name << '>' << std::endl;
+                            break;
+
+                        case failed_generate:
+                            print_indent();
+                            BOOST_SPIRIT_DEBUG_OUT << "<fail/>" << std::endl;
+                            --get_indent();
+                            print_indent();
+                            BOOST_SPIRIT_DEBUG_OUT
+                                    << "</" << rule_name << '>' << std::endl;
+                            break;
                     }
-                    --get_indent();
-                    print_indent();
-                    BOOST_SPIRIT_DEBUG_OUT << "</success>" << std::endl;
-                    --get_indent();
-                    print_indent();
-                    BOOST_SPIRIT_DEBUG_OUT 
-                        << "</" << rule_name << '>' << std::endl;
-                    break;
-
-                case failed_generate:
-                    print_indent();
-                    BOOST_SPIRIT_DEBUG_OUT << "<fail/>" << std::endl;
-                    --get_indent();
-                    print_indent();
-                    BOOST_SPIRIT_DEBUG_OUT 
-                        << "</" << rule_name << '>' << std::endl;
-                    break;
-            }
+                }
+            };
         }
-    };
-}}}
+    }
+}
 
 #endif

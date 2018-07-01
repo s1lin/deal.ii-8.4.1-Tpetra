@@ -12,7 +12,9 @@
 #include <boost/config.hpp>
 
 #if !defined(BOOST_NO_CXX11_ADDRESSOF)
+
 #include <memory>
+
 #else
 #include <boost/core/addressof.hpp>
 #endif

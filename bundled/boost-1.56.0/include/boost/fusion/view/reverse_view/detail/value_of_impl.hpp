@@ -11,32 +11,30 @@
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/prior.hpp>
 
-namespace boost { namespace fusion
-{
-    struct reverse_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct reverse_view_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_of_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_of_impl;
 
-        template <>
-        struct value_of_impl<reverse_view_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                typedef typename
+            template<>
+            struct value_of_impl<reverse_view_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename
                     result_of::value_of<
-                        typename result_of::prior<
-                            typename Iterator::first_type
-                        >::type
+                            typename result_of::prior<
+                                    typename Iterator::first_type
+                            >::type
                     >::type
-                type;
+                            type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

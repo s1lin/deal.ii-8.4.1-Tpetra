@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<reluctance_dimension,si::system>    reluctance;
+            typedef unit <reluctance_dimension, si::system> reluctance;
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

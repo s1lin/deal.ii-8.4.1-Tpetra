@@ -18,14 +18,14 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for illuminance : L^-2 I QS
-typedef derived_dimension<length_base_dimension,-2,
-                          luminous_intensity_base_dimension,1,
-                          solid_angle_base_dimension,1>::type illuminance_dimension;
+        typedef derived_dimension<length_base_dimension, -2,
+                luminous_intensity_base_dimension, 1,
+                solid_angle_base_dimension, 1>::type illuminance_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<surface_tension_dimension,si::system>     surface_tension;
-    
-BOOST_UNITS_STATIC_CONSTANT(newton_per_meter,surface_tension);  
-BOOST_UNITS_STATIC_CONSTANT(newtons_per_meter,surface_tension); 
+            typedef unit <surface_tension_dimension, si::system> surface_tension;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(newton_per_meter, surface_tension
+            );
+            BOOST_UNITS_STATIC_CONSTANT(newtons_per_meter, surface_tension
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

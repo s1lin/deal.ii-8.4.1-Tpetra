@@ -50,7 +50,7 @@
 #define __TBB_VOLATILE volatile
 #endif
 
-#define __TBB_MACHINE_DEFINE_ATOMICS(S,T,X,R)                                        \
+#define __TBB_MACHINE_DEFINE_ATOMICS(S, T, X, R)                                        \
 static inline T __TBB_machine_cmpswp##S (volatile void *ptr, T value, T comparand )  \
 {                                                                                    \
     T result;                                                                        \
@@ -81,10 +81,13 @@ static inline  T __TBB_machine_fetchstore##S(volatile void *ptr, T value)       
                           : "memory");                                               \
     return result;                                                                   \
 }                                                                                    \
-                                                                                     
-__TBB_MACHINE_DEFINE_ATOMICS(1,int8_t,"","=q")
-__TBB_MACHINE_DEFINE_ATOMICS(2,int16_t,"","=r")
-__TBB_MACHINE_DEFINE_ATOMICS(4,int32_t,"l","=r")
+
+
+__TBB_MACHINE_DEFINE_ATOMICS(1, int8_t, "", "=q")
+
+__TBB_MACHINE_DEFINE_ATOMICS(2, int16_t, "", "=r")
+
+__TBB_MACHINE_DEFINE_ATOMICS(4, int32_t, "l", "=r")
 
 #if __INTEL_COMPILER
 #pragma warning( push )
@@ -92,7 +95,7 @@ __TBB_MACHINE_DEFINE_ATOMICS(4,int32_t,"l","=r")
 #pragma warning( disable: 998 )
 #endif
 
-static inline int64_t __TBB_machine_cmpswp8 (volatile void *ptr, int64_t value, int64_t comparand ) {
+static inline int64_t __TBB_machine_cmpswp8(volatile void *ptr, int64_t value, int64_t comparand) {
 #if __TBB_GCC_BUILTIN_ATOMICS_PRESENT
     return __sync_val_compare_and_swap( reinterpret_cast<volatile int64_t*>(ptr), comparand, value );
 #else /* !__TBB_GCC_BUILTIN_ATOMICS_PRESENT */
@@ -103,32 +106,32 @@ static inline int64_t __TBB_machine_cmpswp8 (volatile void *ptr, int64_t value, 
         int32_t i32[2];
     };
     i64 = value;
-#if __PIC__ 
+#if __PIC__
     /* compiling position-independent code */
     // EBX register preserved for compliance with position-independent code rules on IA32
     int32_t tmp;
     __asm__ __volatile__ (
-            "movl  %%ebx,%2\n\t"
-            "movl  %5,%%ebx\n\t"
-#if __GNUC__==3
-            "lock\n\t cmpxchg8b %1\n\t"
+    "movl  %%ebx,%2\n\t"
+    "movl  %5,%%ebx\n\t"
+    #if __GNUC__ == 3
+    "lock\n\t cmpxchg8b %1\n\t"
+    #else
+    "lock\n\t cmpxchg8b (%3)\n\t"
+    #endif
+    "movl  %2,%%ebx"
+    : "=A"(result)
+    , "=m"(*(__TBB_VOLATILE int64_t *) ptr)
+    , "=m"(tmp)
+#if __GNUC__ == 3
+    : "m"(*(__TBB_VOLATILE int64_t *)ptr)
 #else
-            "lock\n\t cmpxchg8b (%3)\n\t"
+    : "SD"(ptr)
 #endif
-            "movl  %2,%%ebx"
-             : "=A"(result)
-             , "=m"(*(__TBB_VOLATILE int64_t *)ptr)
-             , "=m"(tmp)
-#if __GNUC__==3
-             : "m"(*(__TBB_VOLATILE int64_t *)ptr)
-#else
-             : "SD"(ptr)
-#endif
-             , "0"(comparand)
-             , "m"(i32[0]), "c"(i32[1])
-             : "memory"
+    , "0"(comparand)
+    , "m"(i32[0]), "c"(i32[1])
+    : "memory"
 #if __INTEL_COMPILER
-             ,"ebx"
+    ,"ebx"
 #endif
     );
 #else /* !__PIC__ */
@@ -149,12 +152,12 @@ static inline int64_t __TBB_machine_cmpswp8 (volatile void *ptr, int64_t value, 
 #pragma warning( pop )
 #endif // warning 998 is back
 
-static inline void __TBB_machine_or( volatile void *ptr, uint32_t addend ) {
-    __asm__ __volatile__("lock\norl %1,%0" : "=m"(*(__TBB_VOLATILE uint32_t *)ptr) : "r"(addend), "m"(*(__TBB_VOLATILE uint32_t *)ptr) : "memory");
+static inline void __TBB_machine_or(volatile void *ptr, uint32_t addend) {
+    __asm__ __volatile__("lock\norl %1,%0" : "=m"(*(__TBB_VOLATILE uint32_t *) ptr) : "r"(addend), "m"(*(__TBB_VOLATILE uint32_t *) ptr) : "memory");
 }
 
-static inline void __TBB_machine_and( volatile void *ptr, uint32_t addend ) {
-    __asm__ __volatile__("lock\nandl %1,%0" : "=m"(*(__TBB_VOLATILE uint32_t *)ptr) : "r"(addend), "m"(*(__TBB_VOLATILE uint32_t *)ptr) : "memory");
+static inline void __TBB_machine_and(volatile void *ptr, uint32_t addend) {
+    __asm__ __volatile__("lock\nandl %1,%0" : "=m"(*(__TBB_VOLATILE uint32_t *) ptr) : "r"(addend), "m"(*(__TBB_VOLATILE uint32_t *) ptr) : "memory");
 }
 
 //TODO: Check if it possible and profitable for IA-32 on (Linux and Windows)
@@ -169,26 +172,28 @@ static inline void __TBB_machine_and( volatile void *ptr, uint32_t addend ) {
 #define __TBB_fistpq "fistpq"
 #endif
 
-static inline int64_t __TBB_machine_aligned_load8 (const volatile void *ptr) {
-    __TBB_ASSERT(tbb::internal::is_aligned(ptr,8),"__TBB_machine_aligned_load8 should be used with 8 byte aligned locations only \n");
+static inline int64_t __TBB_machine_aligned_load8(const volatile void *ptr) {
+    __TBB_ASSERT(tbb::internal::is_aligned(ptr, 8),
+                 "__TBB_machine_aligned_load8 should be used with 8 byte aligned locations only \n");
     int64_t result;
     __asm__ __volatile__ ( __TBB_fildq  " %1\n\t"
-                           __TBB_fistpq " %0" :  "=m"(result) : "m"(*(const __TBB_VOLATILE uint64_t*)ptr) : "memory" );
+                           __TBB_fistpq " %0" :  "=m"(result) : "m"(*(const __TBB_VOLATILE uint64_t *) ptr) : "memory" );
     return result;
 }
 
-static inline void __TBB_machine_aligned_store8 (volatile void *ptr, int64_t value ) {
-    __TBB_ASSERT(tbb::internal::is_aligned(ptr,8),"__TBB_machine_aligned_store8 should be used with 8 byte aligned locations only \n");
+static inline void __TBB_machine_aligned_store8(volatile void *ptr, int64_t value) {
+    __TBB_ASSERT(tbb::internal::is_aligned(ptr, 8),
+                 "__TBB_machine_aligned_store8 should be used with 8 byte aligned locations only \n");
     // Aligned store
     __asm__ __volatile__ ( __TBB_fildq  " %1\n\t"
-                           __TBB_fistpq " %0" :  "=m"(*(__TBB_VOLATILE int64_t*)ptr) : "m"(value) : "memory" );
+                           __TBB_fistpq " %0" :  "=m"(*(__TBB_VOLATILE int64_t *) ptr) : "m"(value) : "memory" );
 }
 
-static inline int64_t __TBB_machine_load8 (const volatile void *ptr) {
+static inline int64_t __TBB_machine_load8(const volatile void *ptr) {
 #if __TBB_FORCE_64BIT_ALIGNMENT_BROKEN
     if( tbb::internal::is_aligned(ptr,8)) {
 #endif
-        return __TBB_machine_aligned_load8(ptr);
+    return __TBB_machine_aligned_load8(ptr);
 #if __TBB_FORCE_64BIT_ALIGNMENT_BROKEN
     } else {
         // Unaligned load
@@ -199,14 +204,15 @@ static inline int64_t __TBB_machine_load8 (const volatile void *ptr) {
 
 //! Handles misaligned 8-byte store
 /** Defined in tbb_misc.cpp */
-extern "C" void __TBB_machine_store8_slow( volatile void *ptr, int64_t value );
-extern "C" void __TBB_machine_store8_slow_perf_warning( volatile void *ptr );
+extern "C" void __TBB_machine_store8_slow(volatile void *ptr, int64_t value);
+
+extern "C" void __TBB_machine_store8_slow_perf_warning(volatile void *ptr);
 
 static inline void __TBB_machine_store8(volatile void *ptr, int64_t value) {
 #if __TBB_FORCE_64BIT_ALIGNMENT_BROKEN
     if( tbb::internal::is_aligned(ptr,8)) {
 #endif
-        __TBB_machine_aligned_store8(ptr,value);
+    __TBB_machine_aligned_store8(ptr, value);
 #if __TBB_FORCE_64BIT_ALIGNMENT_BROKEN
     } else {
         // Unaligned store
@@ -217,10 +223,10 @@ static inline void __TBB_machine_store8(volatile void *ptr, int64_t value) {
     }
 #endif
 }
- 
+
 // Machine specific atomic operations
-#define __TBB_AtomicOR(P,V) __TBB_machine_or(P,V)
-#define __TBB_AtomicAND(P,V) __TBB_machine_and(P,V)
+#define __TBB_AtomicOR(P, V) __TBB_machine_or(P,V)
+#define __TBB_AtomicAND(P, V) __TBB_machine_and(P,V)
 
 #define __TBB_USE_GENERIC_DWORD_FETCH_ADD                   1
 #define __TBB_USE_GENERIC_DWORD_FETCH_STORE                 1

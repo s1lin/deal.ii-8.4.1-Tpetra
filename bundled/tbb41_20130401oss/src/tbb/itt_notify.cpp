@@ -28,20 +28,21 @@
 
 #if DO_ITT_NOTIFY
 
-#if _WIN32||_WIN64
-    #ifndef UNICODE
-        #define UNICODE
-    #endif
+#if _WIN32 || _WIN64
+#ifndef UNICODE
+#define UNICODE
+#endif
 #else
-    #pragma weak dlopen
-    #pragma weak dlsym
-    #pragma weak dlerror
+#pragma weak dlopen
+#pragma weak dlsym
+#pragma weak dlerror
 #endif /* WIN */
 
 #if __TBB_BUILD
 
 extern "C" void ITT_DoOneTimeInitialization();
-#define __itt_init_ittlib_name(x,y) (ITT_DoOneTimeInitialization(), true)
+
+#define __itt_init_ittlib_name(x, y) (ITT_DoOneTimeInitialization(), true)
 
 #elif __TBBMALLOC_BUILD
 
@@ -55,30 +56,31 @@ extern "C" void MallocInitializeITT();
 #include "tools_api/ittnotify_static.c"
 
 namespace tbb {
-namespace internal {
-int __TBB_load_ittnotify() {
-    return __itt_init_ittlib(NULL,          // groups for:
-      (__itt_group_id)(__itt_group_sync     // prepare/cancel/acquired/releasing
-                       | __itt_group_thread // name threads
-                       | __itt_group_stitch // stack stitching
-                           ));
-}
+    namespace internal {
+        int __TBB_load_ittnotify() {
+            return __itt_init_ittlib(NULL,          // groups for:
+                                     (__itt_group_id) (__itt_group_sync     // prepare/cancel/acquired/releasing
+                                                       | __itt_group_thread // name threads
+                                                       | __itt_group_stitch // stack stitching
+                                     ));
+        }
 
-}} // namespaces
+    }
+} // namespaces
 
 #endif /* DO_ITT_NOTIFY */
 
 #define __TBB_NO_IMPLICIT_LINKAGE 1
+
 #include "itt_notify.h"
 
 namespace tbb {
 
 #if DO_ITT_NOTIFY
-    const tchar 
+    const tchar
             *SyncType_GlobalLock = _T("TbbGlobalLock"),
-            *SyncType_Scheduler = _T("%Constant")
-            ;
-    const tchar 
+            *SyncType_Scheduler = _T("%Constant");
+    const tchar
             *SyncObj_SchedulerInitialization = _T("TbbSchedulerInitialization"),
             *SyncObj_SchedulersList = _T("TbbSchedulersList"),
             *SyncObj_WorkerLifeCycleMgmt = _T("TBB Scheduler"),
@@ -89,8 +91,7 @@ namespace tbb {
             *SyncObj_Mailbox = _T("TBB Scheduler"),
             *SyncObj_TaskReturnList = _T("TBB Scheduler"),
             *SyncObj_TaskStream = _T("TBB Scheduler"),
-            *SyncObj_ContextsList = _T("TBB Scheduler")
-            ;
+            *SyncObj_ContextsList = _T("TBB Scheduler");
 #endif /* DO_ITT_NOTIFY */
 
 } // namespace tbb

@@ -26,27 +26,31 @@
 
 namespace boost {
 
-namespace serialization {
-    class extended_type_info;
-} // namespace serialization
+    namespace serialization {
+        class extended_type_info;
+    } // namespace serialization
 
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
-class basic_serializer;
+            class basic_serializer;
 
-template<class Archive>
-class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
-archive_serializer_map {
-public:
-    static bool insert(const basic_serializer * bs);
-    static void erase(const basic_serializer * bs);
-    static const basic_serializer * find(
-        const boost::serialization::extended_type_info & type_
-    );
-};
+            template<class Archive>
+            class BOOST_ARCHIVE_OR_WARCHIVE_DECL (BOOST_PP_EMPTY())
 
-} // namespace detail
+            archive_serializer_map {
+            public:
+
+            static bool insert(const basic_serializer *bs);
+
+            static void erase(const basic_serializer *bs);
+
+            static const basic_serializer *find(
+                    const boost::serialization::extended_type_info &type_
+            );
+        };
+
+    } // namespace detail
 } // namespace archive
 } // namespace boost
 

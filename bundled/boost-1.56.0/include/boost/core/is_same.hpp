@@ -17,23 +17,21 @@
 
 #include <boost/config.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace core
-{
+    namespace core {
 
-template< class T1, class T2 > struct is_same
-{
-    BOOST_STATIC_CONSTANT( bool, value = false );
-};
+        template<class T1, class T2>
+        struct is_same {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
 
-template< class T > struct is_same< T, T >
-{
-    BOOST_STATIC_CONSTANT( bool, value = true );
-};
+        template<class T>
+        struct is_same<T, T> {
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
 
-} // namespace core
+    } // namespace core
 
 } // namespace boost
 

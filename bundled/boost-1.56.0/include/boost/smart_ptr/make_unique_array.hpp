@@ -19,7 +19,7 @@ namespace boost {
         typedef typename boost::detail::array_inner<T>::type U;
         return std::unique_ptr<T>(new U[size]());
     }
-    
+
     template<class T>
     inline typename boost::detail::up_if_array<T>::type
     make_unique_noinit(std::size_t size) {

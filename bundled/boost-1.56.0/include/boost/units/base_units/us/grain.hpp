@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pound_base_unit, scale<7000, static_rational<-1> > > grain_base_unit;
+            typedef scaled_base_unit <pound_base_unit, scale<7000, static_rational < -1>> >
+            grain_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::grain_base_unit> {
-    static const char* name()   { return("grain"); }
-    static const char* symbol() { return("gr"); }
-};
+        template<>
+        struct base_unit_info<us::grain_base_unit> {
+            static const char *name() { return ("grain"); }
 
-} // namespace units
+            static const char *symbol() { return ("gr"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

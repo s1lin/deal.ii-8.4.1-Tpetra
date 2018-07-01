@@ -25,7 +25,9 @@
 #include <boost/config.hpp>
 
 #if !defined(BOOST_HAS_THREADS)
+
 # include <boost/signals2/detail/lwm_nop.hpp>
+
 #elif defined(BOOST_HAS_PTHREADS)
 #  include <boost/signals2/detail/lwm_pthreads.hpp>
 #elif defined(BOOST_HAS_WINTHREADS)

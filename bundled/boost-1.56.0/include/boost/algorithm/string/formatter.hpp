@@ -43,14 +43,14 @@ namespace boost {
             \return An instance of the \c const_formatter object.
         */
         template<typename RangeT>
-        inline detail::const_formatF<
-            iterator_range<
-                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >
-        const_formatter(const RangeT& Format)
-        {
-            return detail::const_formatF<
-                iterator_range<
-                    BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >(::boost::as_literal(Format));
+        inline detail::const_formatF <
+        iterator_range<
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type>>
+        const_formatter(const RangeT &Format) {
+            return detail::const_formatF <
+                   iterator_range <
+                   BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type > > (::boost::as_literal(Format));
         }
 
         //! Identity formatter
@@ -61,14 +61,14 @@ namespace boost {
             \return An instance of the \c identity_formatter object.
         */
         template<typename RangeT>
-        inline detail::identity_formatF<
-            iterator_range<
-                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >
-        identity_formatter()
-        {
-            return detail::identity_formatF<
-                iterator_range<
-                    BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
+        inline detail::identity_formatF <
+        iterator_range<
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type>>
+        identity_formatter() {
+            return detail::identity_formatF <
+                   iterator_range <
+                   BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type > > ();
         }
 
         //! Empty formatter
@@ -81,12 +81,12 @@ namespace boost {
             \return An instance of the \c empty_formatter object.
         */
         template<typename RangeT>
-        inline detail::empty_formatF< 
-            BOOST_STRING_TYPENAME range_value<RangeT>::type>
-        empty_formatter(const RangeT&)
-        {
-            return detail::empty_formatF<
-                BOOST_STRING_TYPENAME range_value<RangeT>::type>();
+        inline detail::empty_formatF<
+                BOOST_STRING_TYPENAME range_value<RangeT>::type>
+        empty_formatter(const RangeT &) {
+            return detail::empty_formatF <
+                   BOOST_STRING_TYPENAME
+            range_value<RangeT>::type > ();
         }
 
         //! Empty formatter
@@ -99,9 +99,8 @@ namespace boost {
             \return An instance of the \c dissect_formatter object.
         */
         template<typename FinderT>
-        inline detail::dissect_formatF< FinderT >
-        dissect_formatter(const FinderT& Finder)
-        {
+        inline detail::dissect_formatF <FinderT>
+        dissect_formatter(const FinderT &Finder) {
             return detail::dissect_formatF<FinderT>(Finder);
         }
 

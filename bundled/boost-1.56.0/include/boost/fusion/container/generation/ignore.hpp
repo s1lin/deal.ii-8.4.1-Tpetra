@@ -9,25 +9,25 @@
 #if !defined(FUSION_IGNORE_07192005_0329)
 #define FUSION_IGNORE_07192005_0329
 
-namespace boost { namespace fusion
-{
-    //  Swallows any assignment (by Doug Gregor)
-    namespace detail
-    {
-        struct swallow_assign
-        {
-            template<typename T>
-            BOOST_FUSION_GPU_ENABLED
-            swallow_assign const&
-            operator=(const T&) const
-            {
-                return *this;
-            }
-        };
-    }
+namespace boost {
+    namespace fusion {
+        //  Swallows any assignment (by Doug Gregor)
+        namespace detail {
+            struct swallow_assign {
+                template<typename T>
+                BOOST_FUSION_GPU_ENABLED
+                        swallow_assign
+                const&
 
-    //  "ignore" allows tuple positions to be ignored when using "tie".
-    detail::swallow_assign const ignore = detail::swallow_assign();
-}}
+                operator=(const T &) const {
+                    return *this;
+                }
+            };
+        }
+
+        //  "ignore" allows tuple positions to be ignored when using "tie".
+        detail::swallow_assign const ignore = detail::swallow_assign();
+    }
+}
 
 #endif

@@ -6,17 +6,27 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_DETAIL_CHECK_HPP
 # define BOOST_PREPROCESSOR_DETAIL_CHECK_HPP
 #
+
+
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
+
 #
+
 # /* BOOST_PP_CHECK */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_CHECK(x, type) BOOST_PP_CHECK_D(x, type)
 # else
@@ -24,6 +34,7 @@
 #    define BOOST_PP_CHECK_OO(par) BOOST_PP_CHECK_D ## par
 # endif
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC() && ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_DMC()
 #    define BOOST_PP_CHECK_D(x, type) BOOST_PP_CHECK_1(BOOST_PP_CAT(BOOST_PP_CHECK_RESULT_, type x))
 #    define BOOST_PP_CHECK_1(chk) BOOST_PP_CHECK_2(chk)
@@ -43,6 +54,8 @@
 #    define BOOST_PP_CHECK_2(res, _) res
 # endif
 #
+
 # define BOOST_PP_CHECK_RESULT_1 1, BOOST_PP_NIL
 #
+
 # endif

@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<absorbed_dose_dimension,si::system>     absorbed_dose;
-    
-BOOST_UNITS_STATIC_CONSTANT(gray,absorbed_dose);  
-BOOST_UNITS_STATIC_CONSTANT(grays,absorbed_dose); 
+            typedef unit <absorbed_dose_dimension, si::system> absorbed_dose;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(gray, absorbed_dose
+            );
+            BOOST_UNITS_STATIC_CONSTANT(grays, absorbed_dose
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

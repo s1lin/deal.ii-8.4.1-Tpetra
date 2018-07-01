@@ -17,71 +17,60 @@
 
 #include <boost/assert.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class spinlock
-{
-public:
+        class spinlock {
+        public:
 
-    bool locked_;
+            bool locked_;
 
-public:
+        public:
 
-    inline bool try_lock()
-    {
-        if( locked_ )
-        {
-            return false;
-        }
-        else
-        {
-            locked_ = true;
-            return true;
-        }
-    }
+            inline bool try_lock() {
+                if (locked_) {
+                    return false;
+                } else {
+                    locked_ = true;
+                    return true;
+                }
+            }
 
-    inline void lock()
-    {
-        BOOST_ASSERT( !locked_ );
-        locked_ = true;
-    }
+            inline void lock() {
+                BOOST_ASSERT(!locked_);
+                locked_ = true;
+            }
 
-    inline void unlock()
-    {
-        BOOST_ASSERT( locked_ );
-        locked_ = false;
-    }
+            inline void unlock() {
+                BOOST_ASSERT(locked_);
+                locked_ = false;
+            }
 
-public:
+        public:
 
-    class scoped_lock
-    {
-    private:
+            class scoped_lock {
+            private:
 
-        spinlock & sp_;
+                spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+                scoped_lock(scoped_lock const &);
 
-    public:
+                scoped_lock &operator=(scoped_lock const &);
 
-        explicit scoped_lock( spinlock & sp ): sp_( sp )
-        {
-            sp.lock();
-        }
+            public:
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
-};
+                explicit scoped_lock(spinlock &sp) : sp_(sp) {
+                    sp.lock();
+                }
 
-} // namespace detail
+                ~scoped_lock() {
+                    sp_.unlock();
+                }
+            };
+        };
+
+    } // namespace detail
 } // namespace boost
 
 #define BOOST_DETAIL_SPINLOCK_INIT { false }

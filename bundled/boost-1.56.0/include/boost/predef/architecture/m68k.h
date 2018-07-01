@@ -77,7 +77,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_ARCH_M68K_NAME "Motorola 68k"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_M68K,BOOST_ARCH_M68K_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_M68K,
+BOOST_ARCH_M68K_NAME)
 
 
 #endif

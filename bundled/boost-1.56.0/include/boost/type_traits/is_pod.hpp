@@ -29,46 +29,52 @@
 namespace boost {
 
 // forward declaration, needed by 'is_pod_array_helper' template below
-template< typename T > struct is_POD;
+    template<typename T>
+    struct is_POD;
 
-namespace detail {
+    namespace detail {
 
 
-template <typename T> struct is_pod_impl
-{ 
-    BOOST_STATIC_CONSTANT(
-        bool, value =
-        (::boost::type_traits::ice_or<
-            ::boost::is_scalar<T>::value,
-            ::boost::is_void<T>::value,
-            BOOST_INTERNAL_IS_POD(T)
-         >::value));
-};
+        template<typename T>
+        struct is_pod_impl {
+            BOOST_STATIC_CONSTANT(
+                    bool, value =
+            (::boost::type_traits::ice_or<
+                    ::boost::is_scalar<T>::value,
+                    ::boost::is_void<T>::value,
+                    BOOST_INTERNAL_IS_POD(T)
+            >::value));
+        };
 
 #if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
-template <typename T, std::size_t sz>
-struct is_pod_impl<T[sz]>
-    : public is_pod_impl<T>
-{
-};
+        template<typename T, std::size_t sz>
+        struct is_pod_impl<T[sz]>
+                : public is_pod_impl<T> {
+        };
 #endif
 
 
 // the following help compilers without partial specialization support:
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void,true)
+        BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,
+        void,true)
 
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void const,true)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void volatile,true)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void const volatile,true)
+        BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,
+        void const,true)
+        BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,
+        void volatile,true)
+        BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,
+        void const volatile,true)
 #endif
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod,T,::boost::detail::is_pod_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod, T, ::boost::detail::is_pod_impl<T>::value
+    )
 // is_POD is the old depricated name for this trait, do not use this as it may
 // be removed in future without warning!!
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD,T,::boost::is_pod<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD, T, ::boost::is_pod<T>::value
+    )
 
 } // namespace boost
 

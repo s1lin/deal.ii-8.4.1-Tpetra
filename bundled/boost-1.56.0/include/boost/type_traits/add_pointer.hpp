@@ -16,54 +16,54 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x5A0)
-//
-// For some reason this implementation stops Borlands compiler
-// from dropping cv-qualifiers, it still fails with references
-// to arrays for some reason though (shrug...) (JM 20021104)
-//
-template <typename T>
-struct add_pointer_impl
-{
-    typedef T* type;
-};
-template <typename T>
-struct add_pointer_impl<T&>
-{
-    typedef T* type;
-};
-template <typename T>
-struct add_pointer_impl<T&const>
-{
-    typedef T* type;
-};
-template <typename T>
-struct add_pointer_impl<T&volatile>
-{
-    typedef T* type;
-};
-template <typename T>
-struct add_pointer_impl<T&const volatile>
-{
-    typedef T* type;
-};
+        //
+        // For some reason this implementation stops Borlands compiler
+        // from dropping cv-qualifiers, it still fails with references
+        // to arrays for some reason though (shrug...) (JM 20021104)
+        //
+        template <typename T>
+        struct add_pointer_impl
+        {
+            typedef T* type;
+        };
+        template <typename T>
+        struct add_pointer_impl<T&>
+        {
+            typedef T* type;
+        };
+        template <typename T>
+        struct add_pointer_impl<T&const>
+        {
+            typedef T* type;
+        };
+        template <typename T>
+        struct add_pointer_impl<T&volatile>
+        {
+            typedef T* type;
+        };
+        template <typename T>
+        struct add_pointer_impl<T&const volatile>
+        {
+            typedef T* type;
+        };
 
 #else
 
-template <typename T>
-struct add_pointer_impl
-{
-    typedef typename remove_reference<T>::type no_ref_type;
-    typedef no_ref_type* type;
-};
+        template<typename T>
+        struct add_pointer_impl {
+            typedef typename remove_reference<T>::type no_ref_type;
+            typedef no_ref_type *type;
+        };
 
 #endif
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_pointer,T,typename boost::detail::add_pointer_impl<T>::type)
+    BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_pointer, T,
+    typename boost::detail::add_pointer_impl<T>::type)
 
 } // namespace boost
 

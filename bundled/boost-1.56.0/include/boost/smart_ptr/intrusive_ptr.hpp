@@ -24,15 +24,16 @@
 
 #if !defined(BOOST_NO_IOSTREAM)
 #if !defined(BOOST_NO_IOSFWD)
+
 #include <iosfwd>               // for std::basic_ostream
+
 #else
 #include <ostream>
 #endif
 #endif
 
 
-namespace boost
-{
+namespace boost {
 
 //
 //  intrusive_ptr
@@ -49,61 +50,59 @@ namespace boost
 //  The object is responsible for destroying itself.
 //
 
-template<class T> class intrusive_ptr
-{
-private:
+    template<class T>
+    class intrusive_ptr {
+    private:
 
-    typedef intrusive_ptr this_type;
+        typedef intrusive_ptr this_type;
 
-public:
+    public:
 
-    typedef T element_type;
+        typedef T element_type;
 
-    intrusive_ptr() BOOST_NOEXCEPT : px( 0 )
-    {
-    }
+        intrusive_ptr()
 
-    intrusive_ptr( T * p, bool add_ref = true ): px( p )
-    {
-        if( px != 0 && add_ref ) intrusive_ptr_add_ref( px );
-    }
+        BOOST_NOEXCEPT : px(0) {
+        }
+
+        intrusive_ptr(T *p, bool add_ref = true) : px(p) {
+            if (px != 0 && add_ref) intrusive_ptr_add_ref(px);
+        }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
-    template<class U>
+        template<class U>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
-    intrusive_ptr( intrusive_ptr<U> const & rhs, typename boost::detail::sp_enable_if_convertible<U,T>::type = boost::detail::sp_empty() )
+        intrusive_ptr(intrusive_ptr<U> const &rhs,
+                      typename boost::detail::sp_enable_if_convertible<U, T>::type = boost::detail::sp_empty())
 
 #else
 
-    intrusive_ptr( intrusive_ptr<U> const & rhs )
+        intrusive_ptr( intrusive_ptr<U> const & rhs )
 
 #endif
-    : px( rhs.get() )
-    {
-        if( px != 0 ) intrusive_ptr_add_ref( px );
-    }
+                : px(rhs.get()) {
+            if (px != 0) intrusive_ptr_add_ref(px);
+        }
 
 #endif
 
-    intrusive_ptr(intrusive_ptr const & rhs): px( rhs.px )
-    {
-        if( px != 0 ) intrusive_ptr_add_ref( px );
-    }
+        intrusive_ptr(intrusive_ptr const &rhs) : px(rhs.px) {
+            if (px != 0) intrusive_ptr_add_ref(px);
+        }
 
-    ~intrusive_ptr()
-    {
-        if( px != 0 ) intrusive_ptr_release( px );
-    }
+        ~intrusive_ptr() {
+            if (px != 0) intrusive_ptr_release(px);
+        }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
-    template<class U> intrusive_ptr & operator=(intrusive_ptr<U> const & rhs)
-    {
-        this_type(rhs).swap(*this);
-        return *this;
-    }
+        template<class U>
+        intrusive_ptr &operator=(intrusive_ptr<U> const &rhs) {
+            this_type(rhs).swap(*this);
+            return *this;
+        }
 
 #endif
 
@@ -111,187 +110,246 @@ public:
 
 #if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
-    intrusive_ptr(intrusive_ptr && rhs) BOOST_NOEXCEPT : px( rhs.px )
-    {
-        rhs.px = 0;
-    }
+        intrusive_ptr(intrusive_ptr &&rhs)
 
-    intrusive_ptr & operator=(intrusive_ptr && rhs) BOOST_NOEXCEPT
-    {
-        this_type( static_cast< intrusive_ptr && >( rhs ) ).swap(*this);
-        return *this;
-    }
+        BOOST_NOEXCEPT : px(rhs.px) {
+            rhs.px = 0;
+        }
+
+        intrusive_ptr &operator=(intrusive_ptr &&rhs)
+
+        BOOST_NOEXCEPT {
+            this_type(static_cast< intrusive_ptr && >( rhs )).swap(*this);
+            return *this;
+        }
 
 #endif
 
-    intrusive_ptr & operator=(intrusive_ptr const & rhs)
-    {
-        this_type(rhs).swap(*this);
-        return *this;
-    }
+        intrusive_ptr &operator=(intrusive_ptr const &rhs) {
+            this_type(rhs).swap(*this);
+            return *this;
+        }
 
-    intrusive_ptr & operator=(T * rhs)
-    {
-        this_type(rhs).swap(*this);
-        return *this;
-    }
+        intrusive_ptr &operator=(T *rhs) {
+            this_type(rhs).swap(*this);
+            return *this;
+        }
 
-    void reset() BOOST_NOEXCEPT
-    {
-        this_type().swap( *this );
-    }
+        void reset()
 
-    void reset( T * rhs )
-    {
-        this_type( rhs ).swap( *this );
-    }
+        BOOST_NOEXCEPT {
+            this_type().swap(*this);
+        }
 
-    void reset( T * rhs, bool add_ref )
-    {
-        this_type( rhs, add_ref ).swap( *this );
-    }
+        void reset(T *rhs) {
+            this_type(rhs).swap(*this);
+        }
 
-    T * get() const BOOST_NOEXCEPT
-    {
-        return px;
-    }
+        void reset(T *rhs, bool add_ref) {
+            this_type(rhs, add_ref).swap(*this);
+        }
 
-    T * detach() BOOST_NOEXCEPT
-    {
-        T * ret = px;
-        px = 0;
-        return ret;
-    }
+        T *get() const
 
-    T & operator*() const
-    {
-        BOOST_ASSERT( px != 0 );
-        return *px;
-    }
+        BOOST_NOEXCEPT {
+            return px;
+        }
 
-    T * operator->() const
-    {
-        BOOST_ASSERT( px != 0 );
-        return px;
-    }
+        T *detach()
+
+        BOOST_NOEXCEPT {
+            T *ret = px;
+            px = 0;
+            return ret;
+        }
+
+        T &operator*() const {
+            BOOST_ASSERT(px != 0);
+            return *px;
+        }
+
+        T *operator->() const {
+            BOOST_ASSERT(px != 0);
+            return px;
+        }
 
 // implicit conversion to "bool"
 #include <boost/smart_ptr/detail/operator_bool.hpp>
 
-    void swap(intrusive_ptr & rhs) BOOST_NOEXCEPT
-    {
-        T * tmp = px;
-        px = rhs.px;
-        rhs.px = tmp;
+        void swap(intrusive_ptr &rhs)
+
+        BOOST_NOEXCEPT {
+            T *tmp = px;
+            px = rhs.px;
+            rhs.px = tmp;
+        }
+
+    private:
+
+        T *px;
+    };
+
+    template<class T, class U>
+    inline bool operator==(intrusive_ptr<T> const &a, intrusive_ptr<U> const &b) {
+        return a.get() == b.get();
     }
 
-private:
+    template<class T, class U>
+    inline bool operator!=(intrusive_ptr<T> const &a, intrusive_ptr<U> const &b) {
+        return a.get() != b.get();
+    }
 
-    T * px;
-};
+    template<class T, class U>
+    inline bool operator==(intrusive_ptr<T> const &a, U *b) {
+        return a.get() == b;
+    }
 
-template<class T, class U> inline bool operator==(intrusive_ptr<T> const & a, intrusive_ptr<U> const & b)
-{
-    return a.get() == b.get();
-}
+    template<class T, class U>
+    inline bool operator!=(intrusive_ptr<T> const &a, U *b) {
+        return a.get() != b;
+    }
 
-template<class T, class U> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_ptr<U> const & b)
-{
-    return a.get() != b.get();
-}
+    template<class T, class U>
+    inline bool operator==(T *a, intrusive_ptr<U> const &b) {
+        return a == b.get();
+    }
 
-template<class T, class U> inline bool operator==(intrusive_ptr<T> const & a, U * b)
-{
-    return a.get() == b;
-}
-
-template<class T, class U> inline bool operator!=(intrusive_ptr<T> const & a, U * b)
-{
-    return a.get() != b;
-}
-
-template<class T, class U> inline bool operator==(T * a, intrusive_ptr<U> const & b)
-{
-    return a == b.get();
-}
-
-template<class T, class U> inline bool operator!=(T * a, intrusive_ptr<U> const & b)
-{
-    return a != b.get();
-}
+    template<class T, class U>
+    inline bool operator!=(T *a, intrusive_ptr<U> const &b) {
+        return a != b.get();
+    }
 
 #if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
 
-// Resolve the ambiguity between our op!= and the one in rel_ops
+    // Resolve the ambiguity between our op!= and the one in rel_ops
 
-template<class T> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
-{
-    return a.get() != b.get();
-}
+    template<class T> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
+    {
+        return a.get() != b.get();
+    }
 
 #endif
 
 #if !defined( BOOST_NO_CXX11_NULLPTR )
 
-template<class T> inline bool operator==( intrusive_ptr<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
-{
-    return p.get() == 0;
+    template<class T>
+    inline bool operator==(intrusive_ptr<T> const &p, boost::detail::sp_nullptr_t)
+
+    BOOST_NOEXCEPT {
+    return p.
+
+    get()
+
+    == 0;
 }
 
-template<class T> inline bool operator==( boost::detail::sp_nullptr_t, intrusive_ptr<T> const & p ) BOOST_NOEXCEPT
+template<class T>
+inline bool operator==(boost::detail::sp_nullptr_t, intrusive_ptr <T> const &p)
+
+BOOST_NOEXCEPT
 {
-    return p.get() == 0;
+return p.
+
+get()
+
+== 0;
 }
 
-template<class T> inline bool operator!=( intrusive_ptr<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
+template<class T> inline bool operator!=(intrusive_ptr < T >
+const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
 {
-    return p.get() != 0;
+return p.
+
+get()
+
+!= 0;
 }
 
-template<class T> inline bool operator!=( boost::detail::sp_nullptr_t, intrusive_ptr<T> const & p ) BOOST_NOEXCEPT
+template<class T>
+inline bool operator!=(boost::detail::sp_nullptr_t, intrusive_ptr <T> const &p)
+
+BOOST_NOEXCEPT
 {
-    return p.get() != 0;
+return p.
+
+get()
+
+!= 0;
 }
 
 #endif
 
-template<class T> inline bool operator<(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
+template<class T> inline bool operator<(intrusive_ptr < T >
+const & a,
+intrusive_ptr <T> const &b
+)
 {
-    return std::less<T *>()(a.get(), b.get());
+return
+
+std::less<T *>()
+
+(a.
+
+get(), b
+
+.
+
+get()
+
+);
 }
 
-template<class T> void swap(intrusive_ptr<T> & lhs, intrusive_ptr<T> & rhs)
-{
+template<class T>
+void swap(intrusive_ptr <T> &lhs, intrusive_ptr <T> &rhs) {
     lhs.swap(rhs);
 }
 
 // mem_fn support
 
-template<class T> T * get_pointer(intrusive_ptr<T> const & p)
+template<class T> T *get_pointer(intrusive_ptr < T >
+const & p)
 {
-    return p.get();
+return p.
+
+get();
+
 }
 
-template<class T, class U> intrusive_ptr<T> static_pointer_cast(intrusive_ptr<U> const & p)
+template<class T, class U> intrusive_ptr <T> static_pointer_cast(intrusive_ptr < U >
+const & p)
 {
-    return static_cast<T *>(p.get());
+return static_cast<T *>(p.
+
+get()
+
+);
 }
 
-template<class T, class U> intrusive_ptr<T> const_pointer_cast(intrusive_ptr<U> const & p)
+template<class T, class U> intrusive_ptr <T> const_pointer_cast(intrusive_ptr < U >
+const & p)
 {
-    return const_cast<T *>(p.get());
+return const_cast<T *>(p.
+
+get()
+
+);
 }
 
-template<class T, class U> intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const & p)
+template<class T, class U> intrusive_ptr <T> dynamic_pointer_cast(intrusive_ptr < U >
+const & p)
 {
-    return dynamic_cast<T *>(p.get());
+return dynamic_cast<T *>(p.
+
+get()
+
+);
 }
 
 // operator<<
 
 #if !defined(BOOST_NO_IOSTREAM)
 
-#if defined(BOOST_NO_TEMPLATED_IOSTREAMS) || ( defined(__GNUC__) &&  (__GNUC__ < 3) )
+#if defined(BOOST_NO_TEMPLATED_IOSTREAMS) || (defined(__GNUC__) && (__GNUC__ < 3))
 
 template<class Y> std::ostream & operator<< (std::ostream & os, intrusive_ptr<Y> const & p)
 {
@@ -309,8 +367,10 @@ template<class Y> std::ostream & operator<< (std::ostream & os, intrusive_ptr<Y>
 using std::basic_ostream;
 template<class E, class T, class Y> basic_ostream<E, T> & operator<< (basic_ostream<E, T> & os, intrusive_ptr<Y> const & p)
 # else
-template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, intrusive_ptr<Y> const & p)
-# endif 
+
+template<class E, class T, class Y>
+std::basic_ostream<E, T> &operator<<(std::basic_ostream<E, T> &os, intrusive_ptr <Y> const &p)
+# endif
 {
     os << p.get();
     return os;
@@ -324,11 +384,12 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 // hash_value
 
-template< class T > struct hash;
+template<class T>
+struct hash;
 
-template< class T > std::size_t hash_value( boost::intrusive_ptr<T> const & p )
-{
-    return boost::hash< T* >()( p.get() );
+template<class T>
+std::size_t hash_value(boost::intrusive_ptr<T> const &p) {
+    return boost::hash<T *>()(p.get());
 }
 
 } // namespace boost

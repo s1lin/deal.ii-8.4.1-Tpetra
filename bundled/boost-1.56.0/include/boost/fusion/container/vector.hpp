@@ -11,6 +11,7 @@
 #include <boost/fusion/container/vector/limits.hpp>
 
 #include <boost/fusion/container/vector/vector10.hpp>
+
 #if (FUSION_MAX_VECTOR_SIZE > 10)
 #include <boost/fusion/container/vector/vector20.hpp>
 #endif

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_TUPLES
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_TUPLES
+
 #include <boost/spirit/home/classic/phoenix/tuples.hpp>
+
 #endif

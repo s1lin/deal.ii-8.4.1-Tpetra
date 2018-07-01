@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<magnetic_flux_density_dimension,si::system>    magnetic_flux_density;
-    
-BOOST_UNITS_STATIC_CONSTANT(tesla,magnetic_flux_density);   
-BOOST_UNITS_STATIC_CONSTANT(teslas,magnetic_flux_density);  
+            typedef unit <magnetic_flux_density_dimension, si::system> magnetic_flux_density;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(tesla, magnetic_flux_density
+            );
+            BOOST_UNITS_STATIC_CONSTANT(teslas, magnetic_flux_density
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

@@ -10,12 +10,15 @@
 
 #include <iostream>
 #include <cstddef> // std::size_t
+
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
+
 #include <array>
+
 #endif
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::size_t; 
 } // namespace std
 #endif
@@ -29,130 +32,125 @@ namespace std{
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/array.hpp>
 
-namespace boost { namespace serialization {
+namespace boost {
+    namespace serialization {
 
 // traits to specify whether to use  an optimized array serialization
 
 #ifdef __BORLANDC__
-// workaround for Borland compiler
-template <class Archive>
-struct use_array_optimization {
-  template <class T> struct apply : boost::mpl::false_ {};
-};
+        // workaround for Borland compiler
+        template <class Archive>
+        struct use_array_optimization {
+          template <class T> struct apply : boost::mpl::false_ {};
+        };
 
 #else
-template <class Archive>
-struct use_array_optimization : boost::mpl::always<boost::mpl::false_> {};
+        template<class Archive>
+        struct use_array_optimization : boost::mpl::always<boost::mpl::false_> {
+        };
 #endif
 
-template<class T>
-class array :
-    public wrapper_traits<const array< T > >
-{
-public:    
-    typedef T value_type;
-    
-    array(value_type* t, std::size_t s) :
-        m_t(t),
-        m_element_count(s)
-    {}
-    array(const array & rhs) :
-        m_t(rhs.m_t),
-        m_element_count(rhs.m_element_count)
-    {}
-    array & operator=(const array & rhs){
-        m_t = rhs.m_t;
-        m_element_count = rhs.m_element_count;
-    }
+        template<class T>
+        class array :
+                public wrapper_traits<const array<T> > {
+        public:
+            typedef T value_type;
 
-    // default implementation
-    template<class Archive>
-    void serialize_optimized(Archive &ar, const unsigned int, mpl::false_ ) const
-    {
-      // default implemention does the loop
-      std::size_t c = count();
-      value_type * t = address();
-      while(0 < c--)
-            ar & boost::serialization::make_nvp("item", *t++);
-    }
+            array(value_type *t, std::size_t s) :
+                    m_t(t),
+                    m_element_count(s) {}
 
-    // optimized implementation
-    template<class Archive>
-    void serialize_optimized(Archive &ar, const unsigned int version, mpl::true_ )
-    {
-      boost::serialization::split_member(ar, *this, version);
-    }
+            array(const array &rhs) :
+                    m_t(rhs.m_t),
+                    m_element_count(rhs.m_element_count) {}
 
-    // default implementation
-    template<class Archive>
-    void save(Archive &ar, const unsigned int version) const
-    {
-      ar.save_array(*this,version);
-    }
+            array &operator=(const array &rhs) {
+                m_t = rhs.m_t;
+                m_element_count = rhs.m_element_count;
+            }
 
-    // default implementation
-    template<class Archive>
-    void load(Archive &ar, const unsigned int version)
-    {
-      ar.load_array(*this,version);
-    }
-    
-    // default implementation
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int version)
-    {
-      typedef typename 
-          boost::serialization::use_array_optimization<Archive>::template apply<
-                    typename remove_const< T >::type 
+            // default implementation
+            template<class Archive>
+            void serialize_optimized(Archive &ar, const unsigned int, mpl::false_) const {
+                // default implemention does the loop
+                std::size_t c = count();
+                value_type *t = address();
+                while (0 < c--)
+                    ar & boost::serialization::make_nvp("item", *t++);
+            }
+
+            // optimized implementation
+            template<class Archive>
+            void serialize_optimized(Archive &ar, const unsigned int version, mpl::true_) {
+                boost::serialization::split_member(ar, *this, version);
+            }
+
+            // default implementation
+            template<class Archive>
+            void save(Archive &ar, const unsigned int version) const {
+                ar.save_array(*this, version);
+            }
+
+            // default implementation
+            template<class Archive>
+            void load(Archive &ar, const unsigned int version) {
+                ar.load_array(*this, version);
+            }
+
+            // default implementation
+            template<class Archive>
+            void serialize(Archive &ar, const unsigned int version) {
+                typedef typename
+                boost::serialization::use_array_optimization<Archive>::template apply<
+                        typename remove_const<T>::type
                 >::type use_optimized;
-      serialize_optimized(ar,version,use_optimized());
-    }
-    
-    value_type* address() const
-    {
-      return m_t;
-    }
+                serialize_optimized(ar, version, use_optimized());
+            }
 
-    std::size_t count() const
-    {
-      return m_element_count;
-    }
-    
-private:
-    value_type* m_t;
-    std::size_t m_element_count;
-};
+            value_type *address() const {
+                return m_t;
+            }
 
-template<class T>
-inline
+            std::size_t count() const {
+                return m_element_count;
+            }
+
+        private:
+            value_type *m_t;
+            std::size_t m_element_count;
+        };
+
+        template<class T>
+        inline
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-const
+        const
 #endif
-array< T > make_array( T* t, std::size_t s){
-    return array< T >(t, s);
-}
+        array<T> make_array(T *t, std::size_t s) {
+            return array<T>(t, s);
+        }
 
 // implement serialization for boost::array
-template <class Archive, class T, std::size_t N>
-void serialize(Archive& ar, boost::array<T,N>& a, const unsigned int /* version */)
-{
-    ar & boost::serialization::make_nvp("elems", a.elems);
-}
+        template<class Archive, class T, std::size_t N>
+        void serialize(Archive &ar, boost::array<T, N> &a, const unsigned int /* version */) {
+            ar & boost::serialization::make_nvp("elems", a.elems);
+        }
 
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
+
 // implement serialization for std::array
-template <class Archive, class T, std::size_t N>
-void serialize(Archive& ar, std::array<T,N>& a, const unsigned int /* version */)
-{
-    ar & boost::serialization::make_nvp(
-        "elems",
-        *static_cast<T (*)[N]>(static_cast<void *>(a.data()))
-    );
-    
-}
+        template<class Archive, class T, std::size_t N>
+        void serialize(Archive &ar, std::array<T, N> &a, const unsigned int /* version */) {
+            ar & boost::serialization::make_nvp(
+                    "elems",
+                    *static_cast<T (*)[N]>(static_cast<void *>(a.data()))
+            );
+
+        }
+
 #endif
 
-} } // end namespace boost::serialization
+    }
+} // end namespace boost::serialization
 
 #ifdef __BORLANDC__
 // ignore optimizations for Borland

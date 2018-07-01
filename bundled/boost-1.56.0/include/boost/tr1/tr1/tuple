@@ -6,6 +6,7 @@
 
 #ifndef BOOST_TR1_TUPLE_INCLUDED
 #  define BOOST_TR1_TUPLE_INCLUDED
+
 #  include <boost/tr1/detail/config_all.hpp>
 
 #  ifdef BOOST_HAS_CPP_0X
@@ -25,7 +26,9 @@
 #        include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(tuple))
 #     endif
 #  else
+
 #     include <boost/tr1/tuple.hpp>
+
 #  endif
 #  undef BOOST_TR1_NO_RECURSION
 #  endif

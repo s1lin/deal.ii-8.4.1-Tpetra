@@ -8,10 +8,11 @@
 
 namespace boost {
 
-  // Just a simple "type envelope". Useful in various contexts, mostly to work
-  // around some MSVC deficiencies.
-  template <class T>
-  struct type {};
+    // Just a simple "type envelope". Useful in various contexts, mostly to work
+    // around some MSVC deficiencies.
+    template<class T>
+    struct type {
+    };
 
 }
 

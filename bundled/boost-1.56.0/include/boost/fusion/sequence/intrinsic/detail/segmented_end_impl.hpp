@@ -15,47 +15,51 @@
 #include <boost/fusion/container/list/cons_fwd.hpp>
 #include <boost/fusion/support/is_segmented.hpp>
 
-namespace boost { namespace fusion
-{
-    template <typename First, typename Last>
-    struct iterator_range;
-}}
+namespace boost {
+    namespace fusion {
+        template<typename First, typename Last>
+        struct iterator_range;
+    }
+}
 
-namespace boost { namespace fusion { namespace detail
-{
-    //auto segmented_end_impl( seq, stack )
-    //{
-    //    assert(is_segmented(seq));
-    //    auto it = end(segments(seq));
-    //    return cons(iterator_range(it, it), stack);
-    //}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            //auto segmented_end_impl( seq, stack )
+            //{
+            //    assert(is_segmented(seq));
+            //    auto it = end(segments(seq));
+            //    return cons(iterator_range(it, it), stack);
+            //}
 
-    template <typename Sequence, typename Stack>
-    struct segmented_end_impl
-    {
-        BOOST_MPL_ASSERT((traits::is_segmented<Sequence>));
+            template<typename Sequence, typename Stack>
+            struct segmented_end_impl {
+                BOOST_MPL_ASSERT((traits::is_segmented<Sequence>));
 
-        typedef
-            typename result_of::end<
-                typename remove_reference<
-                    typename add_const<
-                        typename result_of::segments<Sequence>::type
-                    >::type
+                typedef
+                typename result_of::end<
+                        typename remove_reference<
+                                typename add_const<
+                                        typename result_of::segments<Sequence>::type
+                                >::type
+                        >::type
                 >::type
-            >::type
-        end_type;
+                        end_type;
 
-        typedef iterator_range<end_type, end_type>  pair_type;
-        typedef cons<pair_type, Stack>              type;
+                typedef iterator_range<end_type, end_type> pair_type;
+                typedef cons <pair_type, Stack> type;
 
-        BOOST_FUSION_GPU_ENABLED
-        static type call(Sequence & seq, Stack stack)
-        {
-            end_type end = fusion::end(fusion::segments(seq));
-            return type(pair_type(end, end), stack);
+                BOOST_FUSION_GPU_ENABLED
+                static type
+                call(Sequence & seq, Stack stack)
+                {
+                    end_type end = fusion::end(fusion::segments(seq));
+                    return type(pair_type(end, end), stack);
+                }
+            };
+
         }
-    };
-
-}}}
+    }
+}
 
 #endif

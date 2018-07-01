@@ -8,7 +8,9 @@
 ==============================================================================*/
 
 #if FUSION_MAX_ZIP_SEQUENCES <= 10
+
 #include <boost/fusion/algorithm/transformation/detail/preprocessed/zip10.hpp>
+
 #elif FUSION_MAX_ZIP_SEQUENCES <= 20
 #include <boost/fusion/algorithm/transformation/detail/preprocessed/zip20.hpp>
 #elif FUSION_MAX_ZIP_SEQUENCES <= 30

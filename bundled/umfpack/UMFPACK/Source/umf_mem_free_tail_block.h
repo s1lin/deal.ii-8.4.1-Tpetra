@@ -5,7 +5,7 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_mem_free_tail_block
-(
-    NumericType *Numeric,
-    Int i
-) ;
+        (
+                NumericType *Numeric,
+                Int i
+        );

@@ -11,32 +11,31 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/adapted/boost_array/array_iterator.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct boost_array_tag;
+        struct boost_array_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
 
-        template <>
-        struct end_impl<boost_array_tag>
-        {
-            template <typename Sequence>
-            struct apply 
-            {
-                typedef array_iterator<Sequence, Sequence::static_size> type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& v)
-                {
-                    return type(v);
-                }
+            template<>
+            struct end_impl<boost_array_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef array_iterator <Sequence, Sequence::static_size> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& v)
+                    {
+                        return type(v);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

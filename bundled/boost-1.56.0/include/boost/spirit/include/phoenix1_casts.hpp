@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_CASTS
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_CASTS
+
 #include <boost/spirit/home/classic/phoenix/casts.hpp>
+
 #endif

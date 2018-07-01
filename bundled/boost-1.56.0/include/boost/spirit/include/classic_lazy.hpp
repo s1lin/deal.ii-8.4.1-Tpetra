@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_LAZY
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_LAZY
+
 #include <boost/spirit/home/classic/dynamic/lazy.hpp>
+
 #endif

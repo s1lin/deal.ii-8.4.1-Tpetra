@@ -5,11 +5,11 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_report_vector
-(
-    Int n,
-    const double Xx [ ],
-    const double Xz [ ],
-    Int prl,
-    Int user,
-    Int scalar
-) ;
+        (
+                Int n,
+                const double Xx[],
+                const double Xz[],
+                Int prl,
+                Int user,
+                Int scalar
+        );

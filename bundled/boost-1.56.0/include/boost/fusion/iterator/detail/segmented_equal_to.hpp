@@ -12,31 +12,30 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nil_;
+namespace boost {
+    namespace fusion {
+        struct nil_;
 
-    namespace detail
-    {
-        template <typename Stack1, typename Stack2>
-        struct segmented_equal_to
-          : mpl::and_<
-                segmented_equal_to<
-                    typename Stack1::cdr_type,
-                    typename Stack2::cdr_type
-                >
-              , result_of::equal_to<
-                    typename Stack1::car_type::begin_type,
-                    typename Stack2::car_type::begin_type
-                >
-            >
-        {};
+        namespace detail {
+            template<typename Stack1, typename Stack2>
+            struct segmented_equal_to
+                    : mpl::and_<
+                            segmented_equal_to<
+                                    typename Stack1::cdr_type,
+                                    typename Stack2::cdr_type
+                            >, result_of::equal_to <
+                               typename Stack1::car_type::begin_type,
+                            typename Stack2::car_type::begin_type
+                    >
+            > {
+        };
 
-        template <>
+        template<>
         struct segmented_equal_to<fusion::nil_, fusion::nil_>
-          : mpl::true_
-        {};
+                : mpl::true_ {
+        };
     }
-}}
+}
+}
 
 #endif

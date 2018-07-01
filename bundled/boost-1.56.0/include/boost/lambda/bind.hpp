@@ -15,5 +15,5 @@
 #include "boost/lambda/core.hpp"
 
 #include "boost/lambda/detail/bind_functions.hpp"
-    
+
 #endif

@@ -8,26 +8,26 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstddef> // NULL
-
 #define BOOST_ARCHIVE_SOURCE
+
 #include <boost/archive/detail/basic_oserializer.hpp>
 
 namespace boost {
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
-basic_oserializer::basic_oserializer(
-        const boost::serialization::extended_type_info & eti
-) :
-    basic_serializer(eti), 
-    m_bpos(NULL)
-{}
+            BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
-basic_oserializer::~basic_oserializer(){}
+            basic_oserializer::basic_oserializer(
+                    const boost::serialization::extended_type_info &eti
+            ) :
+                    basic_serializer(eti),
+                    m_bpos(NULL) {}
 
-} // namespace detail
-} // namespace archive
+            BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
+
+            basic_oserializer::~basic_oserializer() {}
+
+        } // namespace detail
+    } // namespace archive
 } // namespace boost

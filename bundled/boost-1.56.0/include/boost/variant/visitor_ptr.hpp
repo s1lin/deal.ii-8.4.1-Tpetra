@@ -31,86 +31,84 @@ namespace boost {
 // Adapts a function pointer for use as visitor capable of handling
 // values of a single type. Throws bad_visit if inappropriately applied.
 //
-template <typename T, typename R>
-class visitor_ptr_t
-    : public static_visitor<R>
-{
-private: // representation
+    template<typename T, typename R>
+    class visitor_ptr_t
+            : public static_visitor<R> {
+    private: // representation
 
-    typedef R (*visitor_t)(T);
+        typedef R (*visitor_t)(T);
 
-    visitor_t visitor_;
+        visitor_t visitor_;
 
-public: // typedefs
+    public: // typedefs
 
-    typedef R result_type;
+        typedef R result_type;
 
-private: // private typedefs
+    private: // private typedefs
 
-    typedef typename mpl::eval_if<
-          is_reference<T>
-        , mpl::identity<T>
+        typedef typename mpl::eval_if<
+                is_reference < T>
+        , mpl::identity <T>
         , add_reference<const T>
-        >::type argument_fwd_type;
+        >
+        ::type argument_fwd_type;
 
-public: // structors
+    public: // structors
 
-    explicit visitor_ptr_t(visitor_t visitor) BOOST_NOEXCEPT
-      : visitor_(visitor)
-    {
-    }
+        explicit visitor_ptr_t(visitor_t visitor)
 
-public: // static visitor interfaces
+        BOOST_NOEXCEPT
+                : visitor_(visitor) {
+        }
 
-    template <typename U>
-    result_type operator()(const U&) const
-    {
-        boost::throw_exception(bad_visit());
-    }
+    public: // static visitor interfaces
+
+        template<typename U>
+        result_type operator()(const U &) const {
+            boost::throw_exception(bad_visit());
+        }
 
 #if !defined(BOOST_NO_VOID_RETURNS)
 
-public: // static visitor interfaces, cont.
+    public: // static visitor interfaces, cont.
 
-    result_type operator()(argument_fwd_type operand) const
-    {
-        return visitor_(operand);
-    }
+        result_type operator()(argument_fwd_type operand) const {
+            return visitor_(operand);
+        }
 
 #else // defined(BOOST_NO_VOID_RETURNS)
 
-private: // helpers, for static visitor interfaces (below)
+        private: // helpers, for static visitor interfaces (below)
 
-    result_type execute_impl(argument_fwd_type operand, mpl::false_) const
-    {
-        return visitor_(operand);
-    }
+            result_type execute_impl(argument_fwd_type operand, mpl::false_) const
+            {
+                return visitor_(operand);
+            }
 
-        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    execute_impl(argument_fwd_type operand, mpl::true_) const
-    {
-        visitor_(operand);
-        BOOST_VARIANT_AUX_RETURN_VOID;
-    }
+                BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+            execute_impl(argument_fwd_type operand, mpl::true_) const
+            {
+                visitor_(operand);
+                BOOST_VARIANT_AUX_RETURN_VOID;
+            }
 
-public: // static visitor interfaces, cont.
+        public: // static visitor interfaces, cont.
 
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(argument_fwd_type operand) const
-    {
-        typedef typename is_void<result_type>::type has_void_result;
-        return execute_impl(operand, has_void_result());
-    }
+                BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+            operator()(argument_fwd_type operand) const
+            {
+                typedef typename is_void<result_type>::type has_void_result;
+                return execute_impl(operand, has_void_result());
+            }
 
 #endif // BOOST_NO_VOID_RETURNS workaround
 
-};
+    };
 
-template <typename R, typename T>
-inline visitor_ptr_t<T,R> visitor_ptr(R (*visitor)(T))
-{
-    return visitor_ptr_t<T,R>(visitor);
-}
+    template<typename R, typename T>
+    inline visitor_ptr_t<T, R> visitor_ptr(R (*visitor)(T)) {
+        return visitor_ptr_t<T, R>(visitor);
+    }
 
 } // namespace boost
 

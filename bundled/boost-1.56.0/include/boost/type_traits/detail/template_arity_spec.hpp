@@ -14,7 +14,7 @@
 #include <boost/mpl/aux_/config/overload_resolution.hpp>
 
 #if defined(BOOST_MPL_CFG_NO_FULL_LAMBDA_SUPPORT) \
-    && defined(BOOST_MPL_CFG_BROKEN_OVERLOAD_RESOLUTION)
+ && defined(BOOST_MPL_CFG_BROKEN_OVERLOAD_RESOLUTION)
 #   define BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(i, name) \
 namespace mpl { namespace aux { \
 template< BOOST_MPL_PP_PARAMS(i, typename T) > \

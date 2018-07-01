@@ -14,7 +14,7 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 
 #if    !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-   #define BOOST_INTRUSIVE_PERFECT_FORWARDING
+#define BOOST_INTRUSIVE_PERFECT_FORWARDING
 #endif
 
 //Macros for documentation purposes. For code, expands to the argument

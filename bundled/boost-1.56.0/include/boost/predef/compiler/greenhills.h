@@ -56,7 +56,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_GHS_NAME "Green Hills C/C++"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_GHS,BOOST_COMP_GHS_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_GHS,
+BOOST_COMP_GHS_NAME)
 
 #ifdef BOOST_COMP_GHS_EMULATED
 #include <boost/predef/detail/test.h>

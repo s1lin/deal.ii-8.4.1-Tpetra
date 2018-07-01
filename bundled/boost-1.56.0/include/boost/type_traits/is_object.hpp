@@ -21,22 +21,22 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
-template <typename T>
-struct is_object_impl
-{
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_and<
-         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
-         ::boost::type_traits::ice_not< ::boost::is_void<T>::value>::value,
-         ::boost::type_traits::ice_not< ::boost::is_function<T>::value>::value
-      >::value));
-};
+        template<typename T>
+        struct is_object_impl {
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::type_traits::ice_and<
+                    ::boost::type_traits::ice_not<::boost::is_reference<T>::value>::value,
+                    ::boost::type_traits::ice_not<::boost::is_void<T>::value>::value,
+                    ::boost::type_traits::ice_not<::boost::is_function<T>::value>::value
+            >::value));
+        };
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_object,T,::boost::detail::is_object_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_object, T, ::boost::detail::is_object_impl<T>::value
+    )
 
 } // namespace boost
 

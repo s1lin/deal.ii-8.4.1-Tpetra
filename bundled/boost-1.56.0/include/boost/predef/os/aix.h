@@ -32,9 +32,9 @@ Version number available as major, minor, and patch.
 
 #define BOOST_OS_AIX BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && ( \
+#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && (\
     defined(_AIX) || defined(__TOS_AIX__) \
-    )
+)
 #   undef BOOST_OS_AIX
 #   if !defined(BOOST_OS_AIX) && defined(_AIX43)
 #       define BOOST_OS_AIX BOOST_VERSION_NUMBER(4,3,0)
@@ -61,7 +61,9 @@ Version number available as major, minor, and patch.
 #define BOOST_OS_AIX_NAME "IBM AIX"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_OS_AIX,BOOST_OS_AIX_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_OS_AIX,
+BOOST_OS_AIX_NAME)
 
 
 #endif

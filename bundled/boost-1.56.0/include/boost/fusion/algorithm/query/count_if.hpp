@@ -14,31 +14,32 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename F>
-        struct count_if
-        {
-            typedef int type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename F>
+            struct count_if {
+                typedef int type;
+            };
+        }
 
-    template <typename Sequence, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    inline 
-    typename
-        enable_if<
-            traits::is_sequence<Sequence>
-          , int
-        >::type
-    count_if(Sequence const& seq, F f)
-    {
-        return detail::count_if(
-            seq, f, typename traits::category_of<Sequence>::type());
+        template<typename Sequence, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        inline
+        typename
+                enable_if<
+                traits::is_sequence < Sequence>
+        ,
+        int
+        >
+
+        ::type
+        count_if(Sequence const &seq, F f) {
+            return detail::count_if(
+                    seq, f, typename traits::category_of<Sequence>::type());
+        }
     }
-}}
+}
 
 #endif
 

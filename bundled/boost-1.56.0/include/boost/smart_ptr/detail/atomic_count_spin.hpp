@@ -13,49 +13,43 @@
 
 #include <boost/smart_ptr/detail/spinlock_pool.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class atomic_count
-{
-private:
+        class atomic_count {
+        private:
 
-public:
+        public:
 
-    explicit atomic_count( long v ): value_( v )
-    {
-    }
+            explicit atomic_count(long v) : value_(v) {
+            }
 
-    long operator++()
-    {
-        spinlock_pool<0>::scoped_lock lock( &value_ );
-        return ++value_;
-    }
+            long operator++() {
+                spinlock_pool<0>::scoped_lock lock(&value_);
+                return ++value_;
+            }
 
-    long operator--()
-    {
-        spinlock_pool<0>::scoped_lock lock( &value_ );
-        return --value_;
-    }
+            long operator--() {
+                spinlock_pool<0>::scoped_lock lock(&value_);
+                return --value_;
+            }
 
-    operator long() const
-    {
-        spinlock_pool<0>::scoped_lock lock( &value_ );
-        return value_;
-    }
+            operator long() const {
+                spinlock_pool<0>::scoped_lock lock(&value_);
+                return value_;
+            }
 
-private:
+        private:
 
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
+            atomic_count(atomic_count const &);
 
-    long value_;
-};
+            atomic_count &operator=(atomic_count const &);
 
-} // namespace detail
+            long value_;
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

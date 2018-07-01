@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_FILE_ITERATOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_FILE_ITERATOR
+
 #include <boost/spirit/home/classic/iterator/file_iterator.hpp>
+
 #endif

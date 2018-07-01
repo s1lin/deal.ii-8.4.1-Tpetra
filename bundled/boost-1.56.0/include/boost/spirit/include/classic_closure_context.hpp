@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_CLOSURE_CONTEXT
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_CLOSURE_CONTEXT
+
 #include <boost/spirit/home/classic/attribute/closure_context.hpp>
+
 #endif

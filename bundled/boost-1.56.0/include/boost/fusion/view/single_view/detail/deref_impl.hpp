@@ -13,34 +13,32 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/equal_to.hpp>
 
-namespace boost { namespace fusion
-{
-    struct single_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct deref_impl;
+        namespace extension {
+            template<typename Tag>
+            struct deref_impl;
 
-        template <>
-        struct deref_impl<single_view_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                BOOST_MPL_ASSERT((mpl::equal_to<typename Iterator::position, mpl::int_<0> >));
-                typedef typename Iterator::value_type type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return i.view.val;
-                }
+            template<>
+            struct deref_impl<single_view_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    BOOST_MPL_ASSERT((mpl::equal_to<typename Iterator::position, mpl::int_ < 0> >));
+                    typedef typename Iterator::value_type type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return i.view.val;
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

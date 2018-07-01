@@ -31,9 +31,10 @@
 
 #include "umf_internal.h"
 
-double (*umfpack_hypot) (double, double) = umf_hypot ;
-int (*umfpack_divcomplex) (double, double, double, double, double *, double *)
-    = umf_divcomplex ;
+double (*umfpack_hypot)(double, double) = umf_hypot;
+
+int (*umfpack_divcomplex)(double, double, double, double, double *, double *)
+= umf_divcomplex;
 
 
 /* ========================================================================== */
@@ -54,36 +55,26 @@ int (*umfpack_divcomplex) (double, double, double, double, double *, double *)
  * The NaN case for the double relops x >= y and x+y == x is safely ignored.
  */
 
-double umf_hypot (double x, double y)
-{
-    double s, r ;
-    x = SCALAR_ABS (x) ;
-    y = SCALAR_ABS (y) ;
-    if (x >= y)
-    {
-	if (x + y == x)
-	{
-	    s = x ;
-	}
-	else
-	{
-	    r = y / x ;
-	    s = x * sqrt (1.0 + r*r) ;
-	}
+double umf_hypot(double x, double y) {
+    double s, r;
+    x = SCALAR_ABS (x);
+    y = SCALAR_ABS (y);
+    if (x >= y) {
+        if (x + y == x) {
+            s = x;
+        } else {
+            r = y / x;
+            s = x * sqrt(1.0 + r * r);
+        }
+    } else {
+        if (y + x == y) {
+            s = y;
+        } else {
+            r = x / y;
+            s = y * sqrt(1.0 + r * r);
+        }
     }
-    else
-    {
-	if (y + x == y)
-	{
-	    s = y ;
-	}
-	else
-	{
-	    r = x / y ;
-	    s = y * sqrt (1.0 + r*r) ;
-	}
-    } 
-    return (s) ;
+    return (s);
 }
 
 
@@ -103,28 +94,24 @@ double umf_hypot (double x, double y)
  */
 
 int umf_divcomplex
-(
-    double ar, double ai,	/* real and imaginary parts of a */
-    double br, double bi,	/* real and imaginary parts of b */
-    double *cr, double *ci	/* real and imaginary parts of c */
-)
-{
-    double tr, ti, r, den ;
-    if (SCALAR_ABS (br) >= SCALAR_ABS (bi))
-    {
-	r = bi / br ;
-	den = br + r * bi ;
-	tr = (ar + ai * r) / den ;
-	ti = (ai - ar * r) / den ;
+        (
+                double ar, double ai,    /* real and imaginary parts of a */
+                double br, double bi,    /* real and imaginary parts of b */
+                double *cr, double *ci    /* real and imaginary parts of c */
+        ) {
+    double tr, ti, r, den;
+    if (SCALAR_ABS (br) >= SCALAR_ABS (bi)) {
+        r = bi / br;
+        den = br + r * bi;
+        tr = (ar + ai * r) / den;
+        ti = (ai - ar * r) / den;
+    } else {
+        r = br / bi;
+        den = r * br + bi;
+        tr = (ar * r + ai) / den;
+        ti = (ai * r - ar) / den;
     }
-    else
-    {
-	r = br / bi ;
-	den = r * br + bi ;
-	tr = (ar * r + ai) / den ;
-	ti = (ai * r - ar) / den ;
-    }
-    *cr = tr ;
-    *ci = ti ;
-    return (SCALAR_IS_ZERO (den)) ;
+    *cr = tr;
+    *ci = ti;
+    return (SCALAR_IS_ZERO (den));
 }

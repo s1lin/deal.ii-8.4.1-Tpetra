@@ -17,10 +17,13 @@
 #endif
 
 #  include <boost/tr1/detail/config_all.hpp>
+
 #  if defined(BOOST_HAS_INCLUDE_NEXT) && !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT)
 #     include_next <stdexcept>
 #  else
+
 #     include BOOST_TR1_STD_HEADER(stdexcept)
+
 #  endif
 
 #ifdef BOOST_TR1_NO_stdexcept_RECURSION3

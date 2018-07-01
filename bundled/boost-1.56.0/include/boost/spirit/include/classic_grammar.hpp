@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_GRAMMAR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_GRAMMAR
+
 #include <boost/spirit/home/classic/core/non_terminal/grammar.hpp>
+
 #endif

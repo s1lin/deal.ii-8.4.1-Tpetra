@@ -18,19 +18,20 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(T)
-    >
-struct sizeof_
-    : mpl::size_t< sizeof(T) >
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,sizeof_,(T))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(T)
+        >
+        struct sizeof_
+                : mpl::size_t<sizeof(T)> {
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(1,sizeof_,(T))
+        };
 
-BOOST_MPL_AUX_NA_SPEC_NO_ETI(1, sizeof_)
+        BOOST_MPL_AUX_NA_SPEC_NO_ETI(1, sizeof_)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_SIZEOF_HPP_INCLUDED

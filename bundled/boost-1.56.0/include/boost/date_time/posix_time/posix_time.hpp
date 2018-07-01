@@ -13,6 +13,7 @@
 
 #include "boost/date_time/compiler_config.hpp"
 #include "boost/date_time/posix_time/ptime.hpp"
+
 #if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
 #include "boost/date_time/posix_time/date_duration_operators.hpp"
 #endif
@@ -21,14 +22,18 @@
 #if defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
 #include "boost/date_time/posix_time/time_formatters_limited.hpp"
 #else
+
 #include "boost/date_time/posix_time/time_formatters.hpp"
+
 #endif // BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
 
 // streaming operators
 #if defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 #include "boost/date_time/posix_time/posix_time_legacy_io.hpp"
 #else
+
 #include "boost/date_time/posix_time/posix_time_io.hpp"
+
 #endif // USE_DATE_TIME_PRE_1_33_FACET_IO
 
 #include "boost/date_time/posix_time/time_parsers.hpp"

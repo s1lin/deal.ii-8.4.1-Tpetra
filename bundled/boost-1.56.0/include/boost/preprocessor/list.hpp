@@ -6,14 +6,22 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LIST_HPP
 # define BOOST_PREPROCESSOR_LIST_HPP
 #
+
+
 # include <boost/preprocessor/list/adt.hpp>
 # include <boost/preprocessor/list/append.hpp>
 # include <boost/preprocessor/list/at.hpp>
@@ -33,5 +41,7 @@
 # include <boost/preprocessor/list/to_seq.hpp>
 # include <boost/preprocessor/list/to_tuple.hpp>
 # include <boost/preprocessor/list/transform.hpp>
+
 #
+
 # endif

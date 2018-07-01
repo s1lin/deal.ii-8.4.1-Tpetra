@@ -17,111 +17,114 @@
 #include <string>
 
 #define BOOST_ARCHIVE_SOURCE
+
 #include <boost/archive/archive_exception.hpp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-unsigned int
-archive_exception::append(unsigned int l, const char * a){
-    while(l < (sizeof(m_buffer) - 1)){
-        char c = *a++;
-        if('\0' == c)
-            break;
-        m_buffer[l++] = c;
-    }
-    m_buffer[l] = '\0';
-    return l;
-}
+        unsigned int
+        archive_exception::append(unsigned int l, const char *a) {
+            while (l < (sizeof(m_buffer) - 1)) {
+                char c = *a++;
+                if ('\0' == c)
+                    break;
+                m_buffer[l++] = c;
+            }
+            m_buffer[l] = '\0';
+            return l;
+        }
 
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
-archive_exception::archive_exception(
-    exception_code c, 
-    const char * e1,
-    const char * e2
-) : 
-    code(c)
-{
-    unsigned int length = 0;
-    switch(code){
-    case no_exception:
-        length = append(length, "uninitialized exception");
-        break;
-    case unregistered_class:
-        length = append(length, "unregistered class");
-        if(NULL != e1){
-            length = append(length, " - ");
-            length = append(length, e1);
-        }    
-        break;
-    case invalid_signature:
-        length = append(length, "invalid signature");
-        break;
-    case unsupported_version:
-        length = append(length, "unsupported version");
-        break;
-    case pointer_conflict:
-        length = append(length, "pointer conflict");
-        break;
-    case incompatible_native_format:
-        length = append(length, "incompatible native format");
-        if(NULL != e1){
-            length = append(length, " - ");
-            length = append(length, e1);
-        }    
-        break;
-    case array_size_too_short:
-        length = append(length, "array size too short");
-        break;
-    case input_stream_error:
-        length = append(length, "input stream error");
-        break;
-    case invalid_class_name:
-        length = append(length, "class name too long");
-        break;
-    case unregistered_cast:
-        length = append(length, "unregistered void cast ");
-        length = append(length, (NULL != e1) ? e1 : "?");
-        length = append(length, "<-");
-        length = append(length, (NULL != e2) ? e2 : "?");
-        break;
-    case unsupported_class_version:
-        length = append(length, "class version ");
-        length = append(length, (NULL != e1) ? e1 : "<unknown class>");
-        break;
-    case other_exception:
-        // if get here - it indicates a derived exception 
-        // was sliced by passing by value in catch
-        length = append(length, "unknown derived exception");
-        break;
-    case multiple_code_instantiation:
-        length = append(length, "code instantiated in more than one module");
-        if(NULL != e1){
-            length = append(length, " - ");
-            length = append(length, e1);
-        }    
-        break;
-    case output_stream_error:
-        length = append(length, "output stream error");
-        break;
-    default:
-        BOOST_ASSERT(false);
-        length = append(length, "programming error");
-        break;
-    }
-}
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
-archive_exception::~archive_exception() throw() {}
+        BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 
-BOOST_ARCHIVE_DECL(const char *)
-archive_exception::what( ) const throw()
-{
-    return m_buffer;
-}
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
-archive_exception::archive_exception() : 
-        code(no_exception)
-{}
+        archive_exception::archive_exception(
+                exception_code c,
+                const char *e1,
+                const char *e2
+        ) :
+                code(c) {
+            unsigned int length = 0;
+            switch (code) {
+                case no_exception:
+                    length = append(length, "uninitialized exception");
+                    break;
+                case unregistered_class:
+                    length = append(length, "unregistered class");
+                    if (NULL != e1) {
+                        length = append(length, " - ");
+                        length = append(length, e1);
+                    }
+                    break;
+                case invalid_signature:
+                    length = append(length, "invalid signature");
+                    break;
+                case unsupported_version:
+                    length = append(length, "unsupported version");
+                    break;
+                case pointer_conflict:
+                    length = append(length, "pointer conflict");
+                    break;
+                case incompatible_native_format:
+                    length = append(length, "incompatible native format");
+                    if (NULL != e1) {
+                        length = append(length, " - ");
+                        length = append(length, e1);
+                    }
+                    break;
+                case array_size_too_short:
+                    length = append(length, "array size too short");
+                    break;
+                case input_stream_error:
+                    length = append(length, "input stream error");
+                    break;
+                case invalid_class_name:
+                    length = append(length, "class name too long");
+                    break;
+                case unregistered_cast:
+                    length = append(length, "unregistered void cast ");
+                    length = append(length, (NULL != e1) ? e1 : "?");
+                    length = append(length, "<-");
+                    length = append(length, (NULL != e2) ? e2 : "?");
+                    break;
+                case unsupported_class_version:
+                    length = append(length, "class version ");
+                    length = append(length, (NULL != e1) ? e1 : "<unknown class>");
+                    break;
+                case other_exception:
+                    // if get here - it indicates a derived exception
+                    // was sliced by passing by value in catch
+                    length = append(length, "unknown derived exception");
+                    break;
+                case multiple_code_instantiation:
+                    length = append(length, "code instantiated in more than one module");
+                    if (NULL != e1) {
+                        length = append(length, " - ");
+                        length = append(length, e1);
+                    }
+                    break;
+                case output_stream_error:
+                    length = append(length, "output stream error");
+                    break;
+                default:
+                    BOOST_ASSERT(false);
+                    length = append(length, "programming error");
+                    break;
+            }
+        }
 
-} // archive
+        BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
+
+        archive_exception::~archive_exception() throw() {}
+
+        BOOST_ARCHIVE_DECL(const char *)
+        archive_exception::what() const throw() {
+            return m_buffer;
+        }
+
+        BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
+
+        archive_exception::archive_exception() :
+                code(no_exception) {}
+
+    } // archive
 } // boost

@@ -6,24 +6,36 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_SEQ_DETAIL_SPLIT_HPP
 # define BOOST_PREPROCESSOR_SEQ_DETAIL_SPLIT_HPP
 #
+
+
 # include <boost/preprocessor/config/config.hpp>
+
 #
+
 # /* BOOST_PP_SEQ_SPLIT */
+
 #
+
 # define BOOST_PP_SEQ_SPLIT(n, seq) BOOST_PP_SEQ_SPLIT_D(n, seq)
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_SEQ_SPLIT_D(n, seq) (BOOST_PP_SEQ_SPLIT_ ## n seq)
 # else
 #    define BOOST_PP_SEQ_SPLIT_D(n, seq) (BOOST_PP_SEQ_SPLIT_ ## n ## seq)
 # endif
 #
+
 # define BOOST_PP_SEQ_SPLIT_1(x) (x),
 # define BOOST_PP_SEQ_SPLIT_2(x) (x) BOOST_PP_SEQ_SPLIT_1
 # define BOOST_PP_SEQ_SPLIT_3(x) (x) BOOST_PP_SEQ_SPLIT_2
@@ -281,4 +293,5 @@
 # define BOOST_PP_SEQ_SPLIT_255(x) (x) BOOST_PP_SEQ_SPLIT_254
 # define BOOST_PP_SEQ_SPLIT_256(x) (x) BOOST_PP_SEQ_SPLIT_255
 #
+
 # endif

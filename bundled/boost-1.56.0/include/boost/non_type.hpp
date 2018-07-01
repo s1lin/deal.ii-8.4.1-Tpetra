@@ -14,11 +14,12 @@
 
 namespace boost {
 
-  // Just a simple "envelope" for non-type template parameters. Useful
-  // to work around some MSVC deficiencies.
+    // Just a simple "envelope" for non-type template parameters. Useful
+    // to work around some MSVC deficiencies.
 
- template <typename T, T n>
- struct non_type { };
+    template<typename T, T n>
+    struct non_type {
+    };
 
 
 }

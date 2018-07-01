@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SEQUENTIAL_OR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SEQUENTIAL_OR
+
 #include <boost/spirit/home/classic/core/composite/sequential_or.hpp>
+
 #endif

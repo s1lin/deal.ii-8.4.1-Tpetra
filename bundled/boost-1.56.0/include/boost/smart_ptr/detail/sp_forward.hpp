@@ -17,18 +17,18 @@
 
 #include <boost/config.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
 #if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
-template< class T > T&& sp_forward( T & t ) BOOST_NOEXCEPT
-{
-    return static_cast< T&& >( t );
-}
+        template<class T>
+        T &&sp_forward(T &t)
+
+        BOOST_NOEXCEPT {
+        return static_cast< T&& >( t );
+    }
 
 #endif
 

@@ -20,20 +20,20 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(T)
-    >
-struct index_of
-    : index_if< Sequence,same_as<T> >
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,index_of,(Sequence,T))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence), typename BOOST_MPL_AUX_NA_PARAM(T)
+        >
+        struct index_of
+                : index_if<Sequence, same_as < T> > {
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,index_of,(Sequence,T))
+    };
 
-BOOST_MPL_AUX_NA_SPEC(2, index_of)
+    BOOST_MPL_AUX_NA_SPEC(2, index_of)
 
-}}
+}
+}
 
 #endif // BOOST_MPL_INDEX_OF_HPP_INCLUDED

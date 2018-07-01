@@ -22,23 +22,21 @@
 #include "umf_free.h"
 
 GLOBAL Int UMFPACK_report_perm
-(
-    Int np,
-    const Int Perm [ ],
-    const double Control [UMFPACK_CONTROL]
-)
-{
-    Int prl, *W, status ;
+        (
+                Int np,
+                const Int Perm[],
+                const double Control[UMFPACK_CONTROL]
+        ) {
+    Int prl, *W, status;
 
-    prl = GET_CONTROL (UMFPACK_PRL, UMFPACK_DEFAULT_PRL) ;
+    prl = GET_CONTROL (UMFPACK_PRL, UMFPACK_DEFAULT_PRL);
 
-    if (prl <= 2)
-    {
-	return (UMFPACK_OK) ;
+    if (prl <= 2) {
+        return (UMFPACK_OK);
     }
 
-    W = (Int *) UMF_malloc (MAX (np,1), sizeof (Int)) ;
-    status = UMF_report_perm (np, Perm, W, prl, 1) ;
-    (void) UMF_free ((void *) W) ;
-    return (status) ;
+    W = (Int *) UMF_malloc(MAX (np, 1), sizeof(Int));
+    status = UMF_report_perm(np, Perm, W, prl, 1);
+    (void) UMF_free((void *) W);
+    return (status);
 }

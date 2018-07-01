@@ -10,32 +10,30 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/vector/vector_iterator.hpp>
 
-namespace boost { namespace fusion
-{
-    struct vector_tag;
+namespace boost {
+    namespace fusion {
+        struct vector_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct begin_impl;
+        namespace extension {
+            template<typename Tag>
+            struct begin_impl;
 
-        template <>
-        struct begin_impl<vector_tag>
-        {
-            template <typename Sequence>
-            struct apply 
-            {
-                typedef vector_iterator<Sequence, 0> type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& v)
-                {
-                    return type(v);
-                }
+            template<>
+            struct begin_impl<vector_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef vector_iterator<Sequence, 0> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& v)
+                    {
+                        return type(v);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

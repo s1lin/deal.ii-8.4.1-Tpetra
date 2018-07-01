@@ -6,13 +6,21 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
+
 # include <boost/preprocessor/slot/detail/shared.hpp>
+
 #
+
 # undef BOOST_PP_SLOT_4
 #
+
 # undef BOOST_PP_SLOT_4_DIGIT_1
 # undef BOOST_PP_SLOT_4_DIGIT_2
 # undef BOOST_PP_SLOT_4_DIGIT_3
@@ -24,6 +32,7 @@
 # undef BOOST_PP_SLOT_4_DIGIT_9
 # undef BOOST_PP_SLOT_4_DIGIT_10
 #
+
 # if BOOST_PP_SLOT_TEMP_10 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_10 0
 # elif BOOST_PP_SLOT_TEMP_10 == 1
@@ -46,6 +55,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_10 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_9 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_9 0
 # elif BOOST_PP_SLOT_TEMP_9 == 1
@@ -68,6 +78,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_9 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_8 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_8 0
 # elif BOOST_PP_SLOT_TEMP_8 == 1
@@ -90,6 +101,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_8 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_7 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_7 0
 # elif BOOST_PP_SLOT_TEMP_7 == 1
@@ -112,6 +124,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_7 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_6 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_6 0
 # elif BOOST_PP_SLOT_TEMP_6 == 1
@@ -134,6 +147,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_6 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_5 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_5 0
 # elif BOOST_PP_SLOT_TEMP_5 == 1
@@ -156,6 +170,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_5 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_4 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_4 0
 # elif BOOST_PP_SLOT_TEMP_4 == 1
@@ -178,6 +193,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_4 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_3 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_3 0
 # elif BOOST_PP_SLOT_TEMP_3 == 1
@@ -200,6 +216,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_3 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_2 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_2 0
 # elif BOOST_PP_SLOT_TEMP_2 == 1
@@ -222,6 +239,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_2 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_1 == 0
 #    define BOOST_PP_SLOT_4_DIGIT_1 0
 # elif BOOST_PP_SLOT_TEMP_1 == 1
@@ -244,6 +262,7 @@
 #    define BOOST_PP_SLOT_4_DIGIT_1 9
 # endif
 #
+
 # if BOOST_PP_SLOT_4_DIGIT_10
 #    define BOOST_PP_SLOT_4() BOOST_PP_SLOT_CC_10(BOOST_PP_SLOT_4_DIGIT_10, BOOST_PP_SLOT_4_DIGIT_9, BOOST_PP_SLOT_4_DIGIT_8, BOOST_PP_SLOT_4_DIGIT_7, BOOST_PP_SLOT_4_DIGIT_6, BOOST_PP_SLOT_4_DIGIT_5, BOOST_PP_SLOT_4_DIGIT_4, BOOST_PP_SLOT_4_DIGIT_3, BOOST_PP_SLOT_4_DIGIT_2, BOOST_PP_SLOT_4_DIGIT_1)
 # elif BOOST_PP_SLOT_4_DIGIT_9

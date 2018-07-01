@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_GRAMMAR_DEF_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_GRAMMAR_DEF_FWD
+
 #include <boost/spirit/home/classic/utility/grammar_def_fwd.hpp>
+
 #endif

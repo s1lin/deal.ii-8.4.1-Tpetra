@@ -13,33 +13,34 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace fusion
-{
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct fusion_sequence_tag;
 
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct front
-            : result_of::deref<typename result_of::begin<Sequence>::type>
-        {};
-    }
-    
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::front<Sequence>::type
-    front(Sequence& seq)
-    {
-        return *fusion::begin(seq);
+        namespace result_of {
+            template<typename Sequence>
+            struct front
+                    : result_of::deref<typename result_of::begin<Sequence>::type> {
+            };
+        }
+
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::front<Sequence>::type
+        front(Sequence
+        & seq) {
+        return *
+        fusion::begin(seq);
     }
 
-    template <typename Sequence>
+    template<typename Sequence>
     BOOST_FUSION_GPU_ENABLED
     inline typename result_of::front<Sequence const>::type
-    front(Sequence const& seq)
-    {
-        return *fusion::begin(seq);
-    }
+    front(Sequence
+    const& seq) {
+    return *
+    fusion::begin(seq);
+}
 }}
 
 #endif

@@ -88,6 +88,7 @@
             /* (cannot iterate [0, MAX-2) because error on Sun) */ \
             (3, (2, BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, \
             "boost/functional/overloaded_function.hpp"))
+
 #       include BOOST_PP_ITERATE() // Iterate over function arity.
 
 #undef BOOST_FUNCTIONAL_f_type

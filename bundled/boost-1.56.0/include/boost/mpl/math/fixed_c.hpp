@@ -16,21 +16,23 @@
 
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      long IntegerPart
-    , unsigned long FractionPart
-    >
-struct fixed_c
-{
-    BOOST_STATIC_CONSTANT(long, integer_part = IntegerPart);
-    BOOST_STATIC_CONSTANT(unsigned long, fraction_part = FractionPart);
-    typedef fixed_c<IntegerPart, FractionPart> type;
-    
-    fixed_c() {}
-};
+        template<
+                long IntegerPart, unsigned long FractionPart
+        >
+        struct fixed_c {
+            BOOST_STATIC_CONSTANT(long, integer_part = IntegerPart);
 
-}}
+            BOOST_STATIC_CONSTANT(unsigned long, fraction_part = FractionPart);
+
+            typedef fixed_c<IntegerPart, FractionPart> type;
+
+            fixed_c() {}
+        };
+
+    }
+}
 
 #endif // BOOST_MPL_FIXED_C_HPP_INCLUDED

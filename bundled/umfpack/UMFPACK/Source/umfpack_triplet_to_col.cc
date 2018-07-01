@@ -46,32 +46,31 @@ PRIVATE Int init_count ;
 /* ========================================================================== */
 
 GLOBAL Int UMFPACK_triplet_to_col
-(
-    Int n_row,
-    Int n_col,
-    Int nz,
-    const Int Ti [ ],		/* size nz */
-    const Int Tj [ ],		/* size nz */
-    const double Tx [ ],	/* size nz */
+        (
+                Int n_row,
+                Int n_col,
+                Int nz,
+                const Int Ti[],        /* size nz */
+                const Int Tj[],        /* size nz */
+                const double Tx[],    /* size nz */
 #ifdef COMPLEX
-    const double Tz [ ],	/* size nz */
+        const double Tz [ ],	/* size nz */
 #endif
-    Int Ap [ ],			/* size n_col + 1 */
-    Int Ai [ ],			/* size nz */
-    double Ax [ ]		/* size nz */
+                Int Ap[],            /* size n_col + 1 */
+                Int Ai[],            /* size nz */
+                double Ax[]        /* size nz */
 #ifdef COMPLEX
-    , double Az [ ]		/* size nz */
+        , double Az [ ]		/* size nz */
 #endif
-    , Int Map [ ]		/* size nz */
-)
-{
+        , Int Map[]        /* size nz */
+) {
 
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    Int *RowCount, *Rp, *Rj, *W, nn, do_values, do_map, *Map2, status ;
-    double *Rx ;
+    Int *RowCount, *Rp, *Rj, *W, nn, do_values, do_map, *Map2, status;
+    double *Rx;
 #ifdef COMPLEX
     double *Rz ;
     Int split ;
@@ -86,140 +85,125 @@ GLOBAL Int UMFPACK_triplet_to_col
     /* check inputs */
     /* ---------------------------------------------------------------------- */
 
-    if (!Ai || !Ap || !Ti || !Tj)
-    {
-	return (UMFPACK_ERROR_argument_missing) ;
+    if (!Ai || !Ap || !Ti || !Tj) {
+        return (UMFPACK_ERROR_argument_missing);
     }
 
-    if (n_row <= 0 || n_col <= 0)		/* must be > 0 */
+    if (n_row <= 0 || n_col <= 0)        /* must be > 0 */
     {
-	return (UMFPACK_ERROR_n_nonpositive) ;
+        return (UMFPACK_ERROR_n_nonpositive);
     }
 
-    if (nz < 0)		/* nz must be >= 0 (singular matrices are OK) */
+    if (nz < 0)        /* nz must be >= 0 (singular matrices are OK) */
     {
-	return (UMFPACK_ERROR_invalid_matrix) ;
+        return (UMFPACK_ERROR_invalid_matrix);
     }
 
-    nn = MAX (n_row, n_col) ;
+    nn = MAX (n_row, n_col);
 
     /* ---------------------------------------------------------------------- */
     /* allocate workspace */
     /* ---------------------------------------------------------------------- */
 
-    Rx = (double *) NULL ;
+    Rx = (double *) NULL;
 
-    do_values = Ax && Tx ;
+    do_values = Ax && Tx;
 
-    if (do_values)
-    {
+    if (do_values) {
 #ifdef COMPLEX
-	Rx = (double *) UMF_malloc (2*nz+2, sizeof (double)) ;
-	split = SPLIT (Tz) && SPLIT (Az) ;
-	if (split)
-	{
-	    Rz = Rx + nz ;
-	}
-	else
-	{
-	    Rz = (double *) NULL ;
-	}
+        Rx = (double *) UMF_malloc (2*nz+2, sizeof (double)) ;
+        split = SPLIT (Tz) && SPLIT (Az) ;
+        if (split)
+        {
+            Rz = Rx + nz ;
+        }
+        else
+        {
+            Rz = (double *) NULL ;
+        }
 #else
-	Rx = (double *) UMF_malloc (nz+1, sizeof (double)) ;
+        Rx = (double *) UMF_malloc(nz + 1, sizeof(double));
 #endif
-	if (!Rx)
-	{
-	    DEBUGm4 (("out of memory: triplet work \n")) ;
-	    ASSERT (UMF_malloc_count == init_count) ;
-	    return (UMFPACK_ERROR_out_of_memory) ;
-	}
+        if (!Rx) {
+            DEBUGm4 (("out of memory: triplet work \n"));
+            ASSERT (UMF_malloc_count == init_count);
+            return (UMFPACK_ERROR_out_of_memory);
+        }
     }
 
-    do_map = (Map != (Int *) NULL) ;
-    Map2 = (Int *) NULL ;
-    if (do_map)
-    {
-	DEBUG0 (("Do map:\n")) ;
-	Map2 = (Int *) UMF_malloc (nz+1, sizeof (Int)) ;
-	if (!Map2)
-	{
-	    DEBUGm4 (("out of memory: triplet map\n")) ;
-	    (void) UMF_free ((void *) Rx) ;
-	    ASSERT (UMF_malloc_count == init_count) ;
-	    return (UMFPACK_ERROR_out_of_memory) ;
-	}
+    do_map = (Map != (Int *) NULL);
+    Map2 = (Int *) NULL;
+    if (do_map) {
+        DEBUG0 (("Do map:\n"));
+        Map2 = (Int *) UMF_malloc(nz + 1, sizeof(Int));
+        if (!Map2) {
+            DEBUGm4 (("out of memory: triplet map\n"));
+            (void) UMF_free((void *) Rx);
+            ASSERT (UMF_malloc_count == init_count);
+            return (UMFPACK_ERROR_out_of_memory);
+        }
     }
 
-    Rj = (Int *) UMF_malloc (nz+1, sizeof (Int)) ;
-    Rp = (Int *) UMF_malloc (n_row+1, sizeof (Int)) ;
-    RowCount = (Int *) UMF_malloc (n_row, sizeof (Int)) ;
-    W = (Int *) UMF_malloc (nn, sizeof (Int)) ;
-    if (!Rj || !Rp || !RowCount || !W)
-    {
-	DEBUGm4 (("out of memory: triplet work (int)\n")) ;
-	(void) UMF_free ((void *) Rx) ;
-	(void) UMF_free ((void *) Map2) ;
-	(void) UMF_free ((void *) Rp) ;
-	(void) UMF_free ((void *) Rj) ;
-	(void) UMF_free ((void *) RowCount) ;
-	(void) UMF_free ((void *) W) ;
-	ASSERT (UMF_malloc_count == init_count) ;
-	return (UMFPACK_ERROR_out_of_memory) ;
+    Rj = (Int *) UMF_malloc(nz + 1, sizeof(Int));
+    Rp = (Int *) UMF_malloc(n_row + 1, sizeof(Int));
+    RowCount = (Int *) UMF_malloc(n_row, sizeof(Int));
+    W = (Int *) UMF_malloc(nn, sizeof(Int));
+    if (!Rj || !Rp || !RowCount || !W) {
+        DEBUGm4 (("out of memory: triplet work (int)\n"));
+        (void) UMF_free((void *) Rx);
+        (void) UMF_free((void *) Map2);
+        (void) UMF_free((void *) Rp);
+        (void) UMF_free((void *) Rj);
+        (void) UMF_free((void *) RowCount);
+        (void) UMF_free((void *) W);
+        ASSERT (UMF_malloc_count == init_count);
+        return (UMFPACK_ERROR_out_of_memory);
     }
 
     ASSERT (UMF_malloc_count == init_count + 4 +
-	(Rx != (double *) NULL) + do_map) ;
+                                (Rx != (double *) NULL) + do_map);
 
     /* ---------------------------------------------------------------------- */
     /* convert from triplet to column form */
     /* ---------------------------------------------------------------------- */
 
-    if (do_map)
-    {
-	if (do_values)
-	{
-	    status = UMF_triplet_map_x (n_row, n_col, nz, Ti, Tj, Ap, Ai, Rp,
-		Rj, W, RowCount, Tx, Ax, Rx
+    if (do_map) {
+        if (do_values) {
+            status = UMF_triplet_map_x(n_row, n_col, nz, Ti, Tj, Ap, Ai, Rp,
+                                       Rj, W, RowCount, Tx, Ax, Rx
 #ifdef COMPLEX
-		, Tz, Az, Rz
+                    , Tz, Az, Rz
 #endif
-		, Map, Map2) ;
-	}
-	else
-	{
-	    status = UMF_triplet_map_nox (n_row, n_col, nz, Ti, Tj, Ap, Ai, Rp,
-		Rj, W, RowCount, Map, Map2) ;
-	}
-    }
-    else
-    {
-	if (do_values)
-	{
-	    status = UMF_triplet_nomap_x (n_row, n_col, nz, Ti, Tj, Ap, Ai, Rp,
-		Rj, W, RowCount , Tx, Ax, Rx
+                    , Map, Map2);
+        } else {
+            status = UMF_triplet_map_nox(n_row, n_col, nz, Ti, Tj, Ap, Ai, Rp,
+                                         Rj, W, RowCount, Map, Map2);
+        }
+    } else {
+        if (do_values) {
+            status = UMF_triplet_nomap_x(n_row, n_col, nz, Ti, Tj, Ap, Ai, Rp,
+                                         Rj, W, RowCount, Tx, Ax, Rx
 #ifdef COMPLEX
-		, Tz, Az, Rz
+                    , Tz, Az, Rz
 #endif
-		) ;
-	}
-	else
-	{
-	    status = UMF_triplet_nomap_nox (n_row, n_col, nz, Ti, Tj, Ap, Ai,
-		Rp, Rj, W, RowCount) ;
-	}
+            );
+        } else {
+            status = UMF_triplet_nomap_nox(n_row, n_col, nz, Ti, Tj, Ap, Ai,
+                                           Rp, Rj, W, RowCount);
+        }
     }
 
     /* ---------------------------------------------------------------------- */
     /* free the workspace */
     /* ---------------------------------------------------------------------- */
 
-    (void) UMF_free ((void *) Rx) ;
-    (void) UMF_free ((void *) Map2) ;
-    (void) UMF_free ((void *) Rp) ;
-    (void) UMF_free ((void *) Rj) ;
-    (void) UMF_free ((void *) RowCount) ;
-    (void) UMF_free ((void *) W) ;
-    ASSERT (UMF_malloc_count == init_count) ;
+    (void) UMF_free((void *) Rx);
+    (void) UMF_free((void *) Map2);
+    (void) UMF_free((void *) Rp);
+    (void) UMF_free((void *) Rj);
+    (void) UMF_free((void *) RowCount);
+    (void) UMF_free((void *) W);
+    ASSERT (UMF_malloc_count == init_count);
 
-    return (status) ;
+    return (status);
 }

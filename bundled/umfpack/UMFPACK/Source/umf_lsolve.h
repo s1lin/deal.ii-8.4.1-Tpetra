@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL double UMF_lsolve
-(
-    NumericType *Numeric,
-    Entry X [ ],
-    Int Pattern [ ]
-) ;
+        (
+                NumericType *Numeric,
+                Entry X[],
+                Int Pattern[]
+        );

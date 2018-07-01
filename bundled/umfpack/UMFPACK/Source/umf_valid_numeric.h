@@ -5,6 +5,6 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_valid_numeric
-(
-    NumericType *Numeric
-) ;
+        (
+                NumericType *Numeric
+        );

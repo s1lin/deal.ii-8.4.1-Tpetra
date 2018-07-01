@@ -16,8 +16,10 @@
 #include "boost/blank_fwd.hpp"
 
 #if !defined(BOOST_NO_IOSTREAM)
+
 #include <iosfwd> // for std::basic_ostream forward declare
 #include "boost/detail/templated_streams.hpp"
+
 #endif // BOOST_NO_IOSTREAM
 
 #include "boost/mpl/bool.hpp"
@@ -27,77 +29,65 @@
 
 namespace boost {
 
-struct blank
-{
-};
+    struct blank {
+    };
 
 // type traits specializations
 //
 
-template <>
-struct is_pod< blank >
-    : mpl::true_
-{
-};
+    template<>
+    struct is_pod<blank>
+            : mpl::true_ {
+    };
 
-template <>
-struct is_empty< blank >
-    : mpl::true_
-{
-};
+    template<>
+    struct is_empty<blank>
+            : mpl::true_ {
+    };
 
-template <>
-struct is_stateless< blank >
-    : mpl::true_
-{
-};
+    template<>
+    struct is_stateless<blank>
+            : mpl::true_ {
+    };
 
 // relational operators
 //
 
-inline bool operator==(const blank&, const blank&)
-{
-    return true;
-}
+    inline bool operator==(const blank &, const blank &) {
+        return true;
+    }
 
-inline bool operator<=(const blank&, const blank&)
-{
-    return true;
-}
+    inline bool operator<=(const blank &, const blank &) {
+        return true;
+    }
 
-inline bool operator>=(const blank&, const blank&)
-{
-    return true;
-}
+    inline bool operator>=(const blank &, const blank &) {
+        return true;
+    }
 
-inline bool operator!=(const blank&, const blank&)
-{
-    return false;
-}
+    inline bool operator!=(const blank &, const blank &) {
+        return false;
+    }
 
-inline bool operator<(const blank&, const blank&)
-{
-    return false;
-}
+    inline bool operator<(const blank &, const blank &) {
+        return false;
+    }
 
-inline bool operator>(const blank&, const blank&)
-{
-    return false;
-}
+    inline bool operator>(const blank &, const blank &) {
+        return false;
+    }
 
 // streaming support
 //
 #if !defined(BOOST_NO_IOSTREAM)
 
-BOOST_TEMPLATED_STREAM_TEMPLATE(E,T)
-inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
-      BOOST_TEMPLATED_STREAM(ostream, E,T)& out
-    , const blank&
-    )
-{
-    // (output nothing)
-    return out;
-}
+    BOOST_TEMPLATED_STREAM_TEMPLATE(E, T)
+    inline BOOST_TEMPLATED_STREAM(ostream, E, T) &operator<<(
+            BOOST_TEMPLATED_STREAM(ostream, E, T) &out, const blank &
+    ) {
+        // (output nothing)
+        return out;
+    }
 
 #endif // BOOST_NO_IOSTREAM
 

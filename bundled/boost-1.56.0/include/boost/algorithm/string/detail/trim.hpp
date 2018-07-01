@@ -20,20 +20,17 @@ namespace boost {
 
 //  trim iterator helper -----------------------------------------------//
 
-            template< typename ForwardIteratorT, typename PredicateT >
-            inline ForwardIteratorT trim_end_iter_select( 
-                ForwardIteratorT InBegin, 
-                ForwardIteratorT InEnd, 
-                PredicateT IsSpace,
-                std::forward_iterator_tag )
-            {
-                ForwardIteratorT TrimIt=InBegin;
+            template<typename ForwardIteratorT, typename PredicateT>
+            inline ForwardIteratorT trim_end_iter_select(
+                    ForwardIteratorT InBegin,
+                    ForwardIteratorT InEnd,
+                    PredicateT IsSpace,
+                    std::forward_iterator_tag) {
+                ForwardIteratorT TrimIt = InBegin;
 
-                for( ForwardIteratorT It=InBegin; It!=InEnd; ++It )
-                {
-                    if ( !IsSpace(*It) ) 
-                    {
-                        TrimIt=It;
+                for (ForwardIteratorT It = InBegin; It != InEnd; ++It) {
+                    if (!IsSpace(*It)) {
+                        TrimIt = It;
                         ++TrimIt;
                     }
                 }
@@ -41,31 +38,28 @@ namespace boost {
                 return TrimIt;
             }
 
-            template< typename ForwardIteratorT, typename PredicateT >
-            inline ForwardIteratorT trim_end_iter_select( 
-                ForwardIteratorT InBegin, 
-                ForwardIteratorT InEnd, 
-                PredicateT IsSpace,
-                std::bidirectional_iterator_tag )
-            {
-                for( ForwardIteratorT It=InEnd; It!=InBegin;  )
-                {
-                    if ( !IsSpace(*(--It)) )
+            template<typename ForwardIteratorT, typename PredicateT>
+            inline ForwardIteratorT trim_end_iter_select(
+                    ForwardIteratorT InBegin,
+                    ForwardIteratorT InEnd,
+                    PredicateT IsSpace,
+                    std::bidirectional_iterator_tag) {
+                for (ForwardIteratorT It = InEnd; It != InBegin;) {
+                    if (!IsSpace(*(--It)))
                         return ++It;
                 }
 
                 return InBegin;
             }
-   // Search for first non matching character from the beginning of the sequence
-            template< typename ForwardIteratorT, typename PredicateT >
-            inline ForwardIteratorT trim_begin( 
-                ForwardIteratorT InBegin, 
-                ForwardIteratorT InEnd, 
-                PredicateT IsSpace )
-            {
-                ForwardIteratorT It=InBegin;
-                for(; It!=InEnd; ++It )
-                {
+
+            // Search for first non matching character from the beginning of the sequence
+            template<typename ForwardIteratorT, typename PredicateT>
+            inline ForwardIteratorT trim_begin(
+                    ForwardIteratorT InBegin,
+                    ForwardIteratorT InEnd,
+                    PredicateT IsSpace) {
+                ForwardIteratorT It = InBegin;
+                for (; It != InEnd; ++It) {
                     if (!IsSpace(*It))
                         return It;
                 }
@@ -74,16 +68,16 @@ namespace boost {
             }
 
             // Search for first non matching character from the end of the sequence
-            template< typename ForwardIteratorT, typename PredicateT >
-            inline ForwardIteratorT trim_end( 
-                ForwardIteratorT InBegin, 
-                ForwardIteratorT InEnd, 
-                PredicateT IsSpace )
-            {
-                typedef BOOST_STRING_TYPENAME boost::detail::
-                    iterator_traits<ForwardIteratorT>::iterator_category category;
+            template<typename ForwardIteratorT, typename PredicateT>
+            inline ForwardIteratorT trim_end(
+                    ForwardIteratorT InBegin,
+                    ForwardIteratorT InEnd,
+                    PredicateT IsSpace) {
+                typedef BOOST_STRING_TYPENAME boost
+                ::detail::
+                iterator_traits<ForwardIteratorT>::iterator_category category;
 
-                return ::boost::algorithm::detail::trim_end_iter_select( InBegin, InEnd, IsSpace, category() );
+                return ::boost::algorithm::detail::trim_end_iter_select(InBegin, InEnd, IsSpace, category());
             }
 
 

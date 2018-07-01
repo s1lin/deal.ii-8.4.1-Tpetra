@@ -10,6 +10,7 @@
 #define BOOST_FUNCTIONAL_HASH_DETAIL_LIMITS_HEADER
 
 #include <boost/config.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -24,12 +25,11 @@
 #include <float.h>
 #endif
 
-namespace boost
-{
-    namespace hash_detail
-    {
-        template <class T>
-        struct limits : std::numeric_limits<T> {};
+namespace boost {
+    namespace hash_detail {
+        template<class T>
+        struct limits : std::numeric_limits<T> {
+        };
 
 #if defined(__OpenBSD__) || defined(_STLP_NO_LONG_DOUBLE)
         template <>

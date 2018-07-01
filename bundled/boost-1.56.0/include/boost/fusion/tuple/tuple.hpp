@@ -20,7 +20,9 @@
 #include <boost/config/no_tr1/utility.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/tuple/detail/preprocessed/tuple.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/tuple" FUSION_MAX_VECTOR_SIZE_STR ".hpp")
@@ -59,7 +61,7 @@ namespace boost { namespace fusion
         tuple(std::pair<U1, U2> const& rhs)
             : base_type(rhs) {}
 
-        #include <boost/fusion/tuple/detail/tuple_expand.hpp>
+#include <boost/fusion/tuple/detail/tuple_expand.hpp>
 
         template <typename T>
         BOOST_FUSION_GPU_ENABLED

@@ -8,9 +8,9 @@
 /* web: http://www.cise.ufl.edu/research/sparse/umfpack                       */
 /* -------------------------------------------------------------------------- */
 
-void umfpack_tic (double stats [2]) ;
+void umfpack_tic(double stats[2]);
 
-void umfpack_toc (double stats [2]) ;
+void umfpack_toc(double stats[2]);
 
 
 /*

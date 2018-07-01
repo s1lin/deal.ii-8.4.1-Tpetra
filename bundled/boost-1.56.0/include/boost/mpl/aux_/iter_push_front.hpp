@@ -17,20 +17,21 @@
 #include <boost/mpl/push_front.hpp>
 #include <boost/mpl/deref.hpp>
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-template<
-      typename Sequence
-    , typename Iterator
-    >
-struct iter_push_front
-{
-    typedef typename push_front<
-          Sequence
-        , typename deref<Iterator>::type
-        >::type type;
-};
+            template<
+                    typename Sequence, typename Iterator
+            >
+            struct iter_push_front {
+                typedef typename push_front<
+                        Sequence, typename deref<Iterator>::type
+                >::type type;
+            };
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_ITER_PUSH_FRONT_HPP_INCLUDED

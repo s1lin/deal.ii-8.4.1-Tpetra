@@ -29,7 +29,7 @@
  */
 
 namespace boost {
-namespace atomics {
+    namespace atomics {
 
 #if defined(BOOST_NO_CXX11_CONSTEXPR) || defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
 #define BOOST_ATOMIC_NO_ATOMIC_FLAG_INIT
@@ -37,34 +37,44 @@ namespace atomics {
 #define BOOST_ATOMIC_FLAG_INIT {}
 #endif
 
-struct atomic_flag
-{
-    typedef atomics::detail::operations< 1u, false > operations;
-    typedef operations::storage_type storage_type;
+        struct atomic_flag {
+            typedef atomics::detail::operations<1u, false> operations;
+            typedef operations::storage_type storage_type;
 
-    storage_type m_storage;
+            storage_type m_storage;
 
-    BOOST_FORCEINLINE BOOST_CONSTEXPR atomic_flag() BOOST_NOEXCEPT : m_storage(0)
-    {
-    }
+            BOOST_FORCEINLINE BOOST_CONSTEXPR
 
-    BOOST_FORCEINLINE bool test_and_set(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-        return operations::test_and_set(m_storage, order);
-    }
+            atomic_flag()
 
-    BOOST_FORCEINLINE void clear(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-        BOOST_ASSERT(order != memory_order_acquire);
-        BOOST_ASSERT(order != memory_order_acq_rel);
-        operations::clear(m_storage, order);
-    }
+            BOOST_NOEXCEPT : m_storage(0) {
+            }
 
-    BOOST_DELETED_FUNCTION(atomic_flag(atomic_flag const&))
-    BOOST_DELETED_FUNCTION(atomic_flag& operator= (atomic_flag const&))
-};
+            BOOST_FORCEINLINE bool test_and_set(memory_order order = memory_order_seq_cst) volatile
 
-} // namespace atomics
+            BOOST_NOEXCEPT {
+                return operations::test_and_set(m_storage, order);
+            }
+
+            BOOST_FORCEINLINE void clear(memory_order order = memory_order_seq_cst) volatile
+
+            BOOST_NOEXCEPT {
+                BOOST_ASSERT(order != memory_order_acquire);
+                BOOST_ASSERT(order != memory_order_acq_rel);
+                operations::clear(m_storage, order);
+            }
+
+            BOOST_DELETED_FUNCTION (atomic_flag(atomic_flag const &))
+
+            BOOST_DELETED_FUNCTION(atomic_flag
+            &
+
+            operator=(atomic_flag const &)
+
+            )
+        };
+
+    } // namespace atomics
 } // namespace boost
 
 #endif // BOOST_ATOMIC_DETAIL_ATOMIC_FLAG_HPP_INCLUDED_

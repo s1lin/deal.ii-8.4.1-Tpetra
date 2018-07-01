@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace metric {
+        namespace metric {
 
-typedef scaled_base_unit<boost::units::si::second_base_unit, scale<86400, static_rational<1> > > day_base_unit;
+            typedef scaled_base_unit <boost::units::si::second_base_unit, scale<86400, static_rational < 1>> >
+            day_base_unit;
 
-} // namespace metric
+        } // namespace metric
 
-template<>
-struct base_unit_info<metric::day_base_unit> {
-    static const char* name()   { return("day"); }
-    static const char* symbol() { return("d"); }
-};
+        template<>
+        struct base_unit_info<metric::day_base_unit> {
+            static const char *name() { return ("day"); }
 
-} // namespace units
+            static const char *symbol() { return ("d"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

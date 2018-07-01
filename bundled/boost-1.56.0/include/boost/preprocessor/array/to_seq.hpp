@@ -7,18 +7,28 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)                                *
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_ARRAY_TO_SEQ_HPP
 # define BOOST_PREPROCESSOR_ARRAY_TO_SEQ_HPP
 #
+
+
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/tuple/to_seq.hpp>
+
 #
+
 # /* BOOST_PP_ARRAY_TO_SEQ */
+
 #
+
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
 #    define BOOST_PP_ARRAY_TO_SEQ(array) BOOST_PP_ARRAY_TO_SEQ_I(BOOST_PP_TUPLE_TO_SEQ, array)
 #    define BOOST_PP_ARRAY_TO_SEQ_I(m, args) BOOST_PP_ARRAY_TO_SEQ_II(m, args)
@@ -30,4 +40,5 @@
 #    define BOOST_PP_ARRAY_TO_SEQ(array) BOOST_PP_TUPLE_TO_SEQ array
 # endif
 #
+
 # endif

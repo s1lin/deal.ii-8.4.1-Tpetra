@@ -17,16 +17,15 @@
 
 #include <boost/range/reverse_iterator.hpp>
 
-namespace boost
-{
+namespace boost {
     //
     // This interface is deprecated, use range_reverse_iterator<T>
     //
-   
-    template< typename C >
-    struct range_reverse_result_iterator : range_reverse_iterator<C>
-    { };
-    
+
+    template<typename C>
+    struct range_reverse_result_iterator : range_reverse_iterator<C> {
+    };
+
 } // namespace boost
 
 #endif

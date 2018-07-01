@@ -20,20 +20,22 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace celsius {
+        namespace celsius {
 
-typedef make_system<boost::units::temperature::celsius_base_unit>::type system;
+            typedef make_system<boost::units::temperature::celsius_base_unit>::type system;
 
-typedef unit<temperature_dimension,system>   temperature;
+            typedef unit <temperature_dimension, system> temperature;
 
-BOOST_UNITS_STATIC_CONSTANT(degree,temperature);
-BOOST_UNITS_STATIC_CONSTANT(degrees,temperature);
+            BOOST_UNITS_STATIC_CONSTANT(degree, temperature
+            );
+            BOOST_UNITS_STATIC_CONSTANT(degrees, temperature
+            );
 
-} // namespace celsius
-        
-} // namespace units
+        } // namespace celsius
+
+    } // namespace units
 
 } // namespace boost
 

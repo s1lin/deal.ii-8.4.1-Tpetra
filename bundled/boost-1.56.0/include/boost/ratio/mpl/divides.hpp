@@ -13,18 +13,17 @@
 #include <boost/ratio/mpl/numeric_cast.hpp>
 #include <boost/mpl/divides.hpp>
 
-namespace boost { 
-namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct divides_impl< rational_c_tag,rational_c_tag >
-{
-    template< typename R1, typename R2 > struct apply
-        : ratio_divide<R1, R2>
-    {
-    };
-};    
-}
+        template<>
+        struct divides_impl<rational_c_tag, rational_c_tag> {
+            template<typename R1, typename R2>
+            struct apply
+                    : ratio_divide<R1, R2> {
+            };
+        };
+    }
 }
 
 #endif  // BOOST_RATIO_MPL_DIVIDES_HPP

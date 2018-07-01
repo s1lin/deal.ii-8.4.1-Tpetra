@@ -19,6 +19,7 @@
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::ratio, (boost::intmax_t)(boost::intmax_t))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::ratio, (boost::intmax_t)(boost::intmax_t)
+)
 
 #endif

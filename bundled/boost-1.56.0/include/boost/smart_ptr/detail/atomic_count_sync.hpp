@@ -19,42 +19,37 @@
 # include <ia64intrin.h>
 #endif
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class atomic_count
-{
-public:
+        class atomic_count {
+        public:
 
-    explicit atomic_count( long v ) : value_( v ) {}
+            explicit atomic_count(long v) : value_(v) {}
 
-    long operator++()
-    {
-        return __sync_add_and_fetch( &value_, 1 );
-    }
+            long operator++() {
+                return __sync_add_and_fetch(&value_, 1);
+            }
 
-    long operator--()
-    {
-        return __sync_add_and_fetch( &value_, -1 );
-    }
+            long operator--() {
+                return __sync_add_and_fetch(&value_, -1);
+            }
 
-    operator long() const
-    {
-        return __sync_fetch_and_add( &value_, 0 );
-    }
+            operator long() const {
+                return __sync_fetch_and_add(&value_, 0);
+            }
 
-private:
+        private:
 
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
+            atomic_count(atomic_count const &);
 
-    mutable long value_;
-};
+            atomic_count &operator=(atomic_count const &);
 
-} // namespace detail
+            mutable long value_;
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

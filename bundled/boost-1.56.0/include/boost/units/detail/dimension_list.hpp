@@ -23,100 +23,90 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-struct dimensionless_type;
+        struct dimensionless_type;
 
-namespace detail {
+        namespace detail {
 
-struct dimension_list_tag { };
+            struct dimension_list_tag {
+            };
 
-} // namespace detail
+        } // namespace detail
 
-template<class Item, class Next>
-struct list
-{
-    typedef detail::dimension_list_tag  tag;
-    typedef list              type;
-    typedef Item                        item;
-    typedef Next                        next;
-    typedef typename mpl::next<typename Next::size>::type size;
-};
+        template<class Item, class Next>
+        struct list {
+            typedef detail::dimension_list_tag tag;
+            typedef list type;
+            typedef Item item;
+            typedef Next next;
+            typedef typename mpl::next<typename Next::size>::type size;
+        };
 
-} // namespace units
+    } // namespace units
 
-namespace mpl {
-
-// INTERNAL ONLY
-template<>
-struct size_impl<units::detail::dimension_list_tag>
-{
-    template<class L> struct apply : public L::size { };
-};
+    namespace mpl {
 
 // INTERNAL ONLY
-template<>
-struct begin_impl<units::detail::dimension_list_tag>
-{
-    template<class L>
-    struct apply 
-    {
-        typedef L type;
-    };
-};
+        template<>
+        struct size_impl<units::detail::dimension_list_tag> {
+            template<class L>
+            struct apply : public L::size {
+            };
+        };
 
 // INTERNAL ONLY
-template<>
-struct end_impl<units::detail::dimension_list_tag>
-{
-    template<class L>
-    struct apply 
-    {
-        typedef units::dimensionless_type type;
-    };
-};
+        template<>
+        struct begin_impl<units::detail::dimension_list_tag> {
+            template<class L>
+            struct apply {
+                typedef L type;
+            };
+        };
 
 // INTERNAL ONLY
-template<>
-struct push_front_impl<units::detail::dimension_list_tag>
-{
-    template<class L, class T>
-    struct apply 
-    {
-        typedef units::list<T, L> type;
-    };
-};
+        template<>
+        struct end_impl<units::detail::dimension_list_tag> {
+            template<class L>
+            struct apply {
+                typedef units::dimensionless_type type;
+            };
+        };
 
 // INTERNAL ONLY
-template<>
-struct pop_front_impl<units::detail::dimension_list_tag>
-{
-    template<class L>
-    struct apply 
-    {
-        typedef typename L::next type;
-    };
-};
+        template<>
+        struct push_front_impl<units::detail::dimension_list_tag> {
+            template<class L, class T>
+            struct apply {
+                typedef units::list<T, L> type;
+            };
+        };
 
 // INTERNAL ONLY
-template<>
-struct front_impl<units::detail::dimension_list_tag>
-{
-    template<class L>
-    struct apply 
-    {
-        typedef typename L::item type;
-    };
-};
+        template<>
+        struct pop_front_impl<units::detail::dimension_list_tag> {
+            template<class L>
+            struct apply {
+                typedef typename L::next type;
+            };
+        };
 
 // INTERNAL ONLY
-template<class Item, class Next>
-struct deref<units::list<Item, Next> >
-{
-    typedef Item type;
-};
+        template<>
+        struct front_impl<units::detail::dimension_list_tag> {
+            template<class L>
+            struct apply {
+                typedef typename L::item type;
+            };
+        };
 
-} // namespace mpl
+// INTERNAL ONLY
+        template<class Item, class Next>
+        struct deref<units::list<Item, Next> > {
+            typedef Item type;
+        };
+
+    } // namespace mpl
 
 } // namespace boost
 

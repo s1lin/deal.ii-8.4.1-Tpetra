@@ -30,7 +30,7 @@
 
 
 // Microsoft Visual C++
-#if defined (BOOST_MSVC) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (BOOST_MSVC) && !defined (BOOST_STRICT_CONFIG)
 
 // Version 6.0 and 7.0
 #if BOOST_MSVC <= 1300
@@ -51,7 +51,7 @@
 
 
 // GNU Compiler Collection
-#if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (__GNUC__) && !defined (BOOST_STRICT_CONFIG)
 
 #if __GNUC__ >= 4 || (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
 // Specified by ABI definition see GCC bug id 9982
@@ -66,7 +66,7 @@
 
 
 // Intel Compiler
-#if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (BOOST_INTEL) && !defined (BOOST_STRICT_CONFIG)
 
 #if defined (BOOST_INTEL_LINUX) && (BOOST_INTEL_LINUX >= 800)
 // By inspection of compiler results
@@ -114,7 +114,7 @@ namespace std {
 
 
 // Comeau compiler - thanks to Kresimir Fresl
-#if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (__COMO__) && !defined (BOOST_STRICT_CONFIG)
 
 // Missing std::abs overloads for float types in <cmath> are in <cstdlib>
 #if defined(__LIBCOMO__) && (__LIBCOMO_VERSION__ <= 31)
@@ -129,7 +129,7 @@ namespace std {
 #endif
 
 //  HP aCC C++ compiler
-#if defined (__HP_aCC) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (__HP_aCC) && !defined (BOOST_STRICT_CONFIG)
 #  if (__HP_aCC >= 60000 )
 #    define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
@@ -137,7 +137,7 @@ namespace std {
 
 
 //  SGI MIPSpro C++ compiler
-#if defined (__sgi) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (__sgi) && !defined (BOOST_STRICT_CONFIG)
 
 // Missing std::abs overloads for float types in <cmath> are in <cstdlib>
 // This test should be library version specific.
@@ -152,7 +152,7 @@ namespace std {
 
 
 // Metrowerks Codewarrior
-#if defined (__MWERKS__) && ! defined (BOOST_STRICT_CONFIG)
+#if defined (__MWERKS__) && !defined (BOOST_STRICT_CONFIG)
 
 // 8.x
 #if __MWERKS__ <= 0x3003
@@ -223,12 +223,11 @@ namespace std {
  *  Require additional storage and complexity
  */
 #if BOOST_UBLAS_TYPE_CHECK
-template <class Dummy>
-struct disable_type_check
-{
+template<class Dummy>
+struct disable_type_check {
     static bool value;
 };
-template <class Dummy>
+template<class Dummy>
 bool disable_type_check<Dummy>::value = false;
 #endif
 #ifndef BOOST_UBLAS_TYPE_CHECK_EPSILON

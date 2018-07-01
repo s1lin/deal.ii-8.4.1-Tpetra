@@ -27,42 +27,44 @@
 #define STD std
 #endif
 
-namespace boost { 
-namespace serialization {
-namespace detail{
+namespace boost {
+    namespace serialization {
+        namespace detail {
 
-template <typename U, typename Container, typename Compare>
-struct priority_queue_save : public STD::priority_queue<U, Container, Compare> {
-    template<class Archive>
-    void operator()(Archive & ar, const unsigned int file_version) const {
-        save(ar, STD::priority_queue<U, Container, Compare>::c, file_version);
-    }
-};
-template <typename U, typename Container, typename Compare>
-struct priority_queue_load : public STD::priority_queue<U, Container, Compare> {
-    template<class Archive>
-    void operator()(Archive & ar, const unsigned int file_version) {
-        load(ar, STD::priority_queue<U, Container, Compare>::c, file_version);
-    }
-};
+            template<typename U, typename Container, typename Compare>
+            struct priority_queue_save : public STD::priority_queue<U, Container, Compare> {
+                template<class Archive>
+                void operator()(Archive &ar, const unsigned int file_version) const {
+                    save(ar, STD::priority_queue<U, Container, Compare>::c, file_version);
+                }
+            };
 
-} // detail
+            template<typename U, typename Container, typename Compare>
+            struct priority_queue_load : public STD::priority_queue<U, Container, Compare> {
+                template<class Archive>
+                void operator()(Archive &ar, const unsigned int file_version) {
+                    load(ar, STD::priority_queue<U, Container, Compare>::c, file_version);
+                }
+            };
 
-template<class Archive, class T, class Container, class Compare>
-inline void serialize(
-    Archive & ar,
-    std::priority_queue< T, Container, Compare> & t,
-    const unsigned int file_version 
-){
-    typedef typename mpl::eval_if<
-        typename Archive::is_saving,
-        mpl::identity<detail::priority_queue_save<T, Container, Compare> >,
-        mpl::identity<detail::priority_queue_load<T, Container, Compare> >
-    >::type typex;
-    static_cast<typex &>(t)(ar, file_version);
-}
+        } // detail
 
-} // namespace serialization
+        template<class Archive, class T, class Container, class Compare>
+        inline void serialize(
+                Archive &ar,
+                std::priority_queue<T, Container, Compare> &t,
+                const unsigned int file_version
+        ) {
+            typedef typename mpl::eval_if<
+                    typename Archive::is_saving,
+            mpl::identity < detail::priority_queue_save<T, Container, Compare> > ,
+                    mpl::identity < detail::priority_queue_load<T, Container, Compare> >
+                    > ::type
+            typex;
+            static_cast<typex &>(t)(ar, file_version);
+        }
+
+    } // namespace serialization
 } // namespace boost
 
 #include <boost/serialization/collection_traits.hpp>

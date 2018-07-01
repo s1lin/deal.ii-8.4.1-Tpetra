@@ -16,11 +16,11 @@
 #include "boost/concept_check.hpp"
 
 namespace boost {
-namespace detail {
-namespace multi_array { // Old location for this
-  using boost::CollectionConcept;
-}
-}
+    namespace detail {
+        namespace multi_array { // Old location for this
+            using boost::CollectionConcept;
+        }
+    }
 
 }
 #endif // COLLECTION_CONCEPT_RG103101_HPP

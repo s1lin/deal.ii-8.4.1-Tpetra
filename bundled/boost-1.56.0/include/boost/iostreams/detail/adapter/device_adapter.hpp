@@ -25,43 +25,46 @@
 #include <boost/iostreams/traits.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost {
+    namespace iostreams {
+        namespace detail {
 
-template<typename T>
-class device_adapter {
-private:
-    typedef typename detail::value_type<T>::type value_type;
-    typedef typename detail::param_type<T>::type param_type;
-public:
-    explicit device_adapter(param_type t) : t_(t) { }
-    T& component() { return t_; }
+            template<typename T>
+            class device_adapter {
+            private:
+                typedef typename detail::value_type<T>::type value_type;
+                typedef typename detail::param_type<T>::type param_type;
+            public:
+                explicit device_adapter(param_type t) : t_(t) {}
 
-    void close() 
-    {
-        detail::close_all(t_);
-    }
+                T &component() { return t_; }
 
-    void close(BOOST_IOS::openmode which) 
-    { 
-        iostreams::close(t_, which); 
-    }
+                void close() {
+                    detail::close_all(t_);
+                }
 
-    bool flush() 
-    { 
-        return iostreams::flush(t_); 
-    }
+                void close(BOOST_IOS::openmode which) {
+                    iostreams::close(t_, which);
+                }
 
-    template<typename Locale> // Avoid dependency on <locale>
-    void imbue(const Locale& loc) { iostreams::imbue(t_, loc); }
+                bool flush() {
+                    return iostreams::flush(t_);
+                }
 
-    std::streamsize optimal_buffer_size() const 
-    { return iostreams::optimal_buffer_size(t_); }
-public:
-    value_type t_;
-};
+                template<typename Locale>
+                // Avoid dependency on <locale>
+                void imbue(const Locale &loc) { iostreams::imbue(t_, loc); }
+
+                std::streamsize optimal_buffer_size() const { return iostreams::optimal_buffer_size(t_); }
+
+            public:
+                value_type t_;
+            };
 
 //----------------------------------------------------------------------------//
 
-} } } // End namespaces detail, iostreams, boost.
+        }
+    }
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_DEVICE_ADAPTER_HPP_INCLUDED

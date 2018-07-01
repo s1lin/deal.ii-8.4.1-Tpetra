@@ -33,9 +33,9 @@
 
 namespace tbb {
 
-namespace internal {
+    namespace internal {
 
-void DoOneTimeInitializations ();
+        void DoOneTimeInitializations();
 
 //------------------------------------------------------------------------
 // __TBB_InitOnce
@@ -44,60 +44,62 @@ void DoOneTimeInitializations ();
 //! Class that supports TBB initialization. 
 /** It handles acquisition and release of global resources (e.g. TLS) during startup and shutdown,
     as well as synchronization for DoOneTimeInitializations. */
-class __TBB_InitOnce {
-    friend void DoOneTimeInitializations();
-    friend void ITT_DoUnsafeOneTimeInitialization ();
+        class __TBB_InitOnce {
+            friend void DoOneTimeInitializations();
 
-    static atomic<int> count;
+            friend void ITT_DoUnsafeOneTimeInitialization();
 
-    //! Platform specific code to acquire resources.
-    static void acquire_resources();
+            static atomic<int> count;
 
-    //! Platform specific code to release resources.
-    static void release_resources();
+            //! Platform specific code to acquire resources.
+            static void acquire_resources();
 
-    //! Specifies if the one-time initializations has been done.
-    static bool InitializationDone;
+            //! Platform specific code to release resources.
+            static void release_resources();
 
-    //! Global initialization lock
-    /** Scenarios are possible when tools interop has to be initialized before the
-        TBB itself. This imposes a requirement that the global initialization lock 
-        has to support valid static initialization, and does not issue any tool
-        notifications in any build mode. **/
-    static __TBB_atomic_flag InitializationLock;
+            //! Specifies if the one-time initializations has been done.
+            static bool InitializationDone;
 
-public:
-    static void lock()   { __TBB_LockByte( InitializationLock ); }
+            //! Global initialization lock
+            /** Scenarios are possible when tools interop has to be initialized before the
+                TBB itself. This imposes a requirement that the global initialization lock
+                has to support valid static initialization, and does not issue any tool
+                notifications in any build mode. **/
+            static __TBB_atomic_flag InitializationLock;
 
-    static void unlock() { __TBB_UnlockByte( InitializationLock, 0 ); }
+        public:
+            static void lock() { __TBB_LockByte(InitializationLock); }
 
-    static bool initialization_done() { return __TBB_load_with_acquire(InitializationDone); }
+            static void unlock() { __TBB_UnlockByte(InitializationLock, 0); }
 
-    //! Add initial reference to resources. 
-    /** We assume that dynamic loading of the library prevents any other threads 
-        from entering the library until this constructor has finished running. **/
-    __TBB_InitOnce() { add_ref(); }
+            static bool initialization_done() { return __TBB_load_with_acquire(InitializationDone); }
 
-    //! Remove the initial reference to resources.
-    /** This is not necessarily the last reference if other threads are still running. **/
-    ~__TBB_InitOnce() {
-        remove_ref();
-        // We assume that InitializationDone is not set after file-scope destructors
-        // start running, and thus no race on InitializationDone is possible.
-        if( initialization_done() ) {
-            // Remove an extra reference that was added in DoOneTimeInitializations.
-            remove_ref();  
-        }
-    } 
-    //! Add reference to resources.  If first reference added, acquire the resources.
-    static void add_ref();
+            //! Add initial reference to resources.
+            /** We assume that dynamic loading of the library prevents any other threads
+                from entering the library until this constructor has finished running. **/
+            __TBB_InitOnce() { add_ref(); }
 
-    //! Remove reference to resources.  If last reference removed, release the resources.
-    static void remove_ref();
-}; // class __TBB_InitOnce
+            //! Remove the initial reference to resources.
+            /** This is not necessarily the last reference if other threads are still running. **/
+            ~__TBB_InitOnce() {
+                remove_ref();
+                // We assume that InitializationDone is not set after file-scope destructors
+                // start running, and thus no race on InitializationDone is possible.
+                if (initialization_done()) {
+                    // Remove an extra reference that was added in DoOneTimeInitializations.
+                    remove_ref();
+                }
+            }
+
+            //! Add reference to resources.  If first reference added, acquire the resources.
+            static void add_ref();
+
+            //! Remove reference to resources.  If last reference removed, release the resources.
+            static void remove_ref();
+        }; // class __TBB_InitOnce
 
 
-} // namespace internal
+    } // namespace internal
 
 } // namespace tbb
 

@@ -10,9 +10,11 @@
 
 #ifndef BOOST_FT_DETAIL_PP_LOOP_HPP_INCLUDED
 #define BOOST_FT_DETAIL_PP_LOOP_HPP_INCLUDED
+
 #   include <boost/preprocessor/facilities/expand.hpp>
 #   include <boost/preprocessor/facilities/empty.hpp>
 #   include <boost/preprocessor/punctuation/paren.hpp>
+
 #endif
 
 #include <boost/function_types/detail/encoding/def.hpp>

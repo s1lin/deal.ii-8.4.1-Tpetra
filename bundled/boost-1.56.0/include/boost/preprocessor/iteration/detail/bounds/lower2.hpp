@@ -6,13 +6,21 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
+
 # include <boost/preprocessor/slot/detail/shared.hpp>
+
 #
+
 # undef BOOST_PP_ITERATION_START_2
 #
+
 # undef BOOST_PP_ITERATION_START_2_DIGIT_1
 # undef BOOST_PP_ITERATION_START_2_DIGIT_2
 # undef BOOST_PP_ITERATION_START_2_DIGIT_3
@@ -24,6 +32,7 @@
 # undef BOOST_PP_ITERATION_START_2_DIGIT_9
 # undef BOOST_PP_ITERATION_START_2_DIGIT_10
 #
+
 # if BOOST_PP_SLOT_TEMP_3 == 0
 #    define BOOST_PP_ITERATION_START_2_DIGIT_3 0
 # elif BOOST_PP_SLOT_TEMP_3 == 1
@@ -46,6 +55,7 @@
 #    define BOOST_PP_ITERATION_START_2_DIGIT_3 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_2 == 0
 #    define BOOST_PP_ITERATION_START_2_DIGIT_2 0
 # elif BOOST_PP_SLOT_TEMP_2 == 1
@@ -68,6 +78,7 @@
 #    define BOOST_PP_ITERATION_START_2_DIGIT_2 9
 # endif
 #
+
 # if BOOST_PP_SLOT_TEMP_1 == 0
 #    define BOOST_PP_ITERATION_START_2_DIGIT_1 0
 # elif BOOST_PP_SLOT_TEMP_1 == 1
@@ -90,6 +101,7 @@
 #    define BOOST_PP_ITERATION_START_2_DIGIT_1 9
 # endif
 #
+
 # if BOOST_PP_ITERATION_START_2_DIGIT_3
 #    define BOOST_PP_ITERATION_START_2 BOOST_PP_SLOT_CC_3(BOOST_PP_ITERATION_START_2_DIGIT_3, BOOST_PP_ITERATION_START_2_DIGIT_2, BOOST_PP_ITERATION_START_2_DIGIT_1)
 # elif BOOST_PP_ITERATION_START_2_DIGIT_2

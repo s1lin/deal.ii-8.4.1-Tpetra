@@ -16,12 +16,12 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for volume : l^3
-typedef derived_dimension<length_base_dimension,3>::type volume_dimension;
+        typedef derived_dimension<length_base_dimension, 3>::type volume_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

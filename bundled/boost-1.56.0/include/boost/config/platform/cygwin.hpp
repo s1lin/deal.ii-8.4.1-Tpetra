@@ -17,8 +17,10 @@
 // See if we have POSIX threads, if we do use them, otherwise
 // revert to native Win threads.
 #define BOOST_HAS_UNISTD_H
+
 #include <unistd.h>
-#if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0) && !defined(BOOST_HAS_WINTHREADS)
+
+#if defined(_POSIX_THREADS) && (_POSIX_THREADS + 0 >= 0) && !defined(BOOST_HAS_WINTHREADS)
 #  define BOOST_HAS_PTHREADS
 #  define BOOST_HAS_SCHED_YIELD
 #  define BOOST_HAS_GETTIMEOFDAY
@@ -35,6 +37,7 @@
 // find out if we have a stdint.h, there should be a better way to do this:
 //
 #include <sys/types.h>
+
 #ifdef _STDINT_H
 #define BOOST_HAS_STDINT_H
 #endif

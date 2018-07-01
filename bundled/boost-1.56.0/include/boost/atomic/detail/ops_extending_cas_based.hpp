@@ -23,43 +23,52 @@
 #endif
 
 namespace boost {
-namespace atomics {
-namespace detail {
+    namespace atomics {
+        namespace detail {
 
-template< typename Base, unsigned int Size, bool Signed >
-struct extending_cas_based_operations :
-    public Base
-{
-    typedef typename Base::storage_type storage_type;
-    typedef typename make_storage_type< Size, Signed >::type emulated_storage_type;
+            template<typename Base, unsigned int Size, bool Signed>
+            struct extending_cas_based_operations :
+                    public Base {
+                typedef typename Base::storage_type storage_type;
+                typedef typename make_storage_type<Size, Signed>::type emulated_storage_type;
 
-    static BOOST_FORCEINLINE storage_type fetch_add(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        storage_type old_val = Base::load(storage, memory_order_relaxed);
-        emulated_storage_type new_val;
-        do
-        {
-            new_val = static_cast< emulated_storage_type >(old_val) + static_cast< emulated_storage_type >(v);
-        }
-        while (!Base::compare_exchange_weak(storage, old_val, static_cast< storage_type >(new_val), order, memory_order_relaxed));
-        return old_val;
-    }
+                static BOOST_FORCEINLINE storage_type
+                fetch_add(storage_type
+                volatile& storage,
+                storage_type v, memory_order
+                order)
 
-    static BOOST_FORCEINLINE storage_type fetch_sub(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        storage_type old_val = Base::load(storage, memory_order_relaxed);
-        emulated_storage_type new_val;
-        do
-        {
-            new_val = static_cast< emulated_storage_type >(old_val) - static_cast< emulated_storage_type >(v);
-        }
-        while (!Base::compare_exchange_weak(storage, old_val, static_cast< storage_type >(new_val), order, memory_order_relaxed));
-        return old_val;
-    }
-};
+                BOOST_NOEXCEPT {
+                    storage_type old_val = Base::load(storage, memory_order_relaxed);
+                    emulated_storage_type new_val;
+                    do {
+                        new_val =
+                                static_cast< emulated_storage_type >(old_val) + static_cast< emulated_storage_type >(v);
+                    } while (!Base::compare_exchange_weak(storage, old_val, static_cast< storage_type >(new_val), order,
+                                                          memory_order_relaxed));
+                    return old_val;
+                }
 
-} // namespace detail
-} // namespace atomics
+                static BOOST_FORCEINLINE storage_type
+                fetch_sub(storage_type
+                volatile& storage,
+                storage_type v, memory_order
+                order)
+
+                BOOST_NOEXCEPT {
+                    storage_type old_val = Base::load(storage, memory_order_relaxed);
+                    emulated_storage_type new_val;
+                    do {
+                        new_val =
+                                static_cast< emulated_storage_type >(old_val) - static_cast< emulated_storage_type >(v);
+                    } while (!Base::compare_exchange_weak(storage, old_val, static_cast< storage_type >(new_val), order,
+                                                          memory_order_relaxed));
+                    return old_val;
+                }
+            };
+
+        } // namespace detail
+    } // namespace atomics
 } // namespace boost
 
 #endif // BOOST_ATOMIC_DETAIL_OPS_EXTENDING_CAS_BASED_HPP_INCLUDED_

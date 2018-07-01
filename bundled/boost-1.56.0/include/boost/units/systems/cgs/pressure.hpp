@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<pressure_dimension,cgs::system>     pressure;
-    
-BOOST_UNITS_STATIC_CONSTANT(barye,pressure);    
-BOOST_UNITS_STATIC_CONSTANT(baryes,pressure);   
+            typedef unit <pressure_dimension, cgs::system> pressure;
 
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(barye, pressure
+            );
+            BOOST_UNITS_STATIC_CONSTANT(baryes, pressure
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

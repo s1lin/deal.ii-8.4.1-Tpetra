@@ -30,24 +30,24 @@
 
 #if !defined(BOOST_DETAIL_NO_CONTAINER_FWD)
 #  if defined(BOOST_DETAIL_CONTAINER_FWD)
-     // Force forward declarations.
+// Force forward declarations.
 #  elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-     // STLport
+// STLport
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__LIBCOMO__)
-     // Comeau STL:
+// Comeau STL:
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
-     // Rogue Wave library:
+// Rogue Wave library:
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(_LIBCPP_VERSION)
-     // libc++
+// libc++
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
-     // GNU libstdc++ 3
-     //
-     // Disable forwarding for all recent versions, as the library has a
-     // versioned namespace mode, and I don't know how to detect it.
+// GNU libstdc++ 3
+//
+// Disable forwarding for all recent versions, as the library has a
+// versioned namespace mode, and I don't know how to detect it.
 #    if __GLIBCXX__ >= 20070513 \
         || defined(_GLIBCXX_DEBUG) \
         || defined(_GLIBCXX_PARALLEL) \
@@ -59,25 +59,25 @@
 #      endif
 #    endif
 #  elif defined(__STL_CONFIG_H)
-     // generic SGI STL
-     //
-     // Forward declaration seems to be okay, but it has a couple of odd
-     // implementations.
+// generic SGI STL
+//
+// Forward declaration seems to be okay, but it has a couple of odd
+// implementations.
 #    define BOOST_CONTAINER_FWD_BAD_BITSET
 #    if !defined(__STL_NON_TYPE_TMPL_PARAM_BUG)
 #      define BOOST_CONTAINER_FWD_BAD_DEQUE
 #     endif
 #  elif defined(__MSL_CPP__)
-     // MSL standard lib:
+// MSL standard lib:
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__IBMCPP__)
-     // The default VACPP std lib, forward declaration seems to be fine.
+// The default VACPP std lib, forward declaration seems to be fine.
 #  elif defined(MSIPL_COMPILE_H)
-     // Modena C++ standard library
+// Modena C++ standard library
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-     // Dinkumware Library (this has to appear after any possible replacement
-     // libraries)
+// Dinkumware Library (this has to appear after any possible replacement
+// libraries)
 #  else
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  endif
@@ -150,7 +150,7 @@ namespace std
 #endif
 
 #endif // BOOST_DETAIL_NO_CONTAINER_FWD &&
-       // !defined(BOOST_DETAIL_TEST_FORCE_CONTAINER_FWD)
+// !defined(BOOST_DETAIL_TEST_FORCE_CONTAINER_FWD)
 
 #endif // BOOST_DETAIL_TEST_CONFIG_ONLY
 

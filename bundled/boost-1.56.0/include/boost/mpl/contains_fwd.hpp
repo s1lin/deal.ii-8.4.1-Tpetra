@@ -15,11 +15,15 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Tag > struct contains_impl;
-template< typename Sequence, typename T > struct contains;
+        template<typename Tag>
+        struct contains_impl;
+        template<typename Sequence, typename T>
+        struct contains;
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_CONTAINS_FWD_HPP_INCLUDED

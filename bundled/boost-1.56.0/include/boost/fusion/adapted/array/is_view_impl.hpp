@@ -11,19 +11,21 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace fusion { namespace extension
-{
-    template<typename>
-    struct is_view_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct is_view_impl;
 
-    template<>
-    struct is_view_impl<po_array_tag>
-    {
-        template<typename Seq>
-        struct apply
-          : mpl::false_
-        {};
-    };
-}}}
+            template<>
+            struct is_view_impl<po_array_tag> {
+                template<typename Seq>
+                struct apply
+                        : mpl::false_ {
+                };
+            };
+        }
+    }
+}
 
 #endif

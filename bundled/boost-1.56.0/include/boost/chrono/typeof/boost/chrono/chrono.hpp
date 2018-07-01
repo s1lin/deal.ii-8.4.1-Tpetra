@@ -19,8 +19,10 @@
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::chrono::duration, (typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::chrono::time_point, (typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::chrono::duration,
+(typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::chrono::time_point,
+(typename)(typename))
 #if 0
 BOOST_TYPEOF_REGISTER_TYPE(boost::chrono::system_clock)
 #ifdef BOOST_CHRONO_HAS_CLOCK_STEADY

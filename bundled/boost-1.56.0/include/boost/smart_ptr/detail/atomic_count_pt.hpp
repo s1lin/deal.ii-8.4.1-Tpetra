@@ -22,75 +22,65 @@
 //  Users can detect this situation by checking BOOST_AC_USE_PTHREADS.
 //
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class atomic_count
-{
-private:
+        class atomic_count {
+        private:
 
-    class scoped_lock
-    {
-    public:
+            class scoped_lock {
+            public:
 
-        scoped_lock(pthread_mutex_t & m): m_(m)
-        {
-            BOOST_VERIFY( pthread_mutex_lock( &m_ ) == 0 );
-        }
+                scoped_lock(pthread_mutex_t &m) : m_(m) {
+                    BOOST_VERIFY(pthread_mutex_lock(&m_) == 0);
+                }
 
-        ~scoped_lock()
-        {
-            BOOST_VERIFY( pthread_mutex_unlock( &m_ ) == 0 );
-        }
+                ~scoped_lock() {
+                    BOOST_VERIFY(pthread_mutex_unlock(&m_) == 0);
+                }
 
-    private:
+            private:
 
-        pthread_mutex_t & m_;
-    };
+                pthread_mutex_t &m_;
+            };
 
-public:
+        public:
 
-    explicit atomic_count(long v): value_(v)
-    {
-        BOOST_VERIFY( pthread_mutex_init( &mutex_, 0 ) == 0 );
-    }
+            explicit atomic_count(long v) : value_(v) {
+                BOOST_VERIFY(pthread_mutex_init(&mutex_, 0) == 0);
+            }
 
-    ~atomic_count()
-    {
-        BOOST_VERIFY( pthread_mutex_destroy( &mutex_ ) == 0 );
-    }
+            ~atomic_count() {
+                BOOST_VERIFY(pthread_mutex_destroy(&mutex_) == 0);
+            }
 
-    long operator++()
-    {
-        scoped_lock lock(mutex_);
-        return ++value_;
-    }
+            long operator++() {
+                scoped_lock lock(mutex_);
+                return ++value_;
+            }
 
-    long operator--()
-    {
-        scoped_lock lock(mutex_);
-        return --value_;
-    }
+            long operator--() {
+                scoped_lock lock(mutex_);
+                return --value_;
+            }
 
-    operator long() const
-    {
-        scoped_lock lock(mutex_);
-        return value_;
-    }
+            operator long() const {
+                scoped_lock lock(mutex_);
+                return value_;
+            }
 
-private:
+        private:
 
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
+            atomic_count(atomic_count const &);
 
-    mutable pthread_mutex_t mutex_;
-    long value_;
-};
+            atomic_count &operator=(atomic_count const &);
 
-} // namespace detail
+            mutable pthread_mutex_t mutex_;
+            long value_;
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

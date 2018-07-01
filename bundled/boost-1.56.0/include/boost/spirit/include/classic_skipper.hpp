@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SKIPPER
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SKIPPER
+
 #include <boost/spirit/home/classic/core/scanner/skipper.hpp>
+
 #endif

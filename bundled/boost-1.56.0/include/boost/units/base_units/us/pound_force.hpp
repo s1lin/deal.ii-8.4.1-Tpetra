@@ -19,7 +19,8 @@
 #include <boost/units/systems/si/force.hpp>
 #include <boost/units/conversion.hpp>
 
-BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(us, pound_force, "pound-force", "lbf", 4.4482216152605, si::force, -600);    // exact conversion
+BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(us, pound_force,
+"pound-force", "lbf", 4.4482216152605, si::force, -600);    // exact conversion
 
 #if BOOST_UNITS_HAS_BOOST_TYPEOF
 

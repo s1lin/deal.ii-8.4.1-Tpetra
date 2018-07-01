@@ -24,19 +24,20 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
-namespace serialization {
-    class extended_type_info;
-} // namespace serialization
+    namespace serialization {
+        class extended_type_info;
+    } // namespace serialization
 
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
 //////////////////////////////////////////////////////////////////////
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_archive_impl
-{
-};
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
 
-} // namespace detail
+            basic_archive_impl {
+        };
+
+    } // namespace detail
 } // namespace serialization
 } // namespace boost
 

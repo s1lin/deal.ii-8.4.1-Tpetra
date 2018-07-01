@@ -15,20 +15,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<mass_dimension,si::system>      mass;
-    
-BOOST_UNITS_STATIC_CONSTANT(kilogram,mass); 
-BOOST_UNITS_STATIC_CONSTANT(kilograms,mass);    
-BOOST_UNITS_STATIC_CONSTANT(kilogramme,mass);   
-BOOST_UNITS_STATIC_CONSTANT(kilogrammes,mass);  
+            typedef unit <mass_dimension, si::system> mass;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(kilogram, mass
+            );
+            BOOST_UNITS_STATIC_CONSTANT(kilograms, mass
+            );
+            BOOST_UNITS_STATIC_CONSTANT(kilogramme, mass
+            );
+            BOOST_UNITS_STATIC_CONSTANT(kilogrammes, mass
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

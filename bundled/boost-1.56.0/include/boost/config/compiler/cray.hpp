@@ -63,8 +63,8 @@
 #define BOOST_MATH_DISABLE_STD_FPCLASSIFY
 //#define BOOST_HAS_FPCLASSIFY
 
-#define BOOST_SP_USE_PTHREADS 
-#define BOOST_AC_USE_PTHREADS 
+#define BOOST_SP_USE_PTHREADS
+#define BOOST_AC_USE_PTHREADS
 
 /* everything that follows is working around what are thought to be
  * compiler shortcomings.  Revist all of these regularly.

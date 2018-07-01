@@ -131,10 +131,10 @@
 /* get a parameter from the Control array */
 /* -------------------------------------------------------------------------- */
 
-#define GET_CONTROL(i,default) \
+#define GET_CONTROL(i, default) \
     ((Control != (double *) NULL) ? \
-	(SCALAR_IS_NAN (Control [i]) ? default : Control [i]) \
-	: default)
+    (SCALAR_IS_NAN (Control [i]) ? default : Control [i]) \
+    : default)
 
 /* -------------------------------------------------------------------------- */
 /* for clearing the external degree counters */
@@ -157,14 +157,14 @@
 /* matrix, and alpha is the dense row/column control parameter. */
 
 /* Note: this is not defined if alpha is NaN or Inf: */
-#define UMFPACK_DENSE_DEGREE_THRESHOLD(alpha,n) \
+#define UMFPACK_DENSE_DEGREE_THRESHOLD(alpha, n) \
     ((Int) MAX (16.0, (alpha) * 16.0 * sqrt ((double) (n))))
 
 /* -------------------------------------------------------------------------- */
 /* PRINTF */
 /* -------------------------------------------------------------------------- */
 
-#define PRINTFk(k,params) { if (prl >= (k)) { PRINTF (params) ; } }
+#define PRINTFk(k, params) { if (prl >= (k)) { PRINTF (params) ; } }
 #define PRINTF1(params) PRINTFk (1, params)
 #define PRINTF2(params) PRINTFk (2, params)
 #define PRINTF3(params) PRINTFk (3, params)
@@ -215,39 +215,37 @@
 /* -------------------------------------------------------------------------- */
 
 /* for memory alignment - assume double has worst case alignment */
-typedef double Align ;
+typedef double Align;
 
 /* get number of bytes required to hold n items of a type: */
 /* note that this will not overflow, because sizeof (type) is always */
 /* greater than or equal to sizeof (Int) >= 2 */
-#define BYTES(type,n) (sizeof (type) * (n))
+#define BYTES(type, n) (sizeof (type) * (n))
 
 /* ceiling of (b/u).  Assumes b >= 0 and u > 0 */
-#define CEILING(b,u) (((b) + (u) - 1) / (u))
+#define CEILING(b, u) (((b) + (u) - 1) / (u))
 
 /* get number of Units required to hold n items of a type: */
-#define UNITS(type,n) (CEILING (BYTES (type, n), sizeof (Unit)))
+#define UNITS(type, n) (CEILING (BYTES (type, n), sizeof (Unit)))
 
 /* same as DUNITS, but use double instead of int to avoid overflow */
-#define DUNITS(type,n) (ceil (BYTES (type, (double) n) / sizeof (Unit)))
+#define DUNITS(type, n) (ceil (BYTES (type, (double) n) / sizeof (Unit)))
 
-union Unit_union
-{	/* memory is allocated in multiples of Unit */
-    struct
-    {
-	Int
-	    size,	/* size, in Units, of the block, excl. header block */
-			/* size >= 0: block is in use */
-			/* size < 0: block is free, of |size| Units */
-	    prevsize ;	/* size, in Units, of preceding block in S->Memory */
-			/* during garbage_collection, prevsize is set to -e-1 */
-			/* for element e, or positive (and thus a free block) */
-			/* otherwise */
-    } header ;		/* block header */
-    Align  xxxxxx ;	/* force alignment of blocks (xxxxxx is never used) */
-} ;
+union Unit_union {    /* memory is allocated in multiples of Unit */
+    struct {
+        Int
+                size,    /* size, in Units, of the block, excl. header block */
+        /* size >= 0: block is in use */
+        /* size < 0: block is free, of |size| Units */
+                prevsize;    /* size, in Units, of preceding block in S->Memory */
+        /* during garbage_collection, prevsize is set to -e-1 */
+        /* for element e, or positive (and thus a free block) */
+        /* otherwise */
+    } header;        /* block header */
+    Align xxxxxx;    /* force alignment of blocks (xxxxxx is never used) */
+};
 
-typedef union Unit_union Unit ;
+typedef union Unit_union Unit;
 
 /* get the size of an allocated block */
 #define GET_BLOCK_SIZE(p) (((p)-1)->header.size)
@@ -285,92 +283,92 @@ typedef union Unit_union Unit ;
 #define SYMBOLIC_VALID 110291734
 #endif
 
-typedef struct	/* NumericType */
+typedef struct    /* NumericType */
 {
     double
-	flops,		/* "true" flop count */
-	relpt,		/* relative pivot tolerance used */
-	relpt2,		/* relative pivot tolerance used for sym. */
-	droptol,
-	alloc_init,	/* initial allocation of Numeric->memory */
-	front_alloc_init, /* frontal matrix allocation parameter */
-	rsmin,		/* smallest row sum */
-	rsmax,		/* largest row sum  */
-	min_udiag,	/* smallest abs value on diagonal of D */
-	max_udiag,	/* smallest abs value on diagonal of D */
-	rcond ;		/* min (D) / max (D) */
+            flops,        /* "true" flop count */
+            relpt,        /* relative pivot tolerance used */
+            relpt2,        /* relative pivot tolerance used for sym. */
+            droptol,
+            alloc_init,    /* initial allocation of Numeric->memory */
+            front_alloc_init, /* frontal matrix allocation parameter */
+            rsmin,        /* smallest row sum */
+            rsmax,        /* largest row sum  */
+            min_udiag,    /* smallest abs value on diagonal of D */
+            max_udiag,    /* smallest abs value on diagonal of D */
+            rcond;        /* min (D) / max (D) */
 
     Int
-	scale ;
+            scale;
 
-    Int valid ;		/* set to NUMERIC_VALID, for validity check */
+    Int valid;        /* set to NUMERIC_VALID, for validity check */
 
     /* Memory space for A and LU factors */
     Unit
-	*Memory ;	/* working memory for A and LU factors */
+            *Memory;    /* working memory for A and LU factors */
     Int
-	ihead,		/* pointer to tail of LU factors, in Numeric->Memory */
-	itail,		/* pointer to top of elements & tuples,  */
-			/* in Numeric->Memory */
-	ibig,		/* pointer to largest free block seen in tail */
-	size ;		/* size of Memory, in Units */
+            ihead,        /* pointer to tail of LU factors, in Numeric->Memory */
+            itail,        /* pointer to top of elements & tuples,  */
+    /* in Numeric->Memory */
+            ibig,        /* pointer to largest free block seen in tail */
+            size;        /* size of Memory, in Units */
 
     Int
-	*Rperm,		/* pointer to row perm array, size: n+1 */
-			/* after UMF_kernel:  Rperm [new] = old */
-			/* during UMF_kernel: Rperm [old] = new */
-	*Cperm,		/* pointer to col perm array, size: n+1 */
-			/* after UMF_kernel:  Cperm [new] = old */
-			/* during UMF_kernel: Cperm [old] = new */
+            *Rperm,        /* pointer to row perm array, size: n+1 */
+    /* after UMF_kernel:  Rperm [new] = old */
+    /* during UMF_kernel: Rperm [old] = new */
+            *Cperm,        /* pointer to col perm array, size: n+1 */
+    /* after UMF_kernel:  Cperm [new] = old */
+    /* during UMF_kernel: Cperm [old] = new */
 
-	*Upos,		/* see UMFPACK_get_numeric for a description */
-	*Lpos,
-	*Lip,
-	*Lilen,
-	*Uip,
-	*Uilen,
-	*Upattern ;	/* pattern of last row of U (if singular) */
+            *Upos,        /* see UMFPACK_get_numeric for a description */
+            *Lpos,
+            *Lip,
+            *Lilen,
+            *Uip,
+            *Uilen,
+            *Upattern;    /* pattern of last row of U (if singular) */
 
     Int
-	ulen,		/* length of Upattern */
-	npiv,		/* number of structural pivots found (sprank approx) */
-	nnzpiv ;	/* number of numerical (nonzero) pivots found */
+            ulen,        /* length of Upattern */
+            npiv,        /* number of structural pivots found (sprank approx) */
+            nnzpiv;    /* number of numerical (nonzero) pivots found */
 
     Entry
-	*D ;		/* D [i] is the diagonal entry of U */
+            *D;        /* D [i] is the diagonal entry of U */
 
-    Int do_recip ;
-    double *Rs ;	/* scale factors for the rows of A and b */
-			/* do_recip FALSE: Divide row i by Rs [i] */
-			/* do_recip TRUE:  Multiply row i by Rs [i] */
+    Int do_recip;
+    double *Rs;    /* scale factors for the rows of A and b */
+    /* do_recip FALSE: Divide row i by Rs [i] */
+    /* do_recip TRUE:  Multiply row i by Rs [i] */
 
     Int
-	n_row, n_col,	/* A is n_row-by-n_row */
-	n1 ;		/* number of singletons */
+            n_row, n_col,    /* A is n_row-by-n_row */
+            n1;        /* number of singletons */
 
     /* for information only: */
     Int
-	tail_usage,	/* amount of memory allocated in tail */
-			/* head_usage is Numeric->ihead */
-	init_usage,	/* memory usage just after UMF_kernel_init */
-	max_usage,	/* peak memory usage (excludes internal and external */
-			/* fragmentation in the tail) */
-	ngarbage,	/* number of garbage collections performed */
-	nrealloc,	/* number of reallocations performed */
-	ncostly,	/* number of costly reallocations performed */
-	isize,		/* size of integer pattern of L and U */
-	nLentries,	/* number of entries in L, excluding diagonal */
-	nUentries,	/* number of entries in U, including diagonal */
-			/* Some entries may be numerically zero. */
-	lnz,		/* number of nonzero entries in L, excl. diagonal */
-	all_lnz,	/* lnz plus entries dropped from L */
-	unz,		/* number of nonzero entries in U, excl. diagonal */
-	all_unz,	/* unz plus entries dropped form U */
-	maxfrsize ;	/* largest actual front size */
+            tail_usage,    /* amount of memory allocated in tail */
+    /* head_usage is Numeric->ihead */
+            init_usage,    /* memory usage just after UMF_kernel_init */
+            max_usage,    /* peak memory usage (excludes internal and external */
+    /* fragmentation in the tail) */
+            ngarbage,    /* number of garbage collections performed */
+            nrealloc,    /* number of reallocations performed */
+            ncostly,    /* number of costly reallocations performed */
+            isize,        /* size of integer pattern of L and U */
+            nLentries,    /* number of entries in L, excluding diagonal */
+            nUentries,    /* number of entries in U, including diagonal */
+    /* Some entries may be numerically zero. */
+            lnz,        /* number of nonzero entries in L, excl. diagonal */
+            all_lnz,    /* lnz plus entries dropped from L */
+            unz,        /* number of nonzero entries in U, excl. diagonal */
+            all_unz,    /* unz plus entries dropped form U */
+            maxfrsize;    /* largest actual front size */
 
-    Int maxnrows, maxncols ;	/* not the same as Symbolic->maxnrows/cols* */
+    Int maxnrows, maxncols;    /* not the same as Symbolic->maxnrows/cols* */
 
-} NumericType ;
+} NumericType;
 
 
 
@@ -378,14 +376,14 @@ typedef struct	/* NumericType */
 /* Element tuples for connecting elements together in a matrix */
 /* -------------------------------------------------------------------------- */
 
-typedef struct	/* Tuple */
+typedef struct    /* Tuple */
 {
     /* The (e,f) tuples for the element lists */
     Int
-	e,		/* element */
-	f ;		/* contribution to the row/col appears at this offset */
+            e,        /* element */
+            f;        /* contribution to the row/col appears at this offset */
 
-} Tuple ;
+} Tuple;
 
 #define TUPLES(t) MAX (4, (t) + 1)
 
@@ -397,17 +395,17 @@ typedef struct	/* Tuple */
 /* An element */
 /* -------------------------------------------------------------------------- */
 
-typedef struct	/* Element */
+typedef struct    /* Element */
 {
     Int
 
-	cdeg,		/* external column degree + cdeg0 offset */
-	rdeg,		/* external row degree    + rdeg0 offset */
-	nrowsleft,	/* number of rows remaining */
-	ncolsleft,	/* number of columns remaining */
-	nrows,		/* number of rows */
-	ncols,		/* number of columns */
-	next ;		/* for list link of sons, used during assembly only */
+            cdeg,        /* external column degree + cdeg0 offset */
+            rdeg,        /* external row degree    + rdeg0 offset */
+            nrowsleft,    /* number of rows remaining */
+            ncolsleft,    /* number of columns remaining */
+            nrows,        /* number of rows */
+            ncols,        /* number of columns */
+            next;        /* for list link of sons, used during assembly only */
 
     /* followed in memory by:
     Int
@@ -418,17 +416,17 @@ typedef struct	/* Element */
 	size of C is nrows*ncols Entry's
     */
 
-} Element ;
+} Element;
 
 /* macros for computing pointers to row/col indices, and contribution block: */
 
-#define GET_ELEMENT_SIZE(nr,nc) \
+#define GET_ELEMENT_SIZE(nr, nc) \
 (UNITS (Element, 1) + UNITS (Int, (nc) + (nr)) + UNITS (Entry, (nc) * (nr)))
 
-#define DGET_ELEMENT_SIZE(nr,nc) \
+#define DGET_ELEMENT_SIZE(nr, nc) \
 (DUNITS (Element, 1) + DUNITS (Int, (nc) + (nr)) + DUNITS (Entry, (nc) * (nr)))
 
-#define GET_ELEMENT_COLS(ep,p,Cols) { \
+#define GET_ELEMENT_COLS(ep, p, Cols) { \
     ASSERT (p != (Unit *) NULL) ; \
     ASSERT (p >= Numeric->Memory + Numeric->itail) ; \
     ASSERT (p <= Numeric->Memory + Numeric->size) ; \
@@ -437,13 +435,13 @@ typedef struct	/* Element */
     Cols = (Int *) p ; \
 }
 
-#define GET_ELEMENT_PATTERN(ep,p,Cols,Rows,ncm) { \
+#define GET_ELEMENT_PATTERN(ep, p, Cols, Rows, ncm) { \
     GET_ELEMENT_COLS (ep, p, Cols) ; \
     ncm = ep->ncols ; \
     Rows = Cols + ncm ; \
 }
 
-#define GET_ELEMENT(ep,p,Cols,Rows,ncm,nrm,C) { \
+#define GET_ELEMENT(ep, p, Cols, Rows, ncm, nrm, C) { \
     GET_ELEMENT_PATTERN (ep, p, Cols, Rows, ncm) ; \
     nrm = ep->nrows ; \
     p += UNITS (Int, ncm + nrm) ; \
@@ -461,7 +459,7 @@ typedef struct	/* Element */
     Elements).
 */
 
-typedef struct	/* WorkType */
+typedef struct    /* WorkType */
 {
 
     /* ---------------------------------------------------------------------- */
@@ -488,122 +486,122 @@ typedef struct	/* WorkType */
     /* information about each element */
     /* ---------------------------------------------------------------------- */
 
-    Int	*E ;		/* E [0 .. Work->elen-1] element "pointers" */
-			/* (offsets in Numeric->Memory) */
+    Int *E;        /* E [0 .. Work->elen-1] element "pointers" */
+    /* (offsets in Numeric->Memory) */
 
     /* ---------------------------------------------------------------------- */
     /* generic workspace */
     /* ---------------------------------------------------------------------- */
 
-    Entry *Wx, *Wy ;	/* each of size maxnrows+1 */
+    Entry *Wx, *Wy;    /* each of size maxnrows+1 */
 
-    Int			/* Sizes:  nn = MAX (n_row, n_col) */
-	*Wp,		/* nn+1 */
-	*Wrp,		/* n_col+1 */
-	*Wm,		/* maxnrows+1 */
-	*Wio,		/* maxncols+1 */
-	*Woi,		/* maxncols+1 */
-	*Woo,		/* MAX (maxnrows,maxncols)+1 */
-	*Wrow,		/* pointer to Fcols, Wio, or Woi */
-	*NewRows,	/* list of rows to scan */
-	*NewCols ;	/* list of cols to scan */
-
-    /* ---------------------------------------------------------------------- */
-
-    Int
-	*Lpattern,	/* pattern of column of L, for one Lchain */
-	*Upattern,	/* pattern of row of U, for one Uchain */
-	ulen, llen ;	/* length of Upattern and Lpattern */
-
-    Int
-	*Diagonal_map,	/* used for symmetric pivoting, of size nn+1 */
-	*Diagonal_imap ;/* used for symmetric pivoting, of size nn+1 */
+    Int            /* Sizes:  nn = MAX (n_row, n_col) */
+            *Wp,        /* nn+1 */
+            *Wrp,        /* n_col+1 */
+            *Wm,        /* maxnrows+1 */
+            *Wio,        /* maxncols+1 */
+            *Woi,        /* maxncols+1 */
+            *Woo,        /* MAX (maxnrows,maxncols)+1 */
+            *Wrow,        /* pointer to Fcols, Wio, or Woi */
+            *NewRows,    /* list of rows to scan */
+            *NewCols;    /* list of cols to scan */
 
     /* ---------------------------------------------------------------------- */
 
     Int
-	n_row, n_col,	/* matrix is n_row-by-n_col */
-	nz,		/* nonzeros in the elements for this matrix */
-	n1,		/* number of row and col singletons */
-	elen,		/* max possible number of elements */
-	npiv,		/* number of pivot rows and columns so far */
-	ndiscard,	/* number of discarded pivot columns */
-	Wrpflag,
-	nel,		/* elements in use are in the range 1..nel */
-	noff_diagonal,
-	prior_element,
-	rdeg0, cdeg0,
-	rrdeg, ccdeg,
-	Candidates [MAX_CANDIDATES],	 /* current candidate pivot columns */
-	nCandidates,	/* number of candidates in Candidate set */
-	ksuper,
-	firstsuper,
-	jsuper,
-	ncand,		/* number of candidates (some not in Candidates[ ]) */
-	nextcand,	/* next candidate to place in Candidate search set */
-	lo,
-	hi,
-	pivrow,		/* current pivot row */
-	pivcol,		/* current pivot column */
-	do_extend,	/* true if the next pivot extends the current front */
-	do_update,	/* true if update should be applied */
-	nforced,	/* number of forced updates because of frontal growth */
-	any_skip,
-	do_scan2row,
-	do_scan2col,
-	do_grow,
-	pivot_case,
-	frontid,	/* id of current frontal matrix */
-	nfr ;		/* number of frontal matrices */
+            *Lpattern,    /* pattern of column of L, for one Lchain */
+            *Upattern,    /* pattern of row of U, for one Uchain */
+            ulen, llen;    /* length of Upattern and Lpattern */
+
+    Int
+            *Diagonal_map,    /* used for symmetric pivoting, of size nn+1 */
+            *Diagonal_imap;/* used for symmetric pivoting, of size nn+1 */
+
+    /* ---------------------------------------------------------------------- */
+
+    Int
+            n_row, n_col,    /* matrix is n_row-by-n_col */
+            nz,        /* nonzeros in the elements for this matrix */
+            n1,        /* number of row and col singletons */
+            elen,        /* max possible number of elements */
+            npiv,        /* number of pivot rows and columns so far */
+            ndiscard,    /* number of discarded pivot columns */
+            Wrpflag,
+            nel,        /* elements in use are in the range 1..nel */
+            noff_diagonal,
+            prior_element,
+            rdeg0, cdeg0,
+            rrdeg, ccdeg,
+            Candidates[MAX_CANDIDATES],     /* current candidate pivot columns */
+            nCandidates,    /* number of candidates in Candidate set */
+            ksuper,
+            firstsuper,
+            jsuper,
+            ncand,        /* number of candidates (some not in Candidates[ ]) */
+            nextcand,    /* next candidate to place in Candidate search set */
+            lo,
+            hi,
+            pivrow,        /* current pivot row */
+            pivcol,        /* current pivot column */
+            do_extend,    /* true if the next pivot extends the current front */
+            do_update,    /* true if update should be applied */
+            nforced,    /* number of forced updates because of frontal growth */
+            any_skip,
+            do_scan2row,
+            do_scan2col,
+            do_grow,
+            pivot_case,
+            frontid,    /* id of current frontal matrix */
+            nfr;        /* number of frontal matrices */
 
     /* ---------------------------------------------------------------------- */
     /* For row-merge tree */
     /* ---------------------------------------------------------------------- */
 
     Int
-	*Front_new1strow ;
+            *Front_new1strow;
 
     /* ---------------------------------------------------------------------- */
     /* current frontal matrix, F */
     /* ---------------------------------------------------------------------- */
 
-    Int Pivrow [MAXNB],
-	Pivcol [MAXNB] ;
+    Int Pivrow[MAXNB],
+            Pivcol[MAXNB];
 
     Entry
-	*Flublock,	/* LU block, nb-by-nb */
-	*Flblock,	/* L block,  fnr_curr-by-nb */
-	*Fublock,	/* U block,  nb-by-fnc_curr, or U' fnc_curr-by-nb */
-	*Fcblock ;	/* C block,  fnr_curr-by-fnc_curr */
+            *Flublock,    /* LU block, nb-by-nb */
+            *Flblock,    /* L block,  fnr_curr-by-nb */
+            *Fublock,    /* U block,  nb-by-fnc_curr, or U' fnc_curr-by-nb */
+            *Fcblock;    /* C block,  fnr_curr-by-fnc_curr */
 
     Int
-	*Frows,		/* Frows [0.. ]: row indices of F */
+            *Frows,        /* Frows [0.. ]: row indices of F */
 
-	*Fcols,		/* Fcols [0.. ]: column indices of F */
+            *Fcols,        /* Fcols [0.. ]: column indices of F */
 
-	*Frpos,		/* position of row indices in F, or -1 if not present */
-			/* if Frows[i] == row, then Frpos[row] == i */
+            *Frpos,        /* position of row indices in F, or -1 if not present */
+    /* if Frows[i] == row, then Frpos[row] == i */
 
-	*Fcpos,		/* position of col indices in F, or -1 if not present */
-			/* if Fcols[j] == col, then */
-			/* Fcpos[col] == j*Work->fnr_curr */
+            *Fcpos,        /* position of col indices in F, or -1 if not present */
+    /* if Fcols[j] == col, then */
+    /* Fcpos[col] == j*Work->fnr_curr */
 
-	fnrows,		/* number of rows in contribution block in F */
-	fncols,		/* number of columns in contribution block in F */
-	fnr_curr,	/* maximum # of rows in F (leading dimension) */
-	fnc_curr,	/* maximum # of columns in F */
-	fcurr_size,	/* current size of F */
-	fnrows_max,	/* max possible column-dimension (max # of rows) of F */
-	fncols_max,	/* max possible row-dimension (max # of columns) of F */
-	nb,
-	fnpiv,		/* number of pivots in F */
-	fnzeros,	/* number of explicit zero entries in LU block */
-	fscan_row,	/* where to start scanning rows of F in UMF_assemble */
-	fscan_col,	/* where to start scanning cols of F in UMF_assemble */
-	fnrows_new,	/* number of new row indices in F after pivot added */
-	fncols_new,	/* number of new col indices in F after pivot added */
-	pivrow_in_front,	/* true if current pivot row in Frows */
-	pivcol_in_front ;	/* true if current pivot column in Fcols */
+            fnrows,        /* number of rows in contribution block in F */
+            fncols,        /* number of columns in contribution block in F */
+            fnr_curr,    /* maximum # of rows in F (leading dimension) */
+            fnc_curr,    /* maximum # of columns in F */
+            fcurr_size,    /* current size of F */
+            fnrows_max,    /* max possible column-dimension (max # of rows) of F */
+            fncols_max,    /* max possible row-dimension (max # of columns) of F */
+            nb,
+            fnpiv,        /* number of pivots in F */
+            fnzeros,    /* number of explicit zero entries in LU block */
+            fscan_row,    /* where to start scanning rows of F in UMF_assemble */
+            fscan_col,    /* where to start scanning cols of F in UMF_assemble */
+            fnrows_new,    /* number of new row indices in F after pivot added */
+            fncols_new,    /* number of new col indices in F after pivot added */
+            pivrow_in_front,    /* true if current pivot row in Frows */
+            pivcol_in_front;    /* true if current pivot column in Fcols */
 
     /* ----------------------------------------------------------------------
      * Current frontal matrix
@@ -635,7 +633,7 @@ typedef struct	/* WorkType */
      * dr is always odd, to avoid bad cache behavior.
      */
 
-} WorkType ;
+} WorkType;
 
 
 /* -------------------------------------------------------------------------- */
@@ -647,55 +645,55 @@ typedef struct	/* WorkType */
     to factor the matrix.
 */
 
-typedef struct	/* SymbolicType */
+typedef struct    /* SymbolicType */
 {
 
     double
-	num_mem_usage_est,	/* estimated max Numeric->Memory size */
-	num_mem_size_est,	/* estimated final Numeric->Memory size */
-	peak_sym_usage,		/* peak Symbolic and SymbolicWork usage */
-	sym,			/* symmetry of pattern */
-	dnum_mem_init_usage,	/* min Numeric->Memory for UMF_kernel_init */
-	amd_lunz,	/* nz in LU for AMD, with symmetric pivoting */
-	lunz_bound ;	/* max nx in LU, for arbitrary row pivoting */
+            num_mem_usage_est,    /* estimated max Numeric->Memory size */
+            num_mem_size_est,    /* estimated final Numeric->Memory size */
+            peak_sym_usage,        /* peak Symbolic and SymbolicWork usage */
+            sym,            /* symmetry of pattern */
+            dnum_mem_init_usage,    /* min Numeric->Memory for UMF_kernel_init */
+            amd_lunz,    /* nz in LU for AMD, with symmetric pivoting */
+            lunz_bound;    /* max nx in LU, for arbitrary row pivoting */
 
-    Int valid,		/* set to SYMBOLIC_VALID, for validity check */
-	max_nchains,
-	nchains,
-	*Chain_start,
-	*Chain_maxrows,
-	*Chain_maxcols,
-	maxnrows,		/* largest number of rows in any front */
-	maxncols,		/* largest number of columns in any front */
-	*Front_npivcol,		/* Front_npivcol [j] = size of jth supercolumn*/
-	*Front_1strow,		/* first row index in front j */
-	*Front_leftmostdesc,	/* leftmost desc of front j */
-	*Front_parent,		/* super-column elimination tree */
-	*Cperm_init,		/* initial column ordering */
-	*Rperm_init,		/* initial row ordering */
-	*Cdeg, *Rdeg,
-	*Esize,
-	dense_row_threshold,
-	n1,			/* number of singletons */
-	nempty,			/* MIN (nempty_row, nempty_col) */
-	*Diagonal_map,		/* initial "diagonal" (after 2by2) */
-	esize,			/* size of Esize array */
-	nfr,
-	n_row, n_col,		/* matrix A is n_row-by-n_col */
-	nz,			/* nz of original matrix */
-	nb,			/* block size for BLAS 3 */
-	num_mem_init_usage,	/* min Numeric->Memory for UMF_kernel_init */
-	nempty_row, nempty_col,
+    Int valid,        /* set to SYMBOLIC_VALID, for validity check */
+            max_nchains,
+            nchains,
+            *Chain_start,
+            *Chain_maxrows,
+            *Chain_maxcols,
+            maxnrows,        /* largest number of rows in any front */
+            maxncols,        /* largest number of columns in any front */
+            *Front_npivcol,        /* Front_npivcol [j] = size of jth supercolumn*/
+            *Front_1strow,        /* first row index in front j */
+            *Front_leftmostdesc,    /* leftmost desc of front j */
+            *Front_parent,        /* super-column elimination tree */
+            *Cperm_init,        /* initial column ordering */
+            *Rperm_init,        /* initial row ordering */
+            *Cdeg, *Rdeg,
+            *Esize,
+            dense_row_threshold,
+            n1,            /* number of singletons */
+            nempty,            /* MIN (nempty_row, nempty_col) */
+            *Diagonal_map,        /* initial "diagonal" (after 2by2) */
+            esize,            /* size of Esize array */
+            nfr,
+            n_row, n_col,        /* matrix A is n_row-by-n_col */
+            nz,            /* nz of original matrix */
+            nb,            /* block size for BLAS 3 */
+            num_mem_init_usage,    /* min Numeric->Memory for UMF_kernel_init */
+            nempty_row, nempty_col,
 
-	strategy,
-	ordering,
-	fixQ,
-	prefer_diagonal,
-	nzaat,
-	nzdiag,
-	amd_dmax ;
+            strategy,
+            ordering,
+            fixQ,
+            prefer_diagonal,
+            nzaat,
+            nzdiag,
+            amd_dmax;
 
-} SymbolicType ;
+} SymbolicType;
 
 
 /* -------------------------------------------------------------------------- */

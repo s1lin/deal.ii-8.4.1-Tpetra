@@ -42,8 +42,8 @@
 #define BOOST_FUSION_ADAPT_ASSOC_STRUCT_FILLER_0_END
 #define BOOST_FUSION_ADAPT_ASSOC_STRUCT_FILLER_1_END
 
-#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_C_BASE(                                 \
-    TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,PREFIX,ATTRIBUTE)                            \
+#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_C_BASE(\
+    TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, PREFIX, ATTRIBUTE)                            \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_C_BASE(                                           \
         TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, PREFIX, ATTRIBUTE, 3)                 \
@@ -56,13 +56,13 @@
         typedef BOOST_PP_TUPLE_ELEM(3, 2, ATTRIBUTE) type;                      \
     };
 
-#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_C(                                      \
-    TEMPLATE_PARAMS_SEQ,NAME_SEQ, I, ATTRIBUTE)                                 \
+#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_C(\
+    TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, ATTRIBUTE)                                 \
                                                                                 \
     BOOST_FUSION_ADAPT_ASSOC_STRUCT_C_BASE(                                     \
         TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,BOOST_PP_EMPTY,ATTRIBUTE)
 
-#define BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT(                                    \
+#define BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT(\
     TEMPLATE_PARAMS_SEQ, NAME_SEQ, ATTRIBUTES)                                  \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \

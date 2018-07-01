@@ -11,22 +11,22 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/at.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct mpl_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct mpl_sequence_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_at_impl;
 
-        template <>
-        struct value_at_impl<mpl_sequence_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply : mpl::at<Sequence, N> {};
-        };
+            template<>
+            struct value_at_impl<mpl_sequence_tag> {
+                template<typename Sequence, typename N>
+                struct apply : mpl::at<Sequence, N> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

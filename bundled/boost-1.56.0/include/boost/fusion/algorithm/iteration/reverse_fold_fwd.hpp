@@ -8,49 +8,53 @@
 #ifndef BOOST_FUSION_ALGORITHM_ITERATION_REVERSE_FOLD_FWD_HPP
 #define BOOST_FUSION_ALGORITHM_ITERATION_REVERSE_FOLD_FWD_HPP
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Seq, typename State, typename F>
+            struct reverse_fold;
+        }
+
         template<typename Seq, typename State, typename F>
-        struct reverse_fold;
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::reverse_fold<
+                Seq, State const, F
+        >::type
+        reverse_fold(Seq
+        & seq,
+        State const &state, F
+        f);
+
+        template<typename Seq, typename State, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::reverse_fold<
+                Seq const, State const, F
+        >::type
+        reverse_fold(Seq
+        const& seq,
+        State const &state, F
+        f);
+
+        template<typename Seq, typename State, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::reverse_fold<
+                Seq, State const, F
+        >::type
+        reverse_fold(Seq
+        & seq,
+        State &state, F
+        f);
+
+        template<typename Seq, typename State, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::reverse_fold<
+                Seq const, State const, F
+        >::type
+        reverse_fold(Seq
+        const& seq,
+        State &state, F
+        f);
     }
-
-    template<typename Seq, typename State, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::reverse_fold<
-        Seq
-      , State const
-      , F
-    >::type
-    reverse_fold(Seq& seq, State const& state, F f);
-
-    template<typename Seq, typename State, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::reverse_fold<
-        Seq const
-      , State const
-      , F
-    >::type
-    reverse_fold(Seq const& seq, State const& state, F f);
-
-    template<typename Seq, typename State, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::reverse_fold<
-        Seq
-      , State const
-      , F
-    >::type
-    reverse_fold(Seq& seq, State& state, F f);
-
-    template<typename Seq, typename State, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::reverse_fold<
-        Seq const
-      , State const
-      , F
-    >::type
-    reverse_fold(Seq const& seq, State& state, F f);
-}}
+}
 
 #endif

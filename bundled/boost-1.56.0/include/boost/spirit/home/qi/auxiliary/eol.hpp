@@ -19,79 +19,77 @@
 #include <boost/spirit/home/qi/skip_over.hpp>
 #include <boost/spirit/home/support/common_terminals.hpp>
 
-namespace boost { namespace spirit
-{
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_terminal<qi::domain, tag::eol>       // enables eol
-      : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
-{
-#ifndef BOOST_SPIRIT_NO_PREDEFINED_TERMINALS
-    using spirit::eol;
-#endif
-    using spirit::eol_type;
-
-    struct eol_parser : primitive_parser<eol_parser>
-    {
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef unused_type type;
+namespace boost {
+    namespace spirit {
+        ///////////////////////////////////////////////////////////////////////////
+        // Enablers
+        ///////////////////////////////////////////////////////////////////////////
+        template<>
+        struct use_terminal<qi::domain, tag::eol>       // enables eol
+                : mpl::true_ {
         };
+    }
+}
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& /*context*/, Skipper const& skipper
-          , Attribute& /*attr*/) const
-        {
-            qi::skip_over(first, last, skipper);
+namespace boost {
+    namespace spirit {
+        namespace qi {
+#ifndef BOOST_SPIRIT_NO_PREDEFINED_TERMINALS
+            using spirit::eol;
+#endif
+            using spirit::eol_type;
 
-            Iterator it = first;
-            bool matched = false;
-            if (it != last && *it == '\r')  // CR
-            {
-                matched = true;
-                ++it;
-            }
-            if (it != last && *it == '\n')  // LF
-            {
-                matched = true;
-                ++it;
-            }
+            struct eol_parser : primitive_parser<eol_parser> {
+                template<typename Context, typename Iterator>
+                struct attribute {
+                    typedef unused_type type;
+                };
 
-            if (!matched)
-                return false;
+                template<typename Iterator, typename Context, typename Skipper, typename Attribute>
+                bool parse(Iterator &first, Iterator const &last, Context & /*context*/, Skipper const &skipper,
+                           Attribute & /*attr*/) const {
+                    qi::skip_over(first, last, skipper);
 
-            first = it;
-            return true;
+                    Iterator it = first;
+                    bool matched = false;
+                    if (it != last && *it == '\r')  // CR
+                    {
+                        matched = true;
+                        ++it;
+                    }
+                    if (it != last && *it == '\n')  // LF
+                    {
+                        matched = true;
+                        ++it;
+                    }
+
+                    if (!matched)
+                        return false;
+
+                    first = it;
+                    return true;
+                }
+
+                template<typename Context>
+                info what(Context & /*context*/) const {
+                    return info("eol");
+                }
+            };
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Parser generators: make_xxx function (objects)
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename Modifiers>
+            struct make_primitive<tag::eol, Modifiers> {
+                typedef eol_parser result_type;
+
+                result_type operator()(unused_type, unused_type) const {
+                    return result_type();
+                }
+            };
         }
-
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("eol");
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Modifiers>
-    struct make_primitive<tag::eol, Modifiers>
-    {
-        typedef eol_parser result_type;
-        result_type operator()(unused_type, unused_type) const
-        {
-            return result_type();
-        }
-    };
-}}}
+    }
+}
 
 #endif
 

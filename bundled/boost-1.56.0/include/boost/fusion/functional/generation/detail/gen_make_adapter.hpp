@@ -17,26 +17,29 @@
 
 #define BOOST_FUSION_FUNC_NAME BOOST_PP_CAT(make_,BOOST_FUSION_CLASS_TPL_NAME)
 
-namespace boost { namespace fusion
-{
+namespace boost {
+    namespace fusion {
 
-    namespace result_of
-    {
-        template <typename F>
-        struct BOOST_FUSION_FUNC_NAME
-        {
-            typedef fusion::BOOST_FUSION_CLASS_TPL_NAME< 
-                typename fusion::detail::as_fusion_element<F>::type > type;
+        namespace result_of {
+            template<typename F>
+            struct BOOST_FUSION_FUNC_NAME {
+            typedef fusion::BOOST_FUSION_CLASS_TPL_NAME<
+                    typename fusion::detail::as_fusion_element<F>::type> type;
         };
     }
 
-    template <typename F>
+    template<typename F>
     BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::BOOST_FUSION_FUNC_NAME<F>::type
-    BOOST_FUSION_FUNC_NAME(F const & f)
-    {
-        return typename result_of::BOOST_FUSION_FUNC_NAME<F>::type(f);
-    }
+    inline typename result_of::BOOST_FUSION_FUNC_NAME
+
+    <F>::type
+    BOOST_FUSION_FUNC_NAME(
+    F const &f
+    ) {
+    return
+    typename result_of::BOOST_FUSION_FUNC_NAME
+    <F>::type(f);
+}
 
 }}
 

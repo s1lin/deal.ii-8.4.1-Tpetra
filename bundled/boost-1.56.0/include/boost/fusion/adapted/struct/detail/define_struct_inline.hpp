@@ -41,7 +41,7 @@
 // For GCC, 4.4 and earlier are no longer maintained so there is no need
 // to report a bug.
 #if defined(BOOST_MSVC) || (defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 4)))
-    #define BOOST_FUSION_NEED_NESTED_TEMPLATE_PARTIAL_SPEC_WKND 
+#define BOOST_FUSION_NEED_NESTED_TEMPLATE_PARTIAL_SPEC_WKND
 #endif
 
 #ifdef BOOST_FUSION_NEED_NESTED_TEMPLATE_PARTIAL_SPEC_WKND
@@ -106,7 +106,7 @@
     {                                                                           \
     };
 
-#define BOOST_FUSION_MAKE_ITERATOR_DEREF_SPEC(                                  \
+#define BOOST_FUSION_MAKE_ITERATOR_DEREF_SPEC(\
     SPEC_TYPE, CALL_ARG_TYPE, TYPE_QUAL, ATTRIBUTE, N)                          \
                                                                                 \
     template <typename boost_fusion_detail_Sq>                                  \
@@ -279,7 +279,7 @@
         BOOST_FUSION_DEFINE_STRUCT_INLINE_MEMBERS(NAME, ATTRIBUTES)             \
     };
 
-#define BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE_IMPL(                             \
+#define BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE_IMPL(\
     TEMPLATE_PARAMS_SEQ, NAME, ATTRIBUTES)                                      \
                                                                                 \
     BOOST_FUSION_DEFINE_STRUCT_INLINE_ITERATOR(NAME, ATTRIBUTES)                \
@@ -323,7 +323,7 @@
         ATTRIBUTES_SEQ,                                                         \
         BOOST_PP_DEC(BOOST_PP_SEQ_SIZE((0)ATTRIBUTES_SEQ)))
 
-#define BOOST_FUSION_DEFINE_STRUCT_INLINE_ITERATOR_IMPL_IMPL(                   \
+#define BOOST_FUSION_DEFINE_STRUCT_INLINE_ITERATOR_IMPL_IMPL(\
     NAME, ATTRIBUTES_SEQ, ATTRIBUTES_SEQ_SIZE)                                  \
                                                                                 \
     template <typename boost_fusion_detail_Seq, int N>                          \
@@ -421,7 +421,7 @@
     };
 
 
-#define BOOST_FUSION_DEFINE_STRUCT_INLINE_MEMBERS_IMPL_IMPL(                    \
+#define BOOST_FUSION_DEFINE_STRUCT_INLINE_MEMBERS_IMPL_IMPL(\
     NAME, ATTRIBUTES_SEQ, ATTRIBUTES_SEQ_SIZE)                                  \
                                                                                 \
     /* Note: second BOOST_PP_IF is necessary to avoid MSVC warning when */      \

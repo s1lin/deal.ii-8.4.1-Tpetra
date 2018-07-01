@@ -20,248 +20,226 @@
 #include <cstddef>
 #include <functional>
 
-namespace boost{
+namespace boost {
 
-namespace multi_index{
+    namespace multi_index {
 
-namespace detail{
+        namespace detail {
 
-template<typename Allocator>
-struct random_access_index_node_impl
-{
-  typedef typename
-  boost::detail::allocator::rebind_to<
-    Allocator,random_access_index_node_impl
-  >::type::pointer                          pointer;
-  typedef typename
-  boost::detail::allocator::rebind_to<
-    Allocator,random_access_index_node_impl
-  >::type::const_pointer                    const_pointer;
-  typedef typename
-  boost::detail::allocator::rebind_to<
-    Allocator,pointer
-  >::type::pointer                          ptr_pointer;
+            template<typename Allocator>
+            struct random_access_index_node_impl {
+                typedef typename
+                boost::detail::allocator::rebind_to<
+                        Allocator, random_access_index_node_impl
+                >::type::pointer pointer;
+                typedef typename
+                boost::detail::allocator::rebind_to<
+                        Allocator, random_access_index_node_impl
+                >::type::const_pointer const_pointer;
+                typedef typename
+                boost::detail::allocator::rebind_to<
+                        Allocator, pointer
+                >::type::pointer ptr_pointer;
 
-  ptr_pointer& up(){return up_;}
-  ptr_pointer  up()const{return up_;}
+                ptr_pointer &up() { return up_; }
 
-  /* interoperability with rnd_node_iterator */
+                ptr_pointer up() const { return up_; }
 
-  static void increment(pointer& x)
-  {
-    x=*(x->up()+1);
-  }
+                /* interoperability with rnd_node_iterator */
 
-  static void decrement(pointer& x)
-  {
-    x=*(x->up()-1);
-  }
+                static void increment(pointer &x) {
+                    x = *(x->up() + 1);
+                }
 
-  static void advance(pointer& x,std::ptrdiff_t n)
-  {
-    x=*(x->up()+n);
-  }
+                static void decrement(pointer &x) {
+                    x = *(x->up() - 1);
+                }
 
-  static std::ptrdiff_t distance(pointer x,pointer y)
-  {
-    return y->up()-x->up();
-  }
+                static void advance(pointer &x, std::ptrdiff_t n) {
+                    x = *(x->up() + n);
+                }
 
-  /* algorithmic stuff */
+                static std::ptrdiff_t distance(pointer x, pointer y) {
+                    return y->up() - x->up();
+                }
 
-  static void relocate(ptr_pointer pos,ptr_pointer x)
-  {
-    pointer n=*x;
-    if(x<pos){
-      extract(x,pos);
-      *(pos-1)=n;
-      n->up()=pos-1;
-    }
-    else{
-      while(x!=pos){
-        *x=*(x-1);
-        (*x)->up()=x;
-        --x;
-      }
-      *pos=n;
-      n->up()=pos;
-    }
-  };
+                /* algorithmic stuff */
 
-  static void relocate(ptr_pointer pos,ptr_pointer first,ptr_pointer last)
-  {
-    ptr_pointer begin,middle,end;
-    if(pos<first){
-      begin=pos;
-      middle=first;
-      end=last;
-    }
-    else{
-      begin=first;
-      middle=last;
-      end=pos;
-    }
+                static void relocate(ptr_pointer pos, ptr_pointer x) {
+                    pointer n = *x;
+                    if (x < pos) {
+                        extract(x, pos);
+                        *(pos - 1) = n;
+                        n->up() = pos - 1;
+                    } else {
+                        while (x != pos) {
+                            *x = *(x - 1);
+                            (*x)->up() = x;
+                            --x;
+                        }
+                        *pos = n;
+                        n->up() = pos;
+                    }
+                };
 
-    std::ptrdiff_t n=end-begin;
-    std::ptrdiff_t m=middle-begin;
-    std::ptrdiff_t n_m=n-m;
-    std::ptrdiff_t p=math::gcd(n,m);
+                static void relocate(ptr_pointer pos, ptr_pointer first, ptr_pointer last) {
+                    ptr_pointer begin, middle, end;
+                    if (pos < first) {
+                        begin = pos;
+                        middle = first;
+                        end = last;
+                    } else {
+                        begin = first;
+                        middle = last;
+                        end = pos;
+                    }
 
-    for(std::ptrdiff_t i=0;i<p;++i){
-      pointer tmp=begin[i];
-      for(std::ptrdiff_t j=i,k;;){
-        if(j<n_m)k=j+m;
-        else     k=j-n_m;
-        if(k==i){
-          *(begin+j)=tmp;
-          (*(begin+j))->up()=begin+j;
-          break;
-        }
-        else{
-          *(begin+j)=*(begin+k);
-          (*(begin+j))->up()=begin+j;
-        }
+                    std::ptrdiff_t n = end - begin;
+                    std::ptrdiff_t m = middle - begin;
+                    std::ptrdiff_t n_m = n - m;
+                    std::ptrdiff_t p = math::gcd(n, m);
 
-        if(k<n_m)j=k+m;
-        else     j=k-n_m;
-        if(j==i){
-          *(begin+k)=tmp;
-          (*(begin+k))->up()=begin+k;
-          break;
-        }
-        else{
-          *(begin+k)=*(begin+j);
-          (*(begin+k))->up()=begin+k;
-        }
-      }
-    }
-  };
+                    for (std::ptrdiff_t i = 0; i < p; ++i) {
+                        pointer tmp = begin[i];
+                        for (std::ptrdiff_t j = i, k;;) {
+                            if (j < n_m)k = j + m;
+                            else k = j - n_m;
+                            if (k == i) {
+                                *(begin + j) = tmp;
+                                (*(begin + j))->up() = begin + j;
+                                break;
+                            } else {
+                                *(begin + j) = *(begin + k);
+                                (*(begin + j))->up() = begin + j;
+                            }
 
-  static void extract(ptr_pointer x,ptr_pointer pend)
-  {
-    --pend;
-    while(x!=pend){
-      *x=*(x+1);
-      (*x)->up()=x;
-      ++x;
-    }
-  }
+                            if (k < n_m)j = k + m;
+                            else j = k - n_m;
+                            if (j == i) {
+                                *(begin + k) = tmp;
+                                (*(begin + k))->up() = begin + k;
+                                break;
+                            } else {
+                                *(begin + k) = *(begin + j);
+                                (*(begin + k))->up() = begin + k;
+                            }
+                        }
+                    }
+                };
 
-  static void transfer(
-    ptr_pointer pbegin0,ptr_pointer pend0,ptr_pointer pbegin1)
-  {
-    while(pbegin0!=pend0){
-      *pbegin1=*pbegin0++;
-      (*pbegin1)->up()=pbegin1;
-      ++pbegin1;
-    }
-  }
+                static void extract(ptr_pointer x, ptr_pointer pend) {
+                    --pend;
+                    while (x != pend) {
+                        *x = *(x + 1);
+                        (*x)->up() = x;
+                        ++x;
+                    }
+                }
 
-  static void reverse(ptr_pointer pbegin,ptr_pointer pend)
-  {
-    std::ptrdiff_t d=(pend-pbegin)/2;
-    for(std::ptrdiff_t i=0;i<d;++i){
-      std::swap(*pbegin,*--pend);
-      (*pbegin)->up()=pbegin;
-      (*pend)->up()=pend;
-      ++pbegin;
-    }
-  }
+                static void transfer(
+                        ptr_pointer pbegin0, ptr_pointer pend0, ptr_pointer pbegin1) {
+                    while (pbegin0 != pend0) {
+                        *pbegin1 = *pbegin0++;
+                        (*pbegin1)->up() = pbegin1;
+                        ++pbegin1;
+                    }
+                }
 
-private:
-  ptr_pointer up_;
-};
+                static void reverse(ptr_pointer pbegin, ptr_pointer pend) {
+                    std::ptrdiff_t d = (pend - pbegin) / 2;
+                    for (std::ptrdiff_t i = 0; i < d; ++i) {
+                        std::swap(*pbegin, *--pend);
+                        (*pbegin)->up() = pbegin;
+                        (*pend)->up() = pend;
+                        ++pbegin;
+                    }
+                }
 
-template<typename Super>
-struct random_access_index_node_trampoline:
-  random_access_index_node_impl<
-    typename boost::detail::allocator::rebind_to<
-      typename Super::allocator_type,
-      char
-    >::type
-  >
-{
-  typedef random_access_index_node_impl<
-    typename boost::detail::allocator::rebind_to<
-      typename Super::allocator_type,
-      char
-    >::type
-  > impl_type;
-};
+            private:
+                ptr_pointer up_;
+            };
 
-template<typename Super>
-struct random_access_index_node:
-  Super,random_access_index_node_trampoline<Super>
-{
-private:
-  typedef random_access_index_node_trampoline<Super> trampoline;
+            template<typename Super>
+            struct random_access_index_node_trampoline :
+                    random_access_index_node_impl<
+                            typename boost::detail::allocator::rebind_to<
+                                    typename Super::allocator_type,
+                                    char
+                            >::type
+                    > {
+                typedef random_access_index_node_impl<
+                        typename boost::detail::allocator::rebind_to<
+                                typename Super::allocator_type,
+                                char
+                        >::type
+                > impl_type;
+            };
 
-public:
-  typedef typename trampoline::impl_type     impl_type;
-  typedef typename trampoline::pointer       impl_pointer;
-  typedef typename trampoline::const_pointer const_impl_pointer;
-  typedef typename trampoline::ptr_pointer   impl_ptr_pointer;
+            template<typename Super>
+            struct random_access_index_node :
+                    Super, random_access_index_node_trampoline<Super> {
+            private:
+                typedef random_access_index_node_trampoline<Super> trampoline;
 
-  impl_ptr_pointer& up(){return trampoline::up();}
-  impl_ptr_pointer  up()const{return trampoline::up();}
+            public:
+                typedef typename trampoline::impl_type impl_type;
+                typedef typename trampoline::pointer impl_pointer;
+                typedef typename trampoline::const_pointer const_impl_pointer;
+                typedef typename trampoline::ptr_pointer impl_ptr_pointer;
 
-  impl_pointer impl()
-  {
-    return static_cast<impl_pointer>(
-      static_cast<impl_type*>(static_cast<trampoline*>(this)));
-  }
+                impl_ptr_pointer &up() { return trampoline::up(); }
 
-  const_impl_pointer impl()const
-  {
-    return static_cast<const_impl_pointer>(
-      static_cast<const impl_type*>(static_cast<const trampoline*>(this)));
-  }
+                impl_ptr_pointer up() const { return trampoline::up(); }
 
-  static random_access_index_node* from_impl(impl_pointer x)
-  {
-    return static_cast<random_access_index_node*>(
-      static_cast<trampoline*>(&*x));
-  }
+                impl_pointer impl() {
+                    return static_cast<impl_pointer>(
+                            static_cast<impl_type *>(static_cast<trampoline *>(this)));
+                }
 
-  static const random_access_index_node* from_impl(const_impl_pointer x)
-  {
-    return static_cast<const random_access_index_node*>(
-      static_cast<const trampoline*>(&*x));
-  }
+                const_impl_pointer impl() const {
+                    return static_cast<const_impl_pointer>(
+                            static_cast<const impl_type *>(static_cast<const trampoline *>(this)));
+                }
 
-  /* interoperability with rnd_node_iterator */
+                static random_access_index_node *from_impl(impl_pointer x) {
+                    return static_cast<random_access_index_node *>(
+                            static_cast<trampoline *>(&*x));
+                }
 
-  static void increment(random_access_index_node*& x)
-  {
-    impl_pointer xi=x->impl();
-    trampoline::increment(xi);
-    x=from_impl(xi);
-  }
+                static const random_access_index_node *from_impl(const_impl_pointer x) {
+                    return static_cast<const random_access_index_node *>(
+                            static_cast<const trampoline *>(&*x));
+                }
 
-  static void decrement(random_access_index_node*& x)
-  {
-    impl_pointer xi=x->impl();
-    trampoline::decrement(xi);
-    x=from_impl(xi);
-  }
+                /* interoperability with rnd_node_iterator */
 
-  static void advance(random_access_index_node*& x,std::ptrdiff_t n)
-  {
-    impl_pointer xi=x->impl();
-    trampoline::advance(xi,n);
-    x=from_impl(xi);
-  }
+                static void increment(random_access_index_node *&x) {
+                    impl_pointer xi = x->impl();
+                    trampoline::increment(xi);
+                    x = from_impl(xi);
+                }
 
-  static std::ptrdiff_t distance(
-    random_access_index_node* x,random_access_index_node* y)
-  {
-    return trampoline::distance(x->impl(),y->impl());
-  }
-};
+                static void decrement(random_access_index_node *&x) {
+                    impl_pointer xi = x->impl();
+                    trampoline::decrement(xi);
+                    x = from_impl(xi);
+                }
 
-} /* namespace multi_index::detail */
+                static void advance(random_access_index_node *&x, std::ptrdiff_t n) {
+                    impl_pointer xi = x->impl();
+                    trampoline::advance(xi, n);
+                    x = from_impl(xi);
+                }
 
-} /* namespace multi_index */
+                static std::ptrdiff_t distance(
+                        random_access_index_node *x, random_access_index_node *y) {
+                    return trampoline::distance(x->impl(), y->impl());
+                }
+            };
+
+        } /* namespace multi_index::detail */
+
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

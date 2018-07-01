@@ -18,8 +18,9 @@
 
 #include <cstddef> // size_t
 #include <boost/config.hpp>
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::size_t; 
 } // namespace std
 #endif
@@ -30,7 +31,7 @@ namespace std{
 // wcslen
 
 #if defined(BOOST_DINKUMWARE_STDLIB) && BOOST_DINKUMWARE_STDLIB < 306 \
-|| defined(__LIBCOMO__) 
+ || defined(__LIBCOMO__)
 
 namespace std {
 inline std::size_t wcslen(const wchar_t * ws)
@@ -45,6 +46,7 @@ inline std::size_t wcslen(const wchar_t * ws)
 #else
 
 #include <cwchar>
+
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::wcslen; }
 #endif

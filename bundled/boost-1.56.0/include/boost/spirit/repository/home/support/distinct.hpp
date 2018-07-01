@@ -12,11 +12,15 @@
 
 #include <boost/spirit/home/support/terminal.hpp>
 
-namespace boost { namespace spirit { namespace repository
-{
-    // The distinct extended terminal
-    BOOST_SPIRIT_DEFINE_TERMINALS_NAME_EX(( distinct, distinct_type ))
+namespace boost {
+    namespace spirit {
+        namespace repository {
+            // The distinct extended terminal
+            BOOST_SPIRIT_DEFINE_TERMINALS_NAME_EX(( distinct, distinct_type
+            ))
 
-}}}
+        }
+    }
+}
 
 #endif

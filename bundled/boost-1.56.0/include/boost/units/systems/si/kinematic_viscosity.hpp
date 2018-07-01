@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<kinematic_viscosity_dimension,si::system>     kinematic_viscosity;
-    
-} // namespace si
+            typedef unit <kinematic_viscosity_dimension, si::system> kinematic_viscosity;
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

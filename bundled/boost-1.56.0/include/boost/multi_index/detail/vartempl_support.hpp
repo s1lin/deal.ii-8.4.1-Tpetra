@@ -41,7 +41,7 @@
 
 #include <boost/config.hpp>
 
-#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)||\
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
     defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 #include <boost/move/core.hpp>
@@ -210,36 +210,35 @@ BOOST_MULTI_INDEX_VARTEMPL_TO_PLACEMENT_NEW(vartempl_placement_new)
 #define BOOST_MULTI_INDEX_FORWARD_PARAM_PACK  std::forward<Args>(args)...
 #define BOOST_MULTI_INDEX_NULL_PARAM_PACK
 
-#define BOOST_MULTI_INDEX_OVERLOADS_TO_VARTEMPL(                     \
-  ret,name_from,name_to)                                             \
+#define BOOST_MULTI_INDEX_OVERLOADS_TO_VARTEMPL(\
+  ret, name_from, name_to)                                             \
 template<typename... Args> ret name_from(Args&&... args)             \
 {                                                                    \
   return name_to(std::forward<Args>(args)...);                       \
 }
 
-#define BOOST_MULTI_INDEX_OVERLOADS_TO_VARTEMPL_EXTRA_ARG(           \
-  ret,name_from,name_to,extra_arg_type,extra_arg_name)               \
+#define BOOST_MULTI_INDEX_OVERLOADS_TO_VARTEMPL_EXTRA_ARG(\
+  ret, name_from, name_to, extra_arg_type, extra_arg_name)               \
 template<typename... Args> ret name_from(                            \
   extra_arg_type extra_arg_name,Args&&... args)                      \
 {                                                                    \
   return name_to(extra_arg_name,std::forward<Args>(args)...);        \
 }
 
-namespace boost{
-  
-namespace multi_index{
-  
-namespace detail{
+namespace boost {
 
-template<typename Value,typename... Args>
-Value* vartempl_placement_new(Value*x,Args&&... args)
-{
-  return new(x) Value(std::forward<Args>(args)...);
-}
+    namespace multi_index {
 
-} /* namespace multi_index::detail */
+        namespace detail {
 
-} /* namespace multi_index */
+            template<typename Value, typename... Args>
+            Value *vartempl_placement_new(Value *x, Args &&... args) {
+                return new(x) Value(std::forward<Args>(args)...);
+            }
+
+        } /* namespace multi_index::detail */
+
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

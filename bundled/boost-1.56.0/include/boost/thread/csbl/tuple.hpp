@@ -18,28 +18,28 @@
 #endif
 
 #else
+
 #include <tuple>
+
 #endif
 
-namespace boost
-{
-  namespace csbl
-  {
+namespace boost {
+    namespace csbl {
 #if defined BOOST_THREAD_USES_BOOST_TUPLE
-    using ::boost::tuple;
-    using ::boost::get;
+        using ::boost::tuple;
+        using ::boost::get;
 #else
-    // 20.4.2, class template tuple:
-    using ::std::tuple;
-    using ::std::get;
-    // 20.4.2.4, tuple creation functions:
-    // 20.4.2.5, tuple helper classes:
-    // 20.4.2.6, element access:
-    // 20.4.2.7, relational operators:
-    // 20.4.2.8, allocator-related traits
-    // 20.4.2.9, specialized algorithms:
+        // 20.4.2, class template tuple:
+        using ::std::tuple;
+        using ::std::get;
+        // 20.4.2.4, tuple creation functions:
+        // 20.4.2.5, tuple helper classes:
+        // 20.4.2.6, element access:
+        // 20.4.2.7, relational operators:
+        // 20.4.2.8, allocator-related traits
+        // 20.4.2.9, specialized algorithms:
 #endif
 
-  }
+    }
 }
 #endif // header

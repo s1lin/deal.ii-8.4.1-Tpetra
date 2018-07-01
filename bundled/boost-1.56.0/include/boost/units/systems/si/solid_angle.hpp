@@ -15,18 +15,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<solid_angle_dimension,si::system>      solid_angle;
-    
-BOOST_UNITS_STATIC_CONSTANT(steradian,solid_angle); 
-BOOST_UNITS_STATIC_CONSTANT(steradians,solid_angle);    
+            typedef unit <solid_angle_dimension, si::system> solid_angle;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(steradian, solid_angle
+            );
+            BOOST_UNITS_STATIC_CONSTANT(steradians, solid_angle
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

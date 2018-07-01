@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_ACTOR
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_ACTOR
+
 #include <boost/spirit/home/classic/phoenix/actor.hpp>
+
 #endif

@@ -21,50 +21,52 @@
 
 #include <boost/detail/winapi/GetLastError.hpp>
 #include <boost/detail/winapi/GetCurrentProcess.hpp>
+
 #if BOOST_PLAT_WINDOWS_DESKTOP
 #include <boost/detail/winapi/GetProcessTimes.hpp>
 #endif
 
-namespace boost
-{
-namespace chrono
-{
+namespace boost {
+    namespace chrono {
 
-process_real_cpu_clock::time_point process_real_cpu_clock::now() BOOST_NOEXCEPT
-{
-    clock_t c = ::clock();
-    if ( c == clock_t(-1) ) // error
+        process_real_cpu_clock::time_point process_real_cpu_clock::now()
+
+        BOOST_NOEXCEPT {
+        clock_t c = ::clock();
+        if ( c == clock_t(-1)) // error
     {
-      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+        BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
     }
-    typedef ratio_divide<giga, ratio<CLOCKS_PER_SEC> >::type R;
-    return time_point(
-      duration(static_cast<rep>(c)*R::num/R::den)
+    typedef ratio_divide<giga, ratio < CLOCKS_PER_SEC> >
+    ::type R;
+    return
+    time_point(
+            duration(static_cast<rep>(c) * R::num / R::den)
     );
 }
 
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+
 process_real_cpu_clock::time_point process_real_cpu_clock::now(
-        system::error_code & ec)
-{
+        system::error_code &ec) {
     clock_t c = ::clock();
-    if ( c == clock_t(-1) ) // error
+    if (c == clock_t(-1)) // error
     {
-            boost::throw_exception(
-                    system::system_error(
-                            errno,
-                            BOOST_CHRONO_SYSTEM_CATEGORY,
-                            "chrono::process_real_cpu_clock" ));
+        boost::throw_exception(
+                system::system_error(
+                        errno,
+                        BOOST_CHRONO_SYSTEM_CATEGORY,
+                        "chrono::process_real_cpu_clock"));
     }
-    if (!BOOST_CHRONO_IS_THROWS(ec))
-    {
-      ec.clear();
+    if (!BOOST_CHRONO_IS_THROWS(ec)) {
+        ec.clear();
     }
-    typedef ratio_divide<giga, ratio<CLOCKS_PER_SEC> >::type R;
+    typedef ratio_divide<giga, ratio < CLOCKS_PER_SEC> >::type R;
     return time_point(
-      duration(static_cast<rep>(c)*R::num/R::den)
+            duration(static_cast<rep>(c) * R::num / R::den)
     );
 }
+
 #endif
 
 #if BOOST_PLAT_WINDOWS_DESKTOP

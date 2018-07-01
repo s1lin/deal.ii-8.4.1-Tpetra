@@ -16,12 +16,12 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for area : L^2
-typedef derived_dimension<length_base_dimension,2>::type area_dimension; 
+        typedef derived_dimension<length_base_dimension, 2>::type area_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

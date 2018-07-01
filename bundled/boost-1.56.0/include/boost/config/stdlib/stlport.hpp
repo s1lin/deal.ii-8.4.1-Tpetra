@@ -10,20 +10,24 @@
 //  STLPort standard library config:
 
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+
 #  include <cstddef>
+
 #  if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #      error "This is not STLPort!"
 #  endif
 #endif
 
 // Apple doesn't seem to reliably defined a *unix* macro
-#if !defined(CYGWIN) && (  defined(__unix__)  \
-                        || defined(__unix)    \
-                        || defined(unix)      \
-                        || defined(__APPLE__) \
-                        || defined(__APPLE)   \
-                        || defined(APPLE))
+#if !defined(CYGWIN) && (defined(__unix__)  \
+ || defined(__unix)    \
+ || defined(unix)      \
+ || defined(__APPLE__) \
+ || defined(__APPLE)   \
+ || defined(APPLE))
+
 #  include <unistd.h>
+
 #endif
 
 //
@@ -136,10 +140,10 @@
 // necessarily import all the names we need into namespace std::
 // 
 #  if (defined(__STL_IMPORT_VENDOR_CSTD) \
-         || defined(__STL_USE_OWN_NAMESPACE) \
-         || defined(_STLP_IMPORT_VENDOR_CSTD) \
-         || defined(_STLP_USE_OWN_NAMESPACE)) \
-      && (defined(__STL_VENDOR_GLOBAL_CSTD) || defined (_STLP_VENDOR_GLOBAL_CSTD))
+ || defined(__STL_USE_OWN_NAMESPACE) \
+ || defined(_STLP_IMPORT_VENDOR_CSTD) \
+ || defined(_STLP_USE_OWN_NAMESPACE)) \
+ && (defined(__STL_VENDOR_GLOBAL_CSTD) || defined (_STLP_VENDOR_GLOBAL_CSTD))
 #     define BOOST_NO_STDC_NAMESPACE
 #     define BOOST_NO_EXCEPTION_STD_NAMESPACE
 #  endif

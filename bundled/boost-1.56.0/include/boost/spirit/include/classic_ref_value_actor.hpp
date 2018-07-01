@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_REF_VALUE_ACTOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_REF_VALUE_ACTOR
+
 #include <boost/spirit/home/classic/actor/ref_value_actor.hpp>
+
 #endif

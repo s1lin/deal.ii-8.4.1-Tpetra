@@ -7,12 +7,18 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)                                *
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_ARRAY_HPP
 # define BOOST_PREPROCESSOR_ARRAY_HPP
 #
+
+
 # include <boost/preprocessor/array/data.hpp>
 # include <boost/preprocessor/array/elem.hpp>
 # include <boost/preprocessor/array/enum.hpp>
@@ -28,5 +34,7 @@
 # include <boost/preprocessor/array/to_list.hpp>
 # include <boost/preprocessor/array/to_seq.hpp>
 # include <boost/preprocessor/array/to_tuple.hpp>
+
 #
+
 # endif

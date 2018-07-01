@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_FUNCTOR_PARSER
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_FUNCTOR_PARSER
+
 #include <boost/spirit/home/classic/utility/functor_parser.hpp>
+
 #endif

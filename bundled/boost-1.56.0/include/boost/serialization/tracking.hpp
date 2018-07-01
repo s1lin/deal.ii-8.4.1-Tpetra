@@ -32,57 +32,57 @@
 #include <boost/serialization/type_info_implementation.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-struct basic_traits;
+        struct basic_traits;
 
 // default tracking level
-template<class T>
-struct tracking_level_impl {
-    template<class U>
-    struct traits_class_tracking {
-        typedef typename U::tracking type;
-    };
-    typedef mpl::integral_c_tag tag;
-    // note: at least one compiler complained w/o the full qualification
-    // on basic traits below
-    typedef
-        typename mpl::eval_if<
-            is_base_and_derived<boost::serialization::basic_traits, T>,
-            traits_class_tracking< T >,
-        //else
-        typename mpl::eval_if<
-            is_pointer< T >,
+        template<class T>
+        struct tracking_level_impl {
+            template<class U>
+            struct traits_class_tracking {
+                typedef typename U::tracking type;
+            };
+            typedef mpl::integral_c_tag tag;
+            // note: at least one compiler complained w/o the full qualification
+            // on basic traits below
+            typedef
+            typename mpl::eval_if<
+                    is_base_and_derived < boost::serialization::basic_traits, T>,
+            traits_class_tracking<T>,
+            //else
+            typename mpl::eval_if<
+                    is_pointer < T>,
             // pointers are not tracked by default
-            mpl::int_<track_never>,
-        //else
-        typename mpl::eval_if<
-            // for primitives
-            typename mpl::equal_to<
-                implementation_level< T >,
-                mpl::int_<primitive_type> 
+            mpl::int_ <track_never>,
+            //else
+            typename mpl::eval_if<
+                    // for primitives
+                    typename mpl::equal_to<
+                            implementation_level < T>,
+                    mpl::int_ < primitive_type>
             >,
             // is never
-            mpl::int_<track_never>,
+            mpl::int_ <track_never>,
             // otherwise its selective
-            mpl::int_<track_selectively>
-    >  > >::type type;
-    BOOST_STATIC_CONSTANT(int, value = type::value);
-};
+            mpl::int_ <track_selectively>
+            >  > >
+            ::type type;
 
-template<class T>
-struct tracking_level : 
-    public tracking_level_impl<const T>
-{
-};
+            BOOST_STATIC_CONSTANT(int, value = type::value);
+        };
 
-template<class T, enum tracking_type L>
-inline bool operator>=(tracking_level< T > t, enum tracking_type l)
-{
-    return t.value >= (int)l;
-}
+        template<class T>
+        struct tracking_level :
+                public tracking_level_impl<const T> {
+        };
 
-} // namespace serialization
+        template<class T, enum tracking_type L>
+        inline bool operator>=(tracking_level<T> t, enum tracking_type l) {
+            return t.value >= (int) l;
+        }
+
+    } // namespace serialization
 } // namespace boost
 
 

@@ -6,18 +6,28 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_SEQ_ENUM_HPP
 # define BOOST_PREPROCESSOR_SEQ_ENUM_HPP
 #
+
+
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/seq/size.hpp>
+
 #
+
 # /* BOOST_PP_SEQ_ENUM */
+
 #
+
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_SEQ_ENUM(seq) BOOST_PP_SEQ_ENUM_I(seq)
 #    define BOOST_PP_SEQ_ENUM_I(seq) BOOST_PP_CAT(BOOST_PP_SEQ_ENUM_, BOOST_PP_SEQ_SIZE(seq)) seq
@@ -28,6 +38,7 @@
 #    define BOOST_PP_SEQ_ENUM(seq) BOOST_PP_CAT(BOOST_PP_SEQ_ENUM_, BOOST_PP_SEQ_SIZE(seq)) seq
 # endif
 #
+
 # define BOOST_PP_SEQ_ENUM_1(x) x
 # define BOOST_PP_SEQ_ENUM_2(x) x, BOOST_PP_SEQ_ENUM_1
 # define BOOST_PP_SEQ_ENUM_3(x) x, BOOST_PP_SEQ_ENUM_2
@@ -285,4 +296,5 @@
 # define BOOST_PP_SEQ_ENUM_255(x) x, BOOST_PP_SEQ_ENUM_254
 # define BOOST_PP_SEQ_ENUM_256(x) x, BOOST_PP_SEQ_ENUM_255
 #
+
 # endif

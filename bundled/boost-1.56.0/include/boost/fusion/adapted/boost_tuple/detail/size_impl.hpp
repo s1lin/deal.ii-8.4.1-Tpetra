@@ -11,22 +11,22 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct boost_tuple_tag;
+namespace boost {
+    namespace fusion {
+        struct boost_tuple_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct size_impl;
+        namespace extension {
+            template<typename T>
+            struct size_impl;
 
-        template <>
-        struct size_impl<boost_tuple_tag>
-        {
-            template <typename Sequence>
-            struct apply : mpl::int_<tuples::length<Sequence>::value> {};
-        };
+            template<>
+            struct size_impl<boost_tuple_tag> {
+                template<typename Sequence>
+                struct apply : mpl::int_<tuples::length<Sequence>::value> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

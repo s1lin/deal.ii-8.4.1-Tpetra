@@ -34,25 +34,34 @@
 
 /* compile the complex conjugate forward/backsolves */
 #define CONJUGATE_SOLVE
+
 #include "umf_ltsolve.c"
 #include "umf_utsolve.c"
 
 /* compile umf_triplet with DO_MAP, DO_VALUES and DO_MAP, and just DO_VALUES */
 #define DO_MAP
+
 #include "umf_triplet.c"
+
 #define DO_VALUES
+
 #include "umf_triplet.c"
+
 #undef DO_MAP
+
 #include "umf_triplet.c"
 
 /* compile the FIXQ version of umf_assemble */
 #define FIXQ
+
 #include "umf_assemble.c"
 
 /* compile the DROP version of umf_store_lu */
 #define DROP
+
 #include "umf_store_lu.c"
 
 /* compile umfpack_wsolve */
 #define WSOLVE
+
 #include "umfpack_solve.c"

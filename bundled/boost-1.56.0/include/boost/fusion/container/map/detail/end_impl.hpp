@@ -10,31 +10,30 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/map/map_iterator.hpp>
 
-namespace boost { namespace fusion
-{
-    struct map_tag;
+namespace boost {
+    namespace fusion {
+        struct map_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct end_impl;
+        namespace extension {
+            template<typename T>
+            struct end_impl;
 
-        template<>
-        struct end_impl<map_tag>
-        {
-            template<typename Sequence>
-            struct apply
-            {
-                typedef map_iterator<Sequence, Sequence::size::value> type;
+            template<>
+            struct end_impl<map_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef map_iterator <Sequence, Sequence::size::value> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type call(Sequence& seq)
-                {
-                    return type(seq);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return type(seq);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

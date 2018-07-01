@@ -17,17 +17,18 @@
 #include <boost/mpl/front_fwd.hpp>
 #include <boost/mpl/list/aux_/tag.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct front_impl< aux::list_tag >
-{
-    template< typename List > struct apply
-    {
-        typedef typename List::item type;
-    };
-};
+        template<>
+        struct front_impl<aux::list_tag> {
+            template<typename List>
+            struct apply {
+                typedef typename List::item type;
+            };
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_LIST_AUX_FRONT_HPP_INCLUDED

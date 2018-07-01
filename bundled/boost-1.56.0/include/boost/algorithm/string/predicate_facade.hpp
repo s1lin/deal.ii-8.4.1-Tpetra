@@ -33,7 +33,8 @@ namespace boost {
             Every classification predicate must be derived from this class.
         */
         template<typename Derived>
-        struct predicate_facade {};
+        struct predicate_facade {
+        };
 
     } // namespace algorithm
 } // namespace boost

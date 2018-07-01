@@ -11,15 +11,18 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/set/detail/deref_impl.hpp>
 
-namespace boost { namespace fusion { namespace extension
-{
-    template <typename>
-    struct deref_data_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct deref_data_impl;
 
-    template <>
-    struct deref_data_impl<set_iterator_tag>
-      : deref_impl<set_iterator_tag>
-    {};
-}}}
+            template<>
+            struct deref_data_impl<set_iterator_tag>
+                    : deref_impl<set_iterator_tag> {
+            };
+        }
+    }
+}
 
 #endif

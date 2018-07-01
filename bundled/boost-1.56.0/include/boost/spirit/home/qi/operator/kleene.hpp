@@ -22,90 +22,85 @@
 #include <boost/spirit/home/support/handles_container.hpp>
 #include <boost/spirit/home/support/info.hpp>
 
-namespace boost { namespace spirit
-{
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    //[composite_parsers_kleene_enable_
-    template <>
-    struct use_operator<qi::domain, proto::tag::dereference> // enables *p
-      : mpl::true_ {};
-    //]
-}}
-
-namespace boost { namespace spirit { namespace qi
-{
-    //[composite_parsers_kleene
-    template <typename Subject>
-    struct kleene : unary_parser<kleene<Subject> >
-    {
-        typedef Subject subject_type;
-
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            // Build a std::vector from the subject's attribute. Note
-            // that build_std_vector may return unused_type if the
-            // subject's attribute is an unused_type.
-            typedef typename
-                traits::build_std_vector<
-                    typename traits::
-                        attribute_of<Subject, Context, Iterator>::type
-                >::type
-            type;
+namespace boost {
+    namespace spirit {
+        ///////////////////////////////////////////////////////////////////////////
+        // Enablers
+        ///////////////////////////////////////////////////////////////////////////
+        //[composite_parsers_kleene_enable_
+        template<>
+        struct use_operator<qi::domain, proto::tag::dereference> // enables *p
+                : mpl::true_ {
         };
+        //]
+    }
+}
 
-        kleene(Subject const& subject_)
-          : subject(subject_) {}
+namespace boost {
+    namespace spirit {
+        namespace qi {
+            //[composite_parsers_kleene
+            template<typename Subject>
+            struct kleene : unary_parser<kleene<Subject> > {
+                typedef Subject subject_type;
 
-        template <typename F>
-        bool parse_container(F f) const
-        {
-            while (!f (subject))
-                ;
-            return true;
-        }
+                template<typename Context, typename Iterator>
+                struct attribute {
+                    // Build a std::vector from the subject's attribute. Note
+                    // that build_std_vector may return unused_type if the
+                    // subject's attribute is an unused_type.
+                    typedef typename
+                    traits::build_std_vector<
+                            typename traits::
+                            attribute_of<Subject, Context, Iterator>::type
+                    >::type
+                            type;
+                };
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper
-          , Attribute& attr_) const
-        {
-            // ensure the attribute is actually a container type
-            traits::make_container(attr_);
+                kleene(Subject const &subject_)
+                        : subject(subject_) {}
 
-            typedef detail::fail_function<Iterator, Context, Skipper>
-                fail_function;
+                template<typename F>
+                bool parse_container(F f) const {
+                    while (!f(subject));
+                    return true;
+                }
 
-            Iterator iter = first;
-            fail_function f(iter, last, context, skipper);
-            parse_container(detail::make_pass_container(f, attr_));
+                template<typename Iterator, typename Context, typename Skipper, typename Attribute>
+                bool parse(Iterator &first, Iterator const &last, Context &context, Skipper const &skipper,
+                           Attribute &attr_) const {
+                    // ensure the attribute is actually a container type
+                    traits::make_container(attr_);
 
-            first = f.first;
-            return true;
-        }
+                    typedef detail::fail_function <Iterator, Context, Skipper>
+                            fail_function;
 
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("kleene", subject.what(context));
-        }
+                    Iterator iter = first;
+                    fail_function f(iter, last, context, skipper);
+                    parse_container(detail::make_pass_container(f, attr_));
 
-        Subject subject;
-    };
-    //]
+                    first = f.first;
+                    return true;
+                }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    //[composite_parsers_kleene_generator
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::dereference, Elements, Modifiers>
-      : make_unary_composite<Elements, kleene>
-    {};
-    //]
+                template<typename Context>
+                info what(Context &context) const {
+                    return info("kleene", subject.what(context));
+                }
+
+                Subject subject;
+            };
+            //]
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Parser generators: make_xxx function (objects)
+            ///////////////////////////////////////////////////////////////////////////
+            //[composite_parsers_kleene_generator
+            template<typename Elements, typename Modifiers>
+            struct make_composite<proto::tag::dereference, Elements, Modifiers>
+                    : make_unary_composite<Elements, kleene> {
+            };
+            //]
 
 //     ///////////////////////////////////////////////////////////////////////////
 //     // Define what attributes are compatible with a kleene
@@ -114,21 +109,26 @@ namespace boost { namespace spirit { namespace qi
 //       : traits::is_container_compatible<qi::domain, Attribute
 //               , kleene<Subject>, Context, Iterator>
 //     {};
-}}}
+        }
+    }
+}
 
-namespace boost { namespace spirit { namespace traits
-{
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject>
-    struct has_semantic_action<qi::kleene<Subject> >
-      : unary_has_semantic_action<Subject> {};
+namespace boost {
+    namespace spirit {
+        namespace traits {
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename Subject>
+            struct has_semantic_action<qi::kleene<Subject> >
+                    : unary_has_semantic_action<Subject> {
+            };
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject, typename Attribute, typename Context
-      , typename Iterator>
-    struct handles_container<qi::kleene<Subject>, Attribute
-          , Context, Iterator>
-      : mpl::true_ {}; 
-}}}
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename Subject, typename Attribute, typename Context, typename Iterator>
+            struct handles_container<qi::kleene<Subject>, Attribute, Context, Iterator>
+                    : mpl::true_ {
+            };
+        }
+    }
+}
 
 #endif

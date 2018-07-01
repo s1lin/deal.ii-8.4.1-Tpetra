@@ -5,10 +5,10 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_report_perm
-(
-    Int n,
-    const Int P [ ],
-    Int W [ ],
-    Int prl,
-    Int user
-) ;
+        (
+                Int n,
+                const Int P[],
+                Int W[],
+                Int prl,
+                Int user
+        );

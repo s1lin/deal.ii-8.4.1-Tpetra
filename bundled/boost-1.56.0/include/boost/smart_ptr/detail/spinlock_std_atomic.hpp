@@ -18,64 +18,55 @@
 #include <boost/smart_ptr/detail/yield_k.hpp>
 #include <atomic>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class spinlock
-{
-public:
+        class spinlock {
+        public:
 
-    std::atomic_flag v_;
+            std::atomic_flag v_;
 
-public:
+        public:
 
-    bool try_lock()
-    {
-        return !v_.test_and_set( std::memory_order_acquire );
-    }
+            bool try_lock() {
+                return !v_.test_and_set(std::memory_order_acquire);
+            }
 
-    void lock()
-    {
-        for( unsigned k = 0; !try_lock(); ++k )
-        {
-            boost::detail::yield( k );
-        }
-    }
+            void lock() {
+                for (unsigned k = 0; !try_lock(); ++k) {
+                    boost::detail::yield(k);
+                }
+            }
 
-    void unlock()
-    {
-        v_ .clear( std::memory_order_release );
-    }
+            void unlock() {
+                v_.clear(std::memory_order_release);
+            }
 
-public:
+        public:
 
-    class scoped_lock
-    {
-    private:
+            class scoped_lock {
+            private:
 
-        spinlock & sp_;
+                spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+                scoped_lock(scoped_lock const &);
 
-    public:
+                scoped_lock &operator=(scoped_lock const &);
 
-        explicit scoped_lock( spinlock & sp ): sp_( sp )
-        {
-            sp.lock();
-        }
+            public:
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
-};
+                explicit scoped_lock(spinlock &sp) : sp_(sp) {
+                    sp.lock();
+                }
 
-} // namespace detail
+                ~scoped_lock() {
+                    sp_.unlock();
+                }
+            };
+        };
+
+    } // namespace detail
 } // namespace boost
 
 #define BOOST_DETAIL_SPINLOCK_INIT { ATOMIC_FLAG_INIT }

@@ -5,33 +5,32 @@
 
 #ifndef BOOST_THREAD_SHARED_LOCK_GUARD_HPP
 #define BOOST_THREAD_SHARED_LOCK_GUARD_HPP
+
 #include <boost/thread/detail/config.hpp>
 //#include <boost/thread/locks.hpp>
 #include <boost/thread/lock_options.hpp>
 #include <boost/thread/detail/delete.hpp>
 
-namespace boost
-{
+namespace boost {
 
     template<typename SharedMutex>
-    class shared_lock_guard
-    {
+    class shared_lock_guard {
     private:
-        SharedMutex& m;
+        SharedMutex &m;
 
     public:
         typedef SharedMutex mutex_type;
         BOOST_THREAD_NO_COPYABLE(shared_lock_guard)
-        explicit shared_lock_guard(SharedMutex& m_):
-            m(m_)
-        {
+
+        explicit shared_lock_guard(SharedMutex &m_) :
+                m(m_) {
             m.lock_shared();
         }
-        shared_lock_guard(SharedMutex& m_,adopt_lock_t):
-            m(m_)
-        {}
-        ~shared_lock_guard()
-        {
+
+        shared_lock_guard(SharedMutex &m_, adopt_lock_t) :
+                m(m_) {}
+
+        ~shared_lock_guard() {
             m.unlock_shared();
         }
     };

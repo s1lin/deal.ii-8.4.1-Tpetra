@@ -11,17 +11,18 @@
 #include <boost/mpl/empty.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct empty_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct empty_impl;
 
-    template <>
-    struct empty_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply : fusion::result_of::empty<Sequence> {};
-    };
-}}
+        template<>
+        struct empty_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply : fusion::result_of::empty<Sequence> {
+            };
+        };
+    }
+}
 
 #endif

@@ -26,7 +26,7 @@
 
 namespace boost {
 
-using atomics::atomic_flag;
+    using atomics::atomic_flag;
 
 } // namespace boost
 

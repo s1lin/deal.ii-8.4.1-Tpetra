@@ -11,9 +11,14 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/eval_if.hpp>
 
-namespace boost { template<class T> class reference_wrapper; }
+namespace boost {
+    template<class T>
+    class reference_wrapper;
+}
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost {
+    namespace parameter {
+        namespace aux {
 
 //
 // reference_wrapper support -- because of the forwarding problem,
@@ -24,74 +29,72 @@ namespace boost { namespace parameter { namespace aux {
 
 // is_cv_reference_wrapper returns mpl::true_ if T is of type
 // reference_wrapper<U> cv
-template <class U>
-yes_tag is_cv_reference_wrapper_check(reference_wrapper<U> const volatile*);
-no_tag is_cv_reference_wrapper_check(...);
+            template<class U>
+            yes_tag is_cv_reference_wrapper_check(reference_wrapper<U> const volatile *);
 
-template <class T>
-struct is_cv_reference_wrapper
-{
-    BOOST_STATIC_CONSTANT(
-        bool, value = (
-            sizeof(is_cv_reference_wrapper_check((T*)0)) == sizeof(yes_tag)
-        )
-    );
+            no_tag is_cv_reference_wrapper_check(...);
 
-    typedef mpl::bool_<
+            template<class T>
+            struct is_cv_reference_wrapper {
+                BOOST_STATIC_CONSTANT(
+                        bool, value = (
+                        sizeof(is_cv_reference_wrapper_check((T *) 0)) == sizeof(yes_tag)
+                )
+                );
+
+                typedef mpl::bool_ <
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-        is_cv_reference_wrapper::
-#endif 
-    value> type;
-};
+                is_cv_reference_wrapper::
+#endif
+                value> type;
+            };
 
 #if BOOST_WORKAROUND(MSVC, == 1200)
-template <>
-struct is_cv_reference_wrapper<int>
-  : mpl::false_ {};
+            template <>
+            struct is_cv_reference_wrapper<int>
+              : mpl::false_ {};
 #endif
 
 // Needed for unwrap_cv_reference below. T might be const, so
 // eval_if might fail because of deriving from T const on EDG.
-template <class T>
-struct get_type
-{
-    typedef typename T::type type;
-};
+            template<class T>
+            struct get_type {
+                typedef typename T::type type;
+            };
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-template <class T, class is_reference_wrapper = typename is_cv_reference_wrapper<T>::type>
-struct unwrap_cv_reference
-{
-    typedef T type;
-};
+            template <class T, class is_reference_wrapper = typename is_cv_reference_wrapper<T>::type>
+            struct unwrap_cv_reference
+            {
+                typedef T type;
+            };
 
-template <class T>
-struct unwrap_cv_reference<T const, mpl::false_>
-{
-    typedef T const type;
-};
+            template <class T>
+            struct unwrap_cv_reference<T const, mpl::false_>
+            {
+                typedef T const type;
+            };
 
-template <class T>
-struct unwrap_cv_reference<T, mpl::true_>
-  : T
-{};
+            template <class T>
+            struct unwrap_cv_reference<T, mpl::true_>
+              : T
+            {};
 
-#else 
+#else
 // Produces the unwrapped type to hold a reference to in named<>
 // Can't use boost::unwrap_reference<> here because it
 // doesn't handle the case where T = reference_wrapper<U> cv
-template <class T>
-struct unwrap_cv_reference
-{
-    typedef typename mpl::eval_if<
-        is_cv_reference_wrapper<T>
-      , get_type<T>
-      , mpl::identity<T>
-    >::type type;
-};
+            template<class T>
+            struct unwrap_cv_reference {
+                typedef typename mpl::eval_if<
+                        is_cv_reference_wrapper<T>, get_type<T>, mpl::identity < T>
+                >::type type;
+            };
 #endif
 
-}}} // namespace boost::parameter::aux
+        }
+    }
+} // namespace boost::parameter::aux
 
 #endif // UNWRAP_CV_REFERENCE_050328_HPP
 

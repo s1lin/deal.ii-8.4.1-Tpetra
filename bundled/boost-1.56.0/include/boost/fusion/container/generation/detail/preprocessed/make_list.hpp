@@ -8,7 +8,9 @@
 ==============================================================================*/
 
 #if FUSION_MAX_LIST_SIZE <= 10
+
 #include <boost/fusion/container/generation/detail/preprocessed/make_list10.hpp>
+
 #elif FUSION_MAX_LIST_SIZE <= 20
 #include <boost/fusion/container/generation/detail/preprocessed/make_list20.hpp>
 #elif FUSION_MAX_LIST_SIZE <= 30

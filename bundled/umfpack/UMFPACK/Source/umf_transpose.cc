@@ -22,44 +22,43 @@
 #include "umf_is_permutation.h"
 
 GLOBAL Int UMF_transpose
-(
-    Int n_row,			/* A is n_row-by-n_col */
-    Int n_col,
-    const Int Ap [ ],		/* size n_col+1 */
-    const Int Ai [ ],		/* size nz = Ap [n_col] */
-    const double Ax [ ],	/* size nz if present */
+        (
+                Int n_row,            /* A is n_row-by-n_col */
+                Int n_col,
+                const Int Ap[],        /* size n_col+1 */
+                const Int Ai[],        /* size nz = Ap [n_col] */
+                const double Ax[],    /* size nz if present */
 
-    const Int P [ ],	/* P [k] = i means original row i is kth row in A(P,Q)*/
-			/* P is identity if not present */
-			/* size n_row, if present */
+                const Int P[],    /* P [k] = i means original row i is kth row in A(P,Q)*/
+                /* P is identity if not present */
+                /* size n_row, if present */
 
-    const Int Q [ ],	/* Q [k] = j means original col j is kth col in A(P,Q)*/
-			/* Q is identity if not present */
-			/* size nq, if present */
-    Int nq,		/* size of Q, ignored if Q is (Int *) NULL */
+                const Int Q[],    /* Q [k] = j means original col j is kth col in A(P,Q)*/
+                /* Q is identity if not present */
+                /* size nq, if present */
+                Int nq,        /* size of Q, ignored if Q is (Int *) NULL */
 
-			/* output matrix: Rp, Ri, Rx, and Rz: */
-    Int Rp [ ],		/* size n_row+1 */
-    Int Ri [ ],		/* size nz */
-    double Rx [ ],	/* size nz, if present */
+                /* output matrix: Rp, Ri, Rx, and Rz: */
+                Int Rp[],        /* size n_row+1 */
+                Int Ri[],        /* size nz */
+                double Rx[],    /* size nz, if present */
 
-    Int W [ ],		/* size max (n_row,n_col) workspace */
+                Int W[],        /* size max (n_row,n_col) workspace */
 
-    Int check		/* if true, then check inputs */
+                Int check        /* if true, then check inputs */
 #ifdef COMPLEX
-    , const double Az [ ]	/* size nz */
-    , double Rz [ ]		/* size nz */
-    , Int do_conjugate		/* if true, then do conjugate transpose */
-				/* otherwise, do array transpose */
+, const double Az [ ]	/* size nz */
+, double Rz [ ]		/* size nz */
+, Int do_conjugate		/* if true, then do conjugate transpose */
+            /* otherwise, do array transpose */
 #endif
-)
-{
+) {
 
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    Int i, j, k, p, bp, newj, do_values ;
+    Int i, j, k, p, bp, newj, do_values;
 #ifdef COMPLEX
     Int split ;
 #endif
@@ -75,36 +74,32 @@ GLOBAL Int UMF_transpose
     DEBUG2 (("UMF_transpose: " ID "-by-" ID " nz " ID "\n", n_row, n_col, nz)) ;
 #endif
 
-    if (check)
-    {
-	/* UMFPACK_symbolic skips this check */
-	/* UMFPACK_transpose always does this check */
-	if (!Ai || !Ap || !Ri || !Rp || !W)
-	{
-	    return (UMFPACK_ERROR_argument_missing) ;
-	}
-	if (n_row <= 0 || n_col <= 0)		/* n_row,n_col must be > 0 */
-	{
-	    return (UMFPACK_ERROR_n_nonpositive) ;
-	}
-	if (!UMF_is_permutation (P, W, n_row, n_row) ||
-	    !UMF_is_permutation (Q, W, nq, nq))
-	{
-	    return (UMFPACK_ERROR_invalid_permutation) ;
-	}
-	if (AMD_valid (n_row, n_col, Ap, Ai) != AMD_OK)
-	{
-	    return (UMFPACK_ERROR_invalid_matrix) ;
-	}
+    if (check) {
+        /* UMFPACK_symbolic skips this check */
+        /* UMFPACK_transpose always does this check */
+        if (!Ai || !Ap || !Ri || !Rp || !W) {
+            return (UMFPACK_ERROR_argument_missing);
+        }
+        if (n_row <= 0 || n_col <= 0)        /* n_row,n_col must be > 0 */
+        {
+            return (UMFPACK_ERROR_n_nonpositive);
+        }
+        if (!UMF_is_permutation(P, W, n_row, n_row) ||
+            !UMF_is_permutation(Q, W, nq, nq)) {
+            return (UMFPACK_ERROR_invalid_permutation);
+        }
+        if (AMD_valid(n_row, n_col, Ap, Ai) != AMD_OK) {
+            return (UMFPACK_ERROR_invalid_matrix);
+        }
     }
 
 #ifndef NDEBUG
     DEBUG2 (("UMF_transpose, input matrix:\n")) ;
     UMF_dump_col_matrix (Ax,
 #ifdef COMPLEX
-	Az,
+    Az,
 #endif
-	Ai, Ap, n_row, n_col, nz) ;
+    Ai, Ap, n_row, n_col, nz) ;
 #endif
 
     /* ---------------------------------------------------------------------- */
@@ -113,72 +108,57 @@ GLOBAL Int UMF_transpose
 
     /* use W as workspace for RowCount */
 
-    for (i = 0 ; i < n_row ; i++)
-    {
-	W [i] = 0 ;
-	Rp [i] = 0 ;
+    for (i = 0; i < n_row; i++) {
+        W[i] = 0;
+        Rp[i] = 0;
     }
 
-    if (Q != (Int *) NULL)
-    {
-	for (newj = 0 ; newj < nq ; newj++)
-	{
-	    j = Q [newj] ;
-	    ASSERT (j >= 0 && j < n_col) ;
-	    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-	    {
-		i = Ai [p] ;
-		ASSERT (i >= 0 && i < n_row) ;
-		W [i]++ ;
-	    }
-	}
-    }
-    else
-    {
-	for (j = 0 ; j < n_col ; j++)
-	{
-	    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-	    {
-		i = Ai [p] ;
-		ASSERT (i >= 0 && i < n_row) ;
-		W [i]++ ;
-	    }
-	}
+    if (Q != (Int *) NULL) {
+        for (newj = 0; newj < nq; newj++) {
+            j = Q[newj];
+            ASSERT (j >= 0 && j < n_col);
+            for (p = Ap[j]; p < Ap[j + 1]; p++) {
+                i = Ai[p];
+                ASSERT (i >= 0 && i < n_row);
+                W[i]++;
+            }
+        }
+    } else {
+        for (j = 0; j < n_col; j++) {
+            for (p = Ap[j]; p < Ap[j + 1]; p++) {
+                i = Ai[p];
+                ASSERT (i >= 0 && i < n_row);
+                W[i]++;
+            }
+        }
     }
 
     /* ---------------------------------------------------------------------- */
     /* compute the row pointers for R = A (P,Q) */
     /* ---------------------------------------------------------------------- */
 
-    if (P != (Int *) NULL)
-    {
-	Rp [0] = 0 ;
-	for (k = 0 ; k < n_row ; k++)
-	{
-	    i = P [k] ;
-	    ASSERT (i >= 0 && i < n_row) ;
-	    Rp [k+1] = Rp [k] + W [i] ;
-	}
-	for (k = 0 ; k < n_row ; k++)
-	{
-	    i = P [k] ;
-	    ASSERT (i >= 0 && i < n_row) ;
-	    W [i] = Rp [k] ;
-	}
+    if (P != (Int *) NULL) {
+        Rp[0] = 0;
+        for (k = 0; k < n_row; k++) {
+            i = P[k];
+            ASSERT (i >= 0 && i < n_row);
+            Rp[k + 1] = Rp[k] + W[i];
+        }
+        for (k = 0; k < n_row; k++) {
+            i = P[k];
+            ASSERT (i >= 0 && i < n_row);
+            W[i] = Rp[k];
+        }
+    } else {
+        Rp[0] = 0;
+        for (i = 0; i < n_row; i++) {
+            Rp[i + 1] = Rp[i] + W[i];
+        }
+        for (i = 0; i < n_row; i++) {
+            W[i] = Rp[i];
+        }
     }
-    else
-    {
-	Rp [0] = 0 ;
-	for (i = 0 ; i < n_row ; i++)
-	{
-	    Rp [i+1] = Rp [i] + W [i] ;
-	}
-	for (i = 0 ; i < n_row ; i++)
-	{
-	    W [i] = Rp [i] ;
-	}
-    }
-    ASSERT (Rp [n_row] <= Ap [n_col]) ;
+    ASSERT (Rp[n_row] <= Ap[n_col]);
 
     /* at this point, W holds the permuted row pointers */
 
@@ -186,215 +166,198 @@ GLOBAL Int UMF_transpose
     /* construct the row form of B */
     /* ---------------------------------------------------------------------- */
 
-    do_values = Ax && Rx ;
+    do_values = Ax && Rx;
 
 #ifdef COMPLEX
     split = SPLIT (Az) && SPLIT (Rz) ;
 
     if (do_conjugate && do_values)
     {
-	if (Q != (Int *) NULL)
-	{
-	    if (split)
-	    {
-		/* R = A (P,Q)' */
-		for (newj = 0 ; newj < nq ; newj++)
-		{
-		    j = Q [newj] ;
-		    ASSERT (j >= 0 && j < n_col) ;
-		    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-		    {
-			bp = W [Ai [p]]++ ;
-			Ri [bp] = newj ;
-			Rx [bp] = Ax [p] ;
-			Rz [bp] = -Az [p] ;
-		    }
-		}
-	    }
-	    else
-	    {
-		/* R = A (P,Q)' (merged complex values) */
-		for (newj = 0 ; newj < nq ; newj++)
-		{
-		    j = Q [newj] ;
-		    ASSERT (j >= 0 && j < n_col) ;
-		    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-		    {
-			bp = W [Ai [p]]++ ;
-			Ri [bp] = newj ;
-			Rx [2*bp] = Ax [2*p] ;
-			Rx [2*bp+1] = -Ax [2*p+1] ;
-		    }
-		}
-	    }
-	}
-	else
-	{
-	    if (split)
-	    {
-		/* R = A (P,:)' */
-		for (j = 0 ; j < n_col ; j++)
-		{
-		    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-		    {
-			bp = W [Ai [p]]++ ;
-			Ri [bp] = j ;
-			Rx [bp] = Ax [p] ;
-			Rz [bp] = -Az [p] ;
-		    }
-		}
-	    }
-	    else
-	    {
-		/* R = A (P,:)' (merged complex values) */
-		for (j = 0 ; j < n_col ; j++)
-		{
-		    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-		    {
-			bp = W [Ai [p]]++ ;
-			Ri [bp] = j ;
-			Rx [2*bp] = Ax [2*p] ;
-			Rx [2*bp+1] = -Ax [2*p+1] ;
-		    }
-		}
-	    }
-	}
+    if (Q != (Int *) NULL)
+    {
+        if (split)
+        {
+        /* R = A (P,Q)' */
+        for (newj = 0 ; newj < nq ; newj++)
+        {
+            j = Q [newj] ;
+            ASSERT (j >= 0 && j < n_col) ;
+            for (p = Ap [j] ; p < Ap [j+1] ; p++)
+            {
+            bp = W [Ai [p]]++ ;
+            Ri [bp] = newj ;
+            Rx [bp] = Ax [p] ;
+            Rz [bp] = -Az [p] ;
+            }
+        }
+        }
+        else
+        {
+        /* R = A (P,Q)' (merged complex values) */
+        for (newj = 0 ; newj < nq ; newj++)
+        {
+            j = Q [newj] ;
+            ASSERT (j >= 0 && j < n_col) ;
+            for (p = Ap [j] ; p < Ap [j+1] ; p++)
+            {
+            bp = W [Ai [p]]++ ;
+            Ri [bp] = newj ;
+            Rx [2*bp] = Ax [2*p] ;
+            Rx [2*bp+1] = -Ax [2*p+1] ;
+            }
+        }
+        }
+    }
+    else
+    {
+        if (split)
+        {
+        /* R = A (P,:)' */
+        for (j = 0 ; j < n_col ; j++)
+        {
+            for (p = Ap [j] ; p < Ap [j+1] ; p++)
+            {
+            bp = W [Ai [p]]++ ;
+            Ri [bp] = j ;
+            Rx [bp] = Ax [p] ;
+            Rz [bp] = -Az [p] ;
+            }
+        }
+        }
+        else
+        {
+        /* R = A (P,:)' (merged complex values) */
+        for (j = 0 ; j < n_col ; j++)
+        {
+            for (p = Ap [j] ; p < Ap [j+1] ; p++)
+            {
+            bp = W [Ai [p]]++ ;
+            Ri [bp] = j ;
+            Rx [2*bp] = Ax [2*p] ;
+            Rx [2*bp+1] = -Ax [2*p+1] ;
+            }
+        }
+        }
+    }
     }
     else
 #endif
     {
-	if (Q != (Int *) NULL)
-	{
-	    if (do_values)
-	    {
+        if (Q != (Int *) NULL) {
+            if (do_values) {
 #ifdef COMPLEX
-		if (split)
+                if (split)
 #endif
-		{
-		    /* R = A (P,Q).' */
-		    for (newj = 0 ; newj < nq ; newj++)
-		    {
-			j = Q [newj] ;
-			ASSERT (j >= 0 && j < n_col) ;
-			for (p = Ap [j] ; p < Ap [j+1] ; p++)
-			{
-			    bp = W [Ai [p]]++ ;
-			    Ri [bp] = newj ;
-			    Rx [bp] = Ax [p] ;
+                {
+                    /* R = A (P,Q).' */
+                    for (newj = 0; newj < nq; newj++) {
+                        j = Q[newj];
+                        ASSERT (j >= 0 && j < n_col);
+                        for (p = Ap[j]; p < Ap[j + 1]; p++) {
+                            bp = W[Ai[p]]++;
+                            Ri[bp] = newj;
+                            Rx[bp] = Ax[p];
 #ifdef COMPLEX
-			    Rz [bp] = Az [p] ;
+                            Rz [bp] = Az [p] ;
 #endif
-			}
-		    }
-		}
+                        }
+                    }
+                }
 #ifdef COMPLEX
-		else
-		{
-		    /* R = A (P,Q).' (merged complex values) */
-		    for (newj = 0 ; newj < nq ; newj++)
-		    {
-			j = Q [newj] ;
-			ASSERT (j >= 0 && j < n_col) ;
-			for (p = Ap [j] ; p < Ap [j+1] ; p++)
-			{
-			    bp = W [Ai [p]]++ ;
-			    Ri [bp] = newj ;
-			    Rx [2*bp] = Ax [2*p] ;
-			    Rx [2*bp+1] = Ax [2*p+1] ;
-			}
-		    }
-		}
+                else
+                {
+                    /* R = A (P,Q).' (merged complex values) */
+                    for (newj = 0 ; newj < nq ; newj++)
+                    {
+                    j = Q [newj] ;
+                    ASSERT (j >= 0 && j < n_col) ;
+                    for (p = Ap [j] ; p < Ap [j+1] ; p++)
+                    {
+                        bp = W [Ai [p]]++ ;
+                        Ri [bp] = newj ;
+                        Rx [2*bp] = Ax [2*p] ;
+                        Rx [2*bp+1] = Ax [2*p+1] ;
+                    }
+                    }
+                }
 #endif
-	    }
-	    else
-	    {
-		/* R = pattern of A (P,Q).' */
-		for (newj = 0 ; newj < nq ; newj++)
-		{
-		    j = Q [newj] ;
-		    ASSERT (j >= 0 && j < n_col) ;
-		    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-		    {
-			Ri [W [Ai [p]]++] = newj ;
-		    }
-		}
-	    }
-	}
-	else
-	{
-	    if (do_values)
-	    {
+            } else {
+                /* R = pattern of A (P,Q).' */
+                for (newj = 0; newj < nq; newj++) {
+                    j = Q[newj];
+                    ASSERT (j >= 0 && j < n_col);
+                    for (p = Ap[j]; p < Ap[j + 1]; p++) {
+                        Ri[W[Ai[p]]++] = newj;
+                    }
+                }
+            }
+        } else {
+            if (do_values) {
 #ifdef COMPLEX
-		if (split)
+                if (split)
 #endif
-		{
-		    /* R = A (P,:).' */
-		    for (j = 0 ; j < n_col ; j++)
-		    {
-			for (p = Ap [j] ; p < Ap [j+1] ; p++)
-			{
-			    bp = W [Ai [p]]++ ;
-			    Ri [bp] = j ;
-			    Rx [bp] = Ax [p] ;
+                {
+                    /* R = A (P,:).' */
+                    for (j = 0; j < n_col; j++) {
+                        for (p = Ap[j]; p < Ap[j + 1]; p++) {
+                            bp = W[Ai[p]]++;
+                            Ri[bp] = j;
+                            Rx[bp] = Ax[p];
 #ifdef COMPLEX
-			    Rz [bp] = Az [p] ;
+                            Rz [bp] = Az [p] ;
 #endif
-			}
-		    }
-		}
+                        }
+                    }
+                }
 #ifdef COMPLEX
-		else
-		{
-		    /* R = A (P,:).' (merged complex values) */
-		    for (j = 0 ; j < n_col ; j++)
-		    {
-			for (p = Ap [j] ; p < Ap [j+1] ; p++)
-			{
-			    bp = W [Ai [p]]++ ;
-			    Ri [bp] = j ;
-			    Rx [2*bp] = Ax [2*p] ;
-			    Rx [2*bp+1] = Ax [2*p+1] ;
-			}
-		    }
-		}
+                else
+                {
+                    /* R = A (P,:).' (merged complex values) */
+                    for (j = 0 ; j < n_col ; j++)
+                    {
+                    for (p = Ap [j] ; p < Ap [j+1] ; p++)
+                    {
+                        bp = W [Ai [p]]++ ;
+                        Ri [bp] = j ;
+                        Rx [2*bp] = Ax [2*p] ;
+                        Rx [2*bp+1] = Ax [2*p+1] ;
+                    }
+                    }
+                }
 #endif
-	    }
-	    else
-	    {
-		/* R = pattern of A (P,:).' */
-		for (j = 0 ; j < n_col ; j++)
-		{
-		    for (p = Ap [j] ; p < Ap [j+1] ; p++)
-		    {
-			Ri [W [Ai [p]]++] = j ;
-		    }
-		}
-	    }
-	}
+            } else {
+                /* R = pattern of A (P,:).' */
+                for (j = 0; j < n_col; j++) {
+                    for (p = Ap[j]; p < Ap[j + 1]; p++) {
+                        Ri[W[Ai[p]]++] = j;
+                    }
+                }
+            }
+        }
     }
 
 #ifndef NDEBUG
     for (k = 0 ; k < n_row ; k++)
     {
-	if (P != (Int *) NULL)
-	{
-	    i = P [k] ;
-	}
-	else
-	{
-	    i = k ;
-	}
-	DEBUG3 ((ID ":  W[i] " ID " Rp[k+1] " ID "\n", i, W [i], Rp [k+1])) ;
-	ASSERT (W [i] == Rp [k+1]) ;
+    if (P != (Int *) NULL)
+    {
+        i = P [k] ;
+    }
+    else
+    {
+        i = k ;
+    }
+    DEBUG3 ((ID ":  W[i] " ID " Rp[k+1] " ID "\n", i, W [i], Rp [k+1])) ;
+    ASSERT (W [i] == Rp [k+1]) ;
     }
     DEBUG2 (("UMF_transpose, output matrix:\n")) ;
     UMF_dump_col_matrix (Rx,
 #ifdef COMPLEX
-	Rz,
+    Rz,
 #endif
-	Ri, Rp, n_col, n_row, Rp [n_row]) ;
+    Ri, Rp, n_col, n_row, Rp [n_row]) ;
     ASSERT (AMD_valid (n_col, n_row, Rp, Ri) == AMD_OK) ;
 #endif
 
-    return (UMFPACK_OK) ;
+    return (UMFPACK_OK);
 }

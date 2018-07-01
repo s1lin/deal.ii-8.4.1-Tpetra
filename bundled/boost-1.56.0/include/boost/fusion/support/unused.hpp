@@ -11,6 +11,7 @@
 #include <iosfwd>
 
 #include <boost/config.hpp>
+
 #if defined(BOOST_MSVC)
 # pragma warning(push)
 # pragma warning(disable: 4522) // multiple assignment operators specified warning
@@ -18,73 +19,71 @@
 
 #define BOOST_FUSION_UNUSED_HAS_IO
 
-namespace boost { namespace fusion
-{
-    struct unused_type
-    {
-        BOOST_FUSION_GPU_ENABLED
-        unused_type()
-        {
-        }
-
-        template <typename T>
-        BOOST_FUSION_GPU_ENABLED
-        unused_type(T const&)
-        {
-        }
-
-        template <typename T>
-        BOOST_FUSION_GPU_ENABLED
-        unused_type const&
-        operator=(T const&) const
-        {
-            return *this;
-        }
-
-        template <typename T>
-        BOOST_FUSION_GPU_ENABLED
-        unused_type&
-        operator=(T const&)
-        {
-            return *this;
-        }
-
-        BOOST_FUSION_GPU_ENABLED
-        unused_type const&
-        operator=(unused_type const&) const
-        {
-            return *this;
-        }
-
-        BOOST_FUSION_GPU_ENABLED
-        unused_type&
-        operator=(unused_type const&)
-        {
-            return *this;
-        }
-    };
-
-    unused_type const unused = unused_type();
-
-    namespace detail
-    {
-        struct unused_only
-        {
+namespace boost {
+    namespace fusion {
+        struct unused_type {
             BOOST_FUSION_GPU_ENABLED
-            unused_only(unused_type const&) {}
+            unused_type() {
+            }
+
+            template<typename T>
+            BOOST_FUSION_GPU_ENABLED
+            unused_type(T const &) {
+            }
+
+            template<typename T>
+            BOOST_FUSION_GPU_ENABLED
+                    unused_type
+            const&
+
+            operator=(T const &) const {
+                return *this;
+            }
+
+            template<typename T>
+            BOOST_FUSION_GPU_ENABLED
+                    unused_type
+            &
+
+            operator=(T const &) {
+                return *this;
+            }
+
+            BOOST_FUSION_GPU_ENABLED
+                    unused_type
+            const&
+
+            operator=(unused_type const &) const {
+                return *this;
+            }
+
+            BOOST_FUSION_GPU_ENABLED
+                    unused_type
+            &
+
+            operator=(unused_type const &) {
+                return *this;
+            }
         };
-    }
 
-    inline std::ostream& operator<<(std::ostream& out, detail::unused_only const&)
-    {
-        return out;
-    }
+        unused_type const unused = unused_type();
 
-    inline std::istream& operator>>(std::istream& in, unused_type&)
-    {
-        return in;
+        namespace detail {
+            struct unused_only {
+                BOOST_FUSION_GPU_ENABLED
+                unused_only(unused_type const &) {}
+            };
+        }
+
+        inline std::ostream &operator<<(std::ostream &out, detail::unused_only const &) {
+            return out;
+        }
+
+        inline std::istream &operator>>(std::istream &in, unused_type &) {
+            return in;
+        }
     }
-}}
+}
 
 #if defined(BOOST_MSVC)
 # pragma warning(pop)

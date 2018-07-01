@@ -40,7 +40,8 @@ namespace boost {
 //     ...
 //   };
 //
-template <typename T> class recursive_wrapper;
+    template<typename T>
+    class recursive_wrapper;
 
 ///////////////////////////////////////////////////////////////////////////////
 // metafunction is_recursive_wrapper (modeled on code by David Abrahams)
@@ -48,26 +49,24 @@ template <typename T> class recursive_wrapper;
 // True iff specified type matches recursive_wrapper<T>.
 //
 
-namespace detail {
+    namespace detail {
 
 
-template <typename T>
-struct is_recursive_wrapper_impl
-    : mpl::false_
-{
-};
+        template<typename T>
+        struct is_recursive_wrapper_impl
+                : mpl::false_ {
+        };
 
-template <typename T>
-struct is_recursive_wrapper_impl< recursive_wrapper<T> >
-    : mpl::true_
-{
-};
+        template<typename T>
+        struct is_recursive_wrapper_impl<recursive_wrapper<T> >
+                : mpl::true_ {
+        };
 
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-      is_recursive_wrapper
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(
+            is_recursive_wrapper
     , T
     , (::boost::detail::is_recursive_wrapper_impl<T>::value)
     )
@@ -79,21 +78,19 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
 //
 
 
-template <typename T>
-struct unwrap_recursive
-{
-    typedef T type;
+    template<typename T>
+    struct unwrap_recursive {
+        typedef T type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,unwrap_recursive,(T))
-};
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(1,unwrap_recursive,(T))
+    };
 
-template <typename T>
-struct unwrap_recursive< recursive_wrapper<T> >
-{
-    typedef T type;
+    template<typename T>
+    struct unwrap_recursive<recursive_wrapper<T> > {
+        typedef T type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,unwrap_recursive,(T))
-};
+        BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,unwrap_recursive,(T))
+    };
 
 
 } // namespace boost

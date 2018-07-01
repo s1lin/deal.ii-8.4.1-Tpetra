@@ -22,59 +22,64 @@
 #include <boost/serialization/serialization.hpp>
 
 namespace boost {
-namespace archive {
-    namespace detail {
-        template<class Archive> class interface_oarchive;
-        template<class Archive> class interface_iarchive;
-    } // namespace detail
-} // namespace archive
+    namespace archive {
+        namespace detail {
+            template<class Archive>
+            class interface_oarchive;
 
-namespace serialization {
+            template<class Archive>
+            class interface_iarchive;
+        } // namespace detail
+    } // namespace archive
+
+    namespace serialization {
 
 //namespace detail {
-template<class Archive, class T>
-struct free_saver {
-    static void invoke(
-        Archive & ar, 
-        const  T & t, 
-        const unsigned int file_version
-    ){
-        // use function overload (version_type) to workaround
-        // two-phase lookup issue
-        const version_type v(file_version);
-        save(ar, t, v);
-    }
-};
-template<class Archive, class T>
-struct free_loader {
-    static void invoke(
-        Archive & ar, 
-        T & t, 
-        const unsigned int file_version
-    ){
-        // use function overload (version_type) to workaround
-        // two-phase lookup issue
-        const version_type v(file_version);
-        load(ar, t, v);
-    }
-};
+        template<class Archive, class T>
+        struct free_saver {
+            static void invoke(
+                    Archive &ar,
+                    const T &t,
+                    const unsigned int file_version
+            ) {
+                // use function overload (version_type) to workaround
+                // two-phase lookup issue
+                const version_type v(file_version);
+                save(ar, t, v);
+            }
+        };
+
+        template<class Archive, class T>
+        struct free_loader {
+            static void invoke(
+                    Archive &ar,
+                    T &t,
+                    const unsigned int file_version
+            ) {
+                // use function overload (version_type) to workaround
+                // two-phase lookup issue
+                const version_type v(file_version);
+                load(ar, t, v);
+            }
+        };
 //} // namespace detail
 
-template<class Archive, class T>
-inline void split_free(
-    Archive & ar, 
-    T & t, 
-    const unsigned int file_version
-){
-    typedef typename mpl::eval_if<
-        typename Archive::is_saving,
-        mpl::identity</* detail:: */ free_saver<Archive, T> >, 
-        mpl::identity</* detail:: */ free_loader<Archive, T> >
-    >::type typex;
-    typex::invoke(ar, t, file_version);
-}
+        template<class Archive, class T>
+        inline void split_free(
+                Archive &ar,
+                T &t,
+                const unsigned int file_version
+        ) {
+            typedef typename mpl::eval_if<
+                    typename Archive::is_saving,
+            mpl::identity </* detail:: */ free_saver<Archive, T> > ,
+                    mpl::identity </* detail:: */ free_loader<Archive, T> >
+                    > ::type
+            typex;
+            typex::invoke(ar, t, file_version);
+        }
 
-} // namespace serialization
+    } // namespace serialization
 } // namespace boost
 
 #define BOOST_SERIALIZATION_SPLIT_FREE(T)       \

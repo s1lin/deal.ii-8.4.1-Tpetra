@@ -31,16 +31,17 @@ namespace boost {
 //
 // The exception thrown in the event of a failed get of a value.
 //
-class BOOST_SYMBOL_VISIBLE bad_get
-    : public std::exception
-{
-public: // std::exception implementation
+    class BOOST_SYMBOL_VISIBLE bad_get
 
-    virtual const char * what() const BOOST_NOEXCEPT_OR_NOTHROW
-    {
-        return "boost::bad_get: "
-               "failed value get using boost::get";
-    }
+    : public std::exception {
+    public: // std::exception implementation
+
+    virtual const char *what() const
+
+    BOOST_NOEXCEPT_OR_NOTHROW {
+    return "boost::bad_get: "
+    "failed value get using boost::get";
+}
 
 };
 
@@ -51,40 +52,43 @@ public: // std::exception implementation
 // Otherwise: pointer ver. returns 0; reference ver. throws bad_get.
 //
 
-namespace detail { namespace variant {
+namespace detail {
+    namespace variant {
 
 // (detail) class template get_visitor
 //
 // Generic static visitor that: if the value is of the specified type,
 // returns a pointer to the value it visits; else a null pointer.
 //
-template <typename T>
-struct get_visitor
-{
-private: // private typedefs
+        template<typename T>
+        struct get_visitor {
+        private: // private typedefs
 
-    typedef typename add_pointer<T>::type pointer;
-    typedef typename add_reference<T>::type reference;
+            typedef typename add_pointer<T>::type pointer;
+            typedef typename add_reference<T>::type reference;
 
-public: // visitor typedefs
+        public: // visitor typedefs
 
-    typedef pointer result_type;
+            typedef pointer result_type;
 
-public: // visitor interfaces
+        public: // visitor interfaces
 
-    pointer operator()(reference operand) const BOOST_NOEXCEPT
-    {
-        return boost::addressof(operand);
+            pointer operator()(reference operand) const
+
+            BOOST_NOEXCEPT {
+                return boost::addressof(operand);
+            }
+
+            template<typename U>
+            pointer operator()(const U &) const
+
+            BOOST_NOEXCEPT {
+                return static_cast<pointer>(0);
+            }
+        };
+
     }
-
-    template <typename U>
-    pointer operator()(const U&) const BOOST_NOEXCEPT
-    {
-        return static_cast<pointer>(0);
-    }
-};
-
-}} // namespace detail::variant
+} // namespace detail::variant
 
 #ifndef BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE
 #   if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
@@ -95,44 +99,46 @@ public: // visitor interfaces
 #   endif
 #endif
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template<typename U, BOOST_VARIANT_ENUM_PARAMS(typename T)>
 inline
-    typename add_pointer<U>::type
+typename add_pointer<U>::type
 get(
-      boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    ) BOOST_NOEXCEPT
-{
-    typedef typename add_pointer<U>::type U_ptr;
-    if (!operand) return static_cast<U_ptr>(0);
+        boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> *operand BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
+)
 
-    detail::variant::get_visitor<U> v;
-    return operand->apply_visitor(v);
+BOOST_NOEXCEPT
+{
+typedef typename add_pointer<U>::type U_ptr;
+if (!operand) return static_cast<U_ptr>(0);
+
+detail::variant::get_visitor<U> v;
+return operand->
+apply_visitor(v);
 }
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template<typename U, BOOST_VARIANT_ENUM_PARAMS(typename T)>
 inline
-    typename add_pointer<const U>::type
+typename add_pointer<const U>::type
 get(
-      const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    ) BOOST_NOEXCEPT
-{
-    typedef typename add_pointer<const U>::type U_ptr;
-    if (!operand) return static_cast<U_ptr>(0);
+        const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> *operand BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
+)
 
-    detail::variant::get_visitor<const U> v;
-    return operand->apply_visitor(v);
+BOOST_NOEXCEPT
+{
+typedef typename add_pointer<const U>::type U_ptr;
+if (!operand) return static_cast<U_ptr>(0);
+
+detail::variant::get_visitor<const U> v;
+return operand->
+apply_visitor(v);
 }
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template<typename U, BOOST_VARIANT_ENUM_PARAMS(typename T)>
 inline
-    typename add_reference<U>::type
+typename add_reference<U>::type
 get(
-      boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
-{
+        boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> &operand BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
+) {
     typedef typename add_pointer<U>::type U_ptr;
     U_ptr result = get<U>(&operand);
 
@@ -141,14 +147,12 @@ get(
     return *result;
 }
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template<typename U, BOOST_VARIANT_ENUM_PARAMS(typename T)>
 inline
-    typename add_reference<const U>::type
+typename add_reference<const U>::type
 get(
-      const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
-{
+        const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> &operand BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
+) {
     typedef typename add_pointer<const U>::type U_ptr;
     U_ptr result = get<const U>(&operand);
 

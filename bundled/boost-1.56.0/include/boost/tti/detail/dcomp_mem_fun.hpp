@@ -46,7 +46,7 @@
 
 #else
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait, name) \
   template<class BOOST_TTI_DETAIL_TP_T> \
   struct BOOST_PP_CAT(trait,_detail_hcmf) \
     { \

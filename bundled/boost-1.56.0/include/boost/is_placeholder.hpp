@@ -3,7 +3,7 @@
 
 // MS compatible compilers support #pragma once
 
-#if defined( _MSC_VER ) && ( _MSC_VER >= 1020 )
+#if defined( _MSC_VER ) && (_MSC_VER >= 1020)
 # pragma once
 #endif
 
@@ -18,13 +18,14 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 
 
-namespace boost
-{
+namespace boost {
 
-template< class T > struct is_placeholder
-{
-    enum _vt { value = 0 };
-};
+    template<class T>
+    struct is_placeholder {
+        enum _vt {
+            value = 0
+        };
+    };
 
 } // namespace boost
 

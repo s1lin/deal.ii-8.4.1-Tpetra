@@ -19,15 +19,15 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for permittivity : L^-3 M^-1 T^4 I^2
-typedef derived_dimension<length_base_dimension,-3,
-                          mass_base_dimension,-1,
-                          time_base_dimension,4,
-                          current_base_dimension,2>::type permittivity_dimension;                
+        typedef derived_dimension<length_base_dimension, -3,
+                mass_base_dimension, -1,
+                time_base_dimension, 4,
+                current_base_dimension, 2>::type permittivity_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

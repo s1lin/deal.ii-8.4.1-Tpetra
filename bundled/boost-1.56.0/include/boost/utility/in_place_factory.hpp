@@ -17,10 +17,12 @@
 
 namespace boost {
 
-class in_place_factory_base {} ;
+    class in_place_factory_base {
+    };
 
 #define  BOOST_PP_ITERATION_LIMITS (0, BOOST_MAX_INPLACE_FACTORY_ARITY)
 #define  BOOST_PP_FILENAME_1 <boost/utility/in_place_factory.hpp>
+
 #include BOOST_PP_ITERATE()
 
 } // namespace boost

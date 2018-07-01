@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_NIL
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_NIL
+
 #include <boost/spirit/home/classic/core/nil.hpp>
+
 #endif

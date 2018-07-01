@@ -10,14 +10,14 @@
 #pragma once
 #endif
 
-namespace boost { namespace spirit { namespace karma
-{
-    enum debug_handler_state
-    {
-        pre_generate
-      , successful_generate
-      , failed_generate
-    };
-}}}
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            enum debug_handler_state {
+                pre_generate, successful_generate, failed_generate
+            };
+        }
+    }
+}
 
 #endif

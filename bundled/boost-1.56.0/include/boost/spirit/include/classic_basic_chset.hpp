@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_BASIC_CHSET
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_BASIC_CHSET
+
 #include <boost/spirit/home/classic/utility/impl/chset/basic_chset.hpp>
+
 #endif

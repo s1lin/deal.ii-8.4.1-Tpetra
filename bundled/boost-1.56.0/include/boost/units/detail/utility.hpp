@@ -17,7 +17,9 @@
 
 #if defined(__GLIBCXX__) || defined(__GLIBCPP__)
 #define BOOST_UNITS_USE_DEMANGLING
+
 #include <cxxabi.h>
+
 #endif // __GNUC__
 
 #ifdef BOOST_UNITS_USE_DEMANGLING
@@ -26,46 +28,43 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace detail {
+        namespace detail {
 
-inline
-std::string
-demangle(const char* name)
-{
-    // need to demangle C++ symbols
-    char*       realname;
-    std::size_t len; 
-    int         stat;
-     
-    realname = abi::__cxa_demangle(name,NULL,&len,&stat);
-    
-    if (realname != NULL)
-    {
-        std::string   out(realname);
-        
-        std::free(realname);
-        
-        boost::replace_all(out,"boost::units::","");
-        
-        return out;
-    }
-    
-    return std::string("demangle :: error - unable to demangle specified symbol");
-}
+            inline
+            std::string
+            demangle(const char *name) {
+                // need to demangle C++ symbols
+                char *realname;
+                std::size_t len;
+                int stat;
 
-} // namespace detail
+                realname = abi::__cxa_demangle(name, NULL, &len, &stat);
 
-template<class L>
-std::string simplify_typename(const L& /*source*/)
-{
-    const std::string   demangled = detail::demangle(typeid(L).name());
+                if (realname != NULL) {
+                    std::string out(realname);
 
-    return demangled;
-}
+                    std::free(realname);
 
-} // namespace units
+                    boost::replace_all(out, "boost::units::", "");
+
+                    return out;
+                }
+
+                return std::string("demangle :: error - unable to demangle specified symbol");
+            }
+
+        } // namespace detail
+
+        template<class L>
+        std::string simplify_typename(const L & /*source*/) {
+            const std::string demangled = detail::demangle(typeid(L).name());
+
+            return demangled;
+        }
+
+    } // namespace units
 
 } // namespace boost
 

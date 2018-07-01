@@ -17,13 +17,13 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for magnetic field intensity : L^-1 I
-typedef derived_dimension<length_base_dimension,-1,
-                          current_base_dimension,1>::type magnetic_field_intensity_dimension;      
+        typedef derived_dimension<length_base_dimension, -1,
+                current_base_dimension, 1>::type magnetic_field_intensity_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

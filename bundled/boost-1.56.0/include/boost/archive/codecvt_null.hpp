@@ -41,60 +41,63 @@ namespace std {
 #endif
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-template<class Ch>
-class codecvt_null;
+        template<class Ch>
+        class codecvt_null;
 
-template<>
-class codecvt_null<char> : public std::codecvt<char, char, std::mbstate_t>
-{
-    virtual bool do_always_noconv() const throw() {
-        return true;
-    }
-public:
-    explicit codecvt_null(std::size_t no_locale_manage = 0) :
-        std::codecvt<char, char, std::mbstate_t>(no_locale_manage)
-    {}
-};
+        template<>
+        class codecvt_null<char> : public std::codecvt<char, char, std::mbstate_t> {
+            virtual bool do_always_noconv() const throw() {
+                return true;
+            }
 
-template<>
-class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>
-{
-    virtual BOOST_WARCHIVE_DECL(std::codecvt_base::result)
-    do_out(
-        std::mbstate_t & state,
-        const wchar_t * first1,
-        const wchar_t * last1,
-        const wchar_t * & next1,
-        char * first2,
-        char * last2,
-        char * & next2
-    ) const;
-    virtual BOOST_WARCHIVE_DECL(std::codecvt_base::result)
-    do_in(
-        std::mbstate_t & state,
-        const char * first1,
-        const char * last1,
-        const char * & next1,
-        wchar_t * first2,
-        wchar_t * last2,
-        wchar_t * & next2
-    ) const;
-    virtual int do_encoding( ) const throw( ){
-        return sizeof(wchar_t) / sizeof(char);
-    }
-    virtual int do_max_length( ) const throw( ){
-        return do_encoding();
-    }
-};
+        public:
+            explicit codecvt_null(std::size_t no_locale_manage = 0) :
+                    std::codecvt<char, char, std::mbstate_t>(no_locale_manage) {}
+        };
 
-} // namespace archive
+        template<>
+        class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t> {
+            virtual BOOST_WARCHIVE_DECL(std::codecvt_base::result)
+            do_out(
+                    std::mbstate_t
+            & state,
+            const wchar_t *first1,
+            const wchar_t *last1,
+            const wchar_t *&next1,
+            char *first2,
+            char *last2,
+            char *&next2
+            ) const;
+            virtual BOOST_WARCHIVE_DECL(std::codecvt_base::result)
+            do_in(
+                    std::mbstate_t
+            & state,
+            const char *first1,
+            const char *last1,
+            const char *&next1,
+            wchar_t *first2,
+            wchar_t *last2,
+            wchar_t *&next2
+            ) const;
+
+            virtual int do_encoding() const throw() {
+                return sizeof(wchar_t) / sizeof(char);
+            }
+
+            virtual int do_max_length() const throw() {
+                return do_encoding();
+            }
+        };
+
+    } // namespace archive
 } // namespace boost
 
 #ifdef BOOST_MSVC
 #  pragma warning(pop)
 #endif
+
 #include <boost/archive/detail/abi_suffix.hpp> // pop pragmas
 
 #endif //BOOST_ARCHIVE_CODECVT_NULL_HPP

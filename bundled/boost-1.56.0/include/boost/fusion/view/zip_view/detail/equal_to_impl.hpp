@@ -26,38 +26,37 @@
 
 #include <boost/fusion/iterator/equal_to.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct zip_view_iterator_tag;
+        struct zip_view_iterator_tag;
 
-    namespace detail
-    {
-        template<typename It1, typename It2>
-        struct zip_iterators_equal
-        {
-            typedef mpl::zip_view<mpl::vector2<typename It1::iterators, typename It2::iterators> > zipped;
-            typedef mpl::transform_view<zipped, mpl::unpack_args<result_of::equal_to<mpl::_,mpl::_> > > transformed;
-
-            typedef typename mpl::find_if<transformed, mpl::equal_to<mpl::_, mpl::false_> >::type found;
-
-            typedef typename is_same<typename mpl::end<transformed>::type, found>::type type;
-        };
-    }
-
-    namespace extension
-    {
-        template<typename Tag>
-        struct equal_to_impl;
-
-        template<>
-        struct equal_to_impl<zip_view_iterator_tag>
-        {
+        namespace detail {
             template<typename It1, typename It2>
-            struct apply
-                : detail::zip_iterators_equal<It1, It2>::type
-            {};
-        };
+            struct zip_iterators_equal {
+                typedef mpl::zip_view <mpl::vector2<typename It1::iterators, typename It2::iterators>> zipped;
+                typedef mpl::transform_view <zipped, mpl::unpack_args<
+                        result_of::equal_to < mpl::_, mpl::_>> > transformed;
+
+                typedef typename mpl::find_if<transformed, mpl::equal_to < mpl::_, mpl::false_> >::type found;
+
+                typedef typename is_same<typename mpl::end<transformed>::type, found>::type type;
+            };
+        }
+
+        namespace extension {
+            template<typename Tag>
+            struct equal_to_impl;
+
+            template<>
+            struct equal_to_impl<zip_view_iterator_tag> {
+                template<typename It1, typename It2>
+                struct apply
+                        : detail::zip_iterators_equal<It1, It2>::type {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

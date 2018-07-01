@@ -11,7 +11,7 @@
 
 #define BOOST_PLATFORM "SGI Irix"
 
-#define BOOST_NO_SWPRINTF 
+#define BOOST_NO_SWPRINTF
 //
 // these are not auto detected by POSIX feature tests:
 //
@@ -19,12 +19,13 @@
 #define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 
 #ifdef __GNUC__
-   // GNU C on IRIX does not support threads (checked up to gcc 3.3)
+// GNU C on IRIX does not support threads (checked up to gcc 3.3)
 #  define BOOST_DISABLE_THREADS
 #endif
 
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
+
 #include <boost/config/posix_features.hpp>
 
 

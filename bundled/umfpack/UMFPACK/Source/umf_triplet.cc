@@ -33,42 +33,41 @@ GLOBAL Int UMF_triplet_nomap_x
 GLOBAL Int UMF_triplet_nomap_nox
 #endif
 #endif
-(
-    Int n_row,
-    Int n_col,
-    Int nz,
-    const Int Ti [ ],		/* size nz */
-    const Int Tj [ ],		/* size nz */
-    Int Ap [ ],			/* size n_col + 1 */
-    Int Ai [ ],			/* size nz */
-    Int Rp [ ],			/* size n_row + 1 */
-    Int Rj [ ],			/* size nz */
-    Int W [ ],			/* size max (n_row, n_col) */
-    Int RowCount [ ]		/* size n_row */
+        (
+                Int n_row,
+                Int n_col,
+                Int nz,
+                const Int Ti[],        /* size nz */
+                const Int Tj[],        /* size nz */
+                Int Ap[],            /* size n_col + 1 */
+                Int Ai[],            /* size nz */
+                Int Rp[],            /* size n_row + 1 */
+                Int Rj[],            /* size nz */
+                Int W[],            /* size max (n_row, n_col) */
+                Int RowCount[]        /* size n_row */
 #ifdef DO_VALUES
-    , const double Tx [ ]	/* size nz */
-    , double Ax [ ]		/* size nz */
-    , double Rx [ ]		/* size nz */
+, const double Tx [ ]	/* size nz */
+, double Ax [ ]		/* size nz */
+, double Rx [ ]		/* size nz */
 #ifdef COMPLEX
-    , const double Tz [ ]	/* size nz */
-    , double Az [ ]		/* size nz */
-    , double Rz [ ]		/* size nz */
+, const double Tz [ ]	/* size nz */
+, double Az [ ]		/* size nz */
+, double Rz [ ]		/* size nz */
 #endif
 #endif
 #ifdef DO_MAP
-    , Int Map [ ]		/* size nz */
-    , Int Map2 [ ]		/* size nz */
+        , Int Map[]        /* size nz */
+        , Int Map2[]        /* size nz */
 #endif
-)
-{
+) {
 
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    Int i, j, k, p, cp, p1, p2, pdest, pj ;
+    Int i, j, k, p, cp, p1, p2, pdest, pj;
 #ifdef DO_MAP
-    Int duplicates ;
+    Int duplicates;
 #endif
 #ifdef DO_VALUES
 #ifdef COMPLEX
@@ -81,29 +80,26 @@ GLOBAL Int UMF_triplet_nomap_nox
     /* ---------------------------------------------------------------------- */
 
     /* use W as workspace for row counts (including duplicates) */
-    for (i = 0 ; i < n_row ; i++)
-    {
-	W [i] = 0 ;
+    for (i = 0; i < n_row; i++) {
+        W[i] = 0;
     }
 
-    for (k = 0 ; k < nz ; k++)
-    {
-	i = Ti [k] ;
-	j = Tj [k] ;
-	if (i < 0 || i >= n_row || j < 0 || j >= n_col)
-	{
-	    return (UMFPACK_ERROR_invalid_matrix) ;
-	}
-	W [i]++ ;
+    for (k = 0; k < nz; k++) {
+        i = Ti[k];
+        j = Tj[k];
+        if (i < 0 || i >= n_row || j < 0 || j >= n_col) {
+            return (UMFPACK_ERROR_invalid_matrix);
+        }
+        W[i]++;
 #ifndef NDEBUG
-	DEBUG1 ((ID " triplet: " ID " " ID " ", k, i, j)) ;
+        DEBUG1 ((ID " triplet: " ID " " ID " ", k, i, j)) ;
 #ifdef DO_VALUES
-	{
-	    Entry tt ;
-	    ASSIGN (tt, Tx, Tz, k, split) ;
-	    EDEBUG2 (tt) ;
-	    DEBUG1 (("\n")) ;
-	}
+        {
+            Entry tt ;
+            ASSIGN (tt, Tx, Tz, k, split) ;
+            EDEBUG2 (tt) ;
+            DEBUG1 (("\n")) ;
+        }
 #endif
 #endif
     }
@@ -112,11 +108,10 @@ GLOBAL Int UMF_triplet_nomap_nox
     /* compute the row pointers */
     /* ---------------------------------------------------------------------- */
 
-    Rp [0] = 0 ;
-    for (i = 0 ; i < n_row ; i++)
-    {
-	Rp [i+1] = Rp [i] + W [i] ;
-	W [i] = Rp [i] ;
+    Rp[0] = 0;
+    for (i = 0; i < n_row; i++) {
+        Rp[i + 1] = Rp[i] + W[i];
+        W[i] = Rp[i];
     }
 
     /* W is now equal to the row pointers */
@@ -125,27 +120,26 @@ GLOBAL Int UMF_triplet_nomap_nox
     /* construct the row form */
     /* ---------------------------------------------------------------------- */
 
-    for (k = 0 ; k < nz ; k++)
-    {
-	p = W [Ti [k]]++ ;
+    for (k = 0; k < nz; k++) {
+        p = W[Ti[k]]++;
 #ifdef DO_MAP
-	Map [k] = p ;
+        Map[k] = p;
 #endif
-	Rj [p] = Tj [k] ;
+        Rj[p] = Tj[k];
 #ifdef DO_VALUES
 #ifdef COMPLEX
-	if (split)
-	{
-	    Rx [p] = Tx [k] ;
-	    Rz [p] = Tz [k] ;
-	}
-	else
-	{
-	    Rx [2*p  ] = Tx [2*k  ] ;
-	    Rx [2*p+1] = Tx [2*k+1] ;
-	}
+        if (split)
+        {
+            Rx [p] = Tx [k] ;
+            Rz [p] = Tz [k] ;
+        }
+        else
+        {
+            Rx [2*p  ] = Tx [2*k  ] ;
+            Rx [2*p+1] = Tx [2*k+1] ;
+        }
 #else
-	Rx [p] = Tx [k] ;
+        Rx [p] = Tx [k] ;
 #endif
 #endif
     }
@@ -155,18 +149,18 @@ GLOBAL Int UMF_triplet_nomap_nox
 #ifndef NDEBUG
     for (i = 0 ; i < n_row ; i++)
     {
-	ASSERT (W [i] == Rp [i+1]) ;
+    ASSERT (W [i] == Rp [i+1]) ;
     }
 #ifdef DO_MAP
     for (k = 0 ; k < nz ; k++)
     {
-	/* make sure that kth triplet is mapped correctly */
-	p = Map [k] ;
-	DEBUG1 (("First row map: Map [" ID "] = " ID "\n", k, p)) ;
-	i = Ti [k] ;
-	j = Tj [k] ;
-	ASSERT (j == Rj [p]) ;
-	ASSERT (Rp [i] <= p && p < Rp [i+1]) ;
+    /* make sure that kth triplet is mapped correctly */
+    p = Map [k] ;
+    DEBUG1 (("First row map: Map [" ID "] = " ID "\n", k, p)) ;
+    i = Ti [k] ;
+    j = Tj [k] ;
+    ASSERT (j == Rj [p]) ;
+    ASSERT (Rp [i] <= p && p < Rp [i+1]) ;
     }
 #endif
 #endif
@@ -177,96 +171,89 @@ GLOBAL Int UMF_triplet_nomap_nox
 
     /* use W [j] to hold position in Ri/Rx/Rz of a_ij, for row i [ */
 
-    for (j = 0 ; j < n_col ; j++)
-    {
-	W [j] = EMPTY ;
+    for (j = 0; j < n_col; j++) {
+        W[j] = EMPTY;
     }
 
 #ifdef DO_MAP
-    duplicates = FALSE ;
+    duplicates = FALSE;
 #endif
 
-    for (i = 0 ; i < n_row ; i++)
-    {
-	p1 = Rp [i] ;
-	p2 = Rp [i+1] ;
-	pdest = p1 ;
-	/* At this point, W [j] < p1 holds true for all columns j, */
-	/* because Ri/Rx/Rz is stored in row oriented order. */
+    for (i = 0; i < n_row; i++) {
+        p1 = Rp[i];
+        p2 = Rp[i + 1];
+        pdest = p1;
+        /* At this point, W [j] < p1 holds true for all columns j, */
+        /* because Ri/Rx/Rz is stored in row oriented order. */
 #ifndef NDEBUG
-	if (UMF_debug >= -2)
-	{
-	    for (j = 0 ; j < n_col ; j++)
-	    {
-		ASSERT (W [j] < p1) ;
-	    }
-	}
+        if (UMF_debug >= -2)
+        {
+            for (j = 0 ; j < n_col ; j++)
+            {
+            ASSERT (W [j] < p1) ;
+            }
+        }
 #endif
-	for (p = p1 ; p < p2 ; p++)
-	{
-	    j = Rj [p] ;
-	    ASSERT (j >= 0 && j < n_col) ;
-	    pj = W [j] ;
-	    if (pj >= p1)
-	    {
-		/* this column index, j, is already in row i, at position pj */
-		ASSERT (pj < p) ;
-		ASSERT (Rj [pj] == j) ;
+        for (p = p1; p < p2; p++) {
+            j = Rj[p];
+            ASSERT (j >= 0 && j < n_col);
+            pj = W[j];
+            if (pj >= p1) {
+                /* this column index, j, is already in row i, at position pj */
+                ASSERT (pj < p);
+                ASSERT (Rj[pj] == j);
 #ifdef DO_MAP
-		Map2 [p] = pj ;
-		duplicates = TRUE ;
+                Map2[p] = pj;
+                duplicates = TRUE;
 #endif
 #ifdef DO_VALUES
-		/* sum the entry */
+                /* sum the entry */
 #ifdef COMPLEX
-		if (split)
-		{
-		    Rx [pj] += Rx [p] ;
-		    Rz [pj] += Rz [p] ;
-		}
-		else
-		{
-		    Rx[2*pj  ] += Rx[2*p  ] ;
-		    Rx[2*pj+1] += Rx[2*p+1] ;
-		}
+                if (split)
+                {
+                    Rx [pj] += Rx [p] ;
+                    Rz [pj] += Rz [p] ;
+                }
+                else
+                {
+                    Rx[2*pj  ] += Rx[2*p  ] ;
+                    Rx[2*pj+1] += Rx[2*p+1] ;
+                }
 #else
-		Rx [pj] += Rx [p] ;
+                Rx [pj] += Rx [p] ;
 #endif
 #endif
-	    }
-	    else
-	    {
-		/* keep the entry */
-		/* also keep track in W[j] of position of a_ij for case above */
-		W [j] = pdest ;
+            } else {
+                /* keep the entry */
+                /* also keep track in W[j] of position of a_ij for case above */
+                W[j] = pdest;
 #ifdef DO_MAP
-		Map2 [p] = pdest ;
+                Map2[p] = pdest;
 #endif
-		/* no need to move the entry if pdest is equal to p */
-		if (pdest != p)
-		{
-		    Rj [pdest] = j ;
+                /* no need to move the entry if pdest is equal to p */
+                if (pdest != p) {
+                    Rj[pdest] = j;
 #ifdef DO_VALUES
 #ifdef COMPLEX
-		    if (split)
-		    {
-			Rx [pdest] = Rx [p] ;
-			Rz [pdest] = Rz [p] ;
-		    }
-		    else
-		    {
-			Rx [2*pdest  ] = Rx [2*p  ] ;
-			Rx [2*pdest+1] = Rx [2*p+1] ;
-		    }
+                    if (split)
+                    {
+                    Rx [pdest] = Rx [p] ;
+                    Rz [pdest] = Rz [p] ;
+                    }
+                    else
+                    {
+                    Rx [2*pdest  ] = Rx [2*p  ] ;
+                    Rx [2*pdest+1] = Rx [2*p+1] ;
+                    }
 #else
-		    Rx [pdest] = Rx [p] ;
+                    Rx [pdest] = Rx [p] ;
 #endif
 #endif
-		}
-		pdest++ ;
-	    }
-	}
-	RowCount [i] = pdest - p1 ;
+                }
+                pdest++;
+            }
+        }
+        RowCount[i] = pdest - p1;
     }
 
     /* done using W for position of a_ij ] */
@@ -276,31 +263,29 @@ GLOBAL Int UMF_triplet_nomap_nox
     /* ---------------------------------------------------------------------- */
 
 #ifdef DO_MAP
-    if (duplicates)
-    {
-	for (k = 0 ; k < nz ; k++)
-	{
-	    Map [k] = Map2 [Map [k]] ;
-	}
+    if (duplicates) {
+        for (k = 0; k < nz; k++) {
+            Map[k] = Map2[Map[k]];
+        }
     }
 #ifndef NDEBUG
     else
     {
-	/* no duplicates, so no need to recompute Map */
-	for (k = 0 ; k < nz ; k++)
-	{
-	    ASSERT (Map2 [k] == k) ;
-	}
+    /* no duplicates, so no need to recompute Map */
+    for (k = 0 ; k < nz ; k++)
+    {
+        ASSERT (Map2 [k] == k) ;
+    }
     }
     for (k = 0 ; k < nz ; k++)
     {
-	/* make sure that kth triplet is mapped correctly */
-	p = Map [k] ;
-	DEBUG1 (("Second row map: Map [" ID "] = " ID "\n", k, p)) ;
-	i = Ti [k] ;
-	j = Tj [k] ;
-	ASSERT (j == Rj [p]) ;
-	ASSERT (Rp [i] <= p && p < Rp [i+1]) ;
+    /* make sure that kth triplet is mapped correctly */
+    p = Map [k] ;
+    DEBUG1 (("Second row map: Map [" ID "] = " ID "\n", k, p)) ;
+    i = Ti [k] ;
+    j = Tj [k] ;
+    ASSERT (j == Rj [p]) ;
+    ASSERT (Rp [i] <= p && p < Rp [i+1]) ;
     }
 #endif
 #endif
@@ -312,67 +297,60 @@ GLOBAL Int UMF_triplet_nomap_nox
     /* ---------------------------------------------------------------------- */
 
     /* [ use W as work space for column counts of A */
-    for (j = 0 ; j < n_col ; j++)
-    {
-	W [j] = 0 ;
+    for (j = 0; j < n_col; j++) {
+        W[j] = 0;
     }
 
-    for (i = 0 ; i < n_row ; i++)
-    {
-	for (p = Rp [i] ; p < Rp [i] + RowCount [i] ; p++)
-	{
-	    j = Rj [p] ;
-	    ASSERT (j >= 0 && j < n_col) ;
-	    W [j]++ ;
-	}
+    for (i = 0; i < n_row; i++) {
+        for (p = Rp[i]; p < Rp[i] + RowCount[i]; p++) {
+            j = Rj[p];
+            ASSERT (j >= 0 && j < n_col);
+            W[j]++;
+        }
     }
 
     /* ---------------------------------------------------------------------- */
     /* create the column pointers */
     /* ---------------------------------------------------------------------- */
 
-    Ap [0] = 0 ;
-    for (j = 0 ; j < n_col ; j++)
-    {
-	Ap [j+1] = Ap [j] + W [j] ;
+    Ap[0] = 0;
+    for (j = 0; j < n_col; j++) {
+        Ap[j + 1] = Ap[j] + W[j];
     }
     /* done using W as workspace for column counts of A ] */
 
-    for (j = 0 ; j < n_col ; j++)
-    {
-	W [j] = Ap [j] ;
+    for (j = 0; j < n_col; j++) {
+        W[j] = Ap[j];
     }
 
     /* ---------------------------------------------------------------------- */
     /* construct the column form */
     /* ---------------------------------------------------------------------- */
 
-    for (i = 0 ; i < n_row ; i++)
-    {
-	for (p = Rp [i] ; p < Rp [i] + RowCount [i] ; p++)
-	{
-	    cp = W [Rj [p]]++ ;
+    for (i = 0; i < n_row; i++) {
+        for (p = Rp[i]; p < Rp[i] + RowCount[i]; p++) {
+            cp = W[Rj[p]]++;
 #ifdef DO_MAP
-	    Map2 [p] = cp ;
+            Map2[p] = cp;
 #endif
-	    Ai [cp] = i ;
+            Ai[cp] = i;
 #ifdef DO_VALUES
 #ifdef COMPLEX
-	    if (split)
-	    {
-		Ax [cp] = Rx [p] ;
-		Az [cp] = Rz [p] ;
-	    }
-	    else
-	    {
-		Ax [2*cp  ] = Rx [2*p  ] ;
-		Ax [2*cp+1] = Rx [2*p+1] ;
-	    }
+            if (split)
+            {
+            Ax [cp] = Rx [p] ;
+            Az [cp] = Rz [p] ;
+            }
+            else
+            {
+            Ax [2*cp  ] = Rx [2*p  ] ;
+            Ax [2*cp+1] = Rx [2*p+1] ;
+            }
 #else
-	    Ax [cp] = Rx [p] ;
+            Ax [cp] = Rx [p] ;
 #endif
 #endif
-	}
+        }
     }
 
     /* ---------------------------------------------------------------------- */
@@ -380,9 +358,8 @@ GLOBAL Int UMF_triplet_nomap_nox
     /* ---------------------------------------------------------------------- */
 
 #ifdef DO_MAP
-    for (k = 0 ; k < nz ; k++)
-    {
-	Map [k] = Map2 [Map [k]] ;
+    for (k = 0; k < nz; k++) {
+        Map[k] = Map2[Map[k]];
     }
 #endif
 
@@ -391,38 +368,38 @@ GLOBAL Int UMF_triplet_nomap_nox
 #ifndef NDEBUG
     for (j = 0 ; j < n_col ; j++)
     {
-	ASSERT (W [j] == Ap [j+1]) ;
+    ASSERT (W [j] == Ap [j+1]) ;
     }
 
     UMF_dump_col_matrix (
 #ifdef DO_VALUES
-	Ax,
+    Ax,
 #ifdef COMPLEX
-	Az,
+    Az,
 #endif
 #else
-	(double *) NULL,
+    (double *) NULL,
 #ifdef COMPLEX
-	(double *) NULL,
+    (double *) NULL,
 #endif
 #endif
-	Ai, Ap, n_row, n_col, nz) ;
+    Ai, Ap, n_row, n_col, nz) ;
 
 #ifdef DO_MAP
     for (k = 0 ; k < nz ; k++)
     {
-	/* make sure that kth triplet is mapped correctly */
-	p = Map [k] ;
-	DEBUG1 (("Col map: Map [" ID "] = " ID "\t", k, p)) ;
-	i = Ti [k] ;
-	j = Tj [k] ;
-	ASSERT (i == Ai [p]) ;
-	DEBUG1 (("   i " ID " j " ID " Ap[j] " ID " p " ID " Ap[j+1] " ID "\n",
-		i, j, Ap [j], p, Ap [j+1])) ;
-	ASSERT (Ap [j] <= p && p < Ap [j+1]) ;
+    /* make sure that kth triplet is mapped correctly */
+    p = Map [k] ;
+    DEBUG1 (("Col map: Map [" ID "] = " ID "\t", k, p)) ;
+    i = Ti [k] ;
+    j = Tj [k] ;
+    ASSERT (i == Ai [p]) ;
+    DEBUG1 (("   i " ID " j " ID " Ap[j] " ID " p " ID " Ap[j+1] " ID "\n",
+        i, j, Ap [j], p, Ap [j+1])) ;
+    ASSERT (Ap [j] <= p && p < Ap [j+1]) ;
     }
 #endif
 #endif
 
-    return (UMFPACK_OK) ;
+    return (UMFPACK_OK);
 }

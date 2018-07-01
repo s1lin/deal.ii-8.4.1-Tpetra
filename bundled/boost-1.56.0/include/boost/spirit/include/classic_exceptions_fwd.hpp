@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_EXCEPTIONS_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_EXCEPTIONS_FWD
+
 #include <boost/spirit/home/classic/error_handling/exceptions_fwd.hpp>
+
 #endif

@@ -12,16 +12,17 @@
 
 #include "boost/numeric/conversion/detail/sign_mixture.hpp"
 
-namespace boost { namespace numeric
-{
+namespace boost {
+    namespace numeric {
 
-template<class T, class S>
-struct sign_mixture
-  : convdetail::get_sign_mixture<  BOOST_DEDUCED_TYPENAME remove_cv<T>::type
-                                  ,BOOST_DEDUCED_TYPENAME remove_cv<S>::type
-                                >::type {} ;
+        template<class T, class S>
+        struct sign_mixture
+                : convdetail::get_sign_mixture<BOOST_DEDUCED_TYPENAME remove_cv<T>::type, BOOST_DEDUCED_TYPENAME remove_cv<S>::type
+                >::type {
+        };
 
-} } // namespace boost::numeric
+    }
+} // namespace boost::numeric
 
 #endif
 //

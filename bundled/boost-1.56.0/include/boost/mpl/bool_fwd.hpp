@@ -18,11 +18,12 @@
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
-template< bool C_ > struct bool_;
+    template<bool C_>
+    struct bool_;
 
 // shorcuts
-typedef bool_<true> true_;
-typedef bool_<false> false_;
+    typedef bool_<true> true_;
+    typedef bool_<false> false_;
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 

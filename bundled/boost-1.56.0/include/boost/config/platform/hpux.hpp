@@ -30,10 +30,10 @@
 
 #if defined(__GNUC__)
 #  if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 3))
-      // GNU C on HP-UX does not support threads (checked up to gcc 3.3)
+// GNU C on HP-UX does not support threads (checked up to gcc 3.3)
 #     define BOOST_DISABLE_THREADS
 #  elif !defined(BOOST_DISABLE_THREADS)
-      // threads supported from gcc-3.3 onwards:
+// threads supported from gcc-3.3 onwards:
 #     define BOOST_HAS_THREADS
 #     define BOOST_HAS_PTHREADS
 #  endif
@@ -43,6 +43,7 @@
 
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
+
 #include <boost/config/posix_features.hpp>
 
 // the following are always available:
@@ -73,12 +74,12 @@
 #ifndef BOOST_HAS_SIGACTION
 #  define BOOST_HAS_SIGACTION
 #endif
-#ifndef BOOST_HAS_NRVO 
+#ifndef BOOST_HAS_NRVO
 #  ifndef __parisc
 #    define BOOST_HAS_NRVO
 #  endif
 #endif
-#ifndef BOOST_HAS_LOG1P 
+#ifndef BOOST_HAS_LOG1P
 #  define BOOST_HAS_LOG1P
 #endif
 #ifndef BOOST_HAS_EXPM1

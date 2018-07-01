@@ -15,17 +15,17 @@
 
 
 namespace boost {
-namespace detail{
+    namespace detail {
 
-struct is_convertible_from_tester
-{
-   template <class T>
-   is_convertible_from_tester(const std::complex<T>&);
-};
+        struct is_convertible_from_tester {
+            template<class T>
+            is_convertible_from_tester(const std::complex<T> &);
+        };
 
-}
+    }
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_complex,T,(::boost::is_convertible<T, boost::detail::is_convertible_from_tester>::value))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_complex, T, (::boost::is_convertible<T, boost::detail::is_convertible_from_tester>::value)
+    )
 
 } // namespace boost
 

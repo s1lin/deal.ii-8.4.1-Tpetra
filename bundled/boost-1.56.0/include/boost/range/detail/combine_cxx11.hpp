@@ -17,23 +17,20 @@
 
 #include <fstream>
 
-namespace boost
-{
-    namespace range
-    {
+namespace boost {
+    namespace range {
 
-template<typename... Ranges>
-auto combine(Ranges&&... rngs) ->
-    combined_range<decltype(boost::make_tuple(boost::begin(rngs)...))>
-{
-    return combined_range<decltype(boost::make_tuple(boost::begin(rngs)...))>(
-                boost::make_tuple(boost::begin(rngs)...),
-                boost::make_tuple(boost::end(rngs)...));
-}
+        template<typename... Ranges>
+        auto combine(Ranges &&... rngs) ->
+        combined_range<decltype(boost::make_tuple(boost::begin(rngs)...))> {
+            return combined_range<decltype(boost::make_tuple(boost::begin(rngs)...))>(
+                    boost::make_tuple(boost::begin(rngs)...),
+                    boost::make_tuple(boost::end(rngs)...));
+        }
 
     } // namespace range
 
-using range::combine;
+    using range::combine;
 
 } // namespace boost
 

@@ -15,11 +15,15 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Tag > struct key_type_impl;
-template< typename AssociativeSequence, typename T > struct key_type;
+        template<typename Tag>
+        struct key_type_impl;
+        template<typename AssociativeSequence, typename T>
+        struct key_type;
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_KEY_TYPE_FWD_HPP_INCLUDED

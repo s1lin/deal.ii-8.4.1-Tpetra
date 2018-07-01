@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_DIRECTIVES
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_DIRECTIVES
+
 #include <boost/spirit/home/classic/core/composite/directives.hpp>
+
 #endif

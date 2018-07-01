@@ -24,9 +24,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_OS_BSD_BSDI BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && ( \
+#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && (\
     defined(__bsdi__) \
-    )
+)
 #   ifndef BOOST_OS_BSD_AVAILABLE
 #       define BOOST_OS_BSD BOOST_VERSION_NUMBER_AVAILABLE
 #       define BOOST_OS_BSD_AVAILABLE
@@ -43,6 +43,8 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_BSD_BSDI_NAME "BSDi BSD/OS"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_OS_BSD_BSDI,BOOST_OS_BSD_BSDI_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_OS_BSD_BSDI,
+BOOST_OS_BSD_BSDI_NAME)
 
 #endif

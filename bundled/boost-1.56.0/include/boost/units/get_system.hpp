@@ -18,30 +18,29 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-template<class T>
-struct get_system {};
+        template<class T>
+        struct get_system {
+        };
 
 /// Get the system of a unit.
-template<class Dim,class System>
-struct get_system< unit<Dim,System> >
-{
-    typedef System type;
-};
+        template<class Dim, class System>
+        struct get_system<unit < Dim, System> > {
+        typedef System type;
+    };
 
 /// Get the system of an absolute unit.
-template<class Unit>
-struct get_system< absolute<Unit> >
-{
+    template<class Unit>
+    struct get_system<absolute < Unit> > {
     typedef typename get_system<Unit>::type type;
 };
 
 /// Get the system of a quantity.
-template<class Unit,class Y>
-struct get_system< quantity<Unit,Y> >
+template<class Unit, class Y>
+struct get_system<quantity < Unit, Y> >
 {
-    typedef typename get_system<Unit>::type     type;
+typedef typename get_system<Unit>::type type;
 };
 
 } // namespace units

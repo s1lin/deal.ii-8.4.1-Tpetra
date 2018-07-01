@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_PARAMETRIC
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_PARAMETRIC
+
 #include <boost/spirit/home/classic/attribute/parametric.hpp>
+
 #endif

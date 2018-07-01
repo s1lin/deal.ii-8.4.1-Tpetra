@@ -15,22 +15,22 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
-template<class T>
-struct promote_impl
-  : public integral_promotion<
-        BOOST_DEDUCED_TYPENAME floating_point_promotion<T>::type
-      >
-{
-};
+        template<class T>
+        struct promote_impl
+                : public integral_promotion<
+                        BOOST_DEDUCED_TYPENAME floating_point_promotion<T>::type
+                > {
+        };
 
-}
+    }
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(
-      promote
+    BOOST_TT_AUX_TYPE_TRAIT_DEF1(
+            promote
     , T
-    , BOOST_DEDUCED_TYPENAME boost::detail::promote_impl<T>::type
+    , BOOST_DEDUCED_TYPENAME
+    boost::detail::promote_impl<T>::type
     )
 }
 

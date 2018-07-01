@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of amount
-struct amount_base_dimension : 
-    boost::units::base_dimension<amount_base_dimension,-4> 
-{ };
+        struct amount_base_dimension :
+                boost::units::base_dimension<amount_base_dimension, -4> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::amount_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// dimension of amount of substance (N)
-typedef amount_base_dimension::dimension_type     amount_dimension;
+        typedef amount_base_dimension::dimension_type amount_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

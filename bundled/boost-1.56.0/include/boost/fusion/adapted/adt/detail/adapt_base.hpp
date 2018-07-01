@@ -23,13 +23,13 @@
       , BOOST_PP_SEQ_ELEM(1,TEMPLATE_PARAMS_SEQ)                                \
     >::type
 
-#define BOOST_FUSION_ADAPT_ADT_GET_IDENTITY_NON_TEMPLATE_IMPL(                  \
+#define BOOST_FUSION_ADAPT_ADT_GET_IDENTITY_NON_TEMPLATE_IMPL(\
     TEMPLATE_PARAMS_SEQ)                                                        \
                                                                                 \
     boost::remove_const<boost::remove_reference<lvalue>::type>::type
 
-#define BOOST_FUSION_ADAPT_ADT_C_BASE(                                          \
-    TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,ATTRIBUTE,ATTRIBUTE_TUPEL_SIZE)              \
+#define BOOST_FUSION_ADAPT_ADT_C_BASE(\
+    TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, ATTRIBUTE, ATTRIBUTE_TUPEL_SIZE)              \
                                                                                 \
     template<                                                                   \
         BOOST_FUSION_ADAPT_STRUCT_UNPACK_TEMPLATE_PARAMS(TEMPLATE_PARAMS_SEQ)   \

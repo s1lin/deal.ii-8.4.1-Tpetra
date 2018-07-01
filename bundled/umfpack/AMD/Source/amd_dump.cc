@@ -33,16 +33,16 @@ GLOBAL void AMD_debug_init ( char *s )
     f = fopen ("debug.amd", "r") ;
     if (f == (FILE *) NULL)
     {
-	AMD_debug = -999 ;
+    AMD_debug = -999 ;
     }
     else
     {
-	fscanf (f, ID, &AMD_debug) ;
-	fclose (f) ;
+    fscanf (f, ID, &AMD_debug) ;
+    fclose (f) ;
     }
     if (AMD_debug >= 0)
     {
-	printf ("%s: AMD_debug_init, D= " ID "\n", s, AMD_debug) ;
+    printf ("%s: AMD_debug_init, D= " ID "\n", s, AMD_debug) ;
     }
 }
 
@@ -79,100 +79,100 @@ GLOBAL void AMD_dump (
     AMD_DEBUG3 (("\nAMD dump, pfree: " ID "\n", pfree)) ;
     for (i = 0 ; i < n ; i++)
     {
-	pe = Pe [i] ;
-	elen = Elen [i] ;
-	nv = Nv [i] ;
-	len = Len [i] ;
-	w = W [i] ;
+    pe = Pe [i] ;
+    elen = Elen [i] ;
+    nv = Nv [i] ;
+    len = Len [i] ;
+    w = W [i] ;
 
-	if (elen >= EMPTY)
-	{
-	    if (nv == 0)
-	    {
-		AMD_DEBUG3 (("\nI " ID ": nonprincipal:    ", i)) ;
-		ASSERT (elen == EMPTY) ;
-		if (pe == EMPTY)
-		{
-		    AMD_DEBUG3 ((" dense node\n")) ;
-		    ASSERT (w == 1) ;
-		}
-		else
-		{
-		    ASSERT (pe < EMPTY) ;
-		    AMD_DEBUG3 ((" i " ID " -> parent " ID "\n", i, FLIP (Pe[i])));
-		}
-	    }
-	    else
-	    {
-		AMD_DEBUG3 (("\nI " ID ": active principal supervariable:\n",i));
-		AMD_DEBUG3 (("   nv(i): " ID "  Flag: %d\n", nv, (nv < 0))) ;
-		ASSERT (elen >= 0) ;
-		ASSERT (nv > 0 && pe >= 0) ;
-		p = pe ;
-		AMD_DEBUG3 (("   e/s: ")) ;
-		if (elen == 0) AMD_DEBUG3 ((" : ")) ;
-		ASSERT (pe + len <= pfree) ;
-		for (k = 0 ; k < len ; k++)
-		{
-		    j = Iw [p] ;
-		    AMD_DEBUG3 (("  " ID "", j)) ;
-		    ASSERT (j >= 0 && j < n) ;
-		    if (k == elen-1) AMD_DEBUG3 ((" : ")) ;
-		    p++ ;
-		}
-		AMD_DEBUG3 (("\n")) ;
-	    }
-	}
-	else
-	{
-	    e = i ;
-	    if (w == 0)
-	    {
-		AMD_DEBUG3 (("\nE " ID ": absorbed element: w " ID "\n", e, w)) ;
-		ASSERT (nv > 0 && pe < 0) ;
-		AMD_DEBUG3 ((" e " ID " -> parent " ID "\n", e, FLIP (Pe [e]))) ;
-	    }
-	    else
-	    {
-		AMD_DEBUG3 (("\nE " ID ": unabsorbed element: w " ID "\n", e, w)) ;
-		ASSERT (nv > 0 && pe >= 0) ;
-		p = pe ;
-		AMD_DEBUG3 ((" : ")) ;
-		ASSERT (pe + len <= pfree) ;
-		for (k = 0 ; k < len ; k++)
-		{
-		    j = Iw [p] ;
-		    AMD_DEBUG3 (("  " ID "", j)) ;
-		    ASSERT (j >= 0 && j < n) ;
-		    p++ ;
-		}
-		AMD_DEBUG3 (("\n")) ;
-	    }
-	}
+    if (elen >= EMPTY)
+    {
+        if (nv == 0)
+        {
+        AMD_DEBUG3 (("\nI " ID ": nonprincipal:    ", i)) ;
+        ASSERT (elen == EMPTY) ;
+        if (pe == EMPTY)
+        {
+            AMD_DEBUG3 ((" dense node\n")) ;
+            ASSERT (w == 1) ;
+        }
+        else
+        {
+            ASSERT (pe < EMPTY) ;
+            AMD_DEBUG3 ((" i " ID " -> parent " ID "\n", i, FLIP (Pe[i])));
+        }
+        }
+        else
+        {
+        AMD_DEBUG3 (("\nI " ID ": active principal supervariable:\n",i));
+        AMD_DEBUG3 (("   nv(i): " ID "  Flag: %d\n", nv, (nv < 0))) ;
+        ASSERT (elen >= 0) ;
+        ASSERT (nv > 0 && pe >= 0) ;
+        p = pe ;
+        AMD_DEBUG3 (("   e/s: ")) ;
+        if (elen == 0) AMD_DEBUG3 ((" : ")) ;
+        ASSERT (pe + len <= pfree) ;
+        for (k = 0 ; k < len ; k++)
+        {
+            j = Iw [p] ;
+            AMD_DEBUG3 (("  " ID "", j)) ;
+            ASSERT (j >= 0 && j < n) ;
+            if (k == elen-1) AMD_DEBUG3 ((" : ")) ;
+            p++ ;
+        }
+        AMD_DEBUG3 (("\n")) ;
+        }
+    }
+    else
+    {
+        e = i ;
+        if (w == 0)
+        {
+        AMD_DEBUG3 (("\nE " ID ": absorbed element: w " ID "\n", e, w)) ;
+        ASSERT (nv > 0 && pe < 0) ;
+        AMD_DEBUG3 ((" e " ID " -> parent " ID "\n", e, FLIP (Pe [e]))) ;
+        }
+        else
+        {
+        AMD_DEBUG3 (("\nE " ID ": unabsorbed element: w " ID "\n", e, w)) ;
+        ASSERT (nv > 0 && pe >= 0) ;
+        p = pe ;
+        AMD_DEBUG3 ((" : ")) ;
+        ASSERT (pe + len <= pfree) ;
+        for (k = 0 ; k < len ; k++)
+        {
+            j = Iw [p] ;
+            AMD_DEBUG3 (("  " ID "", j)) ;
+            ASSERT (j >= 0 && j < n) ;
+            p++ ;
+        }
+        AMD_DEBUG3 (("\n")) ;
+        }
+    }
     }
 
     /* this routine cannot be called when the hash buckets are non-empty */
     AMD_DEBUG3 (("\nDegree lists:\n")) ;
     if (nel >= 0)
     {
-	cnt = 0 ;
-	for (deg = 0 ; deg < n ; deg++)
-	{
-	    if (Head [deg] == EMPTY) continue ;
-	    ilast = EMPTY ;
-	    AMD_DEBUG3 ((ID": \n", deg)) ;
-	    for (i = Head [deg] ; i != EMPTY ; i = Next [i])
-	    {
-		AMD_DEBUG3 (("   " ID " : next " ID " last " ID " deg " ID "\n",
-		    i, Next [i], Last [i], Degree [i])) ;
-		ASSERT (i >= 0 && i < n && ilast == Last [i] &&
-		    deg == Degree [i]) ;
-		cnt += Nv [i] ;
-		ilast = i ;
-	    }
-	    AMD_DEBUG3 (("\n")) ;
-	}
-	ASSERT (cnt == n - nel) ;
+    cnt = 0 ;
+    for (deg = 0 ; deg < n ; deg++)
+    {
+        if (Head [deg] == EMPTY) continue ;
+        ilast = EMPTY ;
+        AMD_DEBUG3 ((ID": \n", deg)) ;
+        for (i = Head [deg] ; i != EMPTY ; i = Next [i])
+        {
+        AMD_DEBUG3 (("   " ID " : next " ID " last " ID " deg " ID "\n",
+            i, Next [i], Last [i], Degree [i])) ;
+        ASSERT (i >= 0 && i < n && ilast == Last [i] &&
+            deg == Degree [i]) ;
+        cnt += Nv [i] ;
+        ilast = i ;
+        }
+        AMD_DEBUG3 (("\n")) ;
+    }
+    ASSERT (cnt == n - nel) ;
     }
 
 }

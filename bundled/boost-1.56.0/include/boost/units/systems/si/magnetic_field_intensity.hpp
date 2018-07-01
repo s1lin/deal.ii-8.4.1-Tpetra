@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<magnetic_field_intensity_dimension,si::system>    magnetic_field_intensity;
-                                                                                       
-} // namespace si
+            typedef unit <magnetic_field_intensity_dimension, si::system> magnetic_field_intensity;
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

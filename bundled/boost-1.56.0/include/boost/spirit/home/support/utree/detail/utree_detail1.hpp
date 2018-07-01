@@ -11,136 +11,146 @@
 
 #include <boost/type_traits/alignment_of.hpp>
 
-namespace boost { namespace spirit { namespace detail
-{
-    template <typename UTreeX, typename UTreeY>
-    struct visit_impl;
+namespace boost {
+    namespace spirit {
+        namespace detail {
+            template<typename UTreeX, typename UTreeY>
+            struct visit_impl;
 
-    struct index_impl;
+            struct index_impl;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Our POD double linked list. Straightforward implementation.
-    // This implementation is very primitive and is not meant to be
-    // used stand-alone. This is the internal data representation
-    // of lists in our utree.
-    ///////////////////////////////////////////////////////////////////////////
-    struct list // keep this a POD!
-    {
-        struct node;
+            ///////////////////////////////////////////////////////////////////////////
+            // Our POD double linked list. Straightforward implementation.
+            // This implementation is very primitive and is not meant to be
+            // used stand-alone. This is the internal data representation
+            // of lists in our utree.
+            ///////////////////////////////////////////////////////////////////////////
+            struct list // keep this a POD!
+            {
+                struct node;
 
-        template <typename Value>
-        class node_iterator;
+                template<typename Value>
+                class node_iterator;
 
-        void free();
-        void copy(list const& other);
-        void default_construct();
+                void free();
 
-        template <typename T, typename Iterator>
-        void insert(T const& val, Iterator pos);
+                void copy(list const &other);
 
-        template <typename T>
-        void push_front(T const& val);
+                void default_construct();
 
-        template <typename T>
-        void push_back(T const& val);
+                template<typename T, typename Iterator>
+                void insert(T const &val, Iterator pos);
 
-        void pop_front();
-        void pop_back();
-        node* erase(node* pos);
+                template<typename T>
+                void push_front(T const &val);
 
-        node* first;
-        node* last;
-        std::size_t size;
-    };
+                template<typename T>
+                void push_back(T const &val);
 
-    ///////////////////////////////////////////////////////////////////////////
-    // A range of utree(s) using an iterator range (begin/end) of node(s)
-    ///////////////////////////////////////////////////////////////////////////
-    struct range
-    {
-        list::node* first;
-        list::node* last;
-    };
+                void pop_front();
 
-    ///////////////////////////////////////////////////////////////////////////
-    // A range of char*s
-    ///////////////////////////////////////////////////////////////////////////
-    struct string_range
-    {
-        char const* first;
-        char const* last;
-    };
+                void pop_back();
 
-    ///////////////////////////////////////////////////////////////////////////
-    // A void* plus type_info
-    ///////////////////////////////////////////////////////////////////////////
-    struct void_ptr
-    {
-        void* p;
-        std::type_info const* i;
-    };
+                node *erase(node *pos);
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Our POD fast string. This implementation is very primitive and is not
-    // meant to be used stand-alone. This is the internal data representation
-    // of strings in our utree. This is deliberately a POD to allow it to be
-    // placed in a union. This POD fast string specifically utilizes
-    // (sizeof(list) * alignment_of(list)) - (2 * sizeof(char)). In a 32 bit
-    // system, this is 14 bytes. The two extra bytes are used by utree to store
-    // management info.
-    //
-    // It is a const string (i.e. immutable). It stores the characters directly
-    // if possible and only uses the heap if the string does not fit. Null
-    // characters are allowed, making it suitable to encode raw binary. The
-    // string length is encoded in the first byte if the string is placed in-situ,
-    // else, the length plus a pointer to the string in the heap are stored.
-    ///////////////////////////////////////////////////////////////////////////
-    struct fast_string // Keep this a POD!
-    {
-        static std::size_t const
-            buff_size = (sizeof(list) + boost::alignment_of<list>::value)
-                / sizeof(char);
+                node *first;
+                node *last;
+                std::size_t size;
+            };
 
-        static std::size_t const
-            small_string_size = buff_size-sizeof(char);
+            ///////////////////////////////////////////////////////////////////////////
+            // A range of utree(s) using an iterator range (begin/end) of node(s)
+            ///////////////////////////////////////////////////////////////////////////
+            struct range {
+                list::node *first;
+                list::node *last;
+            };
 
-        static std::size_t const
-            max_string_len = small_string_size - 3;
+            ///////////////////////////////////////////////////////////////////////////
+            // A range of char*s
+            ///////////////////////////////////////////////////////////////////////////
+            struct string_range {
+                char const *first;
+                char const *last;
+            };
 
-        struct heap_store
-        {
-            char* str;
-            std::size_t size;
-        };
+            ///////////////////////////////////////////////////////////////////////////
+            // A void* plus type_info
+            ///////////////////////////////////////////////////////////////////////////
+            struct void_ptr {
+                void *p;
+                std::type_info const *i;
+            };
 
-        union
-        {
-            char buff[buff_size];
-            long lbuff[buff_size / (sizeof(long)/sizeof(char))];   // for initialize 
-            heap_store heap;
-        };
+            ///////////////////////////////////////////////////////////////////////////
+            // Our POD fast string. This implementation is very primitive and is not
+            // meant to be used stand-alone. This is the internal data representation
+            // of strings in our utree. This is deliberately a POD to allow it to be
+            // placed in a union. This POD fast string specifically utilizes
+            // (sizeof(list) * alignment_of(list)) - (2 * sizeof(char)). In a 32 bit
+            // system, this is 14 bytes. The two extra bytes are used by utree to store
+            // management info.
+            //
+            // It is a const string (i.e. immutable). It stores the characters directly
+            // if possible and only uses the heap if the string does not fit. Null
+            // characters are allowed, making it suitable to encode raw binary. The
+            // string length is encoded in the first byte if the string is placed in-situ,
+            // else, the length plus a pointer to the string in the heap are stored.
+            ///////////////////////////////////////////////////////////////////////////
+            struct fast_string // Keep this a POD!
+            {
+                static std::size_t const
+                        buff_size = (sizeof(list) + boost::alignment_of<list>::value)
+                                    / sizeof(char);
 
-        int get_type() const;
-        void set_type(int t);
-        bool is_heap_allocated() const;
+                static std::size_t const
+                        small_string_size = buff_size - sizeof(char);
 
-        std::size_t size() const;
-        char const* str() const;
+                static std::size_t const
+                        max_string_len = small_string_size - 3;
 
-        template <typename Iterator>
-        void construct(Iterator f, Iterator l);
+                struct heap_store {
+                    char *str;
+                    std::size_t size;
+                };
 
-        void swap(fast_string& other);
-        void free();
-        void copy(fast_string const& other);
-        void initialize();
+                union {
+                    char buff[buff_size];
+                    long lbuff[buff_size / (sizeof(long) / sizeof(char))];   // for initialize
+                    heap_store heap;
+                };
 
-        char& info();
-        char info() const;
+                int get_type() const;
 
-        short tag() const;
-        void tag(short tag);
-    };
-}}}
+                void set_type(int t);
+
+                bool is_heap_allocated() const;
+
+                std::size_t size() const;
+
+                char const *str() const;
+
+                template<typename Iterator>
+                void construct(Iterator f, Iterator l);
+
+                void swap(fast_string &other);
+
+                void free();
+
+                void copy(fast_string const &other);
+
+                void initialize();
+
+                char &info();
+
+                char info() const;
+
+                short tag() const;
+
+                void tag(short tag);
+            };
+        }
+    }
+}
 
 #endif

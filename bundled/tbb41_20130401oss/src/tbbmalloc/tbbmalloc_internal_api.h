@@ -34,7 +34,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 void __TBB_mallocProcessShutdownNotification();
-#if _WIN32||_WIN64
+#if _WIN32 || _WIN64
 void __TBB_mallocThreadShutdownNotification();
 #endif
 

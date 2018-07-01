@@ -47,7 +47,7 @@
 
 #if !defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
 #undef BOOST_MULTI_INDEX_SAFE_MODE_ASSERT
-#define BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(expr,error_code) ((void)0)
+#define BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(expr, error_code) ((void)0)
 #else
 #if !defined(BOOST_MULTI_INDEX_SAFE_MODE_ASSERT)
 #include <boost/assert.hpp>
@@ -75,32 +75,32 @@
     safe_mode::check_decrementable_iterator(it),                             \
     safe_mode::not_decrementable_iterator);
 
-#define BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,cont)                            \
+#define BOOST_MULTI_INDEX_CHECK_IS_OWNER(it, cont)                            \
   BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
     safe_mode::check_is_owner(it,cont),                                      \
     safe_mode::not_owner);
 
-#define BOOST_MULTI_INDEX_CHECK_SAME_OWNER(it0,it1)                          \
+#define BOOST_MULTI_INDEX_CHECK_SAME_OWNER(it0, it1)                          \
   BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
     safe_mode::check_same_owner(it0,it1),                                    \
     safe_mode::not_same_owner);
 
-#define BOOST_MULTI_INDEX_CHECK_VALID_RANGE(it0,it1)                         \
+#define BOOST_MULTI_INDEX_CHECK_VALID_RANGE(it0, it1)                         \
   BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
     safe_mode::check_valid_range(it0,it1),                                   \
     safe_mode::invalid_range);
 
-#define BOOST_MULTI_INDEX_CHECK_OUTSIDE_RANGE(it,it0,it1)                    \
+#define BOOST_MULTI_INDEX_CHECK_OUTSIDE_RANGE(it, it0, it1)                    \
   BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
     safe_mode::check_outside_range(it,it0,it1),                              \
     safe_mode::inside_range);
 
-#define BOOST_MULTI_INDEX_CHECK_IN_BOUNDS(it,n)                              \
+#define BOOST_MULTI_INDEX_CHECK_IN_BOUNDS(it, n)                              \
   BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
     safe_mode::check_in_bounds(it,n),                                        \
     safe_mode::out_of_bounds);
 
-#define BOOST_MULTI_INDEX_CHECK_DIFFERENT_CONTAINER(cont0,cont1)             \
+#define BOOST_MULTI_INDEX_CHECK_DIFFERENT_CONTAINER(cont0, cont1)             \
   BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
     safe_mode::check_different_container(cont0,cont1),                       \
     safe_mode::same_container);

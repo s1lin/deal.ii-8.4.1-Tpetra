@@ -22,62 +22,48 @@
 #include <boost/mpl/aux_/inserter_algorithm.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-namespace aux {
+        namespace aux {
 
-template< typename Predicate, typename T >
-struct replace_if_op
-{
-    template< typename U > struct apply
+            template<typename Predicate, typename T>
+            struct replace_if_op {
+                template<typename U>
+                struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
-        : if_<
-              typename apply1<Predicate,U>::type
-            , T
-            , U
-            >
-    {
+                        : if_<
+                                typename apply1<Predicate, U>::type, T, U
+                        > {
 #else
-    {
-        typedef typename if_<
-              typename apply1<Predicate,U>::type
-            , T
-            , U
-            >::type type;
+                    {
+                        typedef typename if_<
+                              typename apply1<Predicate,U>::type
+                            , T
+                            , U
+                            >::type type;
 #endif
+                };
+            };
+
+
+            template<
+                    typename Sequence, typename Predicate, typename T, typename Inserter
+            >
+            struct replace_if_impl
+                    : transform1_impl<
+                            Sequence, protect < aux::replace_if_op<Predicate, T> >, Inserter
+            > {
+        };
+
+        template<
+                typename Sequence, typename Predicate, typename T, typename Inserter
+        >
+        struct reverse_replace_if_impl
+                : reverse_transform1_impl<
+                        Sequence, protect < aux::replace_if_op<Predicate, T> >, Inserter
+        > {
     };
-};
-
-
-template<
-      typename Sequence
-    , typename Predicate
-    , typename T
-    , typename Inserter
-    >
-struct replace_if_impl
-    : transform1_impl<
-          Sequence
-        , protect< aux::replace_if_op<Predicate,T> >
-        , Inserter
-        >
-{
-};
-
-template<
-      typename Sequence
-    , typename Predicate
-    , typename T
-    , typename Inserter
-    >
-struct reverse_replace_if_impl
-    : reverse_transform1_impl<
-          Sequence
-        , protect< aux::replace_if_op<Predicate,T> >
-        , Inserter
-        >
-{
-};
 
 } // namespace aux
 

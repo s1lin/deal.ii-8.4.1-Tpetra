@@ -14,11 +14,15 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Tag > struct pop_front_impl;
-template< typename Sequence > struct pop_front;
+        template<typename Tag>
+        struct pop_front_impl;
+        template<typename Sequence>
+        struct pop_front;
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_POP_FRONT_FWD_HPP_INCLUDED

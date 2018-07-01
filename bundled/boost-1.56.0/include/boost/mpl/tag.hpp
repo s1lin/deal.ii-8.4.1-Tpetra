@@ -19,34 +19,34 @@
 #include <boost/mpl/aux_/has_tag.hpp>
 #include <boost/mpl/aux_/config/eti.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-namespace aux {
-template< typename T > struct tag_impl
-{
-    typedef typename T::tag type;
-};
-}
+        namespace aux {
+            template<typename T>
+            struct tag_impl {
+                typedef typename T::tag type;
+            };
+        }
 
-template< typename T, typename Default = void_ > struct tag
+        template<typename T, typename Default = void_>
+        struct tag
 #if !defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-    : if_< 
-          aux::has_tag<T>
-        , aux::tag_impl<T>
-        , Default
-        >::type
-{
+                : if_<
+                        aux::has_tag<T>, aux::tag_impl<T>, Default
+                >::type {
 #else
-{
-    typedef typename eval_if< 
-          aux::has_tag<T>
-        , aux::tag_impl<T>
-        , Default
-        >::type type;
+            {
+                typedef typename eval_if<
+                      aux::has_tag<T>
+                    , aux::tag_impl<T>
+                    , Default
+                    >::type type;
 
 #endif
-};
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_TAG_HPP_INCLUDED

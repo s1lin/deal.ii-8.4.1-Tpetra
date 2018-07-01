@@ -39,17 +39,16 @@ namespace boost {
             \param MatchFlags Regex search options
             \return An instance of the \c regex_finder object
         */
-        template< 
-            typename CharT, 
-            typename RegexTraitsT>
-        inline detail::find_regexF< basic_regex<CharT, RegexTraitsT> >
+        template<
+                typename CharT,
+                typename RegexTraitsT>
+        inline detail::find_regexF <basic_regex<CharT, RegexTraitsT>>
         regex_finder(
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type MatchFlags=match_default )
-        {
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type MatchFlags = match_default) {
             return detail::
-                find_regexF< 
-                    basic_regex<CharT, RegexTraitsT> >( Rx, MatchFlags );
+                   find_regexF <
+                   basic_regex < CharT, RegexTraitsT > > (Rx, MatchFlags);
         }
 
 //  regex_formater  ---------------------------------------------//
@@ -64,18 +63,17 @@ namespace boost {
             \param Flags Format flags
             \return An instance of the \c regex_formatter functor
         */
-       template< 
-            typename CharT, 
-            typename TraitsT, typename AllocT >
-        inline detail::regex_formatF< std::basic_string< CharT, TraitsT, AllocT > >
-        regex_formatter( 
-            const std::basic_string<CharT, TraitsT, AllocT>& Format,
-            match_flag_type Flags=format_default )
-        {
-            return 
-                detail::regex_formatF< std::basic_string<CharT, TraitsT, AllocT> >(
-                    Format,
-                    Flags );
+        template<
+                typename CharT,
+                typename TraitsT, typename AllocT>
+        inline detail::regex_formatF <std::basic_string<CharT, TraitsT, AllocT>>
+        regex_formatter(
+                const std::basic_string <CharT, TraitsT, AllocT> &Format,
+                match_flag_type Flags = format_default) {
+            return
+                    detail::regex_formatF < std::basic_string < CharT, TraitsT, AllocT > > (
+                            Format,
+                                    Flags);
         }
 
     } // namespace algorithm

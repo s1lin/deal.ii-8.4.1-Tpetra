@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<torque_dimension,si::system>     torque;
-    
-BOOST_UNITS_STATIC_CONSTANT(newton_meter,torque);  
-BOOST_UNITS_STATIC_CONSTANT(newton_meters,torque); 
+            typedef unit <torque_dimension, si::system> torque;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(newton_meter, torque
+            );
+            BOOST_UNITS_STATIC_CONSTANT(newton_meters, torque
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

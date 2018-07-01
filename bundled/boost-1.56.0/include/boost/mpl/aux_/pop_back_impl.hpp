@@ -17,18 +17,20 @@
 #include <boost/mpl/pop_back_fwd.hpp>
 #include <boost/mpl/aux_/traits_lambda_spec.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
 // no default implementation; the definition is needed to make MSVC happy
 
-template< typename Tag >
-struct pop_back_impl
-{
-    template< typename Sequence > struct apply;
-};
+        template<typename Tag>
+        struct pop_back_impl {
+            template<typename Sequence>
+            struct apply;
+        };
 
-BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1, pop_back_impl)
+        BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1, pop_back_impl)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_AUX_POP_BACK_IMPL_HPP_INCLUDED

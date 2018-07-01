@@ -20,31 +20,24 @@
 #include <boost/mpl/same_as.hpp>
 #include <boost/mpl/aux_/inserter_algorithm.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-namespace aux {
+        namespace aux {
 
-template<
-      typename Sequence
-    , typename OldType
-    , typename NewType
-    , typename Inserter 
-    >
-struct replace_impl
-    : replace_if_impl< Sequence, same_as<OldType>, NewType, Inserter >
-{
-};
+            template<
+                    typename Sequence, typename OldType, typename NewType, typename Inserter
+            >
+            struct replace_impl
+                    : replace_if_impl<Sequence, same_as < OldType>, NewType, Inserter > {
+        };
 
-template<
-      typename Sequence
-    , typename OldType
-    , typename NewType
-    , typename Inserter 
-    >
-struct reverse_replace_impl
-    : reverse_replace_if_impl< Sequence, same_as<OldType>, NewType, Inserter >
-{
-};
+        template<
+                typename Sequence, typename OldType, typename NewType, typename Inserter
+        >
+        struct reverse_replace_impl
+                : reverse_replace_if_impl<Sequence, same_as < OldType>, NewType, Inserter > {
+    };
 
 } // namespace aux
 

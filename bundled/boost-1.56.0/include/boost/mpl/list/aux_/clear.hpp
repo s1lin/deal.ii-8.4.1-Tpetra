@@ -18,17 +18,18 @@
 #include <boost/mpl/list/aux_/item.hpp>
 #include <boost/mpl/list/aux_/tag.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct clear_impl< aux::list_tag >
-{
-    template< typename List > struct apply
-    {
-        typedef l_end type;
-    };
-};
+        template<>
+        struct clear_impl<aux::list_tag> {
+            template<typename List>
+            struct apply {
+                typedef l_end type;
+            };
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_LIST_AUX_CLEAR_HPP_INCLUDED

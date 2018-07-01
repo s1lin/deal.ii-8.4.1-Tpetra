@@ -33,7 +33,7 @@
 #error "macro already defined!"
 #endif
 
-#if BOOST_WORKAROUND( __MWERKS__, <= 0x3003 )
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3003 )
 #define BOOST_RANGE_NO_ARRAY_SUPPORT 1
 #endif
 
@@ -49,7 +49,6 @@
 #else
 #  define BOOST_RANGE_UNUSED
 #endif
-
 
 
 #endif

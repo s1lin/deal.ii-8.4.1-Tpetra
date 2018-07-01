@@ -22,48 +22,43 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class template reference_content
 //
 // Non-Assignable wrapper for references.
 //
-template <typename RefT>
-class reference_content
-{
-private: // representation
+        template<typename RefT>
+        class reference_content {
+        private: // representation
 
-    RefT content_;
+            RefT content_;
 
-public: // structors
+        public: // structors
 
-    ~reference_content()
-    {
-    }
+            ~reference_content() {
+            }
 
-    reference_content(RefT r)
-        : content_( r )
-    {
-    }
+            reference_content(RefT r)
+                    : content_(r) {
+            }
 
-    reference_content(const reference_content& operand)
-        : content_( operand.content_ )
-    {
-    }
+            reference_content(const reference_content &operand)
+                    : content_(operand.content_) {
+            }
 
-private: // non-Assignable
+        private: // non-Assignable
 
-    reference_content& operator=(const reference_content&);
+            reference_content &operator=(const reference_content &);
 
-public: // queries
+        public: // queries
 
-    RefT get() const
-    {
-        return content_;
-    }
+            RefT get() const {
+                return content_;
+            }
 
-};
+        };
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_reference_content
@@ -71,48 +66,44 @@ public: // queries
 // Wraps with reference_content if specified type is reference.
 //
 
-template <typename T = mpl::void_> struct make_reference_content;
+        template<typename T = mpl::void_>
+        struct make_reference_content;
 
 
-template <typename T>
-struct make_reference_content
-{
-    typedef T type;
-};
+        template<typename T>
+        struct make_reference_content {
+            typedef T type;
+        };
 
-template <typename T>
-struct make_reference_content< T& >
-{
-    typedef reference_content<T&> type;
-};
+        template<typename T>
+        struct make_reference_content<T &> {
+            typedef reference_content<T &> type;
+        };
 
 
-template <>
-struct make_reference_content< mpl::void_ >
-{
-    template <typename T>
-    struct apply
-        : make_reference_content<T>
-    {
-    };
+        template<>
+        struct make_reference_content<mpl::void_> {
+            template<typename T>
+            struct apply
+                    : make_reference_content<T> {
+            };
 
-    typedef mpl::void_ type;
-};
+            typedef mpl::void_ type;
+        };
 
-} // namespace detail
+    } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
 // reference_content<T&> type traits specializations
 //
 
 
-template <typename T>
-struct has_nothrow_copy<
-      ::boost::detail::reference_content< T& >
+    template<typename T>
+    struct has_nothrow_copy<
+            ::boost::detail::reference_content<T &>
     >
-    : mpl::true_
-{
-};
+            : mpl::true_ {
+    };
 
 
 } // namespace boost

@@ -16,12 +16,12 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for wavenumber : L^-1
-typedef derived_dimension<length_base_dimension,-1>::type wavenumber_dimension;                 
+        typedef derived_dimension<length_base_dimension, -1>::type wavenumber_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

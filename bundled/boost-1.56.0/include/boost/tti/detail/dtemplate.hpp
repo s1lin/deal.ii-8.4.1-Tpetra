@@ -25,11 +25,11 @@
     ) \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_ASSERT_NOT_NIL(trait,name,params) \
+#define BOOST_TTI_DETAIL_TRAIT_ASSERT_NOT_NIL(trait, name, params) \
   BOOST_PP_ASSERT_MSG(0, "The parameter must be BOOST_PP_NIL") \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_CHECK_IS_NIL(trait,name,params) \
+#define BOOST_TTI_DETAIL_TRAIT_CHECK_IS_NIL(trait, name, params) \
   BOOST_PP_IIF \
     ( \
     BOOST_TTI_DETAIL_IS_NIL(params), \
@@ -39,7 +39,7 @@
     (trait,name,params) \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_THT(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_THT(trait, name) \
   BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \
   template<class BOOST_TTI_DETAIL_TP_T> \
   struct BOOST_PP_CAT(trait,_tht) : \
@@ -48,18 +48,18 @@
     }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE(trait,name,params) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE(trait, name, params) \
   BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_THT(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T> \
   struct trait \
     { \
     typedef typename \
-  	boost::mpl::eval_if \
-  		< \
-  		boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
-  		BOOST_PP_CAT(trait,_tht)<BOOST_TTI_DETAIL_TP_T>, \
-  		boost::mpl::false_ \
-  		>::type type; \
+    boost::mpl::eval_if \
+        < \
+        boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
+        BOOST_PP_CAT(trait,_tht)<BOOST_TTI_DETAIL_TP_T>, \
+        boost::mpl::false_ \
+        >::type type; \
     BOOST_STATIC_CONSTANT(bool,value=type::value); \
     }; \
 /**/

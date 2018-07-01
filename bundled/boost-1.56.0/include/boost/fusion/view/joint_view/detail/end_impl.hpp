@@ -11,32 +11,30 @@
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/mpl/if.hpp>
 
-namespace boost { namespace fusion
-{
-    struct joint_view_tag;
+namespace boost {
+    namespace fusion {
+        struct joint_view_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
 
-        template <>
-        struct end_impl<joint_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::concat_last_type type;
+            template<>
+            struct end_impl<joint_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::concat_last_type type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s)
-                {
-                    return s.concat_last();
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s)
+                    {
+                        return s.concat_last();
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

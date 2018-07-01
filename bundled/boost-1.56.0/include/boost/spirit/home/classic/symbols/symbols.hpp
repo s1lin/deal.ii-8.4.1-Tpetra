@@ -21,9 +21,10 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -67,69 +68,65 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //          sym.add("hello", 1)("crazy", 2)("world", 3);
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T, typename CharT, typename SetT>
-class symbols
-:   private SetT
-,   public parser<symbols<T, CharT, SetT> >
-{
-public:
+        template<typename T, typename CharT, typename SetT>
+        class symbols
+                : private SetT, public parser<symbols<T, CharT, SetT> > {
+        public:
 
-    typedef parser<symbols<T, CharT, SetT> > parser_base_t;
-    typedef symbols<T, CharT, SetT> self_t;
-    typedef self_t const& embed_t;
-    typedef T symbol_data_t;
-    typedef boost::reference_wrapper<T> symbol_ref_t;
+            typedef parser <symbols<T, CharT, SetT>> parser_base_t;
+            typedef symbols<T, CharT, SetT> self_t;
+            typedef self_t const &embed_t;
+            typedef T symbol_data_t;
+            typedef boost::reference_wrapper<T> symbol_ref_t;
 
-    symbols();
-    symbols(symbols const& other);
-    ~symbols();
+            symbols();
 
-    symbols&
-    operator=(symbols const& other);
+            symbols(symbols const &other);
 
-    symbol_inserter<T, SetT> const&
-    operator=(CharT const* str);
+            ~symbols();
 
-    template <typename ScannerT>
-    struct result
-    {
-        typedef typename match_result<ScannerT, symbol_ref_t>::type type;
-    };
+            symbols &
+            operator=(symbols const &other);
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse_main(ScannerT const& scan) const
-    {
-        typedef typename ScannerT::iterator_t iterator_t;
-        iterator_t first = scan.first;
-        typename SetT::search_info result = SetT::find(scan);
+            symbol_inserter <T, SetT> const &
+            operator=(CharT const *str);
 
-        if (result.data)
-            return scan.
-                create_match(
-                    result.length,
-                    symbol_ref_t(*result.data),
-                    first,
-                    scan.first);
-        else
-            return scan.no_match();
-    }
+            template<typename ScannerT>
+            struct result {
+                typedef typename match_result<ScannerT, symbol_ref_t>::type type;
+            };
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        typedef typename parser_result<self_t, ScannerT>::type result_t;
-        return impl::implicit_lexeme_parse<result_t>
-            (*this, scan, scan);
-    }
+            template<typename ScannerT>
+            typename parser_result<self_t, ScannerT>::type
+            parse_main(ScannerT const &scan) const {
+                typedef typename ScannerT::iterator_t iterator_t;
+                iterator_t first = scan.first;
+                typename SetT::search_info result = SetT::find(scan);
 
-    template < typename ScannerT >
-    T* find(ScannerT const& scan) const
-    { return SetT::find(scan).data; }
+                if (result.data)
+                    return scan.
+                            create_match(
+                            result.length,
+                            symbol_ref_t(*result.data),
+                            first,
+                            scan.first);
+                else
+                    return scan.no_match();
+            }
 
-    symbol_inserter<T, SetT> const add;
-};
+            template<typename ScannerT>
+            typename parser_result<self_t, ScannerT>::type
+            parse(ScannerT const &scan) const {
+                typedef typename parser_result<self_t, ScannerT>::type result_t;
+                return impl::implicit_lexeme_parse<result_t>
+                        (*this, scan, scan);
+            }
+
+            template<typename ScannerT>
+            T *find(ScannerT const &scan) const { return SetT::find(scan).data; }
+
+            symbol_inserter <T, SetT> const add;
+        };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -148,11 +145,11 @@ public:
 //      pointer to the data associated with the symbol or NULL if not found
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T, typename CharT, typename SetT>
-T*  add(symbols<T, CharT, SetT>& table, CharT const* sym, T const& data = T());
+        template<typename T, typename CharT, typename SetT>
+        T *add(symbols<T, CharT, SetT> &table, CharT const *sym, T const &data = T());
 
-template <typename T, typename CharT, typename SetT>
-T*  find(symbols<T, CharT, SetT> const& table, CharT const* sym);
+        template<typename T, typename CharT, typename SetT>
+        T *find(symbols<T, CharT, SetT> const &table, CharT const *sym);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -175,55 +172,53 @@ T*  find(symbols<T, CharT, SetT> const& table, CharT const* sym);
 //          p[sym.add]
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T, typename SetT>
-class symbol_inserter
-{
-public:
+        template<typename T, typename SetT>
+        class symbol_inserter {
+        public:
 
-    symbol_inserter(SetT& set_)
-    : set(set_) {}
+            symbol_inserter(SetT &set_)
+                    : set(set_) {}
 
-    typedef symbol_inserter const & result_type;
+            typedef symbol_inserter const &result_type;
 
-    template <typename IteratorT>
-    symbol_inserter const&
-    operator()(IteratorT first, IteratorT const& last, T const& data = T()) const
-    {
-        set.add(first, last, data);
-        return *this;
-    }
+            template<typename IteratorT>
+            symbol_inserter const &
+            operator()(IteratorT first, IteratorT const &last, T const &data = T()) const {
+                set.add(first, last, data);
+                return *this;
+            }
 
-    template <typename CharT>
-    symbol_inserter const&
-    operator()(CharT const* str, T const& data = T()) const
-    {
-        CharT const* last = str;
-        while (*last)
-            last++;
-        set.add(str, last, data);
-        return *this;
-    }
+            template<typename CharT>
+            symbol_inserter const &
+            operator()(CharT const *str, T const &data = T()) const {
+                CharT const *last = str;
+                while (*last)
+                    last++;
+                set.add(str, last, data);
+                return *this;
+            }
 
-    template <typename CharT>
-    symbol_inserter const&
-    operator,(CharT const* str) const
-    {
-        CharT const* last = str;
-        while (*last)
-            last++;
-        set.add(str, last, T());
-        return *this;
-    }
+            template<typename CharT>
+            symbol_inserter const &
+            operator,(CharT const *str) const {
+                CharT const *last = str;
+                while (*last)
+                    last++;
+                set.add(str, last, T());
+                return *this;
+            }
 
-private:
+        private:
 
-    SetT& set;
-};
+            SetT &set;
+        };
 
 ///////////////////////////////////////////////////////////////////////////////
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+    }
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #include <boost/spirit/home/classic/symbols/impl/symbols.ipp>
+
 #endif

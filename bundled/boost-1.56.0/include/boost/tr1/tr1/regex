@@ -7,7 +7,9 @@
 #ifndef BOOST_TR1_REGEX_INCLUDED
 #  define BOOST_TR1_REGEX_INCLUDED
 #  define BOOST_TR1_NO_RECURSION
+
 #  include <boost/tr1/detail/config_all.hpp>
+
 #  ifdef BOOST_HAS_TR1_REGEX
 #     if defined(BOOST_HAS_INCLUDE_NEXT) && !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT)
 #        include_next BOOST_TR1_HEADER(regex)
@@ -15,7 +17,9 @@
 #        include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(regex))
 #     endif
 #  else
+
 #     include <boost/tr1/regex.hpp>
+
 #  endif
 #  undef BOOST_TR1_NO_RECURSION
 #endif

@@ -23,8 +23,11 @@
 
 
 #include <boost/config.hpp>
+
 #ifndef BOOST_NO_EXCEPTIONS
-    #include <exception>
+
+#include <exception>
+
 #endif
 
 #include <boost/call_traits.hpp>
@@ -36,61 +39,61 @@
 #include <boost/mpl/identity.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-template<class T>
+        template<class T>
 // T requirements:
 //  - POD or object semantic (cannot be reference, function, ...)
 //  - copy constructor
 //  - operator = (no-throw one preferred)
-class state_saver : private boost::noncopyable
-{
-private:
-    const T previous_value;
-    T & previous_ref;
+        class state_saver : private boost::noncopyable {
+        private:
+            const T previous_value;
+            T &previous_ref;
 
-    struct restore {
-        static void invoke(T & previous_ref, const T & previous_value){
-            previous_ref = previous_value; // won't throw
-        }
-    };
+            struct restore {
+                static void invoke(T &previous_ref, const T &previous_value) {
+                    previous_ref = previous_value; // won't throw
+                }
+            };
 
-    struct restore_with_exception {
-        static void invoke(T & previous_ref, const T & previous_value){
-            BOOST_TRY{
+            struct restore_with_exception {
+                static void invoke(T &previous_ref, const T &previous_value) {
+                    BOOST_TRY{
+                            previous_ref = previous_value;
+                    }
+                    BOOST_CATCH(::std::exception & )
+                    {
+                        // we must ignore it - we are in destructor
+                    }
+                    BOOST_CATCH_END
+                }
+            };
+
+        public:
+            state_saver(
+                    T &object
+            ) :
+                    previous_value(object),
+                    previous_ref(object) {}
+
+            ~state_saver() {
+#ifndef BOOST_NO_EXCEPTIONS
+                typedef typename mpl::eval_if<
+                has_nothrow_copy < T > ,
+                        mpl::identity < restore >,
+                        mpl::identity < restore_with_exception >
+                        > ::type
+                typex;
+                typex::invoke(previous_ref, previous_value);
+#else
                 previous_ref = previous_value;
-            } 
-            BOOST_CATCH(::std::exception &) { 
-                // we must ignore it - we are in destructor
+#endif
             }
-            BOOST_CATCH_END
-        }
-    };
 
-public:
-    state_saver(
-        T & object
-    ) : 
-        previous_value(object),
-        previous_ref(object) 
-    {}
-    
-    ~state_saver() {
-        #ifndef BOOST_NO_EXCEPTIONS
-            typedef typename mpl::eval_if<
-                has_nothrow_copy< T >,
-                mpl::identity<restore>,
-                mpl::identity<restore_with_exception>
-            >::type typex;
-            typex::invoke(previous_ref, previous_value);
-        #else
-            previous_ref = previous_value;
-        #endif
-    }
+        }; // state_saver<>
 
-}; // state_saver<>
-
-} // serialization
+    } // serialization
 } // boost
 
 #endif //BOOST_SERIALIZATION_STATE_SAVER_HPP

@@ -9,48 +9,48 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_report_triplet
-(
-    int n_row,
-    int n_col,
-    int nz,
-    const int Ti [ ],
-    const int Tj [ ],
-    const double Tx [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                int n_row,
+                int n_col,
+                int nz,
+                const int Ti[],
+                const int Tj[],
+                const double Tx[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_dl_report_triplet
-(
-    UF_long n_row,
-    UF_long n_col,
-    UF_long nz,
-    const UF_long Ti [ ],
-    const UF_long Tj [ ],
-    const double Tx [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                UF_long nz,
+                const UF_long Ti[],
+                const UF_long Tj[],
+                const double Tx[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 int umfpack_zi_report_triplet
-(
-    int n_row,
-    int n_col,
-    int nz,
-    const int Ti [ ],
-    const int Tj [ ],
-    const double Tx [ ], const double Tz [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                int n_row,
+                int n_col,
+                int nz,
+                const int Ti[],
+                const int Tj[],
+                const double Tx[], const double Tz[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_zl_report_triplet
-(
-    UF_long n_row,
-    UF_long n_col,
-    UF_long nz,
-    const UF_long Ti [ ],
-    const UF_long Tj [ ],
-    const double Tx [ ], const double Tz [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                UF_long nz,
+                const UF_long Ti[],
+                const UF_long Tj[],
+                const double Tx[], const double Tz[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 /*
 double int Syntax:

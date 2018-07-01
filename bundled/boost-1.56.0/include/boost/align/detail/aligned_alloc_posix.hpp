@@ -17,29 +17,35 @@
 
 namespace boost {
     namespace alignment {
-        inline void* aligned_alloc(std::size_t alignment,
-            std::size_t size) BOOST_NOEXCEPT
-        {
-            BOOST_ASSERT(detail::is_alignment(alignment));
-            enum {
-                void_size = sizeof(void*)
-            };
-            if (alignment < void_size) {
-                alignment = void_size;
-            }
-            void* p;
-            if (::posix_memalign(&p, alignment, size) != 0) {
-                p = 0;
-            }
-            return p;
-        }
+        inline void *aligned_alloc(std::size_t alignment,
+                                   std::size_t size)
 
-        inline void aligned_free(void* ptr)
-            BOOST_NOEXCEPT
-        {
-            ::free(ptr);
-        }
+        BOOST_NOEXCEPT {
+        BOOST_ASSERT (detail::is_alignment(alignment));
+
+        enum {
+            void_size = sizeof(void *)
+        };
+        if (alignment<void_size) {
+        alignment = void_size;
     }
+    void *p;
+    if (
+    ::posix_memalign(&p, alignment, size
+    ) != 0) {
+    p = 0;
+}
+return
+p;
+}
+
+inline void aligned_free(void *ptr)
+
+BOOST_NOEXCEPT
+{
+::free(ptr);
+}
+}
 }
 
 #endif

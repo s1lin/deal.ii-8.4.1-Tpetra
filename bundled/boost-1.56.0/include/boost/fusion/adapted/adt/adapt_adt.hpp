@@ -44,7 +44,7 @@
     BOOST_FUSION_ADAPT_ADT_C_BASE(                                              \
         TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, ATTRIBUTE, 4)
 
-#define BOOST_FUSION_ADAPT_TPL_ADT(TEMPLATE_PARAMS_SEQ, NAME_SEQ , ATTRIBUTES)  \
+#define BOOST_FUSION_ADAPT_TPL_ADT(TEMPLATE_PARAMS_SEQ, NAME_SEQ, ATTRIBUTES)  \
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \
         (1)TEMPLATE_PARAMS_SEQ,                                                 \
         (1)NAME_SEQ,                                                            \

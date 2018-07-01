@@ -18,7 +18,9 @@
 #include <boost/fusion/support/pair.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/generation/detail/preprocessed/make_map.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/make_map" FUSION_MAX_MAP_SIZE_STR".hpp")
@@ -104,9 +106,9 @@ namespace boost { namespace fusion
             BOOST_PP_ENUM_PARAMS(N, typename K)
           , BOOST_PP_ENUM_PARAMS(N, typename D)
         >
-        #define TEXT(z, n, text) , text
+#define TEXT(z, n, text) , text
         struct make_map<BOOST_PP_ENUM_PARAMS(N, K), BOOST_PP_ENUM_PARAMS(N, D) BOOST_PP_REPEAT_FROM_TO(N, FUSION_MAX_VECTOR_SIZE, TEXT, void_) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_VECTOR_SIZE, TEXT, void_)>
-        #undef TEXT
+#undef TEXT
         {
             typedef map<BOOST_PP_ENUM(N, BOOST_FUSION_PAIR, _)> type;
         };

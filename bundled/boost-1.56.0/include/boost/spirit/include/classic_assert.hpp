@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_ASSERT
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_ASSERT
+
 #include <boost/spirit/home/classic/core/assert.hpp>
+
 #endif

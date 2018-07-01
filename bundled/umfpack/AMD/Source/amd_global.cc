@@ -47,11 +47,16 @@ void (*amd_free) (void *) = mxFree ;
 void *(*amd_realloc) (void *, size_t) = mxRealloc ;
 void *(*amd_calloc) (size_t, size_t) = mxCalloc ;
 #else
+
 /* standard ANSI-C: */
-void *(*amd_malloc) (size_t) = malloc ;
-void (*amd_free) (void *) = free ;
-void *(*amd_realloc) (void *, size_t) = realloc ;
-void *(*amd_calloc) (size_t, size_t) = calloc ;
+void *(*amd_malloc)(size_t) = malloc;
+
+void (*amd_free)(void *) = free;
+
+void *(*amd_realloc)(void *, size_t) = realloc;
+
+void *(*amd_calloc)(size_t, size_t) = calloc;
+
 #endif
 #else
 /* no memory manager defined at compile-time; you MUST define one at run-time */
@@ -76,8 +81,11 @@ void *(*amd_calloc) (size_t, size_t) = NULL ;
 #ifdef MATLAB_MEX_FILE
 int (*amd_printf) (const char *, ...) = mexPrintf ;
 #else
+
 #include <stdio.h>
-int (*amd_printf) (const char *, ...) = printf ;
+
+int (*amd_printf)(const char *, ...) = printf;
+
 #endif
 #else
 int (*amd_printf) (const char *, ...) = NULL ;

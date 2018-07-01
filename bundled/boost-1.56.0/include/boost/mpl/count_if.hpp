@@ -25,55 +25,49 @@
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-namespace aux {
+        namespace aux {
 
-template< typename Predicate >
-struct next_if
-{
-    template<
-          typename N
-        , typename T
-        >
-    struct apply
+            template<typename Predicate>
+            struct next_if {
+                template<
+                        typename N, typename T
+                >
+                struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
-        : eval_if<
-              typename apply1<Predicate,T>::type
-            , next<N>
-            , identity<N>
-            >
-    {
+                        : eval_if<
+                                typename apply1<Predicate, T>::type, next < N>, identity<N>
+                >
+                {
 #else
-    {
-        typedef typename eval_if<
-              typename apply1<Predicate,T>::type
-            , next<N>
-            , identity<N>
-            >::type type;
+                    {
+                        typedef typename eval_if<
+                              typename apply1<Predicate,T>::type
+                            , next<N>
+                            , identity<N>
+                            >::type type;
 #endif
+                };
+            };
+
+        } // namespace aux
+
+
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence), typename BOOST_MPL_AUX_NA_PARAM(Predicate)
+        >
+        struct count_if
+                : aux::msvc_eti_base<typename fold<
+                        Sequence, integral_c < unsigned long, 0>, protect < aux::next_if<Predicate> >
+        >::type > {
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,count_if,(Sequence,Predicate))
     };
-};
 
-} // namespace aux
+    BOOST_MPL_AUX_NA_SPEC(2, count_if)
 
-
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(Predicate)
-    >
-struct count_if
-    : aux::msvc_eti_base< typename fold<
-          Sequence
-        , integral_c<unsigned long,0>
-        , protect< aux::next_if<Predicate> >
-        >::type >
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,count_if,(Sequence,Predicate))
-};
-
-BOOST_MPL_AUX_NA_SPEC(2, count_if)
-
-}}
+}
+}
 
 #endif // BOOST_MPL_COUNT_IF_HPP_INCLUDED

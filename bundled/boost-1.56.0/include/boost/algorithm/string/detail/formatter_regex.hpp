@@ -24,36 +24,33 @@ namespace boost {
 
             // regex format functor
             template<typename StringT>
-            struct regex_formatF
-            {
+            struct regex_formatF {
             private:
                 typedef StringT result_type;
-                typedef BOOST_STRING_TYPENAME StringT::value_type char_type;
+                typedef BOOST_STRING_TYPENAME StringT
+                ::value_type char_type;
 
             public:
                 // Construction
-                regex_formatF( const StringT& Fmt, match_flag_type Flags=format_default ) :
-                    m_Fmt(Fmt), m_Flags( Flags ) {}
+                regex_formatF(const StringT &Fmt, match_flag_type Flags = format_default) :
+                        m_Fmt(Fmt), m_Flags(Flags) {}
 
                 template<typename InputIteratorT>
-                result_type operator()( 
-                    const regex_search_result<InputIteratorT>& Replace ) const
-                {
-                    if ( Replace.empty() )
-                    {
+                result_type operator()(
+                        const regex_search_result <InputIteratorT> &Replace) const {
+                    if (Replace.empty()) {
                         return result_type();
-                    }
-                    else
-                    {
-                        return Replace.match_results().format( m_Fmt, m_Flags );                      
+                    } else {
+                        return Replace.match_results().format(m_Fmt, m_Flags);
                     }
                 }
+
             private:
-                const StringT& m_Fmt;
+                const StringT &m_Fmt;
                 match_flag_type m_Flags;
             };
 
-        
+
         } // namespace detail
     } // namespace algorithm
 } // namespace boost

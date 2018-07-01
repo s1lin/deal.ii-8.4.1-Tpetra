@@ -13,51 +13,51 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
-namespace boost { namespace fusion
-{
-    // Special tags:
-    struct sequence_facade_tag;
-    struct mpl_sequence_tag; // mpl sequence tag
+namespace boost {
+    namespace fusion {
+        // Special tags:
+        struct sequence_facade_tag;
+        struct mpl_sequence_tag; // mpl sequence tag
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct empty_impl
-        {
-            template <typename Sequence>
-            struct apply 
-                : mpl::bool_<(result_of::size<Sequence>::value == 0)>
-            {};
-        };
+        namespace extension {
+            template<typename Tag>
+            struct empty_impl {
+                template<typename Sequence>
+                struct apply
+                        : mpl::bool_<(result_of::size<Sequence>::value == 0)> {
+                };
+            };
 
-        template <>
-        struct empty_impl<sequence_facade_tag>
-        {
-            template <typename Sequence>
-            struct apply : Sequence::template empty<Sequence> {};
-        };
+            template<>
+            struct empty_impl<sequence_facade_tag> {
+                template<typename Sequence>
+                struct apply : Sequence::template empty<Sequence> {
+                };
+            };
 
-        template <>
-        struct empty_impl<mpl_sequence_tag>;
-    }
+            template<>
+            struct empty_impl<mpl_sequence_tag>;
+        }
 
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct empty 
-            : extension::empty_impl<typename detail::tag_of<Sequence>::type>::
-                template apply<Sequence>
-        {};
-    }
+        namespace result_of {
+            template<typename Sequence>
+            struct empty
+                    : extension::empty_impl<typename detail::tag_of<Sequence>::type>::
+                      template apply<Sequence> {
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::empty<Sequence>::type
-    empty(Sequence const&)
-    {
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::empty<Sequence>::type
+        empty(Sequence
+        const&) {
         typedef typename result_of::empty<Sequence>::type result;
-        return result();
+        return
+
+        result();
     }
-}}
+}
+}
 
 #endif

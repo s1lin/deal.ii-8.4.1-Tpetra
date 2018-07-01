@@ -12,70 +12,63 @@
 #include "boost/date_time/posix_time/posix_time_config.hpp"
 
 namespace boost {
-namespace posix_time {
+    namespace posix_time {
 
-  //! Allows expression of durations as an hour count
-  /*! \ingroup time_basics
-   */
-  class hours : public time_duration
-  {
-  public:
-    explicit hours(long h) :
-      time_duration(h,0,0)
-    {}
-  };
+        //! Allows expression of durations as an hour count
+        /*! \ingroup time_basics
+         */
+        class hours : public time_duration {
+        public:
+            explicit hours(long h) :
+                    time_duration(h, 0, 0) {}
+        };
 
-  //! Allows expression of durations as a minute count
-  /*! \ingroup time_basics
-   */
-  class minutes : public time_duration
-  {
-  public:
-    explicit minutes(long m) :
-      time_duration(0,m,0)
-    {}
-  };
+        //! Allows expression of durations as a minute count
+        /*! \ingroup time_basics
+         */
+        class minutes : public time_duration {
+        public:
+            explicit minutes(long m) :
+                    time_duration(0, m, 0) {}
+        };
 
-  //! Allows expression of durations as a seconds count
-  /*! \ingroup time_basics
-   */
-  class seconds : public time_duration
-  {
-  public:
-    explicit seconds(long s) :
-      time_duration(0,0,s)
-    {}
-  };
+        //! Allows expression of durations as a seconds count
+        /*! \ingroup time_basics
+         */
+        class seconds : public time_duration {
+        public:
+            explicit seconds(long s) :
+                    time_duration(0, 0, s) {}
+        };
 
 
-  //! Allows expression of durations as milli seconds
-  /*! \ingroup time_basics
-   */
-  typedef date_time::subsecond_duration<time_duration,1000> millisec;
-  typedef date_time::subsecond_duration<time_duration,1000> milliseconds;
+        //! Allows expression of durations as milli seconds
+        /*! \ingroup time_basics
+         */
+        typedef date_time::subsecond_duration<time_duration, 1000> millisec;
+        typedef date_time::subsecond_duration<time_duration, 1000> milliseconds;
 
-  //! Allows expression of durations as micro seconds
-  /*! \ingroup time_basics
-   */
-  typedef date_time::subsecond_duration<time_duration,1000000> microsec;
-  typedef date_time::subsecond_duration<time_duration,1000000> microseconds;
+        //! Allows expression of durations as micro seconds
+        /*! \ingroup time_basics
+         */
+        typedef date_time::subsecond_duration<time_duration, 1000000> microsec;
+        typedef date_time::subsecond_duration<time_duration, 1000000> microseconds;
 
-  //This is probably not needed anymore...
+        //This is probably not needed anymore...
 #if defined(BOOST_DATE_TIME_HAS_NANOSECONDS)
 
-  //! Allows expression of durations as nano seconds
-  /*! \ingroup time_basics
-   */
-  typedef date_time::subsecond_duration<time_duration,1000000000> nanosec;
-  typedef date_time::subsecond_duration<time_duration,1000000000> nanoseconds;
+        //! Allows expression of durations as nano seconds
+        /*! \ingroup time_basics
+         */
+        typedef date_time::subsecond_duration<time_duration,1000000000> nanosec;
+        typedef date_time::subsecond_duration<time_duration,1000000000> nanoseconds;
 
 
 #endif
 
 
-
-
-} }//namespace posix_time
+    }
+}//namespace posix_time
 
 
 #endif

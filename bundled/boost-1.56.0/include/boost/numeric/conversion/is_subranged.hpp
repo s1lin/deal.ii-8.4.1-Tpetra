@@ -12,15 +12,17 @@
 
 #include "boost/numeric/conversion/detail/is_subranged.hpp"
 
-namespace boost { namespace numeric {
+namespace boost {
+    namespace numeric {
 
-template<class T, class S>
-struct is_subranged
-  : convdetail::get_is_subranged<  BOOST_DEDUCED_TYPENAME remove_cv<T>::type
-                                  ,BOOST_DEDUCED_TYPENAME remove_cv<S>::type
-                                >::type {} ;
+        template<class T, class S>
+        struct is_subranged
+                : convdetail::get_is_subranged<BOOST_DEDUCED_TYPENAME remove_cv<T>::type, BOOST_DEDUCED_TYPENAME remove_cv<S>::type
+                >::type {
+        };
 
-} } // namespace boost::numeric
+    }
+} // namespace boost::numeric
 
 #endif
 

@@ -15,14 +15,16 @@
 #include <ostream>
 
 #define BOOST_ARCHIVE_SOURCE
+
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/impl/basic_text_oprimitive.ipp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
 // explicitly instantiate for this type of text stream
-template class basic_text_oprimitive<std::ostream> ;
+        template
+        class basic_text_oprimitive<std::ostream>;
 
-} // namespace archive
+    } // namespace archive
 } // namespace boost

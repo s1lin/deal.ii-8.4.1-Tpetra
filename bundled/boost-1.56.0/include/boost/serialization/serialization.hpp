@@ -57,41 +57,41 @@
 // one of the default template functions below.
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-BOOST_STRONG_TYPEDEF(unsigned int, version_type)
+        BOOST_STRONG_TYPEDEF(unsigned int, version_type)
 
 // default implementation - call the member function "serialize"
-template<class Archive, class T>
-inline void serialize(
-    Archive & ar, T & t, const BOOST_PFTO unsigned int file_version
-){
-    access::serialize(ar, t, static_cast<unsigned int>(file_version));
-}
+        template<class Archive, class T>
+        inline void serialize(
+                Archive &ar, T &t, const BOOST_PFTO unsigned int file_version
+        ) {
+            access::serialize(ar, t, static_cast<unsigned int>(file_version));
+        }
 
 // save data required for construction
-template<class Archive, class T>
-inline void save_construct_data(
-    Archive & /*ar*/, 
-    const T * /*t*/, 
-    const BOOST_PFTO unsigned int /*file_version */
-){
-    // default is to save no data because default constructor
-    // requires no arguments.
-}
+        template<class Archive, class T>
+        inline void save_construct_data(
+                Archive & /*ar*/,
+                const T * /*t*/,
+                const BOOST_PFTO unsigned int /*file_version */
+        ) {
+            // default is to save no data because default constructor
+            // requires no arguments.
+        }
 
 // load data required for construction and invoke constructor in place
-template<class Archive, class T>
-inline void load_construct_data(
-    Archive & /*ar*/, 
-    T * t, 
-    const BOOST_PFTO unsigned int /*file_version*/
-){
-    // default just uses the default constructor.  going
-    // through access permits usage of otherwise private default
-    // constructor
-    access::construct(t);
-}
+        template<class Archive, class T>
+        inline void load_construct_data(
+                Archive & /*ar*/,
+                T *t,
+                const BOOST_PFTO unsigned int /*file_version*/
+        ) {
+            // default just uses the default constructor.  going
+            // through access permits usage of otherwise private default
+            // constructor
+            access::construct(t);
+        }
 
 /////////////////////////////////////////////////////////////////////////////
 // layer 3 - move call into serialization namespace so that ADL will function
@@ -109,59 +109,59 @@ inline void load_construct_data(
 //
 // Due to Martin Ecker
 
-template<class Archive, class T>
-inline void serialize_adl(
-    Archive & ar, 
-    T & t, 
-    const unsigned int file_version
-){
-    // note usage of function overloading to delay final resolution
-    // until the point of instantiation.  This works around the two-phase
-    // lookup "feature" which inhibits redefintion of a default function
-    // template implementation. Due to Robert Ramey
-    //
-    // Note that this trick generates problems for compiles which don't support
-    // PFTO, suppress it here.  As far as we know, there are no compilers
-    // which fail to support PFTO while supporting two-phase lookup.
-    #if ! defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        const version_type v(file_version);
-        serialize(ar, t, v);
-    #else
-        serialize(ar, t, file_version);
-    #endif
-}
+        template<class Archive, class T>
+        inline void serialize_adl(
+                Archive &ar,
+                T &t,
+                const unsigned int file_version
+        ) {
+            // note usage of function overloading to delay final resolution
+            // until the point of instantiation.  This works around the two-phase
+            // lookup "feature" which inhibits redefintion of a default function
+            // template implementation. Due to Robert Ramey
+            //
+            // Note that this trick generates problems for compiles which don't support
+            // PFTO, suppress it here.  As far as we know, there are no compilers
+            // which fail to support PFTO while supporting two-phase lookup.
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+            const version_type v(file_version);
+            serialize(ar, t, v);
+#else
+            serialize(ar, t, file_version);
+#endif
+        }
 
-template<class Archive, class T>
-inline void save_construct_data_adl(
-    Archive & ar, 
-    const T * t, 
-    const unsigned int file_version
-){
-    // see above
-    #if ! defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        const version_type v(file_version);
-        save_construct_data(ar, t, v);
-    #else
-        save_construct_data(ar, t, file_version);
-    #endif
-}
+        template<class Archive, class T>
+        inline void save_construct_data_adl(
+                Archive &ar,
+                const T *t,
+                const unsigned int file_version
+        ) {
+            // see above
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+            const version_type v(file_version);
+            save_construct_data(ar, t, v);
+#else
+            save_construct_data(ar, t, file_version);
+#endif
+        }
 
-template<class Archive, class T>
-inline void load_construct_data_adl(
-    Archive & ar, 
-    T * t, 
-    const unsigned int file_version
-){
-    // see above comment
-    #if ! defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        const version_type v(file_version);
-        load_construct_data(ar, t, v);
-    #else
-        load_construct_data(ar, t, file_version);
-    #endif
-}
+        template<class Archive, class T>
+        inline void load_construct_data_adl(
+                Archive &ar,
+                T *t,
+                const unsigned int file_version
+        ) {
+            // see above comment
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+            const version_type v(file_version);
+            load_construct_data(ar, t, v);
+#else
+            load_construct_data(ar, t, file_version);
+#endif
+        }
 
-} // namespace serialization
+    } // namespace serialization
 } // namespace boost
 
 #endif //BOOST_SERIALIZATION_SERIALIZATION_HPP

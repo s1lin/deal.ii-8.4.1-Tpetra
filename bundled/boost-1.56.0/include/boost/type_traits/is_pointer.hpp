@@ -34,49 +34,48 @@
 namespace boost {
 
 #if defined( __CODEGEARC__ )
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,__is_pointer(T))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,__is_pointer(T))
 #else
 
-namespace detail {
+    namespace detail {
 
-template< typename T > struct is_pointer_helper
-{
-    BOOST_STATIC_CONSTANT(bool, value = false);
-};
+        template<typename T>
+        struct is_pointer_helper {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
 
-#   define TT_AUX_BOOL_TRAIT_HELPER_PARTIAL_SPEC(helper,sp,result) \
+#   define TT_AUX_BOOL_TRAIT_HELPER_PARTIAL_SPEC(helper, sp, result) \
 template< typename T > struct helper<sp> \
 { \
     BOOST_STATIC_CONSTANT(bool, value = result); \
 }; \
 /**/
 
-TT_AUX_BOOL_TRAIT_HELPER_PARTIAL_SPEC(is_pointer_helper,T*,true)
+        TT_AUX_BOOL_TRAIT_HELPER_PARTIAL_SPEC(is_pointer_helper, T *, true)
 
 #   undef TT_AUX_BOOL_TRAIT_HELPER_PARTIAL_SPEC
 
-template< typename T >
-struct is_pointer_impl
-{
-    BOOST_STATIC_CONSTANT(bool, value =
-        (::boost::type_traits::ice_and<
-        ::boost::detail::is_pointer_helper<typename remove_cv<T>::type>::value
-            , ::boost::type_traits::ice_not<
-                ::boost::is_member_pointer<T>::value
-                >::value
+        template<typename T>
+        struct is_pointer_impl {
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::type_traits::ice_and<
+                    ::boost::detail::is_pointer_helper<typename remove_cv<T>::type>::value, ::boost::type_traits::ice_not<
+                            ::boost::is_member_pointer<T>::value
+                    >::value
             >::value)
-        );
-};
+            );
+        };
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,::boost::detail::is_pointer_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer, T, ::boost::detail::is_pointer_impl<T>::value
+    )
 
 #if defined(__BORLANDC__) && !defined(__COMO__) && (__BORLANDC__ < 0x600)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T&,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const volatile,false)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T&,false)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const,false)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& volatile,false)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const volatile,false)
 #endif
 
 #endif

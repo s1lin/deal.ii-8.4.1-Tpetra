@@ -28,103 +28,97 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/detail/sp_typeinfo.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class sp_counted_base
-{
-private:
+        class sp_counted_base {
+        private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+            sp_counted_base(sp_counted_base const &);
 
-    long use_count_;        // #shared
-    long weak_count_;       // #weak + (#shared != 0)
+            sp_counted_base &operator=(sp_counted_base const &);
 
-public:
+            long use_count_;        // #shared
+            long weak_count_;       // #weak + (#shared != 0)
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {
-    }
+        public:
 
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
+            sp_counted_base() : use_count_(1), weak_count_(1) {
+            }
 
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
+            virtual ~sp_counted_base() // nothrow
+            {
+            }
 
-    virtual void dispose() = 0; // nothrow
+            // dispose() is called when use_count_ drops to zero, to release
+            // the resources managed by *this.
 
-    // destroy() is called when weak_count_ drops to zero.
+            virtual void dispose() = 0; // nothrow
 
-    virtual void destroy() // nothrow
-    {
-        delete this;
-    }
+            // destroy() is called when weak_count_ drops to zero.
 
-    virtual void * get_deleter( sp_typeinfo const & ti ) = 0;
-    virtual void * get_untyped_deleter() = 0;
+            virtual void destroy() // nothrow
+            {
+                delete this;
+            }
 
-    void add_ref_copy()
-    {
-        BOOST_SP_INTERLOCKED_INCREMENT( &use_count_ );
-    }
+            virtual void *get_deleter(sp_typeinfo const &ti) = 0;
 
-    bool add_ref_lock() // true on success
-    {
-        for( ;; )
-        {
-            long tmp = static_cast< long const volatile& >( use_count_ );
-            if( tmp == 0 ) return false;
+            virtual void *get_untyped_deleter() = 0;
 
-#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1200 )
+            void add_ref_copy() {
+                BOOST_SP_INTERLOCKED_INCREMENT(&use_count_);
+            }
 
-            // work around a code generation bug
+            bool add_ref_lock() // true on success
+            {
+                for (;;) {
+                    long tmp = static_cast< long const volatile & >( use_count_ );
+                    if (tmp == 0) return false;
 
-            long tmp2 = tmp + 1;
-            if( BOOST_SP_INTERLOCKED_COMPARE_EXCHANGE( &use_count_, tmp2, tmp ) == tmp2 - 1 ) return true;
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND(BOOST_MSVC, == 1200 )
+
+                    // work around a code generation bug
+
+                    long tmp2 = tmp + 1;
+                    if( BOOST_SP_INTERLOCKED_COMPARE_EXCHANGE( &use_count_, tmp2, tmp ) == tmp2 - 1 ) return true;
 
 #else
 
-            if( BOOST_SP_INTERLOCKED_COMPARE_EXCHANGE( &use_count_, tmp + 1, tmp ) == tmp ) return true;
+                    if (BOOST_SP_INTERLOCKED_COMPARE_EXCHANGE(&use_count_, tmp + 1, tmp) == tmp) return true;
 
 #endif
-        }
-    }
+                }
+            }
 
-    void release() // nothrow
-    {
-        if( BOOST_SP_INTERLOCKED_DECREMENT( &use_count_ ) == 0 )
-        {
-            dispose();
-            weak_release();
-        }
-    }
+            void release() // nothrow
+            {
+                if (BOOST_SP_INTERLOCKED_DECREMENT(&use_count_) == 0) {
+                    dispose();
+                    weak_release();
+                }
+            }
 
-    void weak_add_ref() // nothrow
-    {
-        BOOST_SP_INTERLOCKED_INCREMENT( &weak_count_ );
-    }
+            void weak_add_ref() // nothrow
+            {
+                BOOST_SP_INTERLOCKED_INCREMENT(&weak_count_);
+            }
 
-    void weak_release() // nothrow
-    {
-        if( BOOST_SP_INTERLOCKED_DECREMENT( &weak_count_ ) == 0 )
-        {
-            destroy();
-        }
-    }
+            void weak_release() // nothrow
+            {
+                if (BOOST_SP_INTERLOCKED_DECREMENT(&weak_count_) == 0) {
+                    destroy();
+                }
+            }
 
-    long use_count() const // nothrow
-    {
-        return static_cast<long const volatile &>( use_count_ );
-    }
-};
+            long use_count() const // nothrow
+            {
+                return static_cast<long const volatile &>( use_count_ );
+            }
+        };
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace boost
 

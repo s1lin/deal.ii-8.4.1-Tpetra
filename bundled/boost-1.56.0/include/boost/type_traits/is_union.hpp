@@ -20,35 +20,40 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 #ifndef __GNUC__
-template <typename T> struct is_union_impl
-{
-   typedef typename remove_cv<T>::type cvt;
+        template <typename T> struct is_union_impl
+        {
+           typedef typename remove_cv<T>::type cvt;
 #ifdef BOOST_IS_UNION
-   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(cvt));
+           BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(cvt));
 #else
-   BOOST_STATIC_CONSTANT(bool, value = false);
+           BOOST_STATIC_CONSTANT(bool, value = false);
 #endif
-};
+        };
 #else
+
 //
 // using remove_cv here generates a whole load of needless
 // warnings with gcc, since it doesn't do any good with gcc
 // in any case (at least at present), just remove it:
 //
-template <typename T> struct is_union_impl
-{
+        template<typename T>
+        struct is_union_impl {
 #ifdef BOOST_IS_UNION
-   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(T));
+            BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(T));
 #else
-   BOOST_STATIC_CONSTANT(bool, value = false);
-#endif
-};
-#endif
-} // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_union,T,::boost::detail::is_union_impl<T>::value)
+            BOOST_STATIC_CONSTANT(bool, value = false);
+
+#endif
+        };
+
+#endif
+    } // namespace detail
+
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_union, T, ::boost::detail::is_union_impl<T>::value
+    )
 
 } // namespace boost
 

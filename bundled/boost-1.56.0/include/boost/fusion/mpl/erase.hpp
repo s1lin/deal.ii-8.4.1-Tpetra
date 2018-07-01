@@ -13,28 +13,27 @@
 #include <boost/fusion/algorithm/transformation/erase.hpp>
 #include <boost/fusion/sequence/convert.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct erase_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct erase_impl;
 
-    template <>
-    struct erase_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence, typename First, typename Last>
-        struct apply
-        {
-            typedef typename
+        template<>
+        struct erase_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence, typename First, typename Last>
+            struct apply {
+                typedef typename
                 fusion::result_of::erase<Sequence, First, Last>::type
-            result;
+                        result;
 
-            typedef typename
+                typedef typename
                 fusion::result_of::convert<
-                    typename fusion::detail::tag_of<Sequence>::type, result>::type
-            type;
+                        typename fusion::detail::tag_of<Sequence>::type, result>::type
+                        type;
+            };
         };
-    };
-}}
+    }
+}
 
 #endif
 

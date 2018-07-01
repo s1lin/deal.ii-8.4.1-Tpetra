@@ -14,14 +14,17 @@
 #include <boost/preprocessor/iteration/iterate.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
-namespace boost { namespace fusion
-{
-    template <typename Dummy = void>
-    struct vector0;
-}}
+namespace boost {
+    namespace fusion {
+        template<typename Dummy = void>
+        struct vector0;
+    }
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/vector/detail/preprocessed/vector10_fwd.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/vector10_fwd.hpp")
@@ -43,9 +46,9 @@ namespace boost { namespace fusion
 namespace boost { namespace fusion
 {
     // expand vector1 to vector10
-    #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/vector10_fwd.hpp>
-    #define BOOST_PP_ITERATION_LIMITS (1, 10)
-    #include BOOST_PP_ITERATE()
+#define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/vector10_fwd.hpp>
+#define BOOST_PP_ITERATION_LIMITS (1, 10)
+#include BOOST_PP_ITERATE()
 }}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
@@ -58,7 +61,7 @@ namespace boost { namespace fusion
 
 #else
 
-    template <BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename T)>
-    struct BOOST_PP_CAT(vector, BOOST_PP_ITERATION());
+template <BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename T)>
+struct BOOST_PP_CAT(vector, BOOST_PP_ITERATION());
 
 #endif

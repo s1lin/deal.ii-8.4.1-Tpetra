@@ -19,12 +19,10 @@
 #include <boost/range/iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
-namespace boost
-{
+namespace boost {
     template<typename SinglePassRange>
     struct range_traversal
-        : iterator_traversal<typename range_iterator<SinglePassRange>::type>
-    {
+            : iterator_traversal<typename range_iterator<SinglePassRange>::type> {
     };
 }
 

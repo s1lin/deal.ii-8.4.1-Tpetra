@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_PARSER_TRAITS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_PARSER_TRAITS
+
 #include <boost/spirit/home/classic/meta/parser_traits.hpp>
+
 #endif

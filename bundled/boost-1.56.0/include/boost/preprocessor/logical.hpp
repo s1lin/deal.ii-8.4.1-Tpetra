@@ -6,14 +6,22 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LOGICAL_HPP
 # define BOOST_PREPROCESSOR_LOGICAL_HPP
 #
+
+
 # include <boost/preprocessor/logical/and.hpp>
 # include <boost/preprocessor/logical/bitand.hpp>
 # include <boost/preprocessor/logical/bitnor.hpp>
@@ -25,5 +33,7 @@
 # include <boost/preprocessor/logical/not.hpp>
 # include <boost/preprocessor/logical/or.hpp>
 # include <boost/preprocessor/logical/xor.hpp>
+
 #
+
 # endif

@@ -17,20 +17,21 @@
 #endif
 
 namespace boost {
-namespace detail {
-namespace winapi {
+    namespace detail {
+        namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetCurrentProcessId;
+            using ::GetCurrentProcessId;
 #else
 # ifndef UNDER_CE
-extern "C" {
-    __declspec(dllimport) DWORD_ WINAPI GetCurrentProcessId(void);
-}
+            extern "C" {
+            __declspec(dllimport) DWORD_ WINAPI
+            GetCurrentProcessId(void);
+            }
 # else
-    using ::GetCurrentProcessId;
+            using ::GetCurrentProcessId;
 # endif
 #endif
-}
-}
+        }
+    }
 }
 #endif // BOOST_DETAIL_WINAPI_PROCESS_HPP

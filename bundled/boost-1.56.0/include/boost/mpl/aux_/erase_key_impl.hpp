@@ -17,16 +17,18 @@
 #include <boost/mpl/erase_key_fwd.hpp>
 #include <boost/mpl/aux_/traits_lambda_spec.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Tag >
-struct erase_key_impl
-{
-    template< typename Sequence, typename Key > struct apply;
-};
+        template<typename Tag>
+        struct erase_key_impl {
+            template<typename Sequence, typename Key>
+            struct apply;
+        };
 
-BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(2, erase_key_impl)
+        BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(2, erase_key_impl)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_AUX_ERASE_KEY_IMPL_HPP_INCLUDED

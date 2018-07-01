@@ -26,7 +26,9 @@
 #include <boost/mpl/bool.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/map/detail/cpp03/preprocessed/map.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/map" FUSION_MAX_MAP_SIZE_STR ".hpp")
@@ -74,7 +76,7 @@ namespace boost { namespace fusion
         map(Sequence const& rhs)
             : data(rhs) {}
 
-        #include <boost/fusion/container/map/detail/cpp03/map_forward_ctor.hpp>
+#include <boost/fusion/container/map/detail/cpp03/map_forward_ctor.hpp>
 
         template <typename T>
         BOOST_FUSION_GPU_ENABLED

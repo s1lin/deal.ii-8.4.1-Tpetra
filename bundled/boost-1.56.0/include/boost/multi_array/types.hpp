@@ -21,17 +21,17 @@
 #include <cstddef>
 
 namespace boost {
-namespace detail {
-namespace multi_array{
+    namespace detail {
+        namespace multi_array {
 
 // needed typedefs
-typedef std::size_t size_type;
-typedef std::ptrdiff_t index;
+            typedef std::size_t size_type;
+            typedef std::ptrdiff_t index;
 
-} // namespace multi_array
-} // namespace detail
+        } // namespace multi_array
+    } // namespace detail
 } // namespace boost
-  
+
 
 
 

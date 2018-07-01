@@ -16,109 +16,114 @@
 # include <boost/detail/workaround.hpp>
 # include <cstddef>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-template<class T> struct addr_impl_ref
-{
-    T & v_;
+        template<class T>
+        struct addr_impl_ref {
+            T &v_;
 
-    BOOST_FORCEINLINE addr_impl_ref( T & v ): v_( v ) {}
-    BOOST_FORCEINLINE operator T& () const { return v_; }
+            BOOST_FORCEINLINE addr_impl_ref(T &v): v_(v) {}
 
-private:
-    addr_impl_ref & operator=(const addr_impl_ref &);
-};
+            BOOST_FORCEINLINE operator T &() const { return v_; }
 
-template<class T> struct addressof_impl
-{
-    static BOOST_FORCEINLINE T * f( T & v, long )
-    {
-        return reinterpret_cast<T*>(
-            &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
-    }
+        private:
+            addr_impl_ref &operator=(const addr_impl_ref &);
+        };
 
-    static BOOST_FORCEINLINE T * f( T * v, int )
-    {
-        return v;
-    }
-};
+        template<class T>
+        struct addressof_impl {
+            static BOOST_FORCEINLINE T * f( T & v, long )
+            {
+                return reinterpret_cast<T *>(
+                        &const_cast<char &>(reinterpret_cast<const volatile char &>(v)));
+            }
+
+            static BOOST_FORCEINLINE T * f( T * v, int )
+            {
+                return v;
+            }
+        };
 
 #if !defined( BOOST_NO_CXX11_NULLPTR )
 
 #if defined( __clang__ ) && !defined( _LIBCPP_VERSION ) && !defined( BOOST_NO_CXX11_DECLTYPE )
 
-    typedef decltype(nullptr) addr_nullptr_t;
+        typedef decltype(nullptr) addr_nullptr_t;
 
 #else
 
-    typedef std::nullptr_t addr_nullptr_t;
+        typedef std::nullptr_t addr_nullptr_t;
 
 #endif
 
-template<> struct addressof_impl< addr_nullptr_t >
-{
-    typedef addr_nullptr_t T;
+        template<>
+        struct addressof_impl<addr_nullptr_t> {
+            typedef addr_nullptr_t T;
 
-    static BOOST_FORCEINLINE T * f( T & v, int )
-    {
-        return &v;
-    }
-};
+            static BOOST_FORCEINLINE T * f( T & v, int )
+            {
+                return &v;
+            }
+        };
 
-template<> struct addressof_impl< addr_nullptr_t const >
-{
-    typedef addr_nullptr_t const T;
+        template<>
+        struct addressof_impl<addr_nullptr_t const> {
+            typedef addr_nullptr_t const T;
 
-    static BOOST_FORCEINLINE T * f( T & v, int )
-    {
-        return &v;
-    }
-};
+            static BOOST_FORCEINLINE T * f( T & v, int )
+            {
+                return &v;
+            }
+        };
 
-template<> struct addressof_impl< addr_nullptr_t volatile >
-{
-    typedef addr_nullptr_t volatile T;
+        template<>
+        struct addressof_impl<addr_nullptr_t volatile> {
+            typedef addr_nullptr_t volatile T;
 
-    static BOOST_FORCEINLINE T * f( T & v, int )
-    {
-        return &v;
-    }
-};
+            static BOOST_FORCEINLINE T * f( T & v, int )
+            {
+                return &v;
+            }
+        };
 
-template<> struct addressof_impl< addr_nullptr_t const volatile >
-{
-    typedef addr_nullptr_t const volatile T;
+        template<>
+        struct addressof_impl<addr_nullptr_t const volatile> {
+            typedef addr_nullptr_t const volatile T;
 
-    static BOOST_FORCEINLINE T * f( T & v, int )
-    {
-        return &v;
-    }
-};
+            static BOOST_FORCEINLINE T * f( T & v, int )
+            {
+                return &v;
+            }
+        };
 
 #endif
 
-} // namespace detail
+    } // namespace detail
 
-template<class T>
-BOOST_FORCEINLINE
-T * addressof( T & v )
-{
-#if (defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x610 ) ) ) || defined( __SUNPRO_CC )
+    template<class T>
+    BOOST_FORCEINLINE
+            T
+    *
+    addressof( T
+    & v ) {
+#if (defined( __BORLANDC__ ) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610))) || defined( __SUNPRO_CC )
 
     return boost::detail::addressof_impl<T>::f( v, 0 );
 
 #else
 
-    return boost::detail::addressof_impl<T>::f( boost::detail::addr_impl_ref<T>( v ), 0 );
+    return
+
+    boost::detail::addressof_impl<T>::f( boost::detail::addr_impl_ref<T>(v),
+
+    0 );
 
 #endif
 }
 
-#if defined( __SUNPRO_CC ) && BOOST_WORKAROUND( __SUNPRO_CC, BOOST_TESTED_AT( 0x590 ) )
+#if defined( __SUNPRO_CC ) && BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
 
 namespace detail
 {

@@ -9,28 +9,28 @@
 /* -------------------------------------------------------------------------- */
 
 void umfpack_di_report_status
-(
-    const double Control [UMFPACK_CONTROL],
-    int status
-) ;
+        (
+                const double Control[UMFPACK_CONTROL],
+                int status
+        );
 
 void umfpack_dl_report_status
-(
-    const double Control [UMFPACK_CONTROL],
-    UF_long status
-) ;
+        (
+                const double Control[UMFPACK_CONTROL],
+                UF_long status
+        );
 
 void umfpack_zi_report_status
-(
-    const double Control [UMFPACK_CONTROL],
-    int status
-) ;
+        (
+                const double Control[UMFPACK_CONTROL],
+                int status
+        );
 
 void umfpack_zl_report_status
-(
-    const double Control [UMFPACK_CONTROL],
-    UF_long status
-) ;
+        (
+                const double Control[UMFPACK_CONTROL],
+                UF_long status
+        );
 
 /*
 double int Syntax:

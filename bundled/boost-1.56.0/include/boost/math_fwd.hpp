@@ -11,38 +11,40 @@
 
 #include <boost/cstdint.hpp>
 
-namespace boost
-{
-namespace math
-{
+namespace boost {
+    namespace math {
 
 
 //  From <boost/math/quaternion.hpp>  ----------------------------------------//
 
-template < typename T >
-    class quaternion;
+        template<typename T>
+        class quaternion;
 
-template < >
-    class quaternion< float >;
-template < >
-    class quaternion< double >;
-template < >
-    class quaternion< long double >;
+        template<>
+        class quaternion<float>;
+
+        template<>
+        class quaternion<double>;
+
+        template<>
+        class quaternion<long double>;
 
 // Also has many function templates (including operators)
 
 
 //  From <boost/math/octonion.hpp>  ------------------------------------------//
 
-template < typename T >
-    class octonion;
+        template<typename T>
+        class octonion;
 
-template < >
-    class octonion< float >;
-template < >
-    class octonion< double >;
-template < >
-    class octonion< long double >;
+        template<>
+        class octonion<float>;
+
+        template<>
+        class octonion<double>;
+
+        template<>
+        class octonion<long double>;
 
 // Also has many function templates (including operators)
 
@@ -80,28 +82,29 @@ template < >
 //  From <boost/math/common_factor_ct.hpp>  ----------------------------------//
 
 #ifdef BOOST_NO_INTEGRAL_INT64_T
-     typedef unsigned long static_gcd_type;
+        typedef unsigned long static_gcd_type;
 #else
-     typedef boost::uintmax_t static_gcd_type;
+        typedef boost::uintmax_t static_gcd_type;
 #endif
 
-template < static_gcd_type Value1, static_gcd_type Value2 >
-    struct static_gcd;
-template < static_gcd_type Value1, static_gcd_type Value2 >
-    struct static_lcm;
+        template<static_gcd_type Value1, static_gcd_type Value2>
+        struct static_gcd;
+        template<static_gcd_type Value1, static_gcd_type Value2>
+        struct static_lcm;
 
 
 //  From <boost/math/common_factor_rt.hpp>  ----------------------------------//
 
-template < typename IntegerType >
-    class gcd_evaluator;
-template < typename IntegerType >
-    class lcm_evaluator;
+        template<typename IntegerType>
+        class gcd_evaluator;
+
+        template<typename IntegerType>
+        class lcm_evaluator;
 
 // Also has a couple of function templates
 
 
-}  // namespace math
+    }  // namespace math
 }  // namespace boost
 
 

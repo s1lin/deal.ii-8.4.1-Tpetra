@@ -19,34 +19,35 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion
-{
-    struct vector_iterator_tag;
-    struct random_access_traversal_tag;
+namespace boost {
+    namespace fusion {
+        struct vector_iterator_tag;
+        struct random_access_traversal_tag;
 
-    template <typename Vector, int N>
-    struct vector_iterator_identity;
+        template<typename Vector, int N>
+        struct vector_iterator_identity;
 
-    template <typename Vector, int N>
-    struct vector_iterator : iterator_base<vector_iterator<Vector, N> >
-    {
-        typedef mpl::int_<N> index;
-        typedef Vector vector;
-        typedef vector_iterator_tag fusion_tag;
-        typedef random_access_traversal_tag category;
-        typedef vector_iterator_identity<
-            typename add_const<Vector>::type, N> identity;
+        template<typename Vector, int N>
+        struct vector_iterator : iterator_base<vector_iterator<Vector, N> > {
+            typedef mpl::int_ <N> index;
+            typedef Vector vector;
+            typedef vector_iterator_tag fusion_tag;
+            typedef random_access_traversal_tag category;
+            typedef vector_iterator_identity<
+                    typename add_const<Vector>::type, N> identity;
 
-        BOOST_FUSION_GPU_ENABLED
-        vector_iterator(Vector& in_vec)
-            : vec(in_vec) {}
-        Vector& vec;
+            BOOST_FUSION_GPU_ENABLED
+            vector_iterator(Vector &in_vec)
+                    : vec(in_vec) {}
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        vector_iterator& operator= (vector_iterator const&);
-    };
-}}
+            Vector &vec;
+
+        private:
+            // silence MSVC warning C4512: assignment operator could not be generated
+            vector_iterator &operator=(vector_iterator const &);
+        };
+    }
+}
 
 #endif
 

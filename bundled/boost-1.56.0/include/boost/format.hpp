@@ -20,7 +20,9 @@
 #include <boost/config.hpp>
 
 #ifndef BOOST_NO_STD_LOCALE
+
 #include <locale>
+
 #endif
 
 // ***   Compatibility framework
@@ -35,7 +37,7 @@
 #include <boost/format/internals_fwd.hpp>  // misc forward declarations for internal use
 
 // ****  Auxiliary structs (stream_format_state<Ch,Tr> , and format_item<Ch,Tr> )
-#include <boost/format/internals.hpp>    
+#include <boost/format/internals.hpp>
 
 // ****  Format  class  interface --------------------------------
 #include <boost/format/format_class.hpp>

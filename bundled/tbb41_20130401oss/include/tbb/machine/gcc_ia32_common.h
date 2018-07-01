@@ -33,12 +33,13 @@
 //uses __TBB_Log2 and contains the assert and remove the assert from here and all other
 //platform-specific headers.
 //TODO: Check if use of gcc intrinsic gives a better chance for cross call optimizations
-static inline intptr_t __TBB_machine_lg( uintptr_t x ) {
+static inline intptr_t __TBB_machine_lg(uintptr_t x) {
     __TBB_ASSERT(x, "__TBB_Log2(0) undefined");
     uintptr_t j;
     __asm__ ("bsr %1,%0" : "=r"(j) : "r"(x));
     return j;
 }
+
 #define __TBB_Log2(V)  __TBB_machine_lg(V)
 
 #ifndef __TBB_Pause
@@ -51,12 +52,13 @@ static inline intptr_t __TBB_machine_lg( uintptr_t x ) {
 //instruction decode slots from the other hyperthread.
 
 //TODO: check if use of gcc __builtin_ia32_pause intrinsic gives a "some how" better performing code
-static inline void __TBB_machine_pause( int32_t delay ) {
+static inline void __TBB_machine_pause(int32_t delay) {
     for (int32_t i = 0; i < delay; i++) {
-       __asm__ __volatile__("pause;");
+        __asm__ __volatile__("pause;");
     }
     return;
 }
+
 #define __TBB_Pause(V) __TBB_machine_pause(V)
 #endif /* !__TBB_Pause */
 
@@ -65,10 +67,11 @@ static inline void __TBB_machine_pause( int32_t delay ) {
 #define __TBB_CPU_CTL_ENV_PRESENT 1
 
 struct __TBB_cpu_ctl_env_t {
-    int     mxcsr;
-    short   x87cw;
+    int mxcsr;
+    short x87cw;
 };
-inline void __TBB_get_cpu_ctl_env ( __TBB_cpu_ctl_env_t* ctl ) {
+
+inline void __TBB_get_cpu_ctl_env(__TBB_cpu_ctl_env_t *ctl) {
 #if __TBB_ICC_12_0_INL_ASM_FSTCW_BROKEN
     __TBB_cpu_ctl_env_t loc_ctl;
     __asm__ __volatile__ (
@@ -79,19 +82,21 @@ inline void __TBB_get_cpu_ctl_env ( __TBB_cpu_ctl_env_t* ctl ) {
     *ctl = loc_ctl;
 #else
     __asm__ __volatile__ (
-            "stmxcsr %0\n\t"
-            "fstcw %1"
-            : "=m"(ctl->mxcsr), "=m"(ctl->x87cw)
+    "stmxcsr %0\n\t"
+    "fstcw %1"
+    : "=m"(ctl->mxcsr), "=m"(ctl->x87cw)
     );
 #endif
 }
-inline void __TBB_set_cpu_ctl_env ( const __TBB_cpu_ctl_env_t* ctl ) {
+
+inline void __TBB_set_cpu_ctl_env(const __TBB_cpu_ctl_env_t *ctl) {
     __asm__ __volatile__ (
-            "ldmxcsr %0\n\t"
-            "fldcw %1"
-            : : "m"(ctl->mxcsr), "m"(ctl->x87cw)
+    "ldmxcsr %0\n\t"
+    "fldcw %1"
+    : : "m"(ctl->mxcsr), "m"(ctl->x87cw)
     );
 }
+
 #endif /* !__TBB_CPU_CTL_ENV_PRESENT */
 
 #endif /* __TBB_machine_gcc_ia32_common_H */

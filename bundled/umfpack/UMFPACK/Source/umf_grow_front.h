@@ -5,10 +5,10 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_grow_front
-(
-    NumericType *Numeric,
-    Int fnr2,
-    Int fnc2,
-    WorkType *Work,
-    Int do_what
-) ;
+        (
+                NumericType *Numeric,
+                Int fnr2,
+                Int fnc2,
+                WorkType *Work,
+                Int do_what
+        );

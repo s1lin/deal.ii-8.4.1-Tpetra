@@ -17,13 +17,13 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for specific energy : L^2 T^-2 
-typedef derived_dimension<length_base_dimension,2,
-                          time_base_dimension,-2>::type specific_energy_dimension;                    
+        typedef derived_dimension<length_base_dimension, 2,
+                time_base_dimension, -2>::type specific_energy_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

@@ -31,31 +31,34 @@ namespace boost {
 // visitor. The class is analogous to std::unary_function in this role.
 //
 
-namespace detail {
+    namespace detail {
 
-    struct is_static_visitor_tag { };
+        struct is_static_visitor_tag {
+        };
 
-    typedef void static_visitor_default_return;
+        typedef void static_visitor_default_return;
 
-} // namespace detail
+    } // namespace detail
 
-template <typename R = ::boost::detail::static_visitor_default_return>
-class static_visitor
-    : public detail::is_static_visitor_tag
-{
-public: // typedefs
+    template<typename R = ::boost::detail::static_visitor_default_return>
+    class static_visitor
+            : public detail::is_static_visitor_tag {
+    public: // typedefs
 
-    typedef R result_type;
+        typedef R result_type;
 
-protected: // for use as base class only
+    protected: // for use as base class only
 #ifndef BOOST_NO_DEFAULTED_FUNCTIONS
-    static_visitor() = default;
-    ~static_visitor() = default;
+
+        static_visitor() = default;
+
+        ~static_visitor() = default;
+
 #else
-    static_visitor()  BOOST_NOEXCEPT { }
-    ~static_visitor()  BOOST_NOEXCEPT { }
+        static_visitor()  BOOST_NOEXCEPT { }
+        ~static_visitor()  BOOST_NOEXCEPT { }
 #endif
-};
+    };
 
 //////////////////////////////////////////////////////////////////////////
 // metafunction is_static_visitor
@@ -69,22 +72,21 @@ protected: // for use as base class only
 // NOTE #2: This template never needs to be specialized!
 //
 
-namespace detail {
+    namespace detail {
 
-template <typename T>
-struct is_static_visitor_impl
-{
-    BOOST_STATIC_CONSTANT(bool, value = 
-        (::boost::is_base_and_derived< 
-            detail::is_static_visitor_tag,
-            T
-        >::value));
-};
+        template<typename T>
+        struct is_static_visitor_impl {
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::is_base_and_derived<
+                    detail::is_static_visitor_tag,
+                    T
+            >::value));
+        };
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-      is_static_visitor
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(
+            is_static_visitor
     , T
     , (::boost::detail::is_static_visitor_impl<T>::value)
     )

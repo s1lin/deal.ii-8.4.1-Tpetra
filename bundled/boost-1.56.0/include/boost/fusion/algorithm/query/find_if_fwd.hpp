@@ -12,27 +12,31 @@
 #include <boost/type_traits/is_const.hpp>
 
 // Forward declaration of find_if algorithm
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename Pred>
-        struct find_if;
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename Pred>
+            struct find_if;
+        }
+
+        template<typename Pred, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        typename
+                lazy_disable_if<
+                is_const < Sequence>
+        , result_of::find_if<Sequence, Pred>
+        >
+
+        ::type
+        find_if(Sequence &seq);
+
+        template<typename Pred, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::find_if<Sequence const, Pred>::type
+        const
+        find_if(Sequence
+        const& seq);
     }
-
-    template <typename Pred, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    typename 
-        lazy_disable_if<
-            is_const<Sequence>
-          , result_of::find_if<Sequence, Pred>
-        >::type
-    find_if(Sequence& seq);
-
-    template <typename Pred, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::find_if<Sequence const, Pred>::type const
-    find_if(Sequence const& seq);
-}}
+}
 
 #endif

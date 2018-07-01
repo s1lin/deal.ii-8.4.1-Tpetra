@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_MULTI_PASS_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_MULTI_PASS_FWD
+
 #include <boost/spirit/home/classic/iterator/multi_pass_fwd.hpp>
+
 #endif

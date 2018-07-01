@@ -9,28 +9,28 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_report_symbolic
-(
-    void *Symbolic,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                void *Symbolic,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_dl_report_symbolic
-(
-    void *Symbolic,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                void *Symbolic,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 int umfpack_zi_report_symbolic
-(
-    void *Symbolic,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                void *Symbolic,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_zl_report_symbolic
-(
-    void *Symbolic,
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                void *Symbolic,
+                const double Control[UMFPACK_CONTROL]
+        );
 
 /*
 double int Syntax:

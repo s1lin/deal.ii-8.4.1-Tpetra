@@ -26,23 +26,21 @@
 #endif
 
 namespace boost {
-namespace chrono {
-namespace detail {
+    namespace chrono {
+        namespace detail {
 
-  template <class T, class U>
-  bool lt(T t, U u)
-  {
-    return t < u;
-  }
+            template<class T, class U>
+            bool lt(T t, U u) {
+                return t < u;
+            }
 
-  template <class T, class U>
-  bool gt(T t, U u)
-  {
-    return t > u;
-  }
+            template<class T, class U>
+            bool gt(T t, U u) {
+                return t > u;
+            }
 
-} // namespace detail
-} // namespace detail
+        } // namespace detail
+    } // namespace detail
 } // namespace chrono
 
 #if defined __SUNPRO_CC

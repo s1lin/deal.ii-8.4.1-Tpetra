@@ -13,31 +13,29 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace fusion
-{
-    struct cons_tag;
+namespace boost {
+    namespace fusion {
+        struct cons_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_at_impl;
 
-        template <>
-        struct value_at_impl<cons_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply 
-            {
-                typedef typename 
+            template<>
+            struct value_at_impl<cons_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename
                     mpl::eval_if<
-                        mpl::bool_<N::value == 0>
-                      , mpl::identity<typename Sequence::car_type>
-                      , apply<typename Sequence::cdr_type, mpl::int_<N::value-1> >
+                            mpl::bool_ < N::value == 0>
+                    , mpl::identity<typename Sequence::car_type>
+                    , apply<typename Sequence::cdr_type, mpl::int_ < N::value - 1> >
                     >::type
-                type;
+                            type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

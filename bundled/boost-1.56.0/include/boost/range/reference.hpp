@@ -19,11 +19,10 @@
 #include <boost/range/iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
-namespace boost
-{
-    template< class T >
-    struct range_reference : iterator_reference< typename range_iterator<T>::type >
-    { };
+namespace boost {
+    template<class T>
+    struct range_reference : iterator_reference<typename range_iterator<T>::type> {
+    };
 }
 
 #endif

@@ -30,9 +30,9 @@
 // or causes other problems (GCC).  note: this 
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-    #define BOOST_PFTO long
+#define BOOST_PFTO long
 #else
-    #define BOOST_PFTO
+#define BOOST_PFTO
 #endif
 
 // here's another approach.  Rather than use a default function - make sure
@@ -41,38 +41,40 @@
 // (and perhaps others) while implementing templated constructors.
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-template<class T>
-struct pfto_wrapper {
-    const T & t;
-    operator const T & (){
-        return t;
-    }
-    pfto_wrapper (const T & rhs) : t(rhs) {}
-};
+        template<class T>
+        struct pfto_wrapper {
+            const T &t;
 
-template<class T>
-pfto_wrapper< T > make_pfto_wrapper(const T & t, BOOST_PFTO int){
-    return pfto_wrapper< T >(t);
-}
+            operator const T &() {
+                return t;
+            }
 
-template<class T>
-pfto_wrapper< T > make_pfto_wrapper(const pfto_wrapper< T > & t, int){
-    return t;
-}
+            pfto_wrapper(const T &rhs) : t(rhs) {}
+        };
 
-} // namespace serialization
+        template<class T>
+        pfto_wrapper<T> make_pfto_wrapper(const T &t, BOOST_PFTO int) {
+            return pfto_wrapper<T>(t);
+        }
+
+        template<class T>
+        pfto_wrapper<T> make_pfto_wrapper(const pfto_wrapper<T> &t, int) {
+            return t;
+        }
+
+    } // namespace serialization
 } // namespace boost
 
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    #define BOOST_PFTO_WRAPPER(T) \
+#define BOOST_PFTO_WRAPPER(T) \
         boost::serialization::pfto_wrapper< T >
-    #define BOOST_MAKE_PFTO_WRAPPER(t) \
+#define BOOST_MAKE_PFTO_WRAPPER(t) \
         boost::serialization::make_pfto_wrapper(t, 0)
 #else
-    #define BOOST_PFTO_WRAPPER(T) T
-    #define BOOST_MAKE_PFTO_WRAPPER(t) t
+#define BOOST_PFTO_WRAPPER(T) T
+#define BOOST_MAKE_PFTO_WRAPPER(t) t
 #endif
 
 #endif // BOOST_SERIALIZATION_PFTO_HPP

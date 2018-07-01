@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace imperial {
+        namespace imperial {
 
-typedef scaled_base_unit<pound_base_unit, scale<2240, static_rational<1> > > ton_base_unit;
+            typedef scaled_base_unit <pound_base_unit, scale<2240, static_rational < 1>> >
+            ton_base_unit;
 
-} // namespace imperial
+        } // namespace imperial
 
-template<>
-struct base_unit_info<imperial::ton_base_unit> {
-    static const char* name()   { return("long ton"); }
-    static const char* symbol() { return("t"); }
-};
+        template<>
+        struct base_unit_info<imperial::ton_base_unit> {
+            static const char *name() { return ("long ton"); }
 
-} // namespace units
+            static const char *symbol() { return ("t"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

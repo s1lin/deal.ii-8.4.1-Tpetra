@@ -12,40 +12,38 @@
 #include <boost/mpl/next.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost { namespace fusion
-{
-    struct single_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_iterator_tag;
 
-    template <typename SingleView, typename Pos>
-    struct single_view_iterator;
+        template<typename SingleView, typename Pos>
+        struct single_view_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct next_impl;
+        namespace extension {
+            template<typename Tag>
+            struct next_impl;
 
-        template <>
-        struct next_impl<single_view_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                typedef single_view_iterator<
-                    typename Iterator::single_view_type,
-                    typename mpl::next<typename Iterator::position>::type>
-                type;
+            template<>
+            struct next_impl<single_view_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef single_view_iterator<
+                            typename Iterator::single_view_type,
+                            typename mpl::next<typename Iterator::position>::type>
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    BOOST_STATIC_ASSERT((type::position::value < 2));
-                    return type(i.view);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        BOOST_STATIC_ASSERT((type::position::value < 2));
+                        return type(i.view);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

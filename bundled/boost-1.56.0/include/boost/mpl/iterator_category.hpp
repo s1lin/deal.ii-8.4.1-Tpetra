@@ -17,19 +17,20 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost {  namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Iterator)
-    >
-struct iterator_category
-{
-    typedef typename Iterator::category type;
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,iterator_category,(Iterator))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Iterator)
+        >
+        struct iterator_category {
+            typedef typename Iterator::category type;
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(1,iterator_category,(Iterator))
+        };
 
-BOOST_MPL_AUX_NA_SPEC(1, iterator_category)
+        BOOST_MPL_AUX_NA_SPEC(1, iterator_category)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_ITERATOR_CATEGORY_HPP_INCLUDED

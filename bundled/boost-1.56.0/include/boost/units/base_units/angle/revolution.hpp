@@ -17,20 +17,22 @@
 #include <boost/units/base_units/angle/degree.hpp>
 
 namespace boost {
-namespace units {
-namespace angle {
+    namespace units {
+        namespace angle {
 
-typedef scaled_base_unit<degree_base_unit, scale<360, static_rational<1> > >  revolution_base_unit;
+            typedef scaled_base_unit <degree_base_unit, scale<360, static_rational < 1>> >
+            revolution_base_unit;
 
-}
+        }
 
-template<>
-struct base_unit_info<angle::revolution_base_unit> {
-    static const char* name()   { return("revolution"); }
-    static const char* symbol() { return("rev"); }
-};
+        template<>
+        struct base_unit_info<angle::revolution_base_unit> {
+            static const char *name() { return ("revolution"); }
 
-}
+            static const char *symbol() { return ("rev"); }
+        };
+
+    }
 }
 
 #endif // BOOST_UNITS_BASE_UNITS_REVOLUTION_HPP

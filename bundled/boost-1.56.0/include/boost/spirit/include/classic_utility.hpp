@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_UTILITY
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_UTILITY
+
 #include <boost/spirit/home/classic/utility.hpp>
+
 #endif

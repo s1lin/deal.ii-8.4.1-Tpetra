@@ -15,18 +15,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<current_dimension,cgs::system>   current;
-    
-BOOST_UNITS_STATIC_CONSTANT(biot,current);
-BOOST_UNITS_STATIC_CONSTANT(biots,current);
+            typedef unit <current_dimension, cgs::system> current;
 
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(biot, current
+            );
+            BOOST_UNITS_STATIC_CONSTANT(biots, current
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

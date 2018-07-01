@@ -45,14 +45,14 @@
 #define __TBB_WORDSIZE 4
 
 #ifndef __BYTE_ORDER__
-    // Hopefully endianness can be validly determined at runtime.
-    // This may silently fail in some embedded systems with page-specific endianness.
-#elif __BYTE_ORDER__==__ORDER_BIG_ENDIAN__
-    #define __TBB_BIG_ENDIAN 1
-#elif __BYTE_ORDER__==__ORDER_LITTLE_ENDIAN__
-    #define __TBB_BIG_ENDIAN 0
+// Hopefully endianness can be validly determined at runtime.
+// This may silently fail in some embedded systems with page-specific endianness.
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#define __TBB_BIG_ENDIAN 1
+#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define __TBB_BIG_ENDIAN 0
 #else
-    #define __TBB_BIG_ENDIAN -1 // not currently supported
+#define __TBB_BIG_ENDIAN -1 // not currently supported
 #endif
 
 
@@ -76,20 +76,19 @@
  * @param comparand value to compare with *ptr
  * @return value originally in memory at ptr, regardless of success
 */
-static inline int32_t __TBB_machine_cmpswp4(volatile void *ptr, int32_t value, int32_t comparand )
-{
+static inline int32_t __TBB_machine_cmpswp4(volatile void *ptr, int32_t value, int32_t comparand) {
     int32_t oldval, res;
 
     __TBB_full_memory_fence();
 
     do {
-    __asm__ __volatile__(
+        __asm__ __volatile__(
         "ldrex      %1, [%3]\n"
         "mov        %0, #0\n"
         "cmp        %1, %4\n"
         "strexeq    %0, %5, [%3]\n"
-        : "=&r" (res), "=&r" (oldval), "+Qo" (*(volatile int32_t*)ptr)
-        : "r" ((int32_t *)ptr), "Ir" (comparand), "r" (value)
+        : "=&r" (res), "=&r" (oldval), "+Qo" (*(volatile int32_t *) ptr)
+        : "r" ((int32_t *) ptr), "Ir" (comparand), "r" (value)
         : "cc");
     } while (res);
 
@@ -105,8 +104,7 @@ static inline int32_t __TBB_machine_cmpswp4(volatile void *ptr, int32_t value, i
  * @param comparand value to compare with *ptr
  * @return value originally in memory at ptr, regardless of success
  */
-static inline int64_t __TBB_machine_cmpswp8(volatile void *ptr, int64_t value, int64_t comparand )
-{
+static inline int64_t __TBB_machine_cmpswp8(volatile void *ptr, int64_t value, int64_t comparand) {
     int64_t oldval;
     int32_t res;
 
@@ -114,13 +112,13 @@ static inline int64_t __TBB_machine_cmpswp8(volatile void *ptr, int64_t value, i
 
     do {
         __asm__ __volatile__(
-            "mov        %0, #0\n"
-            "ldrexd     %1, %H1, [%3]\n"
-            "cmp        %1, %4\n"
-            "cmpeq      %H1, %H4\n"
-            "strexdeq   %0, %5, %H5, [%3]"
-        : "=&r" (res), "=&r" (oldval), "+Qo" (*(volatile int64_t*)ptr)
-        : "r" ((int64_t *)ptr), "r" (comparand), "r" (value)
+        "mov        %0, #0\n"
+        "ldrexd     %1, %H1, [%3]\n"
+        "cmp        %1, %4\n"
+        "cmpeq      %H1, %H4\n"
+        "strexdeq   %0, %5, %H5, [%3]"
+        : "=&r" (res), "=&r" (oldval), "+Qo" (*(volatile int64_t *) ptr)
+        : "r" ((int64_t *) ptr), "r" (comparand), "r" (value)
         : "cc");
     } while (res);
 
@@ -129,21 +127,20 @@ static inline int64_t __TBB_machine_cmpswp8(volatile void *ptr, int64_t value, i
     return oldval;
 }
 
-static inline int32_t __TBB_machine_fetchadd4(volatile void* ptr, int32_t addend)
-{
+static inline int32_t __TBB_machine_fetchadd4(volatile void *ptr, int32_t addend) {
     unsigned long tmp;
     int32_t result, tmp2;
 
     __TBB_full_memory_fence();
 
     __asm__ __volatile__(
-"1:     ldrex   %0, [%4]\n"
-"       add     %3, %0, %5\n"
-"       strex   %1, %3, [%4]\n"
-"       cmp     %1, #0\n"
-"       bne     1b\n"
-    : "=&r" (result), "=&r" (tmp), "+Qo" (*(volatile int32_t*)ptr), "=&r"(tmp2)
-    : "r" ((int32_t *)ptr), "Ir" (addend)
+    "1:     ldrex   %0, [%4]\n"
+    "       add     %3, %0, %5\n"
+    "       strex   %1, %3, [%4]\n"
+    "       cmp     %1, #0\n"
+    "       bne     1b\n"
+    : "=&r" (result), "=&r" (tmp), "+Qo" (*(volatile int32_t *) ptr), "=&r"(tmp2)
+    : "r" ((int32_t *) ptr), "Ir" (addend)
     : "cc");
 
     __TBB_full_memory_fence();
@@ -151,22 +148,21 @@ static inline int32_t __TBB_machine_fetchadd4(volatile void* ptr, int32_t addend
     return result;
 }
 
-static inline int64_t __TBB_machine_fetchadd8(volatile void *ptr, int64_t addend)
-{
+static inline int64_t __TBB_machine_fetchadd8(volatile void *ptr, int64_t addend) {
     unsigned long tmp;
     int64_t result, tmp2;
 
     __TBB_full_memory_fence();
 
     __asm__ __volatile__(
-"1:     ldrexd  %0, %H0, [%4]\n"
-"       adds    %3, %0, %5\n"
-"       adc     %H3, %H0, %H5\n"
-"       strexd  %1, %3, %H3, [%4]\n"
-"       cmp     %1, #0\n"
-"       bne     1b"
-    : "=&r" (result), "=&r" (tmp), "+Qo" (*(volatile int64_t*)ptr), "=&r"(tmp2)
-    : "r" ((int64_t *)ptr), "r" (addend)
+    "1:     ldrexd  %0, %H0, [%4]\n"
+    "       adds    %3, %0, %5\n"
+    "       adc     %H3, %H0, %H5\n"
+    "       strexd  %1, %3, %H3, [%4]\n"
+    "       cmp     %1, #0\n"
+    "       bne     1b"
+    : "=&r" (result), "=&r" (tmp), "+Qo" (*(volatile int64_t *) ptr), "=&r"(tmp2)
+    : "r" ((int64_t *) ptr), "r" (addend)
     : "cc");
 
 
@@ -175,41 +171,40 @@ static inline int64_t __TBB_machine_fetchadd8(volatile void *ptr, int64_t addend
     return result;
 }
 
-inline void __TBB_machine_pause (int32_t delay )
-{
-    while(delay>0)
-    {
-	__TBB_compiler_fence();
+inline void __TBB_machine_pause(int32_t delay) {
+    while (delay > 0) {
+        __TBB_compiler_fence();
         delay--;
     }
 }
 
 namespace tbb {
-namespace internal {
-    template <typename T, size_t S>
-    struct machine_load_store_relaxed {
-        static inline T load ( const volatile T& location ) {
-            const T value = location;
+    namespace internal {
+        template<typename T, size_t S>
+        struct machine_load_store_relaxed {
+            static inline T load(const volatile T &location) {
+                const T value = location;
 
-            /*
-            * An extra memory barrier is required for errata #761319
-            * Please see http://infocenter.arm.com/help/topic/com.arm.doc.uan0004a
-            */
-            __TBB_armv7_inner_shareable_barrier();
-            return value;
-        }
+                /*
+                * An extra memory barrier is required for errata #761319
+                * Please see http://infocenter.arm.com/help/topic/com.arm.doc.uan0004a
+                */
+                __TBB_armv7_inner_shareable_barrier();
+                return value;
+            }
 
-        static inline void store ( volatile T& location, T value ) {
-            location = value;
-        }
-    };
-}} // namespaces internal, tbb
+            static inline void store(volatile T &location, T value) {
+                location = value;
+            }
+        };
+    }
+} // namespaces internal, tbb
 
 // Machine specific atomic operations
 
-#define __TBB_CompareAndSwap4(P,V,C) __TBB_machine_cmpswp4(P,V,C)
-#define __TBB_CompareAndSwap8(P,V,C) __TBB_machine_cmpswp8(P,V,C)
-#define __TBB_CompareAndSwapW(P,V,C) __TBB_machine_cmpswp4(P,V,C)
+#define __TBB_CompareAndSwap4(P, V, C) __TBB_machine_cmpswp4(P,V,C)
+#define __TBB_CompareAndSwap8(P, V, C) __TBB_machine_cmpswp8(P,V,C)
+#define __TBB_CompareAndSwapW(P, V, C) __TBB_machine_cmpswp4(P,V,C)
 #define __TBB_Pause(V) __TBB_machine_pause(V)
 
 // Use generics for some things

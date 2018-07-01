@@ -17,7 +17,9 @@
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/generation/detail/preprocessed/make_list.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/make_list" FUSION_MAX_LIST_SIZE_STR".hpp")
@@ -92,9 +94,9 @@ namespace boost { namespace fusion
     namespace result_of
     {
         template <BOOST_PP_ENUM_PARAMS(N, typename T)>
-        #define TEXT(z, n, text) , text
+#define TEXT(z, n, text) , text
         struct make_list< BOOST_PP_ENUM_PARAMS(N, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_LIST_SIZE, TEXT, void_) >
-        #undef TEXT
+#undef TEXT
         {
             typedef list<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)> type;
         };

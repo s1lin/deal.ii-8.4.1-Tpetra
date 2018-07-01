@@ -9,7 +9,9 @@
 //  Metrowerks standard library:
 
 #ifndef __MSL_CPP__
+
 #  include <boost/config/no_tr1/utility.hpp>
+
 #  ifndef __MSL_CPP__
 #     error This is not the MSL standard library!
 #  endif
@@ -33,7 +35,7 @@
 #  if !defined(__PALMOS_TRAPS__)
 #    define BOOST_HAS_UNISTD_H
 #  endif
-   // boilerplate code:
+// boilerplate code:
 #  include <boost/config/posix_features.hpp>
 #endif
 

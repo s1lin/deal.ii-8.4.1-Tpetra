@@ -8,9 +8,10 @@
 
 #include <boost/spirit/home/karma/stream/ostream_iterator.hpp>
 
-namespace boost { namespace spirit 
-{
-    typedef karma::ostream_iterator<char, char> ostream_iterator;
-}}
+namespace boost {
+    namespace spirit {
+        typedef karma::ostream_iterator<char, char> ostream_iterator;
+    }
+}
 
 #endif

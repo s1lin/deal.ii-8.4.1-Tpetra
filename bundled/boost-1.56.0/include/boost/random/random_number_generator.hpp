@@ -22,7 +22,7 @@
 #include <boost/random/detail/disable_warnings.hpp>
 
 namespace boost {
-namespace random {
+    namespace random {
 
 /**
  * Instantiations of class template random_number_generator model a
@@ -32,39 +32,38 @@ namespace random {
  *
  * The template parameter IntType shall denote some integer-like value type.
  */
-template<class URNG, class IntType = long>
-class random_number_generator
-{
-public:
-    typedef URNG base_type;
-    typedef IntType argument_type;
-    typedef IntType result_type;
-    /**
-     * Constructs a random_number_generator functor with the given
-     * \uniform_random_number_generator as the underlying source of
-     * random numbers.
-     */
-    random_number_generator(base_type& rng) : _rng(rng) {}
+        template<class URNG, class IntType = long>
+        class random_number_generator {
+        public:
+            typedef URNG base_type;
+            typedef IntType argument_type;
+            typedef IntType result_type;
 
-    // compiler-generated copy ctor is fine
-    // assignment is disallowed because there is a reference member
+            /**
+             * Constructs a random_number_generator functor with the given
+             * \uniform_random_number_generator as the underlying source of
+             * random numbers.
+             */
+            random_number_generator(base_type &rng) : _rng(rng) {}
 
-    /**
-     * Returns a value in the range [0, n)
-     */
-    result_type operator()(argument_type n)
-    {
-        BOOST_ASSERT(n > 0);
-        return uniform_int_distribution<IntType>(0, n-1)(_rng);
-    }
+            // compiler-generated copy ctor is fine
+            // assignment is disallowed because there is a reference member
 
-private:
-    base_type& _rng;
-};
+            /**
+             * Returns a value in the range [0, n)
+             */
+            result_type operator()(argument_type n) {
+                BOOST_ASSERT(n > 0);
+                return uniform_int_distribution<IntType>(0, n - 1)(_rng);
+            }
 
-} // namespace random
+        private:
+            base_type &_rng;
+        };
 
-using random::random_number_generator;
+    } // namespace random
+
+    using random::random_number_generator;
 
 } // namespace boost
 

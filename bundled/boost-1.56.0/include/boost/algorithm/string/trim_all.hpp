@@ -53,13 +53,12 @@ namespace boost {
             \return A trimmed copy of the input
         */
         template<typename SequenceT, typename PredicateT>
-        inline SequenceT trim_all_copy_if(const SequenceT& Input, PredicateT IsSpace)
-        {
-            return 
-                ::boost::find_format_all_copy(      
-                    ::boost::trim_copy_if(Input, IsSpace),
-                    ::boost::token_finder(IsSpace, ::boost::token_compress_on),
-                    ::boost::dissect_formatter(::boost::head_finder(1)));
+        inline SequenceT trim_all_copy_if(const SequenceT &Input, PredicateT IsSpace) {
+            return
+                    ::boost::find_format_all_copy(
+                            ::boost::trim_copy_if(Input, IsSpace),
+                            ::boost::token_finder(IsSpace, ::boost::token_compress_on),
+                            ::boost::dissect_formatter(::boost::head_finder(1)));
         }
 
 
@@ -73,13 +72,12 @@ namespace boost {
             \param IsSpace A unary predicate identifying spaces
         */
         template<typename SequenceT, typename PredicateT>
-        inline void trim_all_if(SequenceT& Input, PredicateT IsSpace)
-        {
+        inline void trim_all_if(SequenceT &Input, PredicateT IsSpace) {
             ::boost::trim_if(Input, IsSpace);
-            ::boost::find_format_all(       
-                Input,          
-                ::boost::token_finder(IsSpace, ::boost::token_compress_on),
-                ::boost::dissect_formatter(::boost::head_finder(1)));
+            ::boost::find_format_all(
+                    Input,
+                    ::boost::token_finder(IsSpace, ::boost::token_compress_on),
+                    ::boost::dissect_formatter(::boost::head_finder(1)));
         }
 
 
@@ -94,8 +92,7 @@ namespace boost {
             \return A trimmed copy of the input
         */
         template<typename SequenceT>
-        inline SequenceT trim_all_copy(const SequenceT& Input, const std::locale& Loc =std::locale())
-        {
+        inline SequenceT trim_all_copy(const SequenceT &Input, const std::locale &Loc = std::locale()) {
             return trim_all_copy_if(Input, ::boost::is_space(Loc));
         }
 
@@ -111,8 +108,7 @@ namespace boost {
             \return A trimmed copy of the input
         */
         template<typename SequenceT>
-        inline void trim_all(SequenceT& Input, const std::locale& Loc =std::locale())
-        {
+        inline void trim_all(SequenceT &Input, const std::locale &Loc = std::locale()) {
             trim_all_if(Input, ::boost::is_space(Loc));
         }
 
@@ -130,13 +126,12 @@ namespace boost {
             \return A trimmed copy of the input
         */
         template<typename SequenceT, typename RangeT, typename PredicateT>
-        inline SequenceT trim_fill_copy_if(const SequenceT& Input, const RangeT& Fill, PredicateT IsSpace)
-        {
-            return 
-                ::boost::find_format_all_copy(      
-                    ::boost::trim_copy_if(Input, IsSpace),
-                    ::boost::token_finder(IsSpace, ::boost::token_compress_on),
-                    ::boost::const_formatter(::boost::as_literal(Fill)));
+        inline SequenceT trim_fill_copy_if(const SequenceT &Input, const RangeT &Fill, PredicateT IsSpace) {
+            return
+                    ::boost::find_format_all_copy(
+                            ::boost::trim_copy_if(Input, IsSpace),
+                            ::boost::token_finder(IsSpace, ::boost::token_compress_on),
+                            ::boost::const_formatter(::boost::as_literal(Fill)));
         }
 
 
@@ -152,13 +147,12 @@ namespace boost {
             \param IsSpace A unary predicate identifying spaces
         */
         template<typename SequenceT, typename RangeT, typename PredicateT>
-        inline void trim_fill_if(SequenceT& Input, const RangeT& Fill, PredicateT IsSpace)
-        {
+        inline void trim_fill_if(SequenceT &Input, const RangeT &Fill, PredicateT IsSpace) {
             ::boost::trim_if(Input, IsSpace);
-            ::boost::find_format_all(       
-                Input,          
-                ::boost::token_finder(IsSpace, ::boost::token_compress_on),
-                ::boost::const_formatter(::boost::as_literal(Fill)));
+            ::boost::find_format_all(
+                    Input,
+                    ::boost::token_finder(IsSpace, ::boost::token_compress_on),
+                    ::boost::const_formatter(::boost::as_literal(Fill)));
         }
 
 
@@ -175,8 +169,8 @@ namespace boost {
             \return A trimmed copy of the input
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT trim_fill_copy(const SequenceT& Input, const RangeT& Fill, const std::locale& Loc =std::locale())
-        {
+        inline SequenceT
+        trim_fill_copy(const SequenceT &Input, const RangeT &Fill, const std::locale &Loc = std::locale()) {
             return trim_fill_copy_if(Input, Fill, ::boost::is_space(Loc));
         }
 
@@ -194,8 +188,7 @@ namespace boost {
             \return A trimmed copy of the input
         */
         template<typename SequenceT, typename RangeT>
-        inline void trim_fill(SequenceT& Input, const RangeT& Fill, const std::locale& Loc =std::locale())
-        {
+        inline void trim_fill(SequenceT &Input, const RangeT &Fill, const std::locale &Loc = std::locale()) {
             trim_fill_if(Input, Fill, ::boost::is_space(Loc));
         }
 

@@ -7,10 +7,14 @@
 #if !defined(FUSION_UNKNOWN_KEY_09242005_1219)
 #define FUSION_UNKNOWN_KEY_09242005_1219
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <int index>
-    struct unknown_key {};
-}}}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<int index>
+            struct unknown_key {
+            };
+        }
+    }
+}
 
 #endif

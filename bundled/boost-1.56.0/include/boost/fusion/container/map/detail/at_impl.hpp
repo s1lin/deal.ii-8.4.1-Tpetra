@@ -10,51 +10,53 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 
-namespace boost { namespace fusion
-{
-    struct map_tag;
+namespace boost {
+    namespace fusion {
+        struct map_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct at_impl;
 
-        template <>
-        struct at_impl<map_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply
-            {
-                typedef mpl::int_<N::value> index;
-                typedef
+            template<>
+            struct at_impl<map_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef mpl::int_ <N::value> index;
+                    typedef
                     decltype(std::declval<Sequence>().get(index()))
-                type;
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& m)
-                {
-                    return m.get(index());
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& m)
+                    {
+                        return m.get(index());
+                    }
+                };
+
+                template<typename Sequence, typename N>
+                struct apply<Sequence const, N> {
+                    typedef mpl::int_ <N::value> index;
+                    typedef
+                    decltype(std::declval < Sequence const>().
+
+                    get (index())
+
+                    )
+                    type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence
+                    const& m)
+                    {
+                        return m.get(index());
+                    }
+                };
             };
-
-            template <typename Sequence, typename N>
-            struct apply<Sequence const, N>
-            {
-                typedef mpl::int_<N::value> index;
-                typedef
-                    decltype(std::declval<Sequence const>().get(index()))
-                type;
-
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence const& m)
-                {
-                    return m.get(index());
-                }
-            };
-        };
+        }
     }
-}}
+}
 
 #endif

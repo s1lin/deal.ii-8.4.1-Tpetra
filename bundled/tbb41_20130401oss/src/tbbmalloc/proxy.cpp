@@ -30,13 +30,13 @@
 #include "tbb/tbb_config.h"
 
 #if !defined(__EXCEPTIONS) && !defined(_CPPUNWIND) && !defined(__SUNPRO_CC) || defined(_XBOX)
-    #if TBB_USE_EXCEPTIONS
-        #error Compilation settings do not support exception handling. Please do not set TBB_USE_EXCEPTIONS macro or set it to 0.
-    #elif !defined(TBB_USE_EXCEPTIONS)
-        #define TBB_USE_EXCEPTIONS 0
-    #endif
+#if TBB_USE_EXCEPTIONS
+#error Compilation settings do not support exception handling. Please do not set TBB_USE_EXCEPTIONS macro or set it to 0.
 #elif !defined(TBB_USE_EXCEPTIONS)
-    #define TBB_USE_EXCEPTIONS 1
+#define TBB_USE_EXCEPTIONS 0
+#endif
+#elif !defined(TBB_USE_EXCEPTIONS)
+#define TBB_USE_EXCEPTIONS 1
 #endif
 
 #if MALLOC_UNIXLIKE_OVERLOAD_ENABLED
@@ -48,8 +48,7 @@
 
 static long memoryPageSize;
 
-static inline void initPageSize()
-{
+static inline void initPageSize() {
     memoryPageSize = sysconf(_SC_PAGESIZE);
 }
 
@@ -59,10 +58,9 @@ static inline void initPageSize()
    So we have to put find_original_malloc here.
  */
 extern "C" bool __TBB_internal_find_original_malloc(int num, const char *names[],
-                                                        void *ptrs[])
-{
-    for (int i=0; i<num; i++)
-        if (NULL == (ptrs[i] = dlsym (RTLD_NEXT, names[i])))
+                                                    void *ptrs[]) {
+    for (int i = 0; i < num; i++)
+        if (NULL == (ptrs[i] = dlsym(RTLD_NEXT, names[i])))
             return false;
 
     return true;
@@ -82,83 +80,75 @@ extern "C" void *__TBB_malloc_proxy() __attribute__ ((alias ("malloc")));
 
 extern "C" {
 
-void *malloc(size_t size) __THROW
-{
+void *malloc(size_t size) __THROW {
     return __TBB_internal_malloc(size);
 }
 
-void * calloc(size_t num, size_t size) __THROW
-{
+void *calloc(size_t num, size_t size) __THROW {
     return __TBB_internal_calloc(num, size);
 }
 
-void free(void *object) __THROW
-{
+void free(void *object) __THROW {
     __TBB_internal_free(object);
 }
 
-void * realloc(void* ptr, size_t sz) __THROW
-{
+void *realloc(void *ptr, size_t sz) __THROW {
     return __TBB_internal_realloc(ptr, sz);
 }
 
-int posix_memalign(void **memptr, size_t alignment, size_t size) __THROW
-{
+int posix_memalign(void **memptr, size_t alignment, size_t size) __THROW {
     return __TBB_internal_posix_memalign(memptr, alignment, size);
 }
 
 /* The older *NIX interface for aligned allocations;
    it's formally substituted by posix_memalign and deprecated,
    so we do not expect it to cause cyclic dependency with C RTL. */
-void * memalign(size_t alignment, size_t size)  __THROW
-{
+void *memalign(size_t alignment, size_t size)  __THROW {
     return scalable_aligned_malloc(size, alignment);
 }
 
 /* valloc allocates memory aligned on a page boundary */
-void * valloc(size_t size) __THROW
-{
-    if (! memoryPageSize) initPageSize();
+void *valloc(size_t size) __THROW {
+    if (!memoryPageSize) initPageSize();
 
     return scalable_aligned_malloc(size, memoryPageSize);
 }
 
 /* pvalloc allocates smallest set of complete pages which can hold
    the requested number of bytes. Result is aligned on page boundary. */
-void * pvalloc(size_t size) __THROW
-{
-    if (! memoryPageSize) initPageSize();
+void *pvalloc(size_t size) __THROW {
+    if (!memoryPageSize) initPageSize();
     // align size up to the page size
-    size = ((size-1) | (memoryPageSize-1)) + 1;
+    size = ((size - 1) | (memoryPageSize - 1)) + 1;
 
     return scalable_aligned_malloc(size, memoryPageSize);
 }
 
-int mallopt(int /*param*/, int /*value*/) __THROW
-{
+int mallopt(int /*param*/, int /*value*/) __THROW {
     return 1;
 }
 
 } /* extern "C" */
 
 #if __linux__
+
 #include <malloc.h>
 #include <string.h> // for memset
 
-extern "C" struct mallinfo mallinfo() __THROW
-{
+extern "C" struct mallinfo mallinfo() __THROW {
     struct mallinfo m;
     memset(&m, 0, sizeof(struct mallinfo));
 
     return m;
 }
+
 #endif /* __linux__ */
 
 /*** replacements for global operators new and delete ***/
 
 #include <new>
 
-void * operator new(size_t sz) throw (std::bad_alloc) {
+void *operator new(size_t sz) throw(std::bad_alloc) {
     void *res = scalable_malloc(sz);
 #if TBB_USE_EXCEPTIONS
     if (NULL == res)
@@ -166,7 +156,8 @@ void * operator new(size_t sz) throw (std::bad_alloc) {
 #endif /* TBB_USE_EXCEPTIONS */
     return res;
 }
-void* operator new[](size_t sz) throw (std::bad_alloc) {
+
+void *operator new[](size_t sz) throw(std::bad_alloc) {
     void *res = scalable_malloc(sz);
 #if TBB_USE_EXCEPTIONS
     if (NULL == res)
@@ -174,22 +165,28 @@ void* operator new[](size_t sz) throw (std::bad_alloc) {
 #endif /* TBB_USE_EXCEPTIONS */
     return res;
 }
-void operator delete(void* ptr) throw() {
+
+void operator delete(void *ptr) throw() {
     scalable_free(ptr);
 }
-void operator delete[](void* ptr) throw() {
+
+void operator delete[](void *ptr) throw() {
     scalable_free(ptr);
 }
-void* operator new(size_t sz, const std::nothrow_t&) throw() {
+
+void *operator new(size_t sz, const std::nothrow_t &) throw() {
     return scalable_malloc(sz);
 }
-void* operator new[](std::size_t sz, const std::nothrow_t&) throw() {
+
+void *operator new[](std::size_t sz, const std::nothrow_t &) throw() {
     return scalable_malloc(sz);
 }
-void operator delete(void* ptr, const std::nothrow_t&) throw() {
+
+void operator delete(void *ptr, const std::nothrow_t &) throw() {
     scalable_free(ptr);
 }
-void operator delete[](void* ptr, const std::nothrow_t&) throw() {
+
+void operator delete[](void *ptr, const std::nothrow_t &) throw() {
     scalable_free(ptr);
 }
 

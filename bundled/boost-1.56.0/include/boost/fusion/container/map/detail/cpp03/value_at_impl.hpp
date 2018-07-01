@@ -11,25 +11,23 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/at.hpp>
 
-namespace boost { namespace fusion
-{
-    struct map_tag;
+namespace boost {
+    namespace fusion {
+        struct map_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_at_impl;
 
-        template <>
-        struct value_at_impl<map_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply 
-            {
-                typedef typename mpl::at<typename Sequence::storage_type::types, N>::type type;
+            template<>
+            struct value_at_impl<map_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename mpl::at<typename Sequence::storage_type::types, N>::type type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif //BOOST_FUSION_MAP_DETAIL_VALUE_AT_IMPL_HPP

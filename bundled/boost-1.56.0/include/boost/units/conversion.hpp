@@ -18,41 +18,41 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-template<class From, class To>
-struct conversion_helper;
+        template<class From, class To>
+        struct conversion_helper;
 
 #ifdef BOOST_UNITS_DOXYGEN
 
-/// Template for defining conversions between
-/// quantities.  This template should be specialized
-/// for every quantity that allows conversions.
-/// For example, if you have a two units
-/// called pair and dozen you would write
-/// @code
-/// namespace boost {
-/// namespace units {
-/// template<class T0, class T1>
-/// struct conversion_helper<quantity<dozen, T0>, quantity<pair, T1> >
-/// {
-///     static quantity<pair, T1> convert(const quantity<dozen, T0>& source)
-///     {
-///         return(quantity<pair, T1>::from_value(6 * source.value()));
-///     }
-/// };
-/// }
-/// }
-/// @endcode
-///
-/// In most cases, the predefined specializations for @c unit
-/// and @c absolute should be sufficient, so users should rarely
-/// need to use this.
-template<class From, class To>
-struct conversion_helper
-{
-    static To convert(const From&);
-};
+        /// Template for defining conversions between
+        /// quantities.  This template should be specialized
+        /// for every quantity that allows conversions.
+        /// For example, if you have a two units
+        /// called pair and dozen you would write
+        /// @code
+        /// namespace boost {
+        /// namespace units {
+        /// template<class T0, class T1>
+        /// struct conversion_helper<quantity<dozen, T0>, quantity<pair, T1> >
+        /// {
+        ///     static quantity<pair, T1> convert(const quantity<dozen, T0>& source)
+        ///     {
+        ///         return(quantity<pair, T1>::from_value(6 * source.value()));
+        ///     }
+        /// };
+        /// }
+        /// }
+        /// @endcode
+        ///
+        /// In most cases, the predefined specializations for @c unit
+        /// and @c absolute should be sufficient, so users should rarely
+        /// need to use this.
+        template<class From, class To>
+        struct conversion_helper
+        {
+            static To convert(const From&);
+        };
 
 #endif
 
@@ -168,17 +168,16 @@ BOOST_UNITS_DEFINE_CONVERSION_FACTOR(namespace_::name_ ## _base_unit, unit, doub
 BOOST_UNITS_DEFAULT_CONVERSION(namespace_::name_ ## _base_unit, unit)
 
 /// Find the conversion factor between two units.
-template<class FromUnit,class ToUnit>
-inline
-typename one_to_double_type<
-    typename detail::conversion_factor_helper<FromUnit, ToUnit>::type
->::type
-conversion_factor(const FromUnit&,const ToUnit&)
-{
-    return(one_to_double(detail::conversion_factor_helper<FromUnit, ToUnit>::value()));
-}
+        template<class FromUnit, class ToUnit>
+        inline
+        typename one_to_double_type<
+                typename detail::conversion_factor_helper<FromUnit, ToUnit>::type
+        >::type
+        conversion_factor(const FromUnit &, const ToUnit &) {
+            return (one_to_double(detail::conversion_factor_helper<FromUnit, ToUnit>::value()));
+        }
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

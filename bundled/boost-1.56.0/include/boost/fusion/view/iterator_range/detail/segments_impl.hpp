@@ -13,42 +13,40 @@
 #include <boost/fusion/support/is_segmented.hpp>
 #include <boost/fusion/view/iterator_range/detail/segmented_iterator_range.hpp>
 
-namespace boost { namespace fusion
-{
-    struct iterator_range_tag;
+namespace boost {
+    namespace fusion {
+        struct iterator_range_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct segments_impl;
+        namespace extension {
+            template<typename Tag>
+            struct segments_impl;
 
-        template <>
-        struct segments_impl<iterator_range_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef
+            template<>
+            struct segments_impl<iterator_range_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef
                     detail::make_segmented_range<
-                        typename Sequence::begin_type
-                      , typename Sequence::end_type
+                            typename Sequence::begin_type, typename Sequence::end_type
                     >
-                impl;
+                            impl;
 
-                BOOST_MPL_ASSERT((traits::is_segmented<typename impl::type>));
+                    BOOST_MPL_ASSERT((traits::is_segmented<typename impl::type>));
 
-                typedef
+                    typedef
                     typename result_of::segments<typename impl::type>::type
-                type;
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type call(Sequence & seq)
-                {
-                    return fusion::segments(impl::call(seq.first, seq.last));
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence & seq)
+                    {
+                        return fusion::segments(impl::call(seq.first, seq.last));
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

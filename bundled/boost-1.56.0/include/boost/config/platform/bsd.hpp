@@ -37,7 +37,7 @@
 // and not in <unistd.h>
 //
 #if (defined(__FreeBSD__) && (__FreeBSD__ <= 3))\
-   || defined(__OpenBSD__) || defined(__DragonFly__) 
+ || defined(__OpenBSD__) || defined(__DragonFly__)
 #  define BOOST_HAS_PTHREADS
 #endif
 
@@ -56,7 +56,7 @@
 #endif
 
 #if !((defined(__FreeBSD__) && (__FreeBSD__ >= 5)) \
-      || (defined(__NetBSD_GCC__) && (__NetBSD_GCC__ >= 2095003)) || defined(__DragonFly__))
+ || (defined(__NetBSD_GCC__) && (__NetBSD_GCC__ >= 2095003)) || defined(__DragonFly__))
 #  define BOOST_NO_CWCHAR
 #endif
 //
@@ -77,6 +77,7 @@
 
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
+
 #include <boost/config/posix_features.hpp>
 
 

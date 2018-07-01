@@ -16,15 +16,16 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef scaled_base_unit<boost::units::cgs::gram_base_unit, scale<10, static_rational<3> > > kilogram_base_unit;
+            typedef scaled_base_unit <boost::units::cgs::gram_base_unit, scale<10, static_rational < 3>> >
+            kilogram_base_unit;
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

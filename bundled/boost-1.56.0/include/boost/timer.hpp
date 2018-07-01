@@ -22,7 +22,7 @@
 #include <boost/limits.hpp>
 
 # ifdef BOOST_NO_STDC_NAMESPACE
-    namespace std { using ::clock_t; using ::clock; }
+namespace std { using ::clock_t; using ::clock; }
 # endif
 
 
@@ -41,31 +41,30 @@ namespace boost {
 //  accuracy of timing information provided by the underlying platform, and
 //  this varies a great deal from platform to platform.
 
-class timer
-{
- public:
-         timer() { _start_time = std::clock(); } // postcondition: elapsed()==0
+    class timer {
+    public:
+        timer() { _start_time = std::clock(); } // postcondition: elapsed()==0
 //         timer( const timer& src );      // post: elapsed()==src.elapsed()
 //        ~timer(){}
 //  timer& operator=( const timer& src );  // post: elapsed()==src.elapsed()
-  void   restart() { _start_time = std::clock(); } // post: elapsed()==0
-  double elapsed() const                  // return elapsed time in seconds
-    { return  double(std::clock() - _start_time) / CLOCKS_PER_SEC; }
+        void restart() { _start_time = std::clock(); } // post: elapsed()==0
+        double elapsed() const                  // return elapsed time in seconds
+        { return double(std::clock() - _start_time) / CLOCKS_PER_SEC; }
 
-  double elapsed_max() const   // return estimated maximum value for elapsed()
-  // Portability warning: elapsed_max() may return too high a value on systems
-  // where std::clock_t overflows or resets at surprising values.
-  {
-    return (double((std::numeric_limits<std::clock_t>::max)())
-       - double(_start_time)) / double(CLOCKS_PER_SEC); 
-  }
+        double elapsed_max() const   // return estimated maximum value for elapsed()
+        // Portability warning: elapsed_max() may return too high a value on systems
+        // where std::clock_t overflows or resets at surprising values.
+        {
+            return (double((std::numeric_limits<std::clock_t>::max) ())
+                    - double(_start_time)) / double(CLOCKS_PER_SEC);
+        }
 
-  double elapsed_min() const            // return minimum value for elapsed()
-   { return double(1)/double(CLOCKS_PER_SEC); }
+        double elapsed_min() const            // return minimum value for elapsed()
+        { return double(1) / double(CLOCKS_PER_SEC); }
 
- private:
-  std::clock_t _start_time;
-}; // timer
+    private:
+        std::clock_t _start_time;
+    }; // timer
 
 } // namespace boost
 

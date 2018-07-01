@@ -89,20 +89,32 @@ struct select_by_size {
 
 */              // End alternate implementation.
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost {
+    namespace iostreams {
+        namespace detail {
 
 //--------------Definition of case_-------------------------------------------//
 
-template<int N> struct case_ { char c1; case_<N - 1> c2; };
-template<> struct case_<-1> { char c; };
-typedef case_<true> yes_type;
-typedef case_<false> no_type;
+            template<int N>
+            struct case_ {
+                char c1;
+                case_<N - 1> c2;
+            };
+            template<>
+            struct case_<-1> {
+                char c;
+            };
+            typedef case_<true> yes_type;
+            typedef case_<false> no_type;
 
 //--------------Declaration of select_by_size---------------------------------//
 
-template<unsigned Size> struct select_by_size;
+            template<unsigned Size>
+            struct select_by_size;
 
-} } } // End namespaces detail, iostreams, boost.
+        }
+    }
+} // End namespaces detail, iostreams, boost.
 
 //--------------Definition of SELECT_BY_SIZE_SPEC-----------------------------//
 
@@ -123,7 +135,9 @@ template<unsigned Size> struct select_by_size;
 
 #define BOOST_PP_LOCAL_MACRO(n) SELECT_BY_SIZE_SPEC(n)
 #define BOOST_PP_LOCAL_LIMITS (0, 20)
+
 #include BOOST_PP_LOCAL_ITERATE()
+
 #undef BOOST_PP_LOCAL_MACRO
 
 //--------------Definition of SELECT_BY_SIZE----------------------------------//

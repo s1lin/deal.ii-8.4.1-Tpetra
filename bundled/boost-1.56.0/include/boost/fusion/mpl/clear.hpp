@@ -12,23 +12,22 @@
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/mpl/detail/clear.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct clear_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct clear_impl;
 
-    template <>
-    struct clear_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply
-        {            
-            typedef typename 
-                fusion::detail::clear<typename fusion::detail::tag_of<Sequence>::type>::type 
-            type;
+        template<>
+        struct clear_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply {
+                typedef typename
+                fusion::detail::clear<typename fusion::detail::tag_of<Sequence>::type>::type
+                        type;
+            };
         };
-    };
-}}
+    }
+}
 
 #endif
 

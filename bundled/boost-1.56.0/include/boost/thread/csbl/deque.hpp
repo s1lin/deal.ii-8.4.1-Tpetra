@@ -17,21 +17,21 @@
 #endif
 #include <boost/container/deque.hpp>
 #else
+
 #include <deque>
+
 #endif
 
-namespace boost
-{
-  namespace csbl
-  {
+namespace boost {
+    namespace csbl {
 #if defined BOOST_THREAD_USES_BOOST_DEQUE
-    using ::boost::container::deque;
+        using ::boost::container::deque;
 
 #else
-    using ::std::deque;
+        using ::std::deque;
 
 #endif
 
-  }
+    }
 }
 #endif // header

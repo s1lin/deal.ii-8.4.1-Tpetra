@@ -271,7 +271,7 @@
        if the nested template exists.
     
 */
-#define BOOST_TTI_TRAIT_HAS_TEMPLATE(trait,name,params) \
+#define BOOST_TTI_TRAIT_HAS_TEMPLATE(trait, name, params) \
   BOOST_PP_IIF \
     ( \
     BOOST_PP_IS_BINARY(params), \
@@ -280,7 +280,7 @@
     ) \
     (trait,name,params) \
 /**/
-  
+
 /// Expands to a metafunction which tests whether an inner class template with a particular name exists.
 /**
 
@@ -335,7 +335,7 @@
        if the nested template exists.
        
 */
-#define BOOST_TTI_HAS_TEMPLATE(name,params) \
+#define BOOST_TTI_HAS_TEMPLATE(name, params) \
   BOOST_TTI_TRAIT_HAS_TEMPLATE \
   ( \
   BOOST_TTI_HAS_TEMPLATE_GEN(name), \

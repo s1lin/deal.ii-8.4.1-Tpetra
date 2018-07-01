@@ -12,26 +12,26 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename T>
-        struct remove
-        {
-            typedef filter_view<Sequence, mpl::not_<is_same<mpl::_, T> > > type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename T>
+            struct remove {
+                typedef filter_view <Sequence, mpl::not_<is_same < mpl::_, T>> > type;
+            };
+        }
 
-    template <typename T, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::remove<Sequence const, T>::type
-    remove(Sequence const& seq)
-    {
+        template<typename T, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::remove<Sequence const, T>::type
+        remove(Sequence
+        const& seq) {
         typedef typename result_of::remove<Sequence const, T>::type result_type;
-        return result_type(seq);
+        return
+        result_type(seq);
     }
-}}
+}
+}
 
 #endif
 

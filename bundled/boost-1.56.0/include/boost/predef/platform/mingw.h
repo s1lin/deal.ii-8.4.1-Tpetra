@@ -59,7 +59,9 @@ Version number available as major, minor, and patch.
 #define BOOST_PLAT_MINGW_NAME "MinGW"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_PLAT_MINGW,BOOST_PLAT_MINGW_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_PLAT_MINGW,
+BOOST_PLAT_MINGW_NAME)
 
 #ifdef BOOST_PLAT_MINGW_EMULATED
 #include <boost/predef/detail/test.h>

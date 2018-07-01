@@ -36,7 +36,7 @@
 #   else
 #       define BOOST_DLLEXPORT __declspec(dllexport)
 #   endif
-#elif ! defined(_WIN32) && ! defined(_WIN64)
+#elif !defined(_WIN32) && !defined(_WIN64)
 #   if defined(__MWERKS__)
 #       define BOOST_DLLEXPORT __declspec(dllexport)
 #   elif defined(__GNUC__) && (__GNUC__ >= 3)

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_CONFIX
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_CONFIX
+
 #include <boost/spirit/home/classic/utility/confix.hpp>
+
 #endif

@@ -21,18 +21,18 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Check that a type is a unit.
-template<class T>
-struct is_unit : 
-    public mpl::false_
-{ };
+        template<class T>
+        struct is_unit :
+                public mpl::false_ {
+        };
 
-template<class Dim,class System>
-struct is_unit< unit<Dim,System> > :
-    public mpl::true_
-{ };
+        template<class Dim, class System>
+        struct is_unit<unit < Dim, System> > :
+        public mpl::true_ {
+    };
 
 } // namespace units
 

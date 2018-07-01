@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pint_base_unit, scale<2, static_rational<1> > > quart_base_unit;
+            typedef scaled_base_unit <pint_base_unit, scale<2, static_rational < 1>> >
+            quart_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::quart_base_unit> {
-    static const char* name()   { return("quart (U.S.)"); }
-    static const char* symbol() { return("qt"); }
-};
+        template<>
+        struct base_unit_info<us::quart_base_unit> {
+            static const char *name() { return ("quart (U.S.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("qt"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

@@ -34,20 +34,22 @@
 namespace tbb {
 
 //! @cond INTERNAL
-namespace internal {
-    // The class calls user function in operator()
-    template <typename Function, typename Iterator>
-    class parallel_for_each_body : internal::no_assign {
-        const Function &my_func;
-    public:
-        parallel_for_each_body(const Function &_func) : my_func(_func) {}
-        parallel_for_each_body(const parallel_for_each_body<Function, Iterator> &_caller) : my_func(_caller.my_func) {}
+    namespace internal {
+        // The class calls user function in operator()
+        template<typename Function, typename Iterator>
+        class parallel_for_each_body : internal::no_assign {
+            const Function &my_func;
+        public:
+            parallel_for_each_body(const Function &_func) : my_func(_func) {}
 
-        void operator() ( typename std::iterator_traits<Iterator>::reference value ) const {
-            my_func(value);
-        }
-    };
-} // namespace internal
+            parallel_for_each_body(const parallel_for_each_body<Function, Iterator> &_caller) : my_func(
+                    _caller.my_func) {}
+
+            void operator()(typename std::iterator_traits<Iterator>::reference value) const {
+                my_func(value);
+            }
+        };
+    } // namespace internal
 //! @endcond
 
 /** \name parallel_for_each
@@ -56,19 +58,21 @@ namespace internal {
 //! Calls function f for all items from [first, last) interval using user-supplied context
 /** @ingroup algorithms */
 #if __TBB_TASK_GROUP_CONTEXT
-template<typename InputIterator, typename Function>
-void parallel_for_each(InputIterator first, InputIterator last, const Function& f, task_group_context &context) {
-    internal::parallel_for_each_body<Function, InputIterator> body(f);
-    tbb::parallel_do (first, last, body, context);
-}
+
+    template<typename InputIterator, typename Function>
+    void parallel_for_each(InputIterator first, InputIterator last, const Function &f, task_group_context &context) {
+        internal::parallel_for_each_body<Function, InputIterator> body(f);
+        tbb::parallel_do(first, last, body, context);
+    }
+
 #endif /* __TBB_TASK_GROUP_CONTEXT */
 
 //! Uses default context
-template<typename InputIterator, typename Function>
-void parallel_for_each(InputIterator first, InputIterator last, const Function& f) {
-    internal::parallel_for_each_body<Function, InputIterator> body(f);
-    tbb::parallel_do (first, last, body);
-}
+    template<typename InputIterator, typename Function>
+    void parallel_for_each(InputIterator first, InputIterator last, const Function &f) {
+        internal::parallel_for_each_body<Function, InputIterator> body(f);
+        tbb::parallel_do(first, last, body);
+    }
 
 //@}
 

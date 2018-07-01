@@ -31,13 +31,16 @@
 // implement a special non-standard version for this platform
 
 #ifndef BOOST_NO_CWCTYPE
+
 #include <cwctype> // iswspace
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ using ::iswspace; }
 #endif
 #endif
 
 #include <cctype> // isspace
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ using ::isspace; }
 #endif
@@ -50,25 +53,25 @@ namespace std{ using ::isspace; }
 
 namespace { // anonymous
 
-template<class CharType>
-struct remove_whitespace_predicate;
+    template<class CharType>
+    struct remove_whitespace_predicate;
 
-template<>
-struct remove_whitespace_predicate<char>
-{
-    bool operator()(unsigned char t){
-        return ! std::isspace(t);
-    }
-};
+    template<>
+    struct remove_whitespace_predicate<char> {
+        bool operator()(unsigned char t) {
+            return !std::isspace(t);
+        }
+    };
 
 #ifndef BOOST_NO_CWCHAR
-template<>
-struct remove_whitespace_predicate<wchar_t>
-{
-    bool operator()(wchar_t t){
-        return ! std::iswspace(t);
-    }
-};
+
+    template<>
+    struct remove_whitespace_predicate<wchar_t> {
+        bool operator()(wchar_t t) {
+            return !std::iswspace(t);
+        }
+    };
+
 #endif
 
 } // namespace anonymous
@@ -76,94 +79,102 @@ struct remove_whitespace_predicate<wchar_t>
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // convert base64 file data (including whitespace and padding) to binary
 
-namespace boost { 
-namespace archive {
-namespace iterators {
+namespace boost {
+    namespace archive {
+        namespace iterators {
 
 // custom version of filter iterator which doesn't look ahead further than
 // necessary
 
-template<class Predicate, class Base>
-class filter_iterator
-    : public boost::iterator_adaptor<
-        filter_iterator<Predicate, Base>,
-        Base,
-        use_default,
-        single_pass_traversal_tag
-    >
-{
-    friend class boost::iterator_core_access;
-    typedef typename boost::iterator_adaptor<
-        filter_iterator<Predicate, Base>,
-        Base,
-        use_default,
-        single_pass_traversal_tag
-    > super_t;
-    typedef filter_iterator<Predicate, Base> this_t;
-    typedef typename super_t::reference reference_type;
+            template<class Predicate, class Base>
+            class filter_iterator
+                    : public boost::iterator_adaptor<
+                            filter_iterator<Predicate, Base>,
+                            Base,
+                            use_default,
+                            single_pass_traversal_tag
+                    > {
+                friend class boost::iterator_core_access;
 
-    reference_type dereference_impl(){
-        if(! m_full){
-            while(! m_predicate(* this->base_reference()))
-                ++(this->base_reference());
-            m_full = true;
-        }
-        return * this->base_reference();
-    }
+                typedef typename boost::iterator_adaptor<
+                        filter_iterator<Predicate, Base>,
+                        Base,
+                        use_default,
+                        single_pass_traversal_tag
+                > super_t;
+                typedef filter_iterator<Predicate, Base> this_t;
+                typedef typename super_t::reference reference_type;
 
-    reference_type dereference() const {
-        return const_cast<this_t *>(this)->dereference_impl();
-    }
+                reference_type dereference_impl() {
+                    if (!m_full) {
+                        while (!m_predicate(*this->base_reference()))
+                            ++(this->base_reference());
+                        m_full = true;
+                    }
+                    return *this->base_reference();
+                }
 
-    Predicate m_predicate;
-    bool m_full;
-public:
-    // note: this function is public only because comeau compiler complained
-    // I don't know if this is because the compiler is wrong or what
-    void increment(){
-        m_full = false;
-        ++(this->base_reference());
-    }
-    filter_iterator(Base start) : 
-        super_t(start), 
-        m_full(false)
-    {}
-    filter_iterator(){}
-};
+                reference_type dereference() const {
+                    return const_cast<this_t *>(this)->dereference_impl();
+                }
 
-template<class Base>
-class remove_whitespace : 
-    public filter_iterator<
-        remove_whitespace_predicate<
-            typename boost::iterator_value<Base>::type
-            //typename Base::value_type
-        >,
-        Base
-    >
-{
-    friend class boost::iterator_core_access;
-    typedef filter_iterator<
-        remove_whitespace_predicate<
-            typename boost::iterator_value<Base>::type
-            //typename Base::value_type
-        >,
-        Base
-    > super_t;
-public:
+                Predicate m_predicate;
+                bool m_full;
+            public:
+                // note: this function is public only because comeau compiler complained
+                // I don't know if this is because the compiler is wrong or what
+                void increment() {
+                    m_full = false;
+                    ++(this->base_reference());
+                }
+
+                filter_iterator(Base start) :
+                        super_t(start),
+                        m_full(false) {}
+
+                filter_iterator() {}
+            };
+
+            template<class Base>
+            class remove_whitespace :
+                    public filter_iterator<
+                            remove_whitespace_predicate<
+                                    typename boost::iterator_value<Base>::type
+                                    //typename Base::value_type
+                            >,
+                            Base
+                    > {
+                friend class boost::iterator_core_access;
+
+                typedef filter_iterator<
+                        remove_whitespace_predicate<
+                                typename boost::iterator_value<Base>::type
+                                //typename Base::value_type
+                        >,
+                        Base
+                > super_t;
+            public:
 //    remove_whitespace(){} // why is this needed?
-    // make composible buy using templated constructor
-    template<class T>
-    remove_whitespace(BOOST_PFTO_WRAPPER(T) start) :
-        super_t(Base(BOOST_MAKE_PFTO_WRAPPER(static_cast< T >(start))))
-    {}
-    // intel 7.1 doesn't like default copy constructor
-    remove_whitespace(const remove_whitespace & rhs) : 
-        super_t(rhs.base_reference())
-    {}
-};
+                // make composible buy using templated constructor
+                template<class T>
+                remove_whitespace (BOOST_PFTO_WRAPPER(T)
 
-} // namespace iterators
-} // namespace archive
+                start) :
+
+                super_t (Base(BOOST_MAKE_PFTO_WRAPPER(
+
+                static_cast
+                <T>(start)
+                )))
+                {}
+
+                // intel 7.1 doesn't like default copy constructor
+                remove_whitespace(const remove_whitespace &rhs) :
+                        super_t(rhs.base_reference()) {}
+            };
+
+        } // namespace iterators
+    } // namespace archive
 } // namespace boost
 
 #endif // BOOST_ARCHIVE_ITERATORS_REMOVE_WHITESPACE_HPP

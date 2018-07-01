@@ -118,9 +118,15 @@
 //
 #ifdef __cplusplus
 #if defined(BOOST_NO_INTRINSIC_WCHAR_T)
+
 #include <cwchar>
-template< typename T > struct assert_no_intrinsic_wchar_t;
-template<> struct assert_no_intrinsic_wchar_t<wchar_t> { typedef void type; };
+
+template<typename T>
+struct assert_no_intrinsic_wchar_t;
+template<>
+struct assert_no_intrinsic_wchar_t<wchar_t> {
+    typedef void type;
+};
 // if you see an error here then you need to unset BOOST_NO_INTRINSIC_WCHAR_T
 // where it is defined above:
 typedef assert_no_intrinsic_wchar_t<unsigned short>::type assert_no_intrinsic_wchar_t_;
@@ -132,7 +138,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER+0 >= 1000)
+#if defined(_MSC_VER) && (_MSC_VER + 0 >= 1000)
 #  if _MSC_VER >= 1200
 #     define BOOST_HAS_MS_INT64
 #  endif
@@ -256,7 +262,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  undef  BOOST_NO_SFINAE_EXPR
 #endif
 #if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1400) && !defined(_MSC_VER)
-#  undef BOOST_NO_CXX11_UNICODE_LITERALS 
+#  undef BOOST_NO_CXX11_UNICODE_LITERALS
 #  undef BOOST_NO_CXX11_RAW_LITERALS 
 // This one generates errors when used with conditional exception specifications, for example in multiprecision:
 //#  undef BOOST_NO_CXX11_NOEXCEPT 

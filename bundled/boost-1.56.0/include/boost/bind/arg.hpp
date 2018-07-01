@@ -23,37 +23,39 @@
 #include <boost/is_placeholder.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost
-{
+namespace boost {
 
-template< int I > struct arg
-{
-    arg()
-    {
+    template<int I>
+    struct arg {
+        arg() {
+        }
+
+        template<class T>
+        arg(T const & /* t */ ) {
+            BOOST_STATIC_ASSERT(I == is_placeholder<T>::value);
+        }
+    };
+
+    template<int I>
+    bool operator==(arg<I> const &, arg<I> const &) {
+        return true;
     }
-
-    template< class T > arg( T const & /* t */ )
-    {
-        BOOST_STATIC_ASSERT( I == is_placeholder<T>::value );
-    }
-};
-
-template< int I > bool operator==( arg<I> const &, arg<I> const & )
-{
-    return true;
-}
 
 #if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
-template< int I > struct is_placeholder< arg<I> >
-{
-    enum _vt { value = I };
-};
+    template<int I>
+    struct is_placeholder<arg<I> > {
+        enum _vt {
+            value = I
+        };
+    };
 
-template< int I > struct is_placeholder< arg<I> (*) () >
-{
-    enum _vt { value = I };
-};
+    template<int I>
+    struct is_placeholder<arg<I> (*)()> {
+        enum _vt {
+            value = I
+        };
+    };
 
 #endif
 

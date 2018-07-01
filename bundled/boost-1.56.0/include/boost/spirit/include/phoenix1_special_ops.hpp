@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_SPECIAL_OPS
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_SPECIAL_OPS
+
 #include <boost/spirit/home/classic/phoenix/special_ops.hpp>
+
 #endif

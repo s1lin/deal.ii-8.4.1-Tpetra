@@ -41,35 +41,34 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace karma { namespace detail
-{
-    ///////////////////////////////////////////////////////////////////////////
-    struct default_width
-    {
-        operator int() const
-        {
-            return BOOST_KARMA_DEFAULT_FIELD_LENGTH;
-        }
-    };
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            namespace detail {
+                ///////////////////////////////////////////////////////////////////////////
+                struct default_width {
+                    operator int() const {
+                        return BOOST_KARMA_DEFAULT_FIELD_LENGTH;
+                    }
+                };
 
-    ///////////////////////////////////////////////////////////////////////////
-    struct default_max_width
-    {
-        operator int() const
-        {
-            return BOOST_KARMA_DEFAULT_FIELD_MAXWIDTH;
-        }
-    };
+                ///////////////////////////////////////////////////////////////////////////
+                struct default_max_width {
+                    operator int() const {
+                        return BOOST_KARMA_DEFAULT_FIELD_MAXWIDTH;
+                    }
+                };
 
-    ///////////////////////////////////////////////////////////////////////////
-    struct default_columns
-    {
-        operator int() const
-        {
-            return BOOST_KARMA_DEFAULT_COLUMNS;
-        }
-    };
+                ///////////////////////////////////////////////////////////////////////////
+                struct default_columns {
+                    operator int() const {
+                        return BOOST_KARMA_DEFAULT_COLUMNS;
+                    }
+                };
 
-}}}}
+            }
+        }
+    }
+}
 
 #endif

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_MATCH
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_MATCH
+
 #include <boost/spirit/home/classic/core/match.hpp>
+
 #endif

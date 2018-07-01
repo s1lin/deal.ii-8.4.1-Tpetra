@@ -10,15 +10,18 @@
  */
 
 namespace boost {
-namespace date_time {
+    namespace date_time {
 
-    enum special_values {not_a_date_time, 
-                         neg_infin, pos_infin, 
-                         min_date_time,  max_date_time,
-                         not_special, NumSpecialValues};
+        enum special_values {
+            not_a_date_time,
+            neg_infin, pos_infin,
+            min_date_time, max_date_time,
+            not_special, NumSpecialValues
+        };
 
 
-} } //namespace date_time
+    }
+} //namespace date_time
 
 
 #endif

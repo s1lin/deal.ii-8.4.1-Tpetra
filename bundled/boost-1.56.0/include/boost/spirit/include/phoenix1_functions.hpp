@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_FUNCTIONS
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_FUNCTIONS
+
 #include <boost/spirit/home/classic/phoenix/functions.hpp>
+
 #endif

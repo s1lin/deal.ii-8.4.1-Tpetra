@@ -33,6 +33,8 @@ a category to indicate that either `BOOST_ARCH_X86_32` or
 #define BOOST_ARCH_X86_NAME "Intel x86"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_X86,BOOST_ARCH_X86_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_X86,
+BOOST_ARCH_X86_NAME)
 
 #endif

@@ -13,34 +13,32 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/equal_to.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct single_view_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct at_impl;
 
-        template<>
-        struct at_impl<single_view_tag>
-        {
-            template<typename Sequence, typename N>
-            struct apply
-            {
-                BOOST_MPL_ASSERT((mpl::equal_to<N, mpl::int_<0> >));
-                typedef typename Sequence::value_type type;
+            template<>
+            struct at_impl<single_view_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    BOOST_MPL_ASSERT((mpl::equal_to<N, mpl::int_ < 0> >));
+                    typedef typename Sequence::value_type type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type 
-                call(Sequence& seq)
-                {
-                    return seq.val;
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return seq.val;
+                    }
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif

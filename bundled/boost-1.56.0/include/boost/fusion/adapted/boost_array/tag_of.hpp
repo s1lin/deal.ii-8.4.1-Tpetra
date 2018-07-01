@@ -13,47 +13,45 @@
 
 #include <cstddef>
 
-namespace boost 
-{ 
+namespace boost {
     template<typename T, std::size_t N>
     class array;
 }
 
-namespace boost { namespace fusion 
-{
-    struct boost_array_tag;
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct boost_array_tag;
+        struct fusion_sequence_tag;
 
-    namespace traits
-    {
-        template<typename T, std::size_t N>
+        namespace traits {
+            template<typename T, std::size_t N>
 #if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
-        struct tag_of<boost::array<T,N>, void >
+            struct tag_of<boost::array<T,N>, void >
 #else
-        struct tag_of<boost::array<T,N> >
+            struct tag_of<boost::array<T, N> >
 #endif
-        {
-            typedef boost_array_tag type;
+            {
+                typedef boost_array_tag type;
+            };
+        }
+    }
+}
+
+namespace boost {
+    namespace mpl {
+        template<typename>
+        struct sequence_tag;
+
+        template<typename T, std::size_t N>
+        struct sequence_tag<array<T, N> > {
+            typedef fusion::fusion_sequence_tag type;
+        };
+
+        template<typename T, std::size_t N>
+        struct sequence_tag<array<T, N> const> {
+            typedef fusion::fusion_sequence_tag type;
         };
     }
-}}
-
-namespace boost { namespace mpl
-{
-    template<typename>
-    struct sequence_tag;
-
-    template<typename T, std::size_t N>
-    struct sequence_tag<array<T,N> >
-    {
-        typedef fusion::fusion_sequence_tag type;
-    };
-
-    template<typename T, std::size_t N>
-    struct sequence_tag<array<T,N> const>
-    {
-        typedef fusion::fusion_sequence_tag type;
-    };
-}}
+}
 
 #endif

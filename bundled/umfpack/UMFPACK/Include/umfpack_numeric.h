@@ -9,48 +9,48 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_numeric
-(
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    void *Symbolic,
-    void **Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                void *Symbolic,
+                void **Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_dl_numeric
-(
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    void *Symbolic,
-    void **Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                void *Symbolic,
+                void **Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 int umfpack_zi_numeric
-(
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    void *Symbolic,
-    void **Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                void *Symbolic,
+                void **Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_zl_numeric
-(
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    void *Symbolic,
-    void **Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                void *Symbolic,
+                void **Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 /*
 double int Syntax:

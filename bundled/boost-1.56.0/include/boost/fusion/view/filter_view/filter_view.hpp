@@ -22,46 +22,53 @@
 #include <boost/mpl/inherit.hpp>
 #include <boost/mpl/identity.hpp>
 
-namespace boost { namespace fusion
-{
-    struct filter_view_tag;
-    struct forward_traversal_tag;
-    struct fusion_sequence_tag;
+namespace boost {
+    namespace fusion {
+        struct filter_view_tag;
+        struct forward_traversal_tag;
+        struct fusion_sequence_tag;
 
-    template <typename Sequence, typename Pred>
-    struct filter_view : sequence_base<filter_view<Sequence, Pred> >
-    {
-        typedef filter_view_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef typename
+        template<typename Sequence, typename Pred>
+        struct filter_view : sequence_base<filter_view<Sequence, Pred> > {
+            typedef filter_view_tag fusion_tag;
+            typedef fusion_sequence_tag tag; // this gets picked up by MPL
+            typedef typename
             mpl::eval_if<
-                traits::is_associative<Sequence>
-              , mpl::inherit2<forward_traversal_tag,associative_tag>
-              , mpl::identity<forward_traversal_tag>
-            >::type
-        category;
-        typedef mpl::true_ is_view;
+                    traits::is_associative < Sequence>
+            , mpl::inherit2 <forward_traversal_tag, associative_tag>
+            , mpl::identity <forward_traversal_tag>
+            >
+            ::type
+                    category;
+            typedef mpl::true_ is_view;
 
-        typedef typename result_of::begin<Sequence>::type first_type;
-        typedef typename result_of::end<Sequence>::type last_type;
-        typedef Pred pred_type;
+            typedef typename result_of::begin<Sequence>::type first_type;
+            typedef typename result_of::end<Sequence>::type last_type;
+            typedef Pred pred_type;
 
-        BOOST_FUSION_GPU_ENABLED
-        filter_view(Sequence& in_seq)
-            : seq(in_seq)
-        {}
+            BOOST_FUSION_GPU_ENABLED
+            filter_view(Sequence &in_seq)
+                    : seq(in_seq) {}
 
-        BOOST_FUSION_GPU_ENABLED
-        first_type first() const { return fusion::begin(seq); }
-        BOOST_FUSION_GPU_ENABLED
-        last_type last() const { return fusion::end(seq); }
-        typename mpl::if_<traits::is_view<Sequence>, Sequence, Sequence&>::type seq;
+            BOOST_FUSION_GPU_ENABLED
+                    first_type
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        filter_view& operator= (filter_view const&);
-    };
-}}
+            first() const { return fusion::begin(seq); }
+
+            BOOST_FUSION_GPU_ENABLED
+                    last_type
+
+            last() const { return fusion::end(seq); }
+
+            typename mpl::if_<traits::is_view < Sequence>, Sequence, Sequence&>
+            ::type seq;
+
+        private:
+            // silence MSVC warning C4512: assignment operator could not be generated
+            filter_view &operator=(filter_view const &);
+        };
+    }
+}
 
 #endif
 

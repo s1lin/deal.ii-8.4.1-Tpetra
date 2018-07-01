@@ -19,15 +19,13 @@
 
 #include <boost/core/typeinfo.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-typedef boost::core::typeinfo sp_typeinfo;
+        typedef boost::core::typeinfo sp_typeinfo;
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace boost
 

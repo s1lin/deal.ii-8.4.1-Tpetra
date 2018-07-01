@@ -9,10 +9,10 @@
 #include <cstddef>
 
 #if (defined(__GNUC__) && !(defined(linux) || defined(__linux) || defined(__linux__))) \
-   || (!defined(__FreeBSD__) && defined(__GNUC__)) \
-   || (!defined(_AIX) && defined(__IBMCPP__)  && (__IBMCPP__ >= 800)) 
-   // Disable use of #include_next on Linux as typically we are installed in a 
-   // directory that is searched *after* the std lib include path.
+ || (!defined(__FreeBSD__) && defined(__GNUC__)) \
+ || (!defined(_AIX) && defined(__IBMCPP__) && (__IBMCPP__ >= 800))
+// Disable use of #include_next on Linux as typically we are installed in a
+// directory that is searched *after* the std lib include path.
 #if !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
@@ -35,7 +35,9 @@
 #     undef BOOST_TR1_NO_RECURSION
 #  endif
 #else
+
 #include <boost/config/no_tr1/utility.hpp>
+
 #endif
 #endif
 
@@ -54,7 +56,7 @@
 #endif
 
 #ifdef __IBMCPP_TR1__
-   // turn on support for everything:
+// turn on support for everything:
 #  define BOOST_HAS_TR1
 #endif
 
@@ -64,7 +66,7 @@
 #endif
 
 #ifdef BOOST_HAS_TR1
-   // turn on support for everything:
+// turn on support for everything:
 #  define BOOST_HAS_TR1_ARRAY
 #  define BOOST_HAS_TR1_COMPLEX_OVERLOADS
 #  define BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
@@ -98,7 +100,7 @@
 #endif
 
 #ifdef BOOST_HAS_GCC_TR1
-   // turn on support for everything in gcc 4.0.x:
+// turn on support for everything in gcc 4.0.x:
 #  define BOOST_HAS_TR1_ARRAY
 #if (__GNUC__ * 100 + __GNUC_MINOR__) >= 403
 //#  define BOOST_HAS_TR1_COMPLEX_OVERLOADS
@@ -127,7 +129,7 @@
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1500) \
-   && defined(_MSC_FULL_VER) && \
+ && defined(_MSC_FULL_VER) && \
    !defined(__SGI_STL_PORT) && \
    !defined(_STLPORT_VERSION) && \
    !defined(_RWSTD_VER_STR) && \
@@ -162,7 +164,7 @@
 #  endif
 #  if _MSC_VER >= 1700 
 #     define BOOST_HAS_TR1_COMPLEX_OVERLOADS 
-#  endif 
+#  endif
 #endif
 
 #include <boost/config.hpp>

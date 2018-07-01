@@ -7,39 +7,37 @@
 #if !defined(FUSION_END_IMPL_05062005_0906)
 #define FUSION_END_IMPL_05062005_0906
 
-namespace boost { namespace fusion
-{
-    struct filter_view_tag;
+namespace boost {
+    namespace fusion {
+        struct filter_view_tag;
 
-    template <typename Category,  typename First, typename Last, typename Pred>
-    struct filter_iterator;
+        template<typename Category, typename First, typename Last, typename Pred>
+        struct filter_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
 
-        template <>
-        struct end_impl<filter_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::last_type last_type;
-                typedef typename Sequence::pred_type pred_type;
-                typedef typename Sequence::category category;
-                typedef filter_iterator<category,last_type, last_type, pred_type> type;
+            template<>
+            struct end_impl<filter_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::last_type last_type;
+                    typedef typename Sequence::pred_type pred_type;
+                    typedef typename Sequence::category category;
+                    typedef filter_iterator<category, last_type, last_type, pred_type> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s)
-                {
-                    return type(s.last());
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s)
+                    {
+                        return type(s.last());
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

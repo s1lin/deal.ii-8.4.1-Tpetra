@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<angular_acceleration_dimension,si::system>      angular_acceleration;
+            typedef unit <angular_acceleration_dimension, si::system> angular_acceleration;
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

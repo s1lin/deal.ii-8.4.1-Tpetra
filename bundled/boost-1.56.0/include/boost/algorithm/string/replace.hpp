@@ -50,22 +50,21 @@ namespace boost {
               \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT replace_range_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const iterator_range<
-                BOOST_STRING_TYPENAME 
-                    range_const_iterator<Range1T>::type>& SearchRange,
-            const Range2T& Format)
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const iterator_range<
+                        BOOST_STRING_TYPENAME
+                        range_const_iterator<Range1T>::type> &SearchRange,
+                const Range2T &Format) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::range_finder(SearchRange),
-                ::boost::algorithm::const_formatter(Format));
+                    Output,
+                    Input,
+                    ::boost::algorithm::range_finder(SearchRange),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace range algorithm
@@ -73,17 +72,16 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT replace_range_copy( 
-            const SequenceT& Input,
-            const iterator_range<
-                BOOST_STRING_TYPENAME 
-                    range_const_iterator<SequenceT>::type>& SearchRange,
-            const RangeT& Format)
-        {
+        inline SequenceT replace_range_copy(
+                const SequenceT &Input,
+                const iterator_range<
+                        BOOST_STRING_TYPENAME
+                        range_const_iterator<SequenceT>::type> &SearchRange,
+                const RangeT &Format) {
             return ::boost::algorithm::find_format_copy(
-                Input,
-                ::boost::algorithm::range_finder(SearchRange),
-                ::boost::algorithm::const_formatter(Format));
+                    Input,
+                    ::boost::algorithm::range_finder(SearchRange),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace range algorithm
@@ -96,17 +94,16 @@ namespace boost {
             \param Format A substitute string
         */
         template<typename SequenceT, typename RangeT>
-        inline void replace_range( 
-            SequenceT& Input,
-            const iterator_range<
-                BOOST_STRING_TYPENAME 
-                    range_iterator<SequenceT>::type>& SearchRange,
-            const RangeT& Format)
-        {
+        inline void replace_range(
+                SequenceT &Input,
+                const iterator_range<
+                        BOOST_STRING_TYPENAME
+                        range_iterator<SequenceT>::type> &SearchRange,
+                const RangeT &Format) {
             ::boost::algorithm::find_format(
-                Input,
-                ::boost::algorithm::range_finder(SearchRange),
-                ::boost::algorithm::const_formatter(Format));
+                    Input,
+                    ::boost::algorithm::range_finder(SearchRange),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_first --------------------------------------------------------------------//
@@ -128,21 +125,20 @@ namespace boost {
               \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT replace_first_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const Range3T& Format)
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const Range3T &Format) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace first algorithm
@@ -150,15 +146,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT replace_first_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT replace_first_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace first algorithm
@@ -171,15 +166,14 @@ namespace boost {
             \param Format A substitute string
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void replace_first( 
-            SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void replace_first(
+                SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_first ( case insensitive ) ---------------------------------------------//
@@ -203,22 +197,21 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT ireplace_first_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const Range3T& Format,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const Range3T &Format,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace first algorithm ( case insensitive )
@@ -226,16 +219,15 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range2T, typename Range1T>
-        inline SequenceT ireplace_first_copy( 
-            const SequenceT& Input,
-            const Range2T& Search,
-            const Range1T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT ireplace_first_copy(
+                const SequenceT &Input,
+                const Range2T &Search,
+                const Range1T &Format,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace first algorithm ( case insensitive )
@@ -250,16 +242,15 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void ireplace_first( 
-            SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void ireplace_first(
+                SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_last --------------------------------------------------------------------//
@@ -281,21 +272,20 @@ namespace boost {
               \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT replace_last_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const Range3T& Format )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const Range3T &Format) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::last_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::last_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace last algorithm
@@ -303,15 +293,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT replace_last_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::last_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT replace_last_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::last_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace last algorithm
@@ -324,15 +313,14 @@ namespace boost {
             \param Format A substitute string
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void replace_last( 
-            SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::last_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void replace_last(
+                SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::last_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_last ( case insensitive ) -----------------------------------------------//
@@ -356,22 +344,21 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT ireplace_last_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const Range3T& Format,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const Range3T &Format,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace last algorithm ( case insensitive )
@@ -379,16 +366,15 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT ireplace_last_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT ireplace_last_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace last algorithm ( case insensitive )
@@ -404,16 +390,15 @@ namespace boost {
             \return A reference to the modified input
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void ireplace_last( 
-            SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void ireplace_last(
+                SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_nth --------------------------------------------------------------------//
@@ -437,22 +422,21 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT replace_nth_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            int Nth,
-            const Range3T& Format )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                int Nth,
+                const Range3T &Format) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::nth_finder(Search, Nth),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace nth algorithm
@@ -460,16 +444,15 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT replace_nth_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            int Nth,
-            const Range2T& Format )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::nth_finder(Search, Nth),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT replace_nth_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                int Nth,
+                const Range2T &Format) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace nth algorithm
@@ -484,20 +467,19 @@ namespace boost {
             \param Format A substitute string
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void replace_nth( 
-            SequenceT& Input,
-            const Range1T& Search,
-            int Nth,
-            const Range2T& Format )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::nth_finder(Search, Nth),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void replace_nth(
+                SequenceT &Input,
+                const Range1T &Search,
+                int Nth,
+                const Range2T &Format) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_nth ( case insensitive ) -----------------------------------------------//
-        
+
         //! Replace nth algorithm ( case insensitive )
         /*!
             Replace an Nth (zero-indexed) match of the search string in the input 
@@ -519,23 +501,22 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
        */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT ireplace_nth_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            int Nth,
-            const Range3T& Format,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                int Nth,
+                const Range3T &Format,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc) ),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace nth algorithm ( case insensitive )
@@ -543,17 +524,16 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT ireplace_nth_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            int Nth,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT ireplace_nth_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                int Nth,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace nth algorithm ( case insensitive )
@@ -570,17 +550,16 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void ireplace_nth( 
-            SequenceT& Input,
-            const Range1T& Search,
-            int Nth,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void ireplace_nth(
+                SequenceT &Input,
+                const Range1T &Search,
+                int Nth,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_all --------------------------------------------------------------------//
@@ -602,21 +581,20 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT replace_all_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const Range3T& Format )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const Range3T &Format) {
             return ::boost::algorithm::find_format_all_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace all algorithm
@@ -624,15 +602,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT replace_all_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Input,
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT replace_all_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace all algorithm
@@ -646,17 +623,16 @@ namespace boost {
             \return A reference to the modified input
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void replace_all( 
-            SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format )
-        {
-            ::boost::algorithm::find_format_all( 
-                Input, 
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void replace_all(
+                SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format) {
+            ::boost::algorithm::find_format_all(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::const_formatter(Format));
         }
-        
+
 //  replace_all ( case insensitive ) -----------------------------------------------//
 
         //! Replace all algorithm ( case insensitive )
@@ -678,22 +654,21 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T,
-            typename Range3T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T,
+                typename Range3T>
         inline OutputIteratorT ireplace_all_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const Range3T& Format,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const Range3T &Format,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_all_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace all algorithm ( case insensitive )
@@ -701,16 +676,15 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline SequenceT ireplace_all_copy( 
-            const SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT ireplace_all_copy(
+                const SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace all algorithm ( case insensitive )
@@ -725,18 +699,17 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
-        inline void ireplace_all( 
-            SequenceT& Input,
-            const Range1T& Search,
-            const Range2T& Format,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format_all( 
-                Input, 
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void ireplace_all(
+                SequenceT &Input,
+                const Range1T &Search,
+                const Range2T &Format,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format_all(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::const_formatter(Format));
         }
-        
+
 //  replace_head --------------------------------------------------------------------//
 
         //! Replace head algorithm
@@ -760,20 +733,19 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT replace_head_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            int N,
-            const Range2T& Format )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                int N,
+                const Range2T &Format) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::head_finder(N),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::head_finder(N),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace head algorithm
@@ -781,15 +753,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT replace_head_copy( 
-            const SequenceT& Input,
-            int N,
-            const RangeT& Format )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::head_finder(N),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT replace_head_copy(
+                const SequenceT &Input,
+                int N,
+                const RangeT &Format) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::head_finder(N),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace head algorithm
@@ -806,15 +777,14 @@ namespace boost {
             \param Format A substitute string
         */
         template<typename SequenceT, typename RangeT>
-        inline void replace_head( 
-            SequenceT& Input,
-            int N,
-            const RangeT& Format )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::head_finder(N),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void replace_head(
+                SequenceT &Input,
+                int N,
+                const RangeT &Format) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::head_finder(N),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
 //  replace_tail --------------------------------------------------------------------//
@@ -840,20 +810,19 @@ namespace boost {
               \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT replace_tail_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            int N,
-            const Range2T& Format )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                int N,
+                const Range2T &Format) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::tail_finder(N),
-                ::boost::algorithm::const_formatter(Format) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::tail_finder(N),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace tail algorithm
@@ -861,15 +830,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT replace_tail_copy( 
-            const SequenceT& Input,
-            int N,
-            const RangeT& Format )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::tail_finder(N),
-                ::boost::algorithm::const_formatter(Format) );
+        inline SequenceT replace_tail_copy(
+                const SequenceT &Input,
+                int N,
+                const RangeT &Format) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::tail_finder(N),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
         //! Replace tail algorithm
@@ -886,15 +854,14 @@ namespace boost {
             \param Format A substitute string
         */
         template<typename SequenceT, typename RangeT>
-        inline void replace_tail( 
-            SequenceT& Input,
-            int N,
-            const RangeT& Format )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::tail_finder(N),
-                ::boost::algorithm::const_formatter(Format) );
+        inline void replace_tail(
+                SequenceT &Input,
+                int N,
+                const RangeT &Format) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::tail_finder(N),
+                    ::boost::algorithm::const_formatter(Format));
         }
 
     } // namespace algorithm

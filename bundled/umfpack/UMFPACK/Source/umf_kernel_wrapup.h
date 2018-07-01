@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_kernel_wrapup
-(
-    NumericType *Numeric,
-    SymbolicType *Symbolic,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                SymbolicType *Symbolic,
+                WorkType *Work
+        );

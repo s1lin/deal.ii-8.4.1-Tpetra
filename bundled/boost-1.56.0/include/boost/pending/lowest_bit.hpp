@@ -20,7 +20,7 @@
 
 namespace boost {
 
-    template <typename T>
+    template<typename T>
     int lowest_bit(T x) {
 
         assert(x >= 1); // PRE
@@ -28,7 +28,7 @@ namespace boost {
         // clear all bits on except the rightmost one,
         // then calculate the logarithm base 2
         //
-        return boost::integer_log2<T>( x - ( x & (x-1) ) );
+        return boost::integer_log2<T>(x - (x & (x - 1)));
 
     }
 

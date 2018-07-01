@@ -8,28 +8,28 @@
 #include <math.h>
 
 namespace std {
-  using ::acos;
-  using ::cos;
-  using ::fmod;
-  using ::modf;
-  using ::tan;
-  using ::asin;
-  using ::cosh;
-  using ::frexp;
-  using ::pow;
-  using ::tanh;
-  using ::atan;
-  using ::exp;
-  using ::ldexp;
-  using ::sin;
-  using ::atan2;
-  using ::fabs;
-  using ::log;
-  using ::sinh;
-  using ::ceil;
-  using ::floor;
-  using ::log10;
-  using ::sqrt;
+    using ::acos;
+    using ::cos;
+    using ::fmod;
+    using ::modf;
+    using ::tan;
+    using ::asin;
+    using ::cosh;
+    using ::frexp;
+    using ::pow;
+    using ::tanh;
+    using ::atan;
+    using ::exp;
+    using ::ldexp;
+    using ::sin;
+    using ::atan2;
+    using ::fabs;
+    using ::log;
+    using ::sinh;
+    using ::ceil;
+    using ::floor;
+    using ::log10;
+    using ::sqrt;
 }
 
 #endif // CMATH_HEADER

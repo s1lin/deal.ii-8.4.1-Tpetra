@@ -25,19 +25,32 @@
 namespace boost {
 
 #if defined( __CODEGEARC__ )
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_array,T,__is_array(T))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_array,T,__is_array(T))
 #else
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_array,T,false)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_array, T,
+    false)
 #if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T[N],true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T const[N],true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T volatile[N],true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T const volatile[N],true)
+
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T, std::size_t N, is_array, T[N],
+
+    true)
+
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T, std::size_t N, is_array, T const[N],
+
+    true)
+
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T, std::size_t N, is_array, T volatile[N],
+
+    true)
+
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T, std::size_t N, is_array, T const volatile[N],
+
+    true)
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && !defined(__IBMCPP__) &&  !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T[],true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T const[],true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T volatile[],true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T const volatile[],true)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T[],true)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T const[],true)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T volatile[],true)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_array,T const volatile[],true)
 #endif
 #endif
 

@@ -19,20 +19,22 @@
 // Julian year = 365.25 days exactly = 8766 hours exactly
 
 namespace boost {
-namespace units {
-namespace metric {
+    namespace units {
+        namespace metric {
 
-typedef scaled_base_unit<boost::units::si::second_base_unit, scale<31557600, static_rational<1> > > year_base_unit;
+            typedef scaled_base_unit <boost::units::si::second_base_unit, scale<31557600, static_rational < 1>> >
+            year_base_unit;
 
-}
+        }
 
-template<>
-struct base_unit_info<metric::year_base_unit> {
-    static const char* name()   { return("Julian year"); }
-    static const char* symbol() { return("yr"); }
-};
+        template<>
+        struct base_unit_info<metric::year_base_unit> {
+            static const char *name() { return ("Julian year"); }
 
-}
+            static const char *symbol() { return ("yr"); }
+        };
+
+    }
 }
 
 #endif

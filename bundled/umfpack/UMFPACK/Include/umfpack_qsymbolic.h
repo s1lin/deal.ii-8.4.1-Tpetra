@@ -9,56 +9,56 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_qsymbolic
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    const int Qinit [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                const int Qinit[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_dl_qsymbolic
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    const UF_long Qinit [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                const UF_long Qinit[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 int umfpack_zi_qsymbolic
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    const int Qinit [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                const int Qinit[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_zl_qsymbolic
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    const UF_long Qinit [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                const UF_long Qinit[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 /*
 double int Syntax:

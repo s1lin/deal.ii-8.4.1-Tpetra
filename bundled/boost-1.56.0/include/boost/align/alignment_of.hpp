@@ -21,7 +21,9 @@
 #include <boost/align/detail/type_traits.hpp>
 
 #if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
+
 #include <boost/align/detail/alignment_of_cxx11.hpp>
+
 #elif defined(BOOST_MSVC)
 #include <boost/align/detail/alignment_of_msvc.hpp>
 #elif defined(BOOST_CLANG)
@@ -62,11 +64,11 @@ namespace boost {
                 /**
                  @cond
                 */
-                value = detail::alignment_of<typename
-                    detail::remove_cv<typename
-                    detail::remove_all_extents<typename
-                    detail::remove_reference<T>::
-                    type>::type>::type>::value
+                        value = detail::alignment_of<typename
+                detail::remove_cv<typename
+                detail::remove_all_extents<typename
+                detail::remove_reference<T>::
+                type>::type>::type>::value
                 /**
                  @endcond
                 */

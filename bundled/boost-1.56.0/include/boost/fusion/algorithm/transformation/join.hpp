@@ -11,25 +11,29 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/view/joint_view.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    namespace result_of
-    {
+        namespace result_of {
+            template<typename LhSequence, typename RhSequence>
+            struct join {
+                typedef joint_view <LhSequence, RhSequence> type;
+            };
+        }
+
         template<typename LhSequence, typename RhSequence>
-        struct join
-        {
-            typedef joint_view<LhSequence, RhSequence> type;
-        };
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::join<LhSequence const, RhSequence const>::type
+        join(LhSequence
+        const& lhs,
+        RhSequence const &rhs
+        ) {
+        return
+        typename result_of::join<LhSequence const, RhSequence const>::type(
+                lhs, rhs
+        );
     }
-
-    template<typename LhSequence, typename RhSequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::join<LhSequence const, RhSequence const>::type
-    join(LhSequence const& lhs, RhSequence const& rhs)
-    {
-        return typename result_of::join<LhSequence const, RhSequence const>::type(
-            lhs, rhs);
-    }
-}}
+}
+}
 
 #endif

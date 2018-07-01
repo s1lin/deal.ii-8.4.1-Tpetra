@@ -20,8 +20,9 @@
 
 #include <cstddef> // size_t
 #include <boost/config.hpp>
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::size_t; 
 } // namespace std
 #endif
@@ -40,77 +41,100 @@ namespace std{
 #endif
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-namespace detail {
-    template<class Archive> class interface_oarchive;
-} // namespace detail
+        namespace detail {
+            template<class Archive>
+            class interface_oarchive;
+        } // namespace detail
 
-template<class Archive>
-class xml_oarchive_impl : 
-    public basic_text_oprimitive<std::ostream>,
-    public basic_xml_oarchive<Archive>
-{
+        template<class Archive>
+        class xml_oarchive_impl :
+                public basic_text_oprimitive<std::ostream>,
+                public basic_xml_oarchive<Archive> {
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-public:
+            public:
 #else
-protected:
-    #if BOOST_WORKAROUND(BOOST_MSVC, < 1500)
-        // for some inexplicable reason insertion of "class" generates compile erro
-        // on msvc 7.1
-        friend detail::interface_oarchive<Archive>;
-        friend basic_xml_oarchive<Archive>;
-        friend save_access;
-    #else
-        friend class detail::interface_oarchive<Archive>;
-        friend class basic_xml_oarchive<Archive>;
-        friend class save_access;
-    #endif
+        protected:
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1500)
+            // for some inexplicable reason insertion of "class" generates compile erro
+            // on msvc 7.1
+            friend detail::interface_oarchive<Archive>;
+            friend basic_xml_oarchive<Archive>;
+            friend save_access;
+#else
+
+            friend class detail::interface_oarchive<Archive>;
+
+            friend class basic_xml_oarchive<Archive>;
+
+            friend class save_access;
+
 #endif
-    //void end_preamble(){
-    //    basic_xml_oarchive<Archive>::end_preamble();
-    //}
-    template<class T>
-    void save(const T & t){
-        basic_text_oprimitive<std::ostream>::save(t);
-    }
-    void 
-    save(const version_type & t){
-        save(static_cast<const unsigned int>(t));
-    }
-    void 
-    save(const boost::serialization::item_version_type & t){
-        save(static_cast<const unsigned int>(t));
-    }
-    BOOST_ARCHIVE_DECL(void) 
-    save(const char * t);
-    #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    BOOST_ARCHIVE_DECL(void)
-    save(const wchar_t * t);
-    #endif
-    BOOST_ARCHIVE_DECL(void)
-    save(const std::string &s);
-    #ifndef BOOST_NO_STD_WSTRING
-    BOOST_ARCHIVE_DECL(void)
-    save(const std::wstring &ws);
-    #endif
-    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
-    xml_oarchive_impl(std::ostream & os, unsigned int flags);
-    ~xml_oarchive_impl(){}
-public:
-    void save_binary(const void *address, std::size_t count){
-        this->end_preamble();
-        #if ! defined(__MWERKS__)
-        this->basic_text_oprimitive<std::ostream>::save_binary(
-        #else
-        this->basic_text_oprimitive::save_binary(
-        #endif
-            address, 
-            count
-        );
-        this->indent_next = true;
-    }
-};
+#endif
+
+            //void end_preamble(){
+            //    basic_xml_oarchive<Archive>::end_preamble();
+            //}
+            template<class T>
+            void save(const T &t) {
+                basic_text_oprimitive<std::ostream>::save(t);
+            }
+
+            void
+            save(const version_type &t) {
+                save(static_cast<const unsigned int>(t));
+            }
+
+            void
+            save(const boost::serialization::item_version_type &t) {
+                save(static_cast<const unsigned int>(t));
+            }
+
+            BOOST_ARCHIVE_DECL(void)
+
+            save(const char *t);
+
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+
+            BOOST_ARCHIVE_DECL(void)
+
+            save(const wchar_t *t);
+
+#endif
+
+            BOOST_ARCHIVE_DECL(void)
+
+            save(const std::string &s);
+
+#ifndef BOOST_NO_STD_WSTRING
+
+            BOOST_ARCHIVE_DECL(void)
+
+            save(const std::wstring &ws);
+
+#endif
+
+            BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
+            xml_oarchive_impl(std::ostream &os, unsigned int flags);
+
+            ~xml_oarchive_impl() {}
+
+        public:
+            void save_binary(const void *address, std::size_t count) {
+                this->end_preamble();
+#if !defined(__MWERKS__)
+                this->basic_text_oprimitive<std::ostream>::save_binary(
+#else
+                        this->basic_text_oprimitive::save_binary(
+#endif
+                        address,
+                        count
+                );
+                this->indent_next = true;
+            }
+        };
 
 // we use the following because we can't use
 // typedef xml_oarchive_impl<xml_oarchive_impl<...> > xml_oarchive;
@@ -118,17 +142,16 @@ public:
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from xml_oarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class xml_oarchive : 
-    public xml_oarchive_impl<xml_oarchive>
-{
-public:
-    xml_oarchive(std::ostream & os, unsigned int flags = 0) :
-        xml_oarchive_impl<xml_oarchive>(os, flags)
-    {}
-    ~xml_oarchive(){}
-};
+        class xml_oarchive :
+                public xml_oarchive_impl<xml_oarchive> {
+        public:
+            xml_oarchive(std::ostream &os, unsigned int flags = 0) :
+                    xml_oarchive_impl<xml_oarchive>(os, flags) {}
 
-} // namespace archive
+            ~xml_oarchive() {}
+        };
+
+    } // namespace archive
 } // namespace boost
 
 // required by export

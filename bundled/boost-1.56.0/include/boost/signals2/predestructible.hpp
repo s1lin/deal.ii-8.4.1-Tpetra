@@ -15,32 +15,31 @@
 #ifndef BOOST_SIGNALS2_PREDESTRUCTIBLE_HPP
 #define BOOST_SIGNALS2_PREDESTRUCTIBLE_HPP
 
-namespace boost
-{
-  namespace signals2
-  {
-    template<typename T> class predestructing_deleter;
-
-    namespace predestructible_adl_barrier
-    {
-      class predestructible
-      {
-      protected:
-        predestructible() {}
-      public:
+namespace boost {
+    namespace signals2 {
         template<typename T>
-          friend void adl_postconstruct(const shared_ptr<T> &, ...)
-        {}
-        friend void adl_predestruct(predestructible *p)
-        {
-          p->predestruct();
-        }
-        virtual ~predestructible() {}
-        virtual void predestruct() = 0;
-      };
-    } // namespace predestructible_adl_barrier
-    using predestructible_adl_barrier::predestructible;
-  }
+        class predestructing_deleter;
+
+        namespace predestructible_adl_barrier {
+            class predestructible {
+            protected:
+                predestructible() {}
+
+            public:
+                template<typename T>
+                friend void adl_postconstruct(const shared_ptr <T> &, ...) {}
+
+                friend void adl_predestruct(predestructible *p) {
+                    p->predestruct();
+                }
+
+                virtual ~predestructible() {}
+
+                virtual void predestruct() = 0;
+            };
+        } // namespace predestructible_adl_barrier
+        using predestructible_adl_barrier::predestructible;
+    }
 }
 
 #endif // BOOST_SIGNALS2_PREDESTRUCTIBLE_HPP

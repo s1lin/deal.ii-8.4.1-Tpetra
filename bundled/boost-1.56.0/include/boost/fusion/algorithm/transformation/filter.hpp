@@ -12,25 +12,24 @@
 #include <boost/fusion/view/filter_view/filter_view.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename T>
-        struct filter
-        {
-            typedef filter_view<Sequence, is_same<mpl::_, T> > type;
-        };
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename T>
+            struct filter {
+                typedef filter_view <Sequence, is_same<mpl::_, T>> type;
+            };
+        }
+
+        template<typename T, typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::filter<Sequence const, T>::type
+        filter(Sequence
+        const& seq) {
+        return filter_view<const Sequence, is_same < mpl::_, T> >(seq);
     }
-    
-    template <typename T, typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::filter<Sequence const, T>::type
-    filter(Sequence const& seq)
-    {
-        return filter_view<const Sequence, is_same<mpl::_, T> >(seq);
-    }
-}}
+}
+}
 
 #endif
 

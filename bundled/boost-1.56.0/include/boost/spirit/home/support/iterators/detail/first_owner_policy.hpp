@@ -10,53 +10,54 @@
 #include <boost/spirit/home/support/iterators/multi_pass_fwd.hpp>
 #include <boost/spirit/home/support/iterators/detail/multi_pass.hpp>
 
-namespace boost { namespace spirit { namespace iterator_policies
-{
-    ///////////////////////////////////////////////////////////////////////////
-    //  class first_owner
-    //  Implementation of an OwnershipPolicy used by multi_pass
-    //  This ownership policy dictates that the first iterator created will
-    //  determine the lifespan of the shared components.  This works well for
-    //  spirit, since no dynamic allocation of iterators is done, and all 
-    //  copies are make on the stack.
-    //
-    //  There is a caveat about using this policy together with the std_deque
-    //  StoragePolicy. Since first_owner always returns false from unique(),
-    //  std_deque will only release the queued data if clear_queue() is called.
-    ///////////////////////////////////////////////////////////////////////////
-    struct first_owner
-    {
-        ///////////////////////////////////////////////////////////////////////
-        struct unique : detail::default_ownership_policy
-        {
-            unique() : first(true) {}
-            unique(unique const&) : first(false) {}
+namespace boost {
+    namespace spirit {
+        namespace iterator_policies {
+            ///////////////////////////////////////////////////////////////////////////
+            //  class first_owner
+            //  Implementation of an OwnershipPolicy used by multi_pass
+            //  This ownership policy dictates that the first iterator created will
+            //  determine the lifespan of the shared components.  This works well for
+            //  spirit, since no dynamic allocation of iterators is done, and all
+            //  copies are make on the stack.
+            //
+            //  There is a caveat about using this policy together with the std_deque
+            //  StoragePolicy. Since first_owner always returns false from unique(),
+            //  std_deque will only release the queued data if clear_queue() is called.
+            ///////////////////////////////////////////////////////////////////////////
+            struct first_owner {
+                ///////////////////////////////////////////////////////////////////////
+                struct unique : detail::default_ownership_policy {
+                    unique() : first(true) {}
 
-            // return true to indicate deletion of resources
-            template <typename MultiPass>
-            static bool release(MultiPass& mp)
-            {
-                return mp.first;
-            }
+                    unique(unique const &) : first(false) {}
 
-            // use swap from default policy
-            // if we're the first, we still remain the first, even if assigned
-            // to, so don't swap first.  swap is only called from operator=
+                    // return true to indicate deletion of resources
+                    template<typename MultiPass>
+                    static bool release(MultiPass &mp) {
+                        return mp.first;
+                    }
 
-            template <typename MultiPass>
-            static bool is_unique(MultiPass const&) 
-            {
-                return false; // no way to know, so always return false
-            }
+                    // use swap from default policy
+                    // if we're the first, we still remain the first, even if assigned
+                    // to, so don't swap first.  swap is only called from operator=
 
-        protected:
-            bool first;
-        };
+                    template<typename MultiPass>
+                    static bool is_unique(MultiPass const &) {
+                        return false; // no way to know, so always return false
+                    }
 
-        ////////////////////////////////////////////////////////////////////////
-        struct shared {};   // no shared data
-    };
+                protected:
+                    bool first;
+                };
 
-}}}
+                ////////////////////////////////////////////////////////////////////////
+                struct shared {
+                };   // no shared data
+            };
+
+        }
+    }
+}
 
 #endif

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX_OBJECT
 #define BOOST_SPIRIT_INCLUDE_PHOENIX_OBJECT
+
 #include <boost/phoenix/object.hpp>
+
 #endif

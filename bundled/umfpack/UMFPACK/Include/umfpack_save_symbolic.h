@@ -9,28 +9,28 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_save_symbolic
-(
-    void *Symbolic,
-    char *filename
-) ;
+        (
+                void *Symbolic,
+                char *filename
+        );
 
 UF_long umfpack_dl_save_symbolic
-(
-    void *Symbolic,
-    char *filename
-) ;
+        (
+                void *Symbolic,
+                char *filename
+        );
 
 int umfpack_zi_save_symbolic
-(
-    void *Symbolic,
-    char *filename
-) ;
+        (
+                void *Symbolic,
+                char *filename
+        );
 
 UF_long umfpack_zl_save_symbolic
-(
-    void *Symbolic,
-    char *filename
-) ;
+        (
+                void *Symbolic,
+                char *filename
+        );
 
 /*
 double int Syntax:

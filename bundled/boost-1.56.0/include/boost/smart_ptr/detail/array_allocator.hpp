@@ -16,8 +16,10 @@
 
 namespace boost {
     namespace detail {
-        struct ms_init_tag   { };
-        struct ms_noinit_tag { };
+        struct ms_init_tag {
+        };
+        struct ms_noinit_tag {
+        };
 
         template<class T>
         struct ms_allocator_state;
@@ -27,16 +29,16 @@ namespace boost {
             typedef typename array_base<T>::type type;
 
             ms_allocator_state(std::size_t size_,
-                type** result_)
-                : size(size_ * array_total<T>::size),
-                  result(result_) {
+                               type **result_)
+                    : size(size_ * array_total<T>::size),
+                      result(result_) {
             }
 
             std::size_t size;
 
             union {
-                type** result;
-                type* object;
+                type **result;
+                type *object;
             };
         };
 
@@ -44,8 +46,8 @@ namespace boost {
         struct ms_allocator_state<T[N]> {
             typedef typename array_base<T>::type type;
 
-            ms_allocator_state(type** result_)
-                : result(result_) {
+            ms_allocator_state(type **result_)
+                    : result(result_) {
             }
 
             enum {
@@ -53,19 +55,20 @@ namespace boost {
             };
 
             union {
-                type** result;
-                type* object;
+                type **result;
+                type *object;
             };
         };
 
         template<class A, class T, class R>
         class as_allocator
-            : public A {
+                : public A {
             template<class A_, class T_, class R_>
-            friend class as_allocator;
+            friend
+            class as_allocator;
 
 #if !defined(BOOST_NO_CXX11_ALLOCATOR)
-            typedef std::allocator_traits<A> AT;
+            typedef std::allocator_traits <A> AT;
             typedef typename AT::template rebind_alloc<char> CA;
             typedef typename AT::template rebind_traits<char> CT;
 #else
@@ -99,7 +102,7 @@ namespace boost {
             struct rebind {
 #if !defined(BOOST_NO_CXX11_ALLOCATOR)
                 typedef as_allocator<typename AT::
-                    template rebind_alloc<U>, T, R> other;
+                template rebind_alloc<U>, T, R> other;
 #else
                 typedef as_allocator<typename A::
                     template rebind<U>::other, T, R> other;
@@ -108,21 +111,21 @@ namespace boost {
 
             typedef typename array_base<T>::type type;
 
-            as_allocator(const A& allocator_, type** result)
-                : A(allocator_),
-                  data(result) {
+            as_allocator(const A &allocator_, type **result)
+                    : A(allocator_),
+                      data(result) {
             }
 
-            as_allocator(const A& allocator_, std::size_t size,
-                type** result)
-                : A(allocator_),
-                  data(size, result) {
+            as_allocator(const A &allocator_, std::size_t size,
+                         type **result)
+                    : A(allocator_),
+                      data(size, result) {
             }
 
             template<class U>
-            as_allocator(const as_allocator<U, T, R>& other)
-                : A(other.allocator()),
-                  data(other.data) {
+            as_allocator(const as_allocator<U, T, R> &other)
+                    : A(other.allocator()),
+                      data(other.data) {
             }
 
             pointer allocate(size_type count, const_void_pointer = 0) {
@@ -133,11 +136,11 @@ namespace boost {
                 std::size_t n2 = data.size * sizeof(type);
                 std::size_t n3 = n2 + M;
                 CA ca(allocator());
-                void* p1 = ca.allocate(n1 + n3);
-                void* p2 = static_cast<char*>(p1) + n1;
-                (void)boost::alignment::align(M, n2, p2, n3);
-                *data.result = static_cast<type*>(p2);
-                return static_cast<value_type*>(p1);
+                void *p1 = ca.allocate(n1 + n3);
+                void *p2 = static_cast<char *>(p1) + n1;
+                (void) boost::alignment::align(M, n2, p2, n3);
+                *data.result = static_cast<type *>(p2);
+                return static_cast<value_type *>(p1);
             }
 
             void deallocate(pointer memory, size_type count) {
@@ -146,20 +149,20 @@ namespace boost {
                 };
                 std::size_t n1 = count * sizeof(value_type);
                 std::size_t n2 = data.size * sizeof(type) + M;
-                char* p1 = reinterpret_cast<char*>(memory);
+                char *p1 = reinterpret_cast<char *>(memory);
                 CA ca(allocator());
                 ca.deallocate(p1, n1 + n2);
             }
 
-            const A& allocator() const {
-                return static_cast<const A&>(*this);
+            const A &allocator() const {
+                return static_cast<const A &>(*this);
             }
 
-            A& allocator() {
-                return static_cast<A&>(*this);
+            A &allocator() {
+                return static_cast<A &>(*this);
             }
 
-            void set(type* memory) {
+            void set(type *memory) {
                 data.object = memory;
             }
 
@@ -187,14 +190,14 @@ namespace boost {
         };
 
         template<class A1, class A2, class T, class R>
-        bool operator==(const as_allocator<A1, T, R>& a1,
-            const as_allocator<A2, T, R>& a2) {
+        bool operator==(const as_allocator<A1, T, R> &a1,
+                        const as_allocator<A2, T, R> &a2) {
             return a1.allocator() == a2.allocator();
         }
 
         template<class A1, class A2, class T, class R>
-        bool operator!=(const as_allocator<A1, T, R>& a1,
-            const as_allocator<A2, T, R>& a2) {
+        bool operator!=(const as_allocator<A1, T, R> &a1,
+                        const as_allocator<A2, T, R> &a2) {
             return a1.allocator() != a2.allocator();
         }
 
@@ -204,53 +207,54 @@ namespace boost {
         template<class T, class Y>
         class ms_allocator {
             template<class T_, class Y_>
-            friend class ms_allocator;
+            friend
+            class ms_allocator;
 
         public:
             typedef typename array_base<T>::type type;
 
             typedef Y value_type;
-            typedef Y* pointer;
-            typedef const Y* const_pointer;
+            typedef Y *pointer;
+            typedef const Y *const_pointer;
             typedef std::size_t size_type;
             typedef ptrdiff_t difference_type;
-            typedef Y& reference;
-            typedef const Y& const_reference;
+            typedef Y &reference;
+            typedef const Y &const_reference;
 
             template<class U>
             struct rebind {
                 typedef ms_allocator<T, U> other;
             };
 
-            ms_allocator(type** result)
-                : data(result) {
+            ms_allocator(type **result)
+                    : data(result) {
             }
 
-            ms_allocator(std::size_t size, type** result)
-                : data(size, result) {
+            ms_allocator(std::size_t size, type **result)
+                    : data(size, result) {
             }
 
             template<class U>
-            ms_allocator(const ms_allocator<T, U>& other)
-                : data(other.data) {
+            ms_allocator(const ms_allocator<T, U> &other)
+                    : data(other.data) {
             }
 
-            pointer allocate(size_type count, const void* = 0) {
+            pointer allocate(size_type count, const void * = 0) {
                 enum {
                     M = boost::alignment_of<type>::value
                 };
                 std::size_t n1 = count * sizeof(Y);
                 std::size_t n2 = data.size * sizeof(type);
                 std::size_t n3 = n2 + M;
-                void* p1 = ::operator new(n1 + n3);
-                void* p2 = static_cast<char*>(p1) + n1;
-                (void)boost::alignment::align(M, n2, p2, n3);
-                *data.result = static_cast<type*>(p2);
-                return static_cast<Y*>(p1);
+                void *p1 = ::operator new(n1 + n3);
+                void *p2 = static_cast<char *>(p1) + n1;
+                (void) boost::alignment::align(M, n2, p2, n3);
+                *data.result = static_cast<type *>(p2);
+                return static_cast<Y *>(p1);
             }
 
             void deallocate(pointer memory, size_type) {
-                void* p1 = memory;
+                void *p1 = memory;
                 ::operator delete(p1);
             }
 
@@ -281,7 +285,7 @@ namespace boost {
             }
 #endif
 
-            void set(type* memory) {
+            void set(type *memory) {
                 data.object = memory;
             }
 
@@ -296,20 +300,20 @@ namespace boost {
         };
 
         template<class T, class Y1, class Y2>
-        bool operator==(const ms_allocator<T, Y1>&,
-            const ms_allocator<T, Y2>&) {
+        bool operator==(const ms_allocator<T, Y1> &,
+                        const ms_allocator<T, Y2> &) {
             return true;
         }
 
         template<class T, class Y1, class Y2>
-        bool operator!=(const ms_allocator<T, Y1>&,
-            const ms_allocator<T, Y2>&) {
+        bool operator!=(const ms_allocator<T, Y1> &,
+                        const ms_allocator<T, Y2> &) {
             return false;
         }
 
         class ms_in_allocator_tag {
         public:
-            void operator()(const void*) {
+            void operator()(const void *) {
             }
         };
     }

@@ -12,27 +12,25 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 
-namespace boost { namespace fusion
-{
-    struct filter_view_tag;
+namespace boost {
+    namespace fusion {
+        struct filter_view_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct size_impl;
+        namespace extension {
+            template<typename Tag>
+            struct size_impl;
 
-        template <>
-        struct size_impl<filter_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-                : result_of::distance<
-                    typename result_of::begin<Sequence>::type
-                  , typename result_of::end<Sequence>::type>
-            {};
-        };
+            template<>
+            struct size_impl<filter_view_tag> {
+                template<typename Sequence>
+                struct apply
+                        : result_of::distance<
+                                typename result_of::begin<Sequence>::type, typename result_of::end<Sequence>::type> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif
 

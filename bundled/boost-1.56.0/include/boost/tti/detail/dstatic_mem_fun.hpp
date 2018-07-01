@@ -43,7 +43,7 @@
 
 #else
 
-#define BOOST_TTI_DETAIL_TRAIT_IMPL_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_IMPL_HAS_STATIC_MEMBER_FUNCTION(trait, name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_TYPE> \
   struct BOOST_PP_CAT(trait,_detail_ihsmf) \
     { \
@@ -62,7 +62,7 @@
 
 #endif
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION_OP(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION_OP(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_IMPL_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_hsmf_op) : \
@@ -86,16 +86,16 @@
     }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION_OP(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_hsmf) : \
-	boost::mpl::eval_if \
-		< \
- 		boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
- 		BOOST_PP_CAT(trait,_detail_hsmf_op)<BOOST_TTI_DETAIL_TP_T,BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG>, \
- 		boost::mpl::false_ \
-		> \
+    boost::mpl::eval_if \
+        < \
+        boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
+        BOOST_PP_CAT(trait,_detail_hsmf_op)<BOOST_TTI_DETAIL_TP_T,BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG>, \
+        boost::mpl::false_ \
+        > \
     { \
     }; \
 /**/

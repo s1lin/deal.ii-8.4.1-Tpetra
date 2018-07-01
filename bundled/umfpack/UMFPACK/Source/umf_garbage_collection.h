@@ -5,10 +5,10 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_garbage_collection
-(
-    NumericType *Numeric,
-    WorkType *Work,
-    Int drnew,
-    Int dcnew,
-    Int do_Fcpos
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work,
+                Int drnew,
+                Int dcnew,
+                Int do_Fcpos
+        );

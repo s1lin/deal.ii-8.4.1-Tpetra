@@ -18,14 +18,14 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for power : L^2 M T^-3
-typedef derived_dimension<length_base_dimension,2,
-                          mass_base_dimension,1,
-                          time_base_dimension,-3>::type power_dimension;                    
+        typedef derived_dimension<length_base_dimension, 2,
+                mass_base_dimension, 1,
+                time_base_dimension, -3>::type power_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

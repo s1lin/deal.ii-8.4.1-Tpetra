@@ -13,6 +13,7 @@
 #include <boost/fusion/functional/adapter/unfused.hpp>
 
 #define BOOST_FUSION_CLASS_TPL_NAME unfused
+
 #include <boost/fusion/functional/generation/detail/gen_make_adapter.hpp>
 
 #endif

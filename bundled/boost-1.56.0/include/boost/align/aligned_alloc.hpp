@@ -46,7 +46,9 @@
 #elif (_POSIX_C_SOURCE >= 200112L) || (_XOPEN_SOURCE >= 600)
 #include <boost/align/detail/aligned_alloc_posix.hpp>
 #else
+
 #include <boost/align/detail/aligned_alloc.hpp>
+
 #endif
 /**
  @endcond
@@ -79,8 +81,10 @@ namespace boost {
            than `size` bytes, by an additional
            `sizeof(void*)` and `alignment - 1` bytes.
         */
-        inline void* aligned_alloc(std::size_t alignment,
-            std::size_t size) BOOST_NOEXCEPT;
+        inline void *aligned_alloc(std::size_t alignment,
+                                   std::size_t size)
+
+        BOOST_NOEXCEPT;
 
         /**
          Causes the space pointed to by `ptr` to be
@@ -92,8 +96,9 @@ namespace boost {
          been deallocated by a call to `aligned_free`,
          the behavior is undefined.
         */
-        inline void aligned_free(void* ptr)
-            BOOST_NOEXCEPT;
+        inline void aligned_free(void *ptr)
+
+        BOOST_NOEXCEPT;
     }
 }
 

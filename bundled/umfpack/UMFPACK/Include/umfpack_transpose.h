@@ -9,62 +9,62 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_transpose
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    const int P [ ],
-    const int Q [ ],
-    int Rp [ ],
-    int Ri [ ],
-    double Rx [ ]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                const int P[],
+                const int Q[],
+                int Rp[],
+                int Ri[],
+                double Rx[]
+        );
 
 UF_long umfpack_dl_transpose
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    const UF_long P [ ],
-    const UF_long Q [ ],
-    UF_long Rp [ ],
-    UF_long Ri [ ],
-    double Rx [ ]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                const UF_long P[],
+                const UF_long Q[],
+                UF_long Rp[],
+                UF_long Ri[],
+                double Rx[]
+        );
 
 int umfpack_zi_transpose
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    const int P [ ],
-    const int Q [ ],
-    int Rp [ ],
-    int Ri [ ],
-    double Rx [ ], double Rz [ ],
-    int do_conjugate
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                const int P[],
+                const int Q[],
+                int Rp[],
+                int Ri[],
+                double Rx[], double Rz[],
+                int do_conjugate
+        );
 
 UF_long umfpack_zl_transpose
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    const UF_long P [ ],
-    const UF_long Q [ ],
-    UF_long Rp [ ],
-    UF_long Ri [ ],
-    double Rx [ ], double Rz [ ],
-    UF_long do_conjugate
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                const UF_long P[],
+                const UF_long Q[],
+                UF_long Rp[],
+                UF_long Ri[],
+                double Rx[], double Rz[],
+                UF_long do_conjugate
+        );
 
 /*
 double int Syntax:

@@ -20,120 +20,127 @@
 
 
 namespace boost {
-namespace detail {
+    namespace detail {
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1700)
 #define BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(X) X
-   template <typename T>
-   struct cv_traits_imp
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = false);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-      typedef T unqualified_type;
-   };
+        template <typename T>
+        struct cv_traits_imp
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = false);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = false);
+           typedef T unqualified_type;
+        };
 
-   template <typename T>
-   struct cv_traits_imp<T[]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = false);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-      typedef T unqualified_type[];
-   };
+        template <typename T>
+        struct cv_traits_imp<T[]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = false);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = false);
+           typedef T unqualified_type[];
+        };
 
-   template <typename T>
-   struct cv_traits_imp<const T[]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = true);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-      typedef T unqualified_type[];
-   };
+        template <typename T>
+        struct cv_traits_imp<const T[]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = true);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = false);
+           typedef T unqualified_type[];
+        };
 
-   template <typename T>
-   struct cv_traits_imp<volatile T[]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = false);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = true);
-      typedef T unqualified_type[];
-   };
+        template <typename T>
+        struct cv_traits_imp<volatile T[]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = false);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = true);
+           typedef T unqualified_type[];
+        };
 
-   template <typename T>
-   struct cv_traits_imp<const volatile T[]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = true);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = true);
-      typedef T unqualified_type[];
-   };
+        template <typename T>
+        struct cv_traits_imp<const volatile T[]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = true);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = true);
+           typedef T unqualified_type[];
+        };
 
-   template <typename T, std::size_t N>
-   struct cv_traits_imp<T[N]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = false);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-      typedef T unqualified_type[N];
-   };
+        template <typename T, std::size_t N>
+        struct cv_traits_imp<T[N]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = false);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = false);
+           typedef T unqualified_type[N];
+        };
 
-   template <typename T, std::size_t N>
-   struct cv_traits_imp<const T[N]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = true);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-      typedef T unqualified_type[N];
-   };
+        template <typename T, std::size_t N>
+        struct cv_traits_imp<const T[N]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = true);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = false);
+           typedef T unqualified_type[N];
+        };
 
-   template <typename T, std::size_t N>
-   struct cv_traits_imp<volatile T[N]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = false);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = true);
-      typedef T unqualified_type[N];
-   };
+        template <typename T, std::size_t N>
+        struct cv_traits_imp<volatile T[N]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = false);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = true);
+           typedef T unqualified_type[N];
+        };
 
-   template <typename T, std::size_t N>
-   struct cv_traits_imp<const volatile T[N]>
-   {
-      BOOST_STATIC_CONSTANT(bool, is_const = true);
-      BOOST_STATIC_CONSTANT(bool, is_volatile = true);
-      typedef T unqualified_type[N];
-   };
+        template <typename T, std::size_t N>
+        struct cv_traits_imp<const volatile T[N]>
+        {
+           BOOST_STATIC_CONSTANT(bool, is_const = true);
+           BOOST_STATIC_CONSTANT(bool, is_volatile = true);
+           typedef T unqualified_type[N];
+        };
 
 #else
 #define BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(X) X *
-template <typename T> struct cv_traits_imp {};
+        template<typename T>
+        struct cv_traits_imp {
+        };
 
-template <typename T>
-struct cv_traits_imp<T*>
-{
-    BOOST_STATIC_CONSTANT(bool, is_const = false);
-    BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-    typedef T unqualified_type;
-};
+        template<typename T>
+        struct cv_traits_imp<T *> {
+            BOOST_STATIC_CONSTANT(bool, is_const = false);
+
+            BOOST_STATIC_CONSTANT(bool, is_volatile = false);
+
+            typedef T unqualified_type;
+        };
+
 #endif
 
-template <typename T>
-struct cv_traits_imp<BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(const T)>
-{
-    BOOST_STATIC_CONSTANT(bool, is_const = true);
-    BOOST_STATIC_CONSTANT(bool, is_volatile = false);
-    typedef T unqualified_type;
-};
+        template<typename T>
+        struct cv_traits_imp<BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(const T)> {
+            BOOST_STATIC_CONSTANT(bool, is_const = true);
 
-template <typename T>
-struct cv_traits_imp<BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(volatile T)>
-{
-    BOOST_STATIC_CONSTANT(bool, is_const = false);
-    BOOST_STATIC_CONSTANT(bool, is_volatile = true);
-    typedef T unqualified_type;
-};
+            BOOST_STATIC_CONSTANT(bool, is_volatile = false);
 
-template <typename T>
-struct cv_traits_imp<BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(const volatile T)>
-{
-    BOOST_STATIC_CONSTANT(bool, is_const = true);
-    BOOST_STATIC_CONSTANT(bool, is_volatile = true);
-    typedef T unqualified_type;
-};
+            typedef T unqualified_type;
+        };
 
-} // namespace detail
+        template<typename T>
+        struct cv_traits_imp<BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(volatile T)> {
+            BOOST_STATIC_CONSTANT(bool, is_const = false);
+
+            BOOST_STATIC_CONSTANT(bool, is_volatile = true);
+
+            typedef T unqualified_type;
+        };
+
+        template<typename T>
+        struct cv_traits_imp<BOOST_TT_AUX_CV_TRAITS_IMPL_PARAM(const volatile T)> {
+            BOOST_STATIC_CONSTANT(bool, is_const = true);
+
+            BOOST_STATIC_CONSTANT(bool, is_volatile = true);
+
+            typedef T unqualified_type;
+        };
+
+    } // namespace detail
 } // namespace boost 
 
 

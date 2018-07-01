@@ -15,7 +15,8 @@
 #include <algorithm>    // for std::mismatch
 #include <utility>      // for std::pair
 
-namespace boost { namespace algorithm {
+namespace boost {
+    namespace algorithm {
 
 /// \fn mismatch ( InputIterator1 first1, InputIterator1 last1, 
 ///                InputIterator2 first2, InputIterator2 last2,
@@ -27,17 +28,16 @@ namespace boost { namespace algorithm {
 /// \param first2    The start of the second range.
 /// \param last2     One past the end of the second range.
 /// \param pred      A predicate for comparing the elements of the ranges
-template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-std::pair<InputIterator1, InputIterator2> mismatch (
-                    InputIterator1 first1, InputIterator1 last1,
-                    InputIterator2 first2, InputIterator2 last2,
-                    BinaryPredicate pred )
-{
-    for (; first1 != last1 && first2 != last2; ++first1, ++first2)
-        if ( !pred ( *first1, *first2 ))
-            break;
-    return std::pair<InputIterator1, InputIterator2>(first1, first2);
-}
+        template<class InputIterator1, class InputIterator2, class BinaryPredicate>
+        std::pair<InputIterator1, InputIterator2> mismatch(
+                InputIterator1 first1, InputIterator1 last1,
+                InputIterator2 first2, InputIterator2 last2,
+                BinaryPredicate pred) {
+            for (; first1 != last1 && first2 != last2; ++first1, ++first2)
+                if (!pred(*first1, *first2))
+                    break;
+            return std::pair<InputIterator1, InputIterator2>(first1, first2);
+        }
 
 /// \fn mismatch ( InputIterator1 first1, InputIterator1 last1, 
 ///                InputIterator2 first2, InputIterator2 last2 )
@@ -47,19 +47,19 @@ std::pair<InputIterator1, InputIterator2> mismatch (
 /// \param last1     One past the end of the first range.
 /// \param first2    The start of the second range.
 /// \param last2     One past the end of the second range.
-template <class InputIterator1, class InputIterator2>
-std::pair<InputIterator1, InputIterator2> mismatch (
-                    InputIterator1 first1, InputIterator1 last1,
-                    InputIterator2 first2, InputIterator2 last2 )
-{
-    for (; first1 != last1 && first2 != last2; ++first1, ++first2)
-        if ( *first1 != *first2 )
-            break;
-    return std::pair<InputIterator1, InputIterator2>(first1, first2);
-}
+        template<class InputIterator1, class InputIterator2>
+        std::pair<InputIterator1, InputIterator2> mismatch(
+                InputIterator1 first1, InputIterator1 last1,
+                InputIterator2 first2, InputIterator2 last2) {
+            for (; first1 != last1 && first2 != last2; ++first1, ++first2)
+                if (*first1 != *first2)
+                    break;
+            return std::pair<InputIterator1, InputIterator2>(first1, first2);
+        }
 
 //  There are already range-based versions of these.
 
-}} // namespace boost and algorithm
+    }
+} // namespace boost and algorithm
 
 #endif // BOOST_ALGORITHM_MISMATCH_HPP

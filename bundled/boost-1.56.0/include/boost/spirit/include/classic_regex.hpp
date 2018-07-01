@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_REGEX
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_REGEX
+
 #include <boost/spirit/home/classic/utility/regex.hpp>
+
 #endif

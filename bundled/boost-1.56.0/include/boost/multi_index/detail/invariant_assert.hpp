@@ -14,7 +14,9 @@
 #endif
 
 #if !defined(BOOST_MULTI_INDEX_INVARIANT_ASSERT)
+
 #include <boost/assert.hpp>
+
 #define BOOST_MULTI_INDEX_INVARIANT_ASSERT BOOST_ASSERT
 #endif
 

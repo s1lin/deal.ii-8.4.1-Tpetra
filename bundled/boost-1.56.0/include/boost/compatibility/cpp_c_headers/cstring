@@ -8,29 +8,29 @@
 #include <string.h>
 
 namespace std {
-  using ::size_t;
-  using ::memchr;
-  using ::strcat;
-  using ::strcspn;
-  using ::strncpy;
-  using ::strtok;
-  using ::memcmp;
-  using ::strchr;
-  using ::strerror;
-  using ::strpbrk;
-  using ::strxfrm;
-  using ::memcpy;
-  using ::strcmp;
-  using ::strlen;
-  using ::strrchr;
-  using ::memmove;
-  using ::strcoll;
-  using ::strncat;
-  using ::strspn;
-  using ::memset;
-  using ::strcpy;
-  using ::strncmp;
-  using ::strstr;
+    using ::size_t;
+    using ::memchr;
+    using ::strcat;
+    using ::strcspn;
+    using ::strncpy;
+    using ::strtok;
+    using ::memcmp;
+    using ::strchr;
+    using ::strerror;
+    using ::strpbrk;
+    using ::strxfrm;
+    using ::memcpy;
+    using ::strcmp;
+    using ::strlen;
+    using ::strrchr;
+    using ::memmove;
+    using ::strcoll;
+    using ::strncat;
+    using ::strspn;
+    using ::memset;
+    using ::strcpy;
+    using ::strncmp;
+    using ::strstr;
 }
 
 #endif // CSTRING_HEADER

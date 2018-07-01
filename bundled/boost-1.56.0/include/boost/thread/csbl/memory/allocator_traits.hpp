@@ -23,12 +23,10 @@ namespace boost
   }
 }
 #else
-namespace boost
-{
-  namespace csbl
-  {
-    using ::std::allocator_traits;
-  }
+namespace boost {
+    namespace csbl {
+        using ::std::allocator_traits;
+    }
 }
 #endif // BOOST_NO_CXX11_POINTER_TRAITS
 

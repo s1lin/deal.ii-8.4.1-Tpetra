@@ -21,65 +21,56 @@
 # include <ia64intrin.h>
 #endif
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class spinlock
-{
-public:
+        class spinlock {
+        public:
 
-    int v_;
+            int v_;
 
-public:
+        public:
 
-    bool try_lock()
-    {
-        int r = __sync_lock_test_and_set( &v_, 1 );
-        return r == 0;
-    }
+            bool try_lock() {
+                int r = __sync_lock_test_and_set(&v_, 1);
+                return r == 0;
+            }
 
-    void lock()
-    {
-        for( unsigned k = 0; !try_lock(); ++k )
-        {
-            boost::detail::yield( k );
-        }
-    }
+            void lock() {
+                for (unsigned k = 0; !try_lock(); ++k) {
+                    boost::detail::yield(k);
+                }
+            }
 
-    void unlock()
-    {
-        __sync_lock_release( &v_ );
-    }
+            void unlock() {
+                __sync_lock_release(&v_);
+            }
 
-public:
+        public:
 
-    class scoped_lock
-    {
-    private:
+            class scoped_lock {
+            private:
 
-        spinlock & sp_;
+                spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+                scoped_lock(scoped_lock const &);
 
-    public:
+                scoped_lock &operator=(scoped_lock const &);
 
-        explicit scoped_lock( spinlock & sp ): sp_( sp )
-        {
-            sp.lock();
-        }
+            public:
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
-};
+                explicit scoped_lock(spinlock &sp) : sp_(sp) {
+                    sp.lock();
+                }
 
-} // namespace detail
+                ~scoped_lock() {
+                    sp_.unlock();
+                }
+            };
+        };
+
+    } // namespace detail
 } // namespace boost
 
 #define BOOST_DETAIL_SPINLOCK_INIT {0}

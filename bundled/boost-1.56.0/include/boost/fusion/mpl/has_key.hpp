@@ -11,18 +11,19 @@
 #include <boost/mpl/has_key.hpp>
 #include <boost/fusion/sequence/intrinsic/has_key.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct has_key_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct has_key_impl;
 
-    template <>
-    struct has_key_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence, typename Key>
-        struct apply : fusion::result_of::has_key<Sequence, Key> {};
-    };
-}}
+        template<>
+        struct has_key_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence, typename Key>
+            struct apply : fusion::result_of::has_key<Sequence, Key> {
+            };
+        };
+    }
+}
 
 #endif
 

@@ -16,13 +16,17 @@
 
 #include <boost/mpl/aux_/common_name_wknd.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-BOOST_MPL_AUX_COMMON_NAME_WKND(advance)
+        BOOST_MPL_AUX_COMMON_NAME_WKND(advance)
 
-template< typename Tag > struct advance_impl;
-template< typename Iterator, typename N > struct advance;
+        template<typename Tag>
+        struct advance_impl;
+        template<typename Iterator, typename N>
+        struct advance;
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_ADVANCE_FWD_HPP_INCLUDED

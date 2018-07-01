@@ -30,8 +30,8 @@
 
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
 
 /*
@@ -40,24 +40,21 @@ namespace odeint {
  * determine type of dxdt for units
  *
  */
-template< class System , class State , class Time , class Observer >
-typename boost::enable_if< typename has_value_type<State>::type , size_t >::type
-integrate( System system , State &start_state , Time start_time , Time end_time , Time dt , Observer observer )
-{
-    typedef controlled_runge_kutta< runge_kutta_dopri5< State , typename State::value_type , State , Time > > stepper_type;
-    return integrate_adaptive( stepper_type() , system , start_state , start_time , end_time , dt , observer );
-}
-
+            template<class System, class State, class Time, class Observer>
+            typename boost::enable_if<typename has_value_type<State>::type, size_t>::type
+            integrate(System system, State &start_state, Time start_time, Time end_time, Time dt, Observer observer) {
+                typedef controlled_runge_kutta <runge_kutta_dopri5<State, typename State::value_type, State, Time>> stepper_type;
+                return integrate_adaptive(stepper_type(), system, start_state, start_time, end_time, dt, observer);
+            }
 
 
 /*
  * the two overloads are needed in order to solve the forwarding problem
  */
-template< class System , class State , class Time >
-size_t integrate( System system , State &start_state , Time start_time , Time end_time , Time dt )
-{
-    return integrate( system , start_state , start_time , end_time , dt , null_observer() );
-}
+            template<class System, class State, class Time>
+            size_t integrate(System system, State &start_state, Time start_time, Time end_time, Time dt) {
+                return integrate(system, start_state, start_time, end_time, dt, null_observer());
+            }
 
 
 /**
@@ -102,8 +99,8 @@ size_t integrate( System system , State &start_state , Time start_time , Time en
  * \return The number of steps performed.
  */
 
-} // namespace odeint
-} // namespace numeric
+        } // namespace odeint
+    } // namespace numeric
 } // namespace boost
 
 

@@ -11,11 +11,12 @@
 
 namespace boost {
 
-  namespace detail {
+    namespace detail {
 
-    struct error_property_not_found { };
+        struct error_property_not_found {
+        };
 
-  } // namespace detail 
+    } // namespace detail
 } // namespace boost
 
 #endif // BOOST_DETAIL_PROPERTY_HPP

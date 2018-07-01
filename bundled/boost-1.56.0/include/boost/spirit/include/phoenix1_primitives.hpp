@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_PRIMITIVES
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_PRIMITIVES
+
 #include <boost/spirit/home/classic/phoenix/primitives.hpp>
+
 #endif

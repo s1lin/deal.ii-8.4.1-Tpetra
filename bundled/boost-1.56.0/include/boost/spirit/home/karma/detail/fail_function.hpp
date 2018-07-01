@@ -14,47 +14,47 @@
 #include <boost/spirit/home/support/unused.hpp>
 #include <boost/config.hpp>
 
-namespace boost { namespace spirit { namespace karma { namespace detail
-{
-    template <typename OutputIterator, typename Context, typename Delimiter>
-    struct fail_function
-    {
-        typedef Context context_type;
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            namespace detail {
+                template<typename OutputIterator, typename Context, typename Delimiter>
+                struct fail_function {
+                    typedef Context context_type;
 
-        fail_function(OutputIterator& sink_, Context& context_
-            , Delimiter const& delim_)
-          : sink(sink_), ctx(context_), delim(delim_) 
-        {}
+                    fail_function(OutputIterator &sink_, Context &context_, Delimiter const &delim_)
+                            : sink(sink_), ctx(context_), delim(delim_) {}
 
-        template <typename Component, typename Attribute>
-        bool operator()(Component const& component, Attribute const& attr) const
-        {
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))  
-            component; // suppresses warning: C4100: 'component' : unreferenced formal parameter
+                    template<typename Component, typename Attribute>
+                    bool operator()(Component const &component, Attribute const &attr) const {
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+                        component; // suppresses warning: C4100: 'component' : unreferenced formal parameter
 #endif
-            // return true if any of the generators fail
-            return !component.generate(sink, ctx, delim, attr);
-        }
+                        // return true if any of the generators fail
+                        return !component.generate(sink, ctx, delim, attr);
+                    }
 
-        template <typename Component>
-        bool operator()(Component const& component) const
-        {
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))  
-            component; // suppresses warning: C4100: 'component' : unreferenced formal parameter
+                    template<typename Component>
+                    bool operator()(Component const &component) const {
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+                        component; // suppresses warning: C4100: 'component' : unreferenced formal parameter
 #endif
-            // return true if any of the generators fail
-            return !component.generate(sink, ctx, delim, unused);
+                        // return true if any of the generators fail
+                        return !component.generate(sink, ctx, delim, unused);
+                    }
+
+                    OutputIterator &sink;
+                    Context &ctx;
+                    Delimiter const &delim;
+
+                private:
+                    // silence MSVC warning C4512: assignment operator could not be generated
+                    fail_function &operator=(fail_function const &);
+                };
+
+            }
         }
-
-        OutputIterator& sink;
-        Context& ctx;
-        Delimiter const& delim;
-
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        fail_function& operator= (fail_function const&);
-    };
-
-}}}}
+    }
+}
 
 #endif

@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pint_base_unit, scale<2, static_rational<3> > > gallon_base_unit;
+            typedef scaled_base_unit <pint_base_unit, scale<2, static_rational < 3>> >
+            gallon_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::gallon_base_unit> {
-    static const char* name()   { return("gallon (U.S.)"); }
-    static const char* symbol() { return("gal"); }
-};
+        template<>
+        struct base_unit_info<us::gallon_base_unit> {
+            static const char *name() { return ("gallon (U.S.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("gal"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

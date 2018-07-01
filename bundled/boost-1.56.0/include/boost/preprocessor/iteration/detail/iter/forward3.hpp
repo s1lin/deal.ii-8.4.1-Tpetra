@@ -6,9 +6,13 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # if defined(BOOST_PP_ITERATION_LIMITS)
 #    if !defined(BOOST_PP_FILENAME_3)
 #        error BOOST_PP_ERROR:  depth #3 filename is not defined
@@ -34,15 +38,19 @@
 #    error BOOST_PP_ERROR:  depth #3 iteration boundaries or filename not defined
 # endif
 #
+
 # undef BOOST_PP_ITERATION_DEPTH
 # define BOOST_PP_ITERATION_DEPTH() 3
 #
+
 # if (BOOST_PP_ITERATION_START_3) > (BOOST_PP_ITERATION_FINISH_3)
 #    include <boost/preprocessor/iteration/detail/iter/reverse3.hpp>
 # else
 #    if BOOST_PP_ITERATION_START_3 <= 0 && BOOST_PP_ITERATION_FINISH_3 >= 0
 #        define BOOST_PP_ITERATION_3 0
+
 #        include BOOST_PP_FILENAME_3
+
 #        undef BOOST_PP_ITERATION_3
 #    endif
 #    if BOOST_PP_ITERATION_START_3 <= 1 && BOOST_PP_ITERATION_FINISH_3 >= 1
@@ -1327,12 +1335,15 @@
 #    endif
 # endif
 #
+
 # undef BOOST_PP_ITERATION_DEPTH
 # define BOOST_PP_ITERATION_DEPTH() 2
 #
+
 # undef BOOST_PP_ITERATION_START_3
 # undef BOOST_PP_ITERATION_FINISH_3
 # undef BOOST_PP_FILENAME_3
 #
+
 # undef BOOST_PP_ITERATION_FLAGS_3
 # undef BOOST_PP_ITERATION_PARAMS_3

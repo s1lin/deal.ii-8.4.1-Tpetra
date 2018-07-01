@@ -12,11 +12,14 @@
 
 #include <boost/spirit/home/support/terminal.hpp>
 
-namespace boost { namespace spirit { namespace repository
-{
-    // The flush_multi_pass extended terminal
-    BOOST_SPIRIT_TERMINAL( flush_multi_pass )
+namespace boost {
+    namespace spirit {
+        namespace repository {
+            // The flush_multi_pass extended terminal
+            BOOST_SPIRIT_TERMINAL( flush_multi_pass )
 
-}}}
+        }
+    }
+}
 
 #endif

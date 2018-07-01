@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_OPERATORS
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_OPERATORS
+
 #include <boost/spirit/home/classic/phoenix/operators.hpp>
+
 #endif

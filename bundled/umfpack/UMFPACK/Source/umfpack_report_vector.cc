@@ -17,27 +17,25 @@
 #include "umf_report_vector.h"
 
 GLOBAL Int UMFPACK_report_vector
-(
-    Int n,
-    const double Xx [ ],
+        (
+                Int n,
+                const double Xx[],
 #ifdef COMPLEX
-    const double Xz [ ],
+        const double Xz [ ],
 #endif
-    const double Control [UMFPACK_CONTROL]
-)
-{
-    Int prl ;
+                const double Control[UMFPACK_CONTROL]
+) {
+    Int prl;
 
 #ifndef COMPLEX
-    double *Xz = (double *) NULL ;
+    double *Xz = (double *) NULL;
 #endif
 
-    prl = GET_CONTROL (UMFPACK_PRL, UMFPACK_DEFAULT_PRL) ;
+    prl = GET_CONTROL (UMFPACK_PRL, UMFPACK_DEFAULT_PRL);
 
-    if (prl <= 2)
-    {
-	return (UMFPACK_OK) ;
+    if (prl <= 2) {
+        return (UMFPACK_OK);
     }
 
-    return (UMF_report_vector (n, Xx, Xz, prl, TRUE, FALSE)) ;
+    return (UMF_report_vector(n, Xx, Xz, prl, TRUE, FALSE));
 }

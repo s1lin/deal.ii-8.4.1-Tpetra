@@ -20,88 +20,83 @@
 
 #include <boost/detail/sp_typeinfo.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class sp_counted_base
-{
-private:
+        class sp_counted_base {
+        private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+            sp_counted_base(sp_counted_base const &);
 
-    long use_count_;        // #shared
-    long weak_count_;       // #weak + (#shared != 0)
+            sp_counted_base &operator=(sp_counted_base const &);
 
-public:
+            long use_count_;        // #shared
+            long weak_count_;       // #weak + (#shared != 0)
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {
-    }
+        public:
 
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
+            sp_counted_base() : use_count_(1), weak_count_(1) {
+            }
 
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
+            virtual ~sp_counted_base() // nothrow
+            {
+            }
 
-    virtual void dispose() = 0; // nothrow
+            // dispose() is called when use_count_ drops to zero, to release
+            // the resources managed by *this.
 
-    // destroy() is called when weak_count_ drops to zero.
+            virtual void dispose() = 0; // nothrow
 
-    virtual void destroy() // nothrow
-    {
-        delete this;
-    }
+            // destroy() is called when weak_count_ drops to zero.
 
-    virtual void * get_deleter( sp_typeinfo const & ti ) = 0;
-    virtual void * get_untyped_deleter() = 0;
+            virtual void destroy() // nothrow
+            {
+                delete this;
+            }
 
-    void add_ref_copy()
-    {
-        ++use_count_;
-    }
+            virtual void *get_deleter(sp_typeinfo const &ti) = 0;
 
-    bool add_ref_lock() // true on success
-    {
-        if( use_count_ == 0 ) return false;
-        ++use_count_;
-        return true;
-    }
+            virtual void *get_untyped_deleter() = 0;
 
-    void release() // nothrow
-    {
-        if( --use_count_ == 0 )
-        {
-            dispose();
-            weak_release();
-        }
-    }
+            void add_ref_copy() {
+                ++use_count_;
+            }
 
-    void weak_add_ref() // nothrow
-    {
-        ++weak_count_;
-    }
+            bool add_ref_lock() // true on success
+            {
+                if (use_count_ == 0) return false;
+                ++use_count_;
+                return true;
+            }
 
-    void weak_release() // nothrow
-    {
-        if( --weak_count_ == 0 )
-        {
-            destroy();
-        }
-    }
+            void release() // nothrow
+            {
+                if (--use_count_ == 0) {
+                    dispose();
+                    weak_release();
+                }
+            }
 
-    long use_count() const // nothrow
-    {
-        return use_count_;
-    }
-};
+            void weak_add_ref() // nothrow
+            {
+                ++weak_count_;
+            }
 
-} // namespace detail
+            void weak_release() // nothrow
+            {
+                if (--weak_count_ == 0) {
+                    destroy();
+                }
+            }
+
+            long use_count() const // nothrow
+            {
+                return use_count_;
+            }
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

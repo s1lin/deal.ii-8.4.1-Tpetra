@@ -16,20 +16,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<mass_density_dimension,si::system>  mass_density;
+            typedef unit <mass_density_dimension, si::system> mass_density;
 
-BOOST_UNITS_STATIC_CONSTANT(kilogram_per_cubic_meter,mass_density);
-BOOST_UNITS_STATIC_CONSTANT(kilograms_per_cubic_meter,mass_density);
-BOOST_UNITS_STATIC_CONSTANT(kilogramme_per_cubic_metre,mass_density);
-BOOST_UNITS_STATIC_CONSTANT(kilogrammes_per_cubic_metre,mass_density);
+            BOOST_UNITS_STATIC_CONSTANT(kilogram_per_cubic_meter, mass_density
+            );
+            BOOST_UNITS_STATIC_CONSTANT(kilograms_per_cubic_meter, mass_density
+            );
+            BOOST_UNITS_STATIC_CONSTANT(kilogramme_per_cubic_metre, mass_density
+            );
+            BOOST_UNITS_STATIC_CONSTANT(kilogrammes_per_cubic_metre, mass_density
+            );
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

@@ -51,17 +51,16 @@ namespace boost {
                 
         */
         template<typename OutputIteratorT, typename RangeT>
-        inline OutputIteratorT 
+        inline OutputIteratorT
         to_lower_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const std::locale& Loc=std::locale())
-        {
-            return ::boost::algorithm::detail::transform_range_copy( 
-               Output,
-               ::boost::as_literal(Input),
-               ::boost::algorithm::detail::to_lowerF<
-                    typename range_value<RangeT>::type >(Loc));
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::detail::transform_range_copy(
+                    Output,
+                    ::boost::as_literal(Input),
+                    ::boost::algorithm::detail::to_lowerF<
+                            typename range_value<RangeT>::type>(Loc));
         }
 
         //! Convert to lower case
@@ -69,14 +68,13 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT to_lower_copy( 
-            const SequenceT& Input, 
-            const std::locale& Loc=std::locale())
-        {
+        inline SequenceT to_lower_copy(
+                const SequenceT &Input,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
-                Input,
-                ::boost::algorithm::detail::to_lowerF<
-                    typename range_value<SequenceT>::type >(Loc));
+                    Input,
+                    ::boost::algorithm::detail::to_lowerF<
+                            typename range_value<SequenceT>::type>(Loc));
         }
 
         //! Convert to lower case
@@ -88,16 +86,15 @@ namespace boost {
             \param Loc a locale used for conversion
         */
         template<typename WritableRangeT>
-        inline void to_lower( 
-            WritableRangeT& Input, 
-            const std::locale& Loc=std::locale())
-        {
+        inline void to_lower(
+                WritableRangeT &Input,
+                const std::locale &Loc = std::locale()) {
             ::boost::algorithm::detail::transform_range(
-                ::boost::as_literal(Input),
-                ::boost::algorithm::detail::to_lowerF<
-                    typename range_value<WritableRangeT>::type >(Loc));
+                    ::boost::as_literal(Input),
+                    ::boost::algorithm::detail::to_lowerF<
+                            typename range_value<WritableRangeT>::type>(Loc));
         }
-        
+
 //  to_upper  -----------------------------------------------//
 
         //! Convert to upper case
@@ -116,17 +113,16 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename RangeT>
-        inline OutputIteratorT 
+        inline OutputIteratorT
         to_upper_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const std::locale& Loc=std::locale())
-        {
-            return ::boost::algorithm::detail::transform_range_copy( 
-               Output,
-               ::boost::as_literal(Input),
-               ::boost::algorithm::detail::to_upperF<
-                    typename range_value<RangeT>::type >(Loc));
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::detail::transform_range_copy(
+                    Output,
+                    ::boost::as_literal(Input),
+                    ::boost::algorithm::detail::to_upperF<
+                            typename range_value<RangeT>::type>(Loc));
         }
 
         //! Convert to upper case
@@ -134,14 +130,13 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT to_upper_copy( 
-            const SequenceT& Input, 
-            const std::locale& Loc=std::locale())
-        {
+        inline SequenceT to_upper_copy(
+                const SequenceT &Input,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
-                Input,
-                ::boost::algorithm::detail::to_upperF<
-                    typename range_value<SequenceT>::type >(Loc));
+                    Input,
+                    ::boost::algorithm::detail::to_upperF<
+                            typename range_value<SequenceT>::type>(Loc));
         }
 
         //! Convert to upper case
@@ -153,14 +148,13 @@ namespace boost {
             \param Loc a locale used for conversion
         */
         template<typename WritableRangeT>
-        inline void to_upper( 
-            WritableRangeT& Input, 
-            const std::locale& Loc=std::locale())
-        {
+        inline void to_upper(
+                WritableRangeT &Input,
+                const std::locale &Loc = std::locale()) {
             ::boost::algorithm::detail::transform_range(
-                ::boost::as_literal(Input),
-                ::boost::algorithm::detail::to_upperF<
-                    typename range_value<WritableRangeT>::type >(Loc));
+                    ::boost::as_literal(Input),
+                    ::boost::algorithm::detail::to_upperF<
+                            typename range_value<WritableRangeT>::type>(Loc));
         }
 
     } // namespace algorithm

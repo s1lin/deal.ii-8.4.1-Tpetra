@@ -18,47 +18,51 @@
 #include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
 #if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
 
 #if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
 
-template< typename T >
-struct is_msvc_eti_arg
-{ 
-    BOOST_STATIC_CONSTANT(bool, value = false);
-};
+            template< typename T >
+            struct is_msvc_eti_arg
+            {
+                BOOST_STATIC_CONSTANT(bool, value = false);
+            };
 
 #else // BOOST_MPL_CFG_MSVC_60_ETI_BUG
 
-struct eti_int_convertible
-{
-    eti_int_convertible(int);
-};
+            struct eti_int_convertible
+            {
+                eti_int_convertible(int);
+            };
 
-template< typename T >
-struct is_msvc_eti_arg
-{ 
-    static no_tag test(...);
-    static yes_tag test(eti_int_convertible);
-    static T& get();
+            template< typename T >
+            struct is_msvc_eti_arg
+            {
+                static no_tag test(...);
+                static yes_tag test(eti_int_convertible);
+                static T& get();
 
-    BOOST_STATIC_CONSTANT(bool, value = 
-          sizeof(test(get())) == sizeof(yes_tag)
-        );
-};
+                BOOST_STATIC_CONSTANT(bool, value =
+                      sizeof(test(get())) == sizeof(yes_tag)
+                    );
+            };
 
 #endif
 
-template<>
-struct is_msvc_eti_arg<int>
-{ 
-    BOOST_STATIC_CONSTANT(bool, value = true);
-};
+            template<>
+            struct is_msvc_eti_arg<int>
+            {
+                BOOST_STATIC_CONSTANT(bool, value = true);
+            };
 
 #endif // BOOST_MPL_CFG_MSVC_ETI_BUG
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_AUX_IS_MSVC_ETI_ARG_HPP_INCLUDED

@@ -13,64 +13,58 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class atomic_count
-{
-public:
+        class atomic_count {
+        public:
 
-    explicit atomic_count( long v ) : value_( static_cast< int >( v ) ) {}
+            explicit atomic_count(long v) : value_(static_cast< int >( v )) {}
 
-    long operator++()
-    {
-        return atomic_exchange_and_add( &value_, +1 ) + 1;
-    }
+            long operator++() {
+                return atomic_exchange_and_add(&value_, +1) + 1;
+            }
 
-    long operator--()
-    {
-        return atomic_exchange_and_add( &value_, -1 ) - 1;
-    }
+            long operator--() {
+                return atomic_exchange_and_add(&value_, -1) - 1;
+            }
 
-    operator long() const
-    {
-        return atomic_exchange_and_add( &value_, 0 );
-    }
+            operator long() const {
+                return atomic_exchange_and_add(&value_, 0);
+            }
 
-private:
+        private:
 
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
+            atomic_count(atomic_count const &);
 
-    mutable int value_;
+            atomic_count &operator=(atomic_count const &);
 
-private:
+            mutable int value_;
 
-    static int atomic_exchange_and_add( int * pw, int dv )
-    {
-        // int r = *pw;
-        // *pw += dv;
-        // return r;
+        private:
 
-        int r;
+            static int atomic_exchange_and_add(int *pw, int dv) {
+                // int r = *pw;
+                // *pw += dv;
+                // return r;
 
-        __asm__ __volatile__
-        (
-            "lock\n\t"
-            "xadd %1, %0":
-            "+m"( *pw ), "=r"( r ): // outputs (%0, %1)
-            "1"( dv ): // inputs (%2 == %1)
-            "memory", "cc" // clobbers
-        );
+                int r;
 
-        return r;
-    }
-};
+                __asm__ __volatile__
+                (
+                "lock\n\t"
+                "xadd %1, %0":
+                "+m"( *pw ), "=r"( r ): // outputs (%0, %1)
+                "1"( dv ): // inputs (%2 == %1)
+                "memory", "cc" // clobbers
+                );
 
-} // namespace detail
+                return r;
+            }
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

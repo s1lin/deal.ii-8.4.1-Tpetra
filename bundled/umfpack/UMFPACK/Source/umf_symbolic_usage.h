@@ -5,11 +5,11 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL double UMF_symbolic_usage
-(
-    Int n_row,
-    Int n_col,
-    Int nchains,
-    Int nfr,
-    Int esize,
-    Int prefer_diagonal
-) ;
+        (
+                Int n_row,
+                Int n_col,
+                Int nchains,
+                Int nfr,
+                Int esize,
+                Int prefer_diagonal
+        );

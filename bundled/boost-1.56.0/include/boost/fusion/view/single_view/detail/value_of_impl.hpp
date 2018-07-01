@@ -13,27 +13,25 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/equal_to.hpp>
 
-namespace boost { namespace fusion
-{
-    struct single_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_of_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_of_impl;
 
-        template <>
-        struct value_of_impl<single_view_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                BOOST_MPL_ASSERT((mpl::equal_to<typename Iterator::position, mpl::int_<0> >));
-                typedef typename Iterator::value_type type;
+            template<>
+            struct value_of_impl<single_view_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    BOOST_MPL_ASSERT((mpl::equal_to<typename Iterator::position, mpl::int_ < 0> >));
+                    typedef typename Iterator::value_type type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

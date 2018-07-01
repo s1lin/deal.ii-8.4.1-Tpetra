@@ -25,9 +25,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_OS_ANDROID BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && ( \
+#if !defined(BOOST_PREDEF_DETAIL_OS_DETECTED) && (\
     defined(__ANDROID__) \
-    )
+)
 #   undef BOOST_OS_ANDROID
 #   define BOOST_OS_ANDROID BOOST_VERSION_NUMBER_AVAILABLE
 #endif
@@ -40,7 +40,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_ANDROID_NAME "Android"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_OS_ANDROID,BOOST_OS_ANDROID_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_OS_ANDROID,
+BOOST_OS_ANDROID_NAME)
 
 
 #endif

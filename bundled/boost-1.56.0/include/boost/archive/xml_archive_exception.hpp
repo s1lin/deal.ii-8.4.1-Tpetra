@@ -19,7 +19,7 @@
 #include <exception>
 #include <boost/assert.hpp>
 
-#include <boost/config.hpp> 
+#include <boost/config.hpp>
 #include <boost/preprocessor/empty.hpp>
 #include <boost/archive/detail/decl.hpp>
 #include <boost/archive/archive_exception.hpp>
@@ -27,26 +27,28 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
 //////////////////////////////////////////////////////////////////////
 // exceptions thrown by xml archives
 //
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) xml_archive_exception : 
-    public virtual boost::archive::archive_exception
-{
-public:
-    typedef enum {
-        xml_archive_parsing_error,    // see save_register
-        xml_archive_tag_mismatch,
-        xml_archive_tag_name_error
-    } exception_code;
-    xml_archive_exception(
-        exception_code c, 
-        const char * e1 = NULL,
-        const char * e2 = NULL
-    );
-};
+        class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
+        xml_archive_exception :
+        public virtual boost::archive::archive_exception {
+        public:
+        typedef enum {
+            xml_archive_parsing_error,    // see save_register
+            xml_archive_tag_mismatch,
+            xml_archive_tag_name_error
+        } exception_code;
+        xml_archive_exception(
+                exception_code
+        c,
+        const char *e1 = NULL,
+        const char *e2 = NULL
+        );
+    };
 
 }// namespace archive
 }// namespace boost

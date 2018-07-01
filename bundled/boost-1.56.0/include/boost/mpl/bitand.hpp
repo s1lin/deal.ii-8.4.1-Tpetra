@@ -32,6 +32,7 @@
 #define AUX778076_OP_NAME   bitand_
 #define AUX778076_OP_PREFIX bitand
 #define AUX778076_OP_TOKEN  &
+
 #include <boost/mpl/aux_/arithmetic_op.hpp>
 
 #if defined(_MSC_VER) && !defined(__clang__)

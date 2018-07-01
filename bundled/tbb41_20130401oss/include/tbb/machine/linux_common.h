@@ -31,6 +31,7 @@
 #endif
 
 #include <sched.h>
+
 #define __TBB_Yield()  sched_yield()
 
 #include <unistd.h>
@@ -40,6 +41,7 @@
 #if defined(SYS_futex)
 
 #define __TBB_USE_FUTEX 1
+
 #include <limits.h>
 #include <errno.h>
 // Unfortunately, some versions of Linux do not have a header that defines FUTEX_WAIT and FUTEX_WAKE.
@@ -62,30 +64,30 @@
 
 namespace tbb {
 
-namespace internal {
+    namespace internal {
 
-inline int futex_wait( void *futex, int comparand ) {
-    int r = syscall( SYS_futex,futex,__TBB_FUTEX_WAIT,comparand,NULL,NULL,0 );
+        inline int futex_wait(void *futex, int comparand) {
+            int r = syscall(SYS_futex, futex, __TBB_FUTEX_WAIT, comparand, NULL, NULL, 0);
 #if TBB_USE_ASSERT
-    int e = errno;
-    __TBB_ASSERT( r==0||r==EWOULDBLOCK||(r==-1&&(e==EAGAIN||e==EINTR)), "futex_wait failed." );
+            int e = errno;
+            __TBB_ASSERT(r == 0 || r == EWOULDBLOCK || (r == -1 && (e == EAGAIN || e == EINTR)), "futex_wait failed.");
 #endif /* TBB_USE_ASSERT */
-    return r;
-}
+            return r;
+        }
 
-inline int futex_wakeup_one( void *futex ) {
-    int r = ::syscall( SYS_futex,futex,__TBB_FUTEX_WAKE,1,NULL,NULL,0 );
-    __TBB_ASSERT( r==0||r==1, "futex_wakeup_one: more than one thread woken up?" );
-    return r;
-}
+        inline int futex_wakeup_one(void *futex) {
+            int r = ::syscall(SYS_futex, futex, __TBB_FUTEX_WAKE, 1, NULL, NULL, 0);
+            __TBB_ASSERT(r == 0 || r == 1, "futex_wakeup_one: more than one thread woken up?");
+            return r;
+        }
 
-inline int futex_wakeup_all( void *futex ) {
-    int r = ::syscall( SYS_futex,futex,__TBB_FUTEX_WAKE,INT_MAX,NULL,NULL,0 );
-    __TBB_ASSERT( r>=0, "futex_wakeup_all: error in waking up threads" );
-    return r;
-}
+        inline int futex_wakeup_all(void *futex) {
+            int r = ::syscall(SYS_futex, futex, __TBB_FUTEX_WAKE, INT_MAX, NULL, NULL, 0);
+            __TBB_ASSERT(r >= 0, "futex_wakeup_all: error in waking up threads");
+            return r;
+        }
 
-} /* namespace internal */
+    } /* namespace internal */
 
 } /* namespace tbb */
 

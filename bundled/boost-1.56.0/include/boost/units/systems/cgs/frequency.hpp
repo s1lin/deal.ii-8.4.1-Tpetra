@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<frequency_dimension,cgs::system>        frequency;
-    
-} // namespace cgs
+            typedef unit <frequency_dimension, cgs::system> frequency;
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

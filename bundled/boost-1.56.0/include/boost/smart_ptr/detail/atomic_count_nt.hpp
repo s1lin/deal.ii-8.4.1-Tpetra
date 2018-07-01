@@ -15,44 +15,38 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 //
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class atomic_count
-{
-public:
+        class atomic_count {
+        public:
 
-    explicit atomic_count( long v ): value_( v )
-    {
-    }
+            explicit atomic_count(long v) : value_(v) {
+            }
 
-    long operator++()
-    {
-        return ++value_;
-    }
+            long operator++() {
+                return ++value_;
+            }
 
-    long operator--()
-    {
-        return --value_;
-    }
+            long operator--() {
+                return --value_;
+            }
 
-    operator long() const
-    {
-        return value_;
-    }
+            operator long() const {
+                return value_;
+            }
 
-private:
+        private:
 
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
+            atomic_count(atomic_count const &);
 
-    long value_;
-};
+            atomic_count &operator=(atomic_count const &);
 
-} // namespace detail
+            long value_;
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

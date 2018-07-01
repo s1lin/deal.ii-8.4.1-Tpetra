@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-struct candela_base_unit : public base_unit<candela_base_unit, luminous_intensity_dimension, -3>
-{
-    static std::string name()   { return("candela"); }
-    static std::string symbol() { return("cd"); }
-};
+            struct candela_base_unit : public base_unit<candela_base_unit, luminous_intensity_dimension, -3> {
+                static std::string name() { return ("candela"); }
 
-} // namespace si
+                static std::string symbol() { return ("cd"); }
+            };
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

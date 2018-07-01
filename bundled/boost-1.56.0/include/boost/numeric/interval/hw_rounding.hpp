@@ -1,6 +1,6 @@
 /* Boost interval/hw_rounding.hpp template implementation file
  *
- * Copyright 2002 Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion
+ * Copyright 2002 Hervï¿½ Brï¿½nnimann, Guillaume Melquiond, Sylvain Pion
  * Copyright 2005 Guillaume Melquiond
  *
  * Distributed under the Boost Software License, Version 1.0.
@@ -41,27 +41,27 @@
 #endif
 
 namespace boost {
-namespace numeric {
-namespace interval_lib {
+    namespace numeric {
+        namespace interval_lib {
 
 /*
  * Three specializations of rounded_math<T>
  */
 
-template<>
-struct rounded_math<float>
-  : save_state<rounded_arith_opp<float> >
-{};
+            template<>
+            struct rounded_math<float>
+                    : save_state<rounded_arith_opp < float> > {
+        };
 
-template<>
-struct rounded_math<double>
-  : save_state<rounded_arith_opp<double> >
-{};
+        template<>
+        struct rounded_math<double>
+                : save_state<rounded_arith_opp < double> > {
+    };
 
-template<>
-struct rounded_math<long double>
-  : save_state<rounded_arith_opp<long double> >
-{};
+    template<>
+    struct rounded_math<long double>
+            : save_state<rounded_arith_opp < long double> > {
+};
 
 } // namespace interval_lib
 } // namespace numeric

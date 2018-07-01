@@ -44,7 +44,7 @@
                           otherwise 'value' is false.
                           
 */
-#define BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
+#define BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_DATA(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
   template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_TYPE> \
   struct trait \

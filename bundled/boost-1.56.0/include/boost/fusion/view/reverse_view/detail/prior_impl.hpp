@@ -11,38 +11,36 @@
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/prior.hpp>
 
-namespace boost { namespace fusion
-{
-    struct reverse_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct reverse_view_iterator_tag;
 
-    template <typename Iterator>
-    struct reverse_view_iterator;
+        template<typename Iterator>
+        struct reverse_view_iterator;
 
-    namespace extension
-    {
-        template <>
-        struct prior_impl<reverse_view_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                typedef typename Iterator::first_type first_type;
-                typedef typename next_impl<typename first_type::fusion_tag>::
+        namespace extension {
+            template<>
+            struct prior_impl<reverse_view_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename Iterator::first_type first_type;
+                    typedef typename next_impl<typename first_type::fusion_tag>::
                     template apply<first_type>
-                wrapped;
-    
-                typedef reverse_view_iterator<typename wrapped::type> type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return type(wrapped::call(i.first));
-                }
+                            wrapped;
+
+                    typedef reverse_view_iterator<typename wrapped::type> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return type(wrapped::call(i.first));
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

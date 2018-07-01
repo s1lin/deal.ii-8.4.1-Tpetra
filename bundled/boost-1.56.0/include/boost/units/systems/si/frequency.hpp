@@ -16,17 +16,18 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<frequency_dimension,si::system>     frequency;
-    
-BOOST_UNITS_STATIC_CONSTANT(hertz,frequency);   
+            typedef unit <frequency_dimension, si::system> frequency;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(hertz, frequency
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

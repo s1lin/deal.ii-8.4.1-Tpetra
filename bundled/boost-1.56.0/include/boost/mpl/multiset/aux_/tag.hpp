@@ -14,10 +14,14 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-struct multiset_tag;
+            struct multiset_tag;
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_MULTISET_AUX_TAG_HPP_INCLUDED

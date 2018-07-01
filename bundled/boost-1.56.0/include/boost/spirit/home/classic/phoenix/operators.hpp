@@ -10,7 +10,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined(BOOST_NO_CWCTYPE)
-    #include <cwctype>
+
+#include <cwctype>
+
 #endif
 
 #if defined(__BORLANDC__) || (defined(__ICL) && __ICL >= 700)
@@ -166,29 +168,51 @@ namespace phoenix {
 
 //  Unary operator tags
 
-struct negative_op;         struct positive_op;
-struct logical_not_op;      struct invert_op;
-struct reference_op;        struct dereference_op;
-struct pre_incr_op;         struct pre_decr_op;
-struct post_incr_op;        struct post_decr_op;
+    struct negative_op;
+    struct positive_op;
+    struct logical_not_op;
+    struct invert_op;
+    struct reference_op;
+    struct dereference_op;
+    struct pre_incr_op;
+    struct pre_decr_op;
+    struct post_incr_op;
+    struct post_decr_op;
 
 //  Binary operator tags
 
-struct assign_op;           struct index_op;
-struct plus_assign_op;      struct minus_assign_op;
-struct times_assign_op;     struct divide_assign_op;    struct mod_assign_op;
-struct and_assign_op;       struct or_assign_op;        struct xor_assign_op;
-struct shift_l_assign_op;   struct shift_r_assign_op;
+    struct assign_op;
+    struct index_op;
+    struct plus_assign_op;
+    struct minus_assign_op;
+    struct times_assign_op;
+    struct divide_assign_op;
+    struct mod_assign_op;
+    struct and_assign_op;
+    struct or_assign_op;
+    struct xor_assign_op;
+    struct shift_l_assign_op;
+    struct shift_r_assign_op;
 
-struct plus_op;             struct minus_op;
-struct times_op;            struct divide_op;           struct mod_op;
-struct and_op;              struct or_op;               struct xor_op;
-struct shift_l_op;          struct shift_r_op;
+    struct plus_op;
+    struct minus_op;
+    struct times_op;
+    struct divide_op;
+    struct mod_op;
+    struct and_op;
+    struct or_op;
+    struct xor_op;
+    struct shift_l_op;
+    struct shift_r_op;
 
-struct eq_op;               struct not_eq_op;
-struct lt_op;               struct lt_eq_op;
-struct gt_op;               struct gt_eq_op;
-struct logical_and_op;      struct logical_or_op;
+    struct eq_op;
+    struct not_eq_op;
+    struct lt_op;
+    struct lt_eq_op;
+    struct gt_op;
+    struct gt_eq_op;
+    struct logical_and_op;
+    struct logical_or_op;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -214,127 +238,135 @@ struct logical_and_op;      struct logical_or_op;
 //      unary operator tags/data types.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename TagT, typename T>
-struct unary_operator;
+    template<typename TagT, typename T>
+    struct unary_operator;
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<negative_op, T> {
+    template<typename T>
+    struct unary_operator<negative_op, T> {
 
-    typedef T const result_type;
-    static result_type eval(T const& v)
-    { return -v; }
-};
+        typedef T const result_type;
 
-//////////////////////////////////
-template <typename T>
-struct unary_operator<positive_op, T> {
-
-    typedef T const result_type;
-    static result_type eval(T const& v)
-    { return +v; }
-};
+        static result_type eval(T const &v) { return -v; }
+    };
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<logical_not_op, T> {
+    template<typename T>
+    struct unary_operator<positive_op, T> {
 
-    typedef T const result_type;
-    static result_type eval(T const& v)
-    { return !v; }
-};
+        typedef T const result_type;
 
-//////////////////////////////////
-template <typename T>
-struct unary_operator<invert_op, T> {
-
-    typedef T const result_type;
-    static result_type eval(T const& v)
-    { return ~v; }
-};
+        static result_type eval(T const &v) { return +v; }
+    };
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<reference_op, T> {
+    template<typename T>
+    struct unary_operator<logical_not_op, T> {
 
-    typedef T* result_type;
-    static result_type eval(T& v)
-    { return &v; }
-};
+        typedef T const result_type;
 
-//////////////////////////////////
-template <typename T>
-struct unary_operator<dereference_op, T*> {
-
-    typedef T& result_type;
-    static result_type eval(T* v)
-    { return *v; }
-};
+        static result_type eval(T const &v) { return !v; }
+    };
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<dereference_op, T* const> {
+    template<typename T>
+    struct unary_operator<invert_op, T> {
 
-    typedef T& result_type;
-    static result_type eval(T* const v)
-    { return *v; }
-};
+        typedef T const result_type;
+
+        static result_type eval(T const &v) { return ~v; }
+    };
 
 //////////////////////////////////
-template <>
-struct unary_operator<dereference_op, nil_t> {
+    template<typename T>
+    struct unary_operator<reference_op, T> {
 
-    //  G++ eager template instantiation
-    //  somehow requires this.
-    typedef nil_t result_type;
-};
+        typedef T *result_type;
+
+        static result_type eval(T &v) { return &v; }
+    };
+
+//////////////////////////////////
+    template<typename T>
+    struct unary_operator<dereference_op, T *> {
+
+        typedef T &result_type;
+
+        static result_type eval(T *v) { return *v; }
+    };
+
+//////////////////////////////////
+    template<typename T>
+    struct unary_operator<dereference_op, T *const> {
+
+        typedef T &result_type;
+
+        static result_type eval(T *const v) { return *v; }
+    };
+
+//////////////////////////////////
+    template<>
+    struct unary_operator<dereference_op, nil_t> {
+
+        //  G++ eager template instantiation
+        //  somehow requires this.
+        typedef nil_t result_type;
+    };
 
 //////////////////////////////////
 #ifndef __BORLANDC__
-template <>
-struct unary_operator<dereference_op, nil_t const> {
+    template<>
+    struct unary_operator<dereference_op, nil_t const> {
 
-    //  G++ eager template instantiation
-    //  somehow requires this.
-    typedef nil_t result_type;
-};
+        //  G++ eager template instantiation
+        //  somehow requires this.
+        typedef nil_t result_type;
+    };
 #endif
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<pre_incr_op, T> {
+    template<typename T>
+    struct unary_operator<pre_incr_op, T> {
 
-    typedef T& result_type;
-    static result_type eval(T& v)
-    { return ++v; }
-};
+        typedef T &result_type;
 
-//////////////////////////////////
-template <typename T>
-struct unary_operator<pre_decr_op, T> {
-
-    typedef T& result_type;
-    static result_type eval(T& v)
-    { return --v; }
-};
+        static result_type eval(T &v) { return ++v; }
+    };
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<post_incr_op, T> {
+    template<typename T>
+    struct unary_operator<pre_decr_op, T> {
 
-    typedef T const result_type;
-    static result_type eval(T& v)
-    { T t(v); ++v; return t; }
-};
+        typedef T &result_type;
+
+        static result_type eval(T &v) { return --v; }
+    };
 
 //////////////////////////////////
-template <typename T>
-struct unary_operator<post_decr_op, T> {
+    template<typename T>
+    struct unary_operator<post_incr_op, T> {
 
-    typedef T const result_type;
-    static result_type eval(T& v)
-    { T t(v); --v; return t; }
-};
+        typedef T const result_type;
+
+        static result_type eval(T &v) {
+            T t(v);
+            ++v;
+            return t;
+        }
+    };
+
+//////////////////////////////////
+    template<typename T>
+    struct unary_operator<post_decr_op, T> {
+
+        typedef T const result_type;
+
+        static result_type eval(T &v) {
+            T t(v);
+            --v;
+            return t;
+        }
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -351,45 +383,98 @@ struct unary_operator<post_decr_op, T> {
 //      Take note that ranks 0..9999 are reserved for the framework.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T>
-struct rank { static int const value = INT_MAX; };
+    template<typename T>
+    struct rank {
+        static int const value = INT_MAX;
+    };
 
-template <> struct rank<void>               { static int const value = 0; };
-template <> struct rank<bool>               { static int const value = 10; };
+    template<>
+    struct rank<void> {
+        static int const value = 0;
+    };
+    template<>
+    struct rank<bool> {
+        static int const value = 10;
+    };
 
-template <> struct rank<char>               { static int const value = 20; };
-template <> struct rank<signed char>        { static int const value = 20; };
-template <> struct rank<unsigned char>      { static int const value = 30; };
+    template<>
+    struct rank<char> {
+        static int const value = 20;
+    };
+    template<>
+    struct rank<signed char> {
+        static int const value = 20;
+    };
+    template<>
+    struct rank<unsigned char> {
+        static int const value = 30;
+    };
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-template <> struct rank<wchar_t>            { static int const value = 40; };
+    template<>
+    struct rank<wchar_t> {
+        static int const value = 40;
+    };
 #endif // !defined(BOOST_NO_INTRINSIC_WCHAR_T)
 
-template <> struct rank<short>              { static int const value = 50; };
-template <> struct rank<unsigned short>     { static int const value = 60; };
+    template<>
+    struct rank<short> {
+        static int const value = 50;
+    };
+    template<>
+    struct rank<unsigned short> {
+        static int const value = 60;
+    };
 
-template <> struct rank<int>                { static int const value = 70; };
-template <> struct rank<unsigned int>       { static int const value = 80; };
+    template<>
+    struct rank<int> {
+        static int const value = 70;
+    };
+    template<>
+    struct rank<unsigned int> {
+        static int const value = 80;
+    };
 
-template <> struct rank<long>               { static int const value = 90; };
-template <> struct rank<unsigned long>      { static int const value = 100; };
+    template<>
+    struct rank<long> {
+        static int const value = 90;
+    };
+    template<>
+    struct rank<unsigned long> {
+        static int const value = 100;
+    };
 
 #ifdef BOOST_HAS_LONG_LONG
-template <> struct rank< ::boost::long_long_type>          { static int const value = 110; };
-template <> struct rank< ::boost::ulong_long_type> { static int const value = 120; };
+    template <> struct rank< ::boost::long_long_type>          { static int const value = 110; };
+    template <> struct rank< ::boost::ulong_long_type> { static int const value = 120; };
 #endif
 
-template <> struct rank<float>              { static int const value = 130; };
-template <> struct rank<double>             { static int const value = 140; };
-template <> struct rank<long double>        { static int const value = 150; };
+    template<>
+    struct rank<float> {
+        static int const value = 130;
+    };
+    template<>
+    struct rank<double> {
+        static int const value = 140;
+    };
+    template<>
+    struct rank<long double> {
+        static int const value = 150;
+    };
 
-template <typename T> struct rank<T*>
-{ static int const value = 160; };
+    template<typename T>
+    struct rank<T *> {
+        static int const value = 160;
+    };
 
-template <typename T> struct rank<T* const>
-{ static int const value = 160; };
+    template<typename T>
+    struct rank<T *const> {
+        static int const value = 160;
+    };
 
-template <typename T, int N> struct rank<T[N]>
-{ static int const value = 160; };
+    template<typename T, int N>
+    struct rank<T[N]> {
+        static int const value = 160;
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -398,12 +483,12 @@ template <typename T, int N> struct rank<T[N]>
 //      Chooses the type (T0 or T1) with the higher rank.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T0, typename T1>
-struct higher_rank {
-    typedef typename boost::mpl::if_c<
-        rank<T0>::value < rank<T1>::value,
-        T1, T0>::type type;
-};
+    template<typename T0, typename T1>
+    struct higher_rank {
+        typedef typename boost::mpl::if_c<
+                rank<T0>::value < rank<T1>::value,
+                T1, T0>::type type;
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -434,329 +519,329 @@ struct higher_rank {
 //      two operators are short-circuit evaluated.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename TagT, typename T0, typename T1>
-struct binary_operator;
+    template<typename TagT, typename T0, typename T1>
+    struct binary_operator;
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<assign_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<assign_op, T0, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs = rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T1>
-struct binary_operator<index_op, nil_t, T1> {
-
-    //  G++ eager template instantiation
-    //  somehow requires this.
-    typedef nil_t result_type;
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs = rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<index_op, T0*, T1> {
+    template<typename T1>
+    struct binary_operator<index_op, nil_t, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0* ptr, T1 const& index)
-    { return ptr[index]; }
-};
-
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<index_op, T0* const, T1> {
-
-    typedef T0& result_type;
-    static result_type eval(T0* const ptr, T1 const& index)
-    { return ptr[index]; }
-};
+        //  G++ eager template instantiation
+        //  somehow requires this.
+        typedef nil_t result_type;
+    };
 
 //////////////////////////////////
-template <typename T0, int N, typename T1>
-struct binary_operator<index_op, T0[N], T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<index_op, T0 *, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0* ptr, T1 const& index)
-    { return ptr[index]; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<plus_assign_op, T0, T1> {
-
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs += rhs; }
-};
+        static result_type eval(T0 *ptr, T1 const &index) { return ptr[index]; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<minus_assign_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<index_op, T0 *const, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs -= rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<times_assign_op, T0, T1> {
-
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs *= rhs; }
-};
+        static result_type eval(T0 *const ptr, T1 const &index) { return ptr[index]; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<divide_assign_op, T0, T1> {
+    template<typename T0, int N, typename T1>
+    struct binary_operator<index_op, T0[N], T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs /= rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<mod_assign_op, T0, T1> {
-
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs %= rhs; }
-};
+        static result_type eval(T0 *ptr, T1 const &index) { return ptr[index]; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<and_assign_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<plus_assign_op, T0, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs &= rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<or_assign_op, T0, T1> {
-
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs |= rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs += rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<xor_assign_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<minus_assign_op, T0, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs ^= rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<shift_l_assign_op, T0, T1> {
-
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs <<= rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs -= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<shift_r_assign_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<times_assign_op, T0, T1> {
 
-    typedef T0& result_type;
-    static result_type eval(T0& lhs, T1 const& rhs)
-    { return lhs >>= rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<plus_op, T0, T1> {
-
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs + rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs *= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<minus_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<divide_assign_op, T0, T1> {
 
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs - rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<times_op, T0, T1> {
-
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs * rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs /= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<divide_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<mod_assign_op, T0, T1> {
 
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs / rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<mod_op, T0, T1> {
-
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs % rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs %= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<and_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<and_assign_op, T0, T1> {
 
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs & rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<or_op, T0, T1> {
-
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs | rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs &= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<xor_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<or_assign_op, T0, T1> {
 
-    typedef typename higher_rank<T0, T1>::type const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs ^ rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<shift_l_op, T0, T1> {
-
-    typedef T0 const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs << rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs |= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<shift_r_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<xor_assign_op, T0, T1> {
 
-    typedef T0 const result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs >> rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<eq_op, T0, T1> {
-
-    typedef bool result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs == rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs ^= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<not_eq_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<shift_l_assign_op, T0, T1> {
 
-    typedef bool result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs != rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<lt_op, T0, T1> {
-
-    typedef bool result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs < rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs <<= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<lt_eq_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<shift_r_assign_op, T0, T1> {
 
-    typedef bool result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs <= rhs; }
-};
+        typedef T0 &result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<gt_op, T0, T1> {
-
-    typedef bool result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs > rhs; }
-};
+        static result_type eval(T0 &lhs, T1 const &rhs) { return lhs >>= rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<gt_eq_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<plus_op, T0, T1> {
 
-    typedef bool result_type;
-    static result_type eval(T0 const& lhs, T1 const& rhs)
-    { return lhs >= rhs; }
-};
+        typedef typename higher_rank<T0, T1>::type const result_type;
 
-//////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<logical_and_op, T0, T1> {
-
-    typedef bool result_type;
-    //  no eval function, see comment above.
-};
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs + rhs; }
+    };
 
 //////////////////////////////////
-template <typename T0, typename T1>
-struct binary_operator<logical_or_op, T0, T1> {
+    template<typename T0, typename T1>
+    struct binary_operator<minus_op, T0, T1> {
 
-    typedef bool result_type;
-    //  no eval function, see comment above.
-};
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs - rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<times_op, T0, T1> {
+
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs * rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<divide_op, T0, T1> {
+
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs / rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<mod_op, T0, T1> {
+
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs % rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<and_op, T0, T1> {
+
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs & rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<or_op, T0, T1> {
+
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs | rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<xor_op, T0, T1> {
+
+        typedef typename higher_rank<T0, T1>::type const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs ^ rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<shift_l_op, T0, T1> {
+
+        typedef T0 const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs << rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<shift_r_op, T0, T1> {
+
+        typedef T0 const result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs >> rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<eq_op, T0, T1> {
+
+        typedef bool result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs == rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<not_eq_op, T0, T1> {
+
+        typedef bool result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs != rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<lt_op, T0, T1> {
+
+        typedef bool result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs < rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<lt_eq_op, T0, T1> {
+
+        typedef bool result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs <= rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<gt_op, T0, T1> {
+
+        typedef bool result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs > rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<gt_eq_op, T0, T1> {
+
+        typedef bool result_type;
+
+        static result_type eval(T0 const &lhs, T1 const &rhs) { return lhs >= rhs; }
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<logical_and_op, T0, T1> {
+
+        typedef bool result_type;
+        //  no eval function, see comment above.
+    };
+
+//////////////////////////////////
+    template<typename T0, typename T1>
+    struct binary_operator<logical_or_op, T0, T1> {
+
+        typedef bool result_type;
+        //  no eval function, see comment above.
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  negative lazy operator (prefix -)
 //
 ///////////////////////////////////////////////////////////////////////////////
-struct negative_op {
+    struct negative_op {
 
-    template <typename T0>
-    struct result {
+        template<typename T0>
+        struct result {
 
-        typedef typename unary_operator<negative_op, T0>::result_type type;
+            typedef typename unary_operator<negative_op, T0>::result_type type;
+        };
+
+        template<typename T0>
+        typename unary_operator<negative_op, T0>::result_type
+        operator()(T0 &_0) const { return unary_operator<negative_op, T0>::eval(_0); }
     };
 
-    template <typename T0>
-    typename unary_operator<negative_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<negative_op, T0>::eval(_0); }
-};
-
 //////////////////////////////////
-template <typename BaseT>
-inline typename impl::make_unary<negative_op, BaseT>::type
-operator-(actor<BaseT> const& _0)
-{
-    return impl::make_unary<negative_op, BaseT>::construct(_0);
+    template<typename BaseT>
+    inline typename impl::make_unary<negative_op, BaseT>::type
+            operator-(actor < BaseT >
+    const& _0) {
+    return
+    impl::make_unary<negative_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -766,24 +851,25 @@ operator-(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct positive_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<positive_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<positive_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<positive_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<positive_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<positive_op, BaseT>::type
-operator+(actor<BaseT> const& _0)
+        operator+(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<positive_op, BaseT>::construct(_0);
+return
+impl::make_unary<positive_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -793,24 +879,25 @@ operator+(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct logical_not_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<logical_not_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<logical_not_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<logical_not_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<logical_not_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<logical_not_op, BaseT>::type
-operator!(actor<BaseT> const& _0)
+        operator!(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<logical_not_op, BaseT>::construct(_0);
+return
+impl::make_unary<logical_not_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -820,24 +907,25 @@ operator!(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct invert_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<invert_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<invert_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<invert_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<invert_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<invert_op, BaseT>::type
-operator~(actor<BaseT> const& _0)
+        operator~(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<invert_op, BaseT>::construct(_0);
+return
+impl::make_unary<invert_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -847,24 +935,25 @@ operator~(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct reference_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<reference_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<reference_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<reference_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<reference_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<reference_op, BaseT>::type
-operator&(actor<BaseT> const& _0)
+        operator&(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<reference_op, BaseT>::construct(_0);
+return
+impl::make_unary<reference_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -874,24 +963,25 @@ operator&(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct dereference_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<dereference_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<dereference_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<dereference_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<dereference_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<dereference_op, BaseT>::type
-operator*(actor<BaseT> const& _0)
+        operator*(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<dereference_op, BaseT>::construct(_0);
+return
+impl::make_unary<dereference_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -901,24 +991,25 @@ operator*(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct pre_incr_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<pre_incr_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<pre_incr_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<pre_incr_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<pre_incr_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<pre_incr_op, BaseT>::type
-operator++(actor<BaseT> const& _0)
+        operator++(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<pre_incr_op, BaseT>::construct(_0);
+return
+impl::make_unary<pre_incr_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -928,24 +1019,25 @@ operator++(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct pre_decr_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<pre_decr_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<pre_decr_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<pre_decr_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<pre_decr_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<pre_decr_op, BaseT>::type
-operator--(actor<BaseT> const& _0)
+        operator--(actor < BaseT >
+const& _0)
 {
-    return impl::make_unary<pre_decr_op, BaseT>::construct(_0);
+return
+impl::make_unary<pre_decr_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -955,24 +1047,25 @@ operator--(actor<BaseT> const& _0)
 ///////////////////////////////////////////////////////////////////////////////
 struct post_incr_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<post_incr_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<post_incr_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<post_incr_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<post_incr_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<post_incr_op, BaseT>::type
-operator++(actor<BaseT> const& _0, int)
+        operator++(actor < BaseT >
+const& _0, int)
 {
-    return impl::make_unary<post_incr_op, BaseT>::construct(_0);
+return
+impl::make_unary<post_incr_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -982,24 +1075,25 @@ operator++(actor<BaseT> const& _0, int)
 ///////////////////////////////////////////////////////////////////////////////
 struct post_decr_op {
 
-    template <typename T0>
+    template<typename T0>
     struct result {
 
         typedef typename unary_operator<post_decr_op, T0>::result_type type;
     };
 
-    template <typename T0>
+    template<typename T0>
     typename unary_operator<post_decr_op, T0>::result_type
-    operator()(T0& _0) const
-    { return unary_operator<post_decr_op, T0>::eval(_0); }
+    operator()(T0 &_0) const { return unary_operator<post_decr_op, T0>::eval(_0); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
+template<typename BaseT>
 inline typename impl::make_unary<post_decr_op, BaseT>::type
-operator--(actor<BaseT> const& _0, int)
+        operator--(actor < BaseT >
+const& _0, int)
 {
-    return impl::make_unary<post_decr_op, BaseT>::construct(_0);
+return
+impl::make_unary<post_decr_op, BaseT>::construct(_0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1010,25 +1104,23 @@ operator--(actor<BaseT> const& _0, int)
 ///////////////////////////////////////////////////////////////////////////////
 struct assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
-template <typename B>
+template<typename BaseT>
+template<typename B>
 inline typename impl::make_binary1<assign_op, BaseT, B>::type
-actor<BaseT>::operator=(B const& _1) const
-{
+actor<BaseT>::operator=(B const &_1) const {
     return impl::make_binary1<assign_op, BaseT, B>::construct(*this, _1);
 }
 
@@ -1040,25 +1132,23 @@ actor<BaseT>::operator=(B const& _1) const
 ///////////////////////////////////////////////////////////////////////////////
 struct index_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<index_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<index_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<index_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<index_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT>
-template <typename B>
+template<typename BaseT>
+template<typename B>
 inline typename impl::make_binary1<index_op, BaseT, B>::type
-actor<BaseT>::operator[](B const& _1) const
-{
+actor<BaseT>::operator[](B const &_1) const {
     return impl::make_binary1<index_op, BaseT, B>::construct(*this, _1);
 }
 
@@ -1069,25 +1159,29 @@ actor<BaseT>::operator[](B const& _1) const
 ///////////////////////////////////////////////////////////////////////////////
 struct plus_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<plus_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<plus_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<plus_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<plus_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<plus_assign_op, BaseT, T1>::type
-operator+=(actor<BaseT> const& _0, T1 CREF _1)
+        operator+=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<plus_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<plus_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1097,25 +1191,29 @@ operator+=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct minus_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<minus_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<minus_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<minus_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<minus_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<minus_assign_op, BaseT, T1>::type
-operator-=(actor<BaseT> const& _0, T1 CREF _1)
+        operator-=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<minus_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<minus_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1125,25 +1223,29 @@ operator-=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct times_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<times_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<times_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<times_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<times_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<times_assign_op, BaseT, T1>::type
-operator*=(actor<BaseT> const& _0, T1 CREF _1)
+        operator*=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<times_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<times_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1153,25 +1255,29 @@ operator*=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct divide_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<divide_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<divide_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<divide_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<divide_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<divide_assign_op, BaseT, T1>::type
-operator/=(actor<BaseT> const& _0, T1 CREF _1)
+        operator/=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<divide_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<divide_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1181,25 +1287,29 @@ operator/=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct mod_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<mod_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<mod_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<mod_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<mod_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<mod_assign_op, BaseT, T1>::type
-operator%=(actor<BaseT> const& _0, T1 CREF _1)
+        operator%=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<mod_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<mod_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1209,25 +1319,29 @@ operator%=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct and_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<and_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<and_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<and_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<and_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<and_assign_op, BaseT, T1>::type
-operator&=(actor<BaseT> const& _0, T1 CREF _1)
+        operator&=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<and_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<and_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1237,25 +1351,29 @@ operator&=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct or_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<or_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<or_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<or_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<or_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<or_assign_op, BaseT, T1>::type
-operator|=(actor<BaseT> const& _0, T1 CREF _1)
+        operator|=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<or_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<or_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1265,25 +1383,29 @@ operator|=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct xor_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<xor_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<xor_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<xor_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<xor_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<xor_assign_op, BaseT, T1>::type
-operator^=(actor<BaseT> const& _0, T1 CREF _1)
+        operator^=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<xor_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<xor_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1293,25 +1415,29 @@ operator^=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct shift_l_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<shift_l_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<shift_l_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<shift_l_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<shift_l_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<shift_l_assign_op, BaseT, T1>::type
-operator<<=(actor<BaseT> const& _0, T1 CREF _1)
+        operator<<=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<shift_l_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<shift_l_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1321,25 +1447,29 @@ operator<<=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct shift_r_assign_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<shift_r_assign_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<shift_r_assign_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<shift_r_assign_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<shift_r_assign_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<shift_r_assign_op, BaseT, T1>::type
-operator>>=(actor<BaseT> const& _0, T1 CREF _1)
+        operator>>=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<shift_r_assign_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<shift_r_assign_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1349,41 +1479,49 @@ operator>>=(actor<BaseT> const& _0, T1 CREF _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct plus_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<plus_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<plus_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<plus_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<plus_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<plus_op, BaseT, T1>::type
-operator+(actor<BaseT> const& _0, T1 CREF _1)
+        operator+(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<plus_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<plus_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<plus_op, T0, BaseT>::type
-operator+(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator+(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<plus_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<plus_op, BaseT0, BaseT1>::type
-operator+(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator+(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<plus_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<plus_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1393,41 +1531,49 @@ operator+(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct minus_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<minus_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<minus_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<minus_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<minus_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<minus_op, BaseT, T1>::type
-operator-(actor<BaseT> const& _0, T1 CREF _1)
+        operator-(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<minus_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<minus_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<minus_op, T0, BaseT>::type
-operator-(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator-(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<minus_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<minus_op, BaseT0, BaseT1>::type
-operator-(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator-(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<minus_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<minus_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1437,41 +1583,49 @@ operator-(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct times_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<times_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<times_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<times_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<times_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<times_op, BaseT, T1>::type
-operator*(actor<BaseT> const& _0, T1 CREF _1)
+        operator*(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<times_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<times_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<times_op, T0, BaseT>::type
-operator*(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator*(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<times_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<times_op, BaseT0, BaseT1>::type
-operator*(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator*(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<times_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<times_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1481,41 +1635,49 @@ operator*(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct divide_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<divide_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<divide_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<divide_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<divide_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<divide_op, BaseT, T1>::type
-operator/(actor<BaseT> const& _0, T1 CREF _1)
+        operator/(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<divide_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<divide_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<divide_op, T0, BaseT>::type
-operator/(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator/(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<divide_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<divide_op, BaseT0, BaseT1>::type
-operator/(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator/(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<divide_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<divide_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1525,41 +1687,49 @@ operator/(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct mod_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<mod_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<mod_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<mod_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<mod_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<mod_op, BaseT, T1>::type
-operator%(actor<BaseT> const& _0, T1 CREF _1)
+        operator%(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<mod_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<mod_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<mod_op, T0, BaseT>::type
-operator%(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator%(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<mod_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<mod_op, BaseT0, BaseT1>::type
-operator%(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator%(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<mod_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<mod_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1569,41 +1739,49 @@ operator%(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct and_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<and_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<and_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<and_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<and_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<and_op, BaseT, T1>::type
-operator&(actor<BaseT> const& _0, T1 CREF _1)
+        operator&(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<and_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<and_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<and_op, T0, BaseT>::type
-operator&(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator&(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<and_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<and_op, BaseT0, BaseT1>::type
-operator&(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator&(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<and_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<and_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1613,41 +1791,49 @@ operator&(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct or_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<or_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<or_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<or_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<or_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<or_op, BaseT, T1>::type
-operator|(actor<BaseT> const& _0, T1 CREF _1)
+        operator|(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<or_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<or_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<or_op, T0, BaseT>::type
-operator|(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator|(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<or_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<or_op, BaseT0, BaseT1>::type
-operator|(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator|(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<or_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<or_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1657,41 +1843,49 @@ operator|(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct xor_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<xor_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<xor_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<xor_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<xor_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<xor_op, BaseT, T1>::type
-operator^(actor<BaseT> const& _0, T1 CREF _1)
+        operator^(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<xor_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<xor_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<xor_op, T0, BaseT>::type
-operator^(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator^(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<xor_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<xor_op, BaseT0, BaseT1>::type
-operator^(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator^(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<xor_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<xor_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1701,41 +1895,49 @@ operator^(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct shift_l_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<shift_l_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<shift_l_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<shift_l_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<shift_l_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<shift_l_op, BaseT, T1>::type
-operator<<(actor<BaseT> const& _0, T1 CREF _1)
+        operator<<(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<shift_l_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<shift_l_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<shift_l_op, T0, BaseT>::type
-operator<<(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator<<(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<shift_l_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<shift_l_op, BaseT0, BaseT1>::type
-operator<<(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator<<(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<shift_l_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<shift_l_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1745,41 +1947,49 @@ operator<<(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct shift_r_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<shift_r_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<shift_r_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<shift_r_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<shift_r_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<shift_r_op, BaseT, T1>::type
-operator>>(actor<BaseT> const& _0, T1 CREF _1)
+        operator>>(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<shift_r_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<shift_r_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<shift_r_op, T0, BaseT>::type
-operator>>(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator>>(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<shift_r_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<shift_r_op, BaseT0, BaseT1>::type
-operator>>(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator>>(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<shift_r_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<shift_r_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1789,41 +1999,49 @@ operator>>(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct eq_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<eq_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<eq_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<eq_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<eq_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<eq_op, BaseT, T1>::type
-operator==(actor<BaseT> const& _0, T1 CREF _1)
+        operator==(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<eq_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<eq_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<eq_op, T0, BaseT>::type
-operator==(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator==(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<eq_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<eq_op, BaseT0, BaseT1>::type
-operator==(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator==(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<eq_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<eq_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1833,41 +2051,49 @@ operator==(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct not_eq_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<not_eq_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<not_eq_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<not_eq_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<not_eq_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<not_eq_op, BaseT, T1>::type
-operator!=(actor<BaseT> const& _0, T1 CREF _1)
+        operator!=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<not_eq_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<not_eq_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<not_eq_op, T0, BaseT>::type
-operator!=(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator!=(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<not_eq_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<not_eq_op, BaseT0, BaseT1>::type
-operator!=(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator!=(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<not_eq_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<not_eq_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1877,41 +2103,49 @@ operator!=(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct lt_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<lt_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<lt_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<lt_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<lt_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<lt_op, BaseT, T1>::type
-operator<(actor<BaseT> const& _0, T1 CREF _1)
+        operator<(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<lt_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<lt_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<lt_op, T0, BaseT>::type
-operator<(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator<(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<lt_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<lt_op, BaseT0, BaseT1>::type
-operator<(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator<(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<lt_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<lt_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1921,41 +2155,49 @@ operator<(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct lt_eq_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<lt_eq_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<lt_eq_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<lt_eq_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<lt_eq_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<lt_eq_op, BaseT, T1>::type
-operator<=(actor<BaseT> const& _0, T1 CREF _1)
+        operator<=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<lt_eq_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<lt_eq_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<lt_eq_op, T0, BaseT>::type
-operator<=(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator<=(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<lt_eq_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<lt_eq_op, BaseT0, BaseT1>::type
-operator<=(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator<=(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<lt_eq_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<lt_eq_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1965,41 +2207,49 @@ operator<=(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct gt_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<gt_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<gt_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<gt_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<gt_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<gt_op, BaseT, T1>::type
-operator>(actor<BaseT> const& _0, T1 CREF _1)
+        operator>(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<gt_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<gt_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<gt_op, T0, BaseT>::type
-operator>(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator>(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<gt_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<gt_op, BaseT0, BaseT1>::type
-operator>(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator>(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<gt_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<gt_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2009,41 +2259,49 @@ operator>(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 ///////////////////////////////////////////////////////////////////////////////
 struct gt_eq_op {
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     struct result {
 
         typedef typename binary_operator<gt_eq_op, T0, T1>
-            ::result_type type;
+        ::result_type type;
     };
 
-    template <typename T0, typename T1>
+    template<typename T0, typename T1>
     typename binary_operator<gt_eq_op, T0, T1>::result_type
-    operator()(T0& _0, T1& _1) const
-    { return binary_operator<gt_eq_op, T0, T1>::eval(_0, _1); }
+    operator()(T0 &_0, T1 &_1) const { return binary_operator<gt_eq_op, T0, T1>::eval(_0, _1); }
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline typename impl::make_binary1<gt_eq_op, BaseT, T1>::type
-operator>=(actor<BaseT> const& _0, T1 CREF _1)
+        operator>=(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return impl::make_binary1<gt_eq_op, BaseT, T1>::construct(_0, _1);
+return
+impl::make_binary1<gt_eq_op, BaseT, T1>::construct(_0, _1
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
+template<typename T0, typename BaseT>
 inline typename impl::make_binary2<gt_eq_op, T0, BaseT>::type
-operator>=(T0 CREF _0, actor<BaseT> const& _1)
-{
+operator>=(T0 CREF _0, actor <BaseT> const &_1) {
     return impl::make_binary2<gt_eq_op, T0, BaseT>::construct(_0, _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
+template<typename BaseT0, typename BaseT1>
 inline typename impl::make_binary3<gt_eq_op, BaseT0, BaseT1>::type
-operator>=(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+        operator>=(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return impl::make_binary3<gt_eq_op, BaseT0, BaseT1>::construct(_0, _1);
+return
+impl::make_binary3<gt_eq_op, BaseT0, BaseT1>::construct(_0, _1
+);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2055,65 +2313,73 @@ operator>=(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
 //  operands.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename A0, typename A1>
+template<typename A0, typename A1>
 struct logical_and_composite {
 
     typedef logical_and_composite<A0, A1> self_t;
 
-    template <typename TupleT>
+    template<typename TupleT>
     struct result {
 
         typedef typename binary_operator<logical_and_op,
-            typename actor_result<A0, TupleT>::plain_type,
-            typename actor_result<A1, TupleT>::plain_type
+                typename actor_result<A0, TupleT>::plain_type,
+                typename actor_result<A1, TupleT>::plain_type
         >::result_type type;
     };
 
-    logical_and_composite(A0 const& _0, A1 const& _1)
-    :   a0(_0), a1(_1) {}
+    logical_and_composite(A0 const &_0, A1 const &_1)
+            : a0(_0), a1(_1) {}
 
-    template <typename TupleT>
+    template<typename TupleT>
     typename actor_result<self_t, TupleT>::type
-    eval(TupleT const& args) const
-    {
+    eval(TupleT const &args) const {
         return a0.eval(args) && a1.eval(args);
     }
 
-    A0 a0; A1 a1; //  actors
+    A0 a0;
+    A1 a1; //  actors
 };
 
 #if !(defined(__ICL) && __ICL <= 500)
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline actor<logical_and_composite
-<actor<BaseT>, typename as_actor<T1>::type> >
-operator&&(actor<BaseT> const& _0, T1 CREF _1)
+        <actor < BaseT>, typename as_actor<T1>::type> >
+operator&&(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return logical_and_composite
-        <actor<BaseT>, typename as_actor<T1>::type>
-        (_0, as_actor<T1>::convert(_1));
+return logical_and_composite
+        <actor < BaseT>, typename as_actor<T1>::type>
+(_0,
+as_actor<T1>::convert(_1)
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
-inline actor<logical_and_composite
-<typename as_actor<T0>::type, actor<BaseT> > >
-operator&&(T0 CREF _0, actor<BaseT> const& _1)
-{
+template<typename T0, typename BaseT>
+inline actor <logical_and_composite
+        <typename as_actor<T0>::type, actor < BaseT>> >
+
+operator&&(T0 CREF _0, actor <BaseT> const &_1) {
     return logical_and_composite
-        <typename as_actor<T0>::type, actor<BaseT> >
-        (as_actor<T0>::convert(_0), _1);
+                   <typename as_actor<T0>::type, actor < BaseT> >
+           (as_actor<T0>::convert(_0), _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
-inline actor<logical_and_composite
-<actor<BaseT0>, actor<BaseT1> > >
-operator&&(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+template<typename BaseT0, typename BaseT1>
+inline actor <logical_and_composite
+        <actor < BaseT0>, actor<BaseT1>> >
+operator&&(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return logical_and_composite
-        <actor<BaseT0>, actor<BaseT1> >
-        (_0, _1);
+return logical_and_composite
+        <actor < BaseT0>, actor <BaseT1> >
+(_0, _1);
 }
 #else
 //////////////////////////////////
@@ -2137,64 +2403,72 @@ operator&&(T0 CREF _0, T1 CREF _1)
 //  operands.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename A0, typename A1>
+template<typename A0, typename A1>
 struct logical_or_composite {
 
     typedef logical_or_composite<A0, A1> self_t;
 
-    template <typename TupleT>
+    template<typename TupleT>
     struct result {
 
         typedef typename binary_operator<logical_or_op,
-            typename actor_result<A0, TupleT>::plain_type,
-            typename actor_result<A1, TupleT>::plain_type
+                typename actor_result<A0, TupleT>::plain_type,
+                typename actor_result<A1, TupleT>::plain_type
         >::result_type type;
     };
 
-    logical_or_composite(A0 const& _0, A1 const& _1)
-    :   a0(_0), a1(_1) {}
+    logical_or_composite(A0 const &_0, A1 const &_1)
+            : a0(_0), a1(_1) {}
 
-    template <typename TupleT>
+    template<typename TupleT>
     typename actor_result<self_t, TupleT>::type
-    eval(TupleT const& args) const
-    {
+    eval(TupleT const &args) const {
         return a0.eval(args) || a1.eval(args);
     }
 
-    A0 a0; A1 a1; //  actors
+    A0 a0;
+    A1 a1; //  actors
 };
 
 //////////////////////////////////
-template <typename BaseT, typename T1>
+template<typename BaseT, typename T1>
 inline actor<logical_or_composite
-<actor<BaseT>, typename as_actor<T1>::type> >
-operator||(actor<BaseT> const& _0, T1 CREF _1)
+        <actor < BaseT>, typename as_actor<T1>::type> >
+operator||(actor < BaseT >
+const& _0,
+T1 CREF _1
+)
 {
-    return logical_or_composite
-        <actor<BaseT>, typename as_actor<T1>::type>
-        (_0, as_actor<T1>::convert(_1));
+return logical_or_composite
+        <actor < BaseT>, typename as_actor<T1>::type>
+(_0,
+as_actor<T1>::convert(_1)
+);
 }
 
 //////////////////////////////////
-template <typename T0, typename BaseT>
-inline actor<logical_or_composite
-<typename as_actor<T0>::type, actor<BaseT> > >
-operator||(T0 CREF _0, actor<BaseT> const& _1)
-{
+template<typename T0, typename BaseT>
+inline actor <logical_or_composite
+        <typename as_actor<T0>::type, actor < BaseT>> >
+
+operator||(T0 CREF _0, actor <BaseT> const &_1) {
     return logical_or_composite
-        <typename as_actor<T0>::type, actor<BaseT> >
-        (as_actor<T0>::convert(_0), _1);
+                   <typename as_actor<T0>::type, actor < BaseT> >
+           (as_actor<T0>::convert(_0), _1);
 }
 
 //////////////////////////////////
-template <typename BaseT0, typename BaseT1>
-inline actor<logical_or_composite
-<actor<BaseT0>, actor<BaseT1> > >
-operator||(actor<BaseT0> const& _0, actor<BaseT1> const& _1)
+template<typename BaseT0, typename BaseT1>
+inline actor <logical_or_composite
+        <actor < BaseT0>, actor<BaseT1>> >
+operator||(actor < BaseT0 >
+const& _0,
+actor <BaseT1> const &_1
+)
 {
-    return logical_or_composite
-        <actor<BaseT0>, actor<BaseT1> >
-        (_0, _1);
+return logical_or_composite
+        <actor < BaseT0>, actor <BaseT1> >
+(_0, _1);
 }
 
 }   //  namespace phoenix

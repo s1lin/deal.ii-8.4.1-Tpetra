@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SUBRULE_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SUBRULE_FWD
+
 #include <boost/spirit/home/classic/core/non_terminal/subrule_fwd.hpp>
+
 #endif

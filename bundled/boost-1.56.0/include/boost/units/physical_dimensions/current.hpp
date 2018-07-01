@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of current
-struct current_base_dimension : 
-    boost::units::base_dimension<current_base_dimension,-6> 
-{ };                       
+        struct current_base_dimension :
+                boost::units::base_dimension<current_base_dimension, -6> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::current_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// dimension of electric current (I)
-typedef current_base_dimension::dimension_type    current_dimension;
+        typedef current_base_dimension::dimension_type current_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

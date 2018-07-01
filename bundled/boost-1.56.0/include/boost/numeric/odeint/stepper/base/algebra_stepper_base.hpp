@@ -20,34 +20,31 @@
 
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
-template< class Algebra , class Operations >
-class algebra_stepper_base
-{
-public:
+            template<class Algebra, class Operations>
+            class algebra_stepper_base {
+            public:
 
-    typedef Algebra algebra_type;
-    typedef Operations operations_type;
+                typedef Algebra algebra_type;
+                typedef Operations operations_type;
 
-    algebra_stepper_base( const algebra_type &algebra = algebra_type() )
-    : m_algebra( algebra ) { }
+                algebra_stepper_base(const algebra_type &algebra = algebra_type())
+                        : m_algebra(algebra) {}
 
-    algebra_type& algebra()
-    {
-        return m_algebra;
-    }
+                algebra_type &algebra() {
+                    return m_algebra;
+                }
 
-    const algebra_type& algebra() const
-    {
-        return m_algebra;
-    }
+                const algebra_type &algebra() const {
+                    return m_algebra;
+                }
 
-protected:
+            protected:
 
-    algebra_type m_algebra;
-};
+                algebra_type m_algebra;
+            };
 
 
 /******* DOXYGEN *******/
@@ -66,25 +63,25 @@ protected:
  * to work with the stepper.
  */
 
-    /**
-     * \fn algebra_stepper_base::algebra_stepper_base( const algebra_type &algebra = algebra_type() )
-     * \brief Constructs a algebra_stepper_base and creates the algebra. This constructor can be used as a default
-     * constructor if the algebra has a default constructor.
-     * \param algebra The algebra_stepper_base stores and uses a copy of algebra.
-     */
+            /**
+             * \fn algebra_stepper_base::algebra_stepper_base( const algebra_type &algebra = algebra_type() )
+             * \brief Constructs a algebra_stepper_base and creates the algebra. This constructor can be used as a default
+             * constructor if the algebra has a default constructor.
+             * \param algebra The algebra_stepper_base stores and uses a copy of algebra.
+             */
 
-    /**
-     * \fn algebra_type& algebra_stepper_base::algebra()
-     * \return A reference to the algebra which is held by this class.
-     */
+            /**
+             * \fn algebra_type& algebra_stepper_base::algebra()
+             * \return A reference to the algebra which is held by this class.
+             */
 
-    /**
-     * \fn const algebra_type& algebra_stepper_base::algebra() const
-     * \return A const reference to the algebra which is held by this class.
-     */
+            /**
+             * \fn const algebra_type& algebra_stepper_base::algebra() const
+             * \return A const reference to the algebra which is held by this class.
+             */
 
-} // odeint
-} // numeric
+        } // odeint
+    } // numeric
 } // boost
 
 

@@ -61,6 +61,8 @@
 #else
 // What is the '3' for?
 #  define BOOST_PP_ITERATION_PARAMS_1 (3,(0,BOOST_FUNCTION_MAX_ARGS,<boost/function/detail/function_iterate.hpp>))
+
 #  include BOOST_PP_ITERATE()
+
 #  undef BOOST_PP_ITERATION_PARAMS_1
 #endif

@@ -59,7 +59,7 @@
 
 #if !defined(BOOST_SPIRIT_FILEITERATOR_STD)
 #  if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) \
-      && !defined(BOOST_DISABLE_WIN32)
+ && !defined(BOOST_DISABLE_WIN32)
 #    define BOOST_SPIRIT_FILEITERATOR_WINDOWS
 #  elif defined(BOOST_HAS_UNISTD_H)
 extern "C"
@@ -78,61 +78,63 @@ extern "C"
 #endif // BOOST_SPIRIT_FILEITERATOR_STD
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-template <
-    typename CharT = char,
-    typename BaseIterator =
+        template<
+                typename CharT = char,
+                typename BaseIterator =
 #ifdef BOOST_SPIRIT_FILEITERATOR_STD
-        fileiter_impl::std_file_iterator<CharT>
+                fileiter_impl::std_file_iterator <CharT>
 #else
-        fileiter_impl::mmap_file_iterator<CharT>
+                fileiter_impl::mmap_file_iterator<CharT>
 #endif
-> class file_iterator;
+        >
+        class file_iterator;
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace fileiter_impl {
+        namespace fileiter_impl {
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    //  file_iter_generator
-    //
-    //  Template meta-function to invoke boost::iterator_adaptor
-    //  NOTE: This cannot be moved into the implementation file because of
-    //  a bug of MSVC 7.0 and previous versions (base classes types are
-    //  looked up at compilation time, not instantion types, and
-    //  file_iterator would break).
-    //
-    /////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////
+            //
+            //  file_iter_generator
+            //
+            //  Template meta-function to invoke boost::iterator_adaptor
+            //  NOTE: This cannot be moved into the implementation file because of
+            //  a bug of MSVC 7.0 and previous versions (base classes types are
+            //  looked up at compilation time, not instantion types, and
+            //  file_iterator would break).
+            //
+            /////////////////////////////////////////////////////////////////////////
 
 #if !defined(BOOST_ITERATOR_ADAPTORS_VERSION) || \
      BOOST_ITERATOR_ADAPTORS_VERSION < 0x0200
 #error "Please use at least Boost V1.31.0 while compiling the file_iterator class!"
 #else // BOOST_ITERATOR_ADAPTORS_VERSION < 0x0200
 
-    template <typename CharT, typename BaseIteratorT>
-    struct file_iter_generator
-    {
-    public:
-        typedef BaseIteratorT adapted_t;
-        typedef typename adapted_t::value_type value_type;
+            template <typename CharT, typename BaseIteratorT>
+            struct file_iter_generator
+            {
+            public:
+                typedef BaseIteratorT adapted_t;
+                typedef typename adapted_t::value_type value_type;
 
-        typedef boost::iterator_adaptor <
-            file_iterator<CharT, BaseIteratorT>,
-            adapted_t,
-            value_type const,
-            std::random_access_iterator_tag,
-            boost::use_default,
-            std::ptrdiff_t
-        > type;
-    };
+                typedef boost::iterator_adaptor <
+                    file_iterator<CharT, BaseIteratorT>,
+                    adapted_t,
+                    value_type const,
+                    std::random_access_iterator_tag,
+                    boost::use_default,
+                    std::ptrdiff_t
+                > type;
+            };
 
 #endif // BOOST_ITERATOR_ADAPTORS_VERSION < 0x0200
 
 ///////////////////////////////////////////////////////////////////////////////
-} /* namespace impl */
+        } /* namespace impl */
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,78 +151,70 @@ namespace fileiter_impl {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template<typename CharT, typename BaseIteratorT>
-class file_iterator
-    : public fileiter_impl::file_iter_generator<CharT, BaseIteratorT>::type,
-      public safe_bool<file_iterator<CharT, BaseIteratorT> >
-{
-private:
-    typedef typename
-        fileiter_impl::file_iter_generator<CharT, BaseIteratorT>::type
-        base_t;
-    typedef typename
-        fileiter_impl::file_iter_generator<CharT, BaseIteratorT>::adapted_t
-        adapted_t;
+        template<typename CharT, typename BaseIteratorT>
+        class file_iterator
+                : public fileiter_impl::file_iter_generator<CharT, BaseIteratorT>::type,
+                  public safe_bool<file_iterator<CharT, BaseIteratorT> > {
+        private:
+            typedef typename
+            fileiter_impl::file_iter_generator<CharT, BaseIteratorT>::type
+                    base_t;
+            typedef typename
+            fileiter_impl::file_iter_generator<CharT, BaseIteratorT>::adapted_t
+                    adapted_t;
 
-public:
-    file_iterator()
-    {}
+        public:
+            file_iterator() {}
 
-    file_iterator(std::string const& fileName)
-    :   base_t(adapted_t(fileName))
-    {}
+            file_iterator(std::string const &fileName)
+                    : base_t(adapted_t(fileName)) {}
 
-    file_iterator(const base_t& iter)
-    :   base_t(iter)
-    {}
+            file_iterator(const base_t &iter)
+                    : base_t(iter) {}
 
-    inline file_iterator& operator=(const base_t& iter);
-    file_iterator make_end(void);
+            inline file_iterator &operator=(const base_t &iter);
 
-    // operator bool. This borrows a trick from boost::shared_ptr to avoid
-    //   to interfere with arithmetic operations.
-    bool operator_bool(void) const
-    { return this->base(); }
+            file_iterator make_end(void);
 
-private:
-    friend class ::boost::iterator_core_access;
+            // operator bool. This borrows a trick from boost::shared_ptr to avoid
+            //   to interfere with arithmetic operations.
+            bool operator_bool(void) const { return this->base(); }
 
-    typename base_t::reference dereference() const
-    {
-        return this->base_reference().get_cur_char();
-    }
+        private:
+            friend class ::boost::iterator_core_access;
 
-    void increment()
-    {
-        this->base_reference().next_char();
-    }
+            typename base_t::reference dereference() const {
+                return this->base_reference().get_cur_char();
+            }
 
-    void decrement()
-    {
-        this->base_reference().prev_char();
-    }
+            void increment() {
+                this->base_reference().next_char();
+            }
 
-    void advance(typename base_t::difference_type n)
-    {
-        this->base_reference().advance(n);
-    }
+            void decrement() {
+                this->base_reference().prev_char();
+            }
 
-    template <
-        typename OtherDerivedT, typename OtherIteratorT,
-        typename V, typename C, typename R, typename D
-    >
-    typename base_t::difference_type distance_to(
-        iterator_adaptor<OtherDerivedT, OtherIteratorT, V, C, R, D>
-        const &x) const
-    {
-        return x.base().distance(this->base_reference());
-    }
-};
+            void advance(typename base_t::difference_type n) {
+                this->base_reference().advance(n);
+            }
+
+            template<
+                    typename OtherDerivedT, typename OtherIteratorT,
+                    typename V, typename C, typename R, typename D
+            >
+            typename base_t::difference_type distance_to(
+                    iterator_adaptor <OtherDerivedT, OtherIteratorT, V, C, R, D>
+                    const &x) const {
+                return x.base().distance(this->base_reference());
+            }
+        };
 
 ///////////////////////////////////////////////////////////////////////////////
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} /* namespace BOOST_SPIRIT_CLASSIC_NS */
+    }
+} /* namespace BOOST_SPIRIT_CLASSIC_NS */
 
 ///////////////////////////////////////////////////////////////////////////////
 #include <boost/spirit/home/classic/iterator/impl/file_iterator.ipp> /* implementation */

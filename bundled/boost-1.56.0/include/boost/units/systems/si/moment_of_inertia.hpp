@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<moment_of_inertia_dimension,si::system>      moment_of_inertia;
-    
-} // namespace si
+            typedef unit <moment_of_inertia_dimension, si::system> moment_of_inertia;
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

@@ -34,309 +34,341 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_member_function_pointer.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+
 #ifndef BOOST_NO_CXX11_HDR_FUNCTIONAL
+
 #include <functional>
+
 #endif
 
-namespace boost
-{
-  namespace detail
-  {
+namespace boost {
+    namespace detail {
 
 
-#if ! defined(BOOST_NO_SFINAE_EXPR) && \
-    ! defined(BOOST_NO_CXX11_DECLTYPE) && \
-    ! defined(BOOST_NO_CXX11_DECLTYPE_N3276) && \
-    ! defined(BOOST_THREAD_NO_CXX11_DECLTYPE_N3276) && \
-    ! defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES)
+#if !defined(BOOST_NO_SFINAE_EXPR) && \
+    !defined(BOOST_NO_CXX11_DECLTYPE) && \
+    !defined(BOOST_NO_CXX11_DECLTYPE_N3276) && \
+    !defined(BOOST_THREAD_NO_CXX11_DECLTYPE_N3276) && \
+    !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES)
 
 #define BOOST_THREAD_PROVIDES_INVOKE
 
-#if ! defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-    // bullets 1 and 2
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+        // bullets 1 and 2
 
-    template <class Fp, class A0, class ...Args>
+        template<class Fp, class A0, class ...Args>
+        inline auto
+        invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...
+
+        args)
+        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<Args>(args)...)) {
+        return (
+        boost::forward<A0>(a0)
+        .*f)(
+        boost::forward<Args>(args)
+        ...);
+    }
+
+    template<class R, class Fp, class A0, class ...Args>
     inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...args)
-        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<Args>(args)...))
-    {
-        return (boost::forward<A0>(a0).*f)(boost::forward<Args>(args)...);
-    }
-    template <class R, class Fp, class A0, class ...Args>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...args)
-        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<Args>(args)...))
-    {
-        return (boost::forward<A0>(a0).*f)(boost::forward<Args>(args)...);
-    }
+    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...
 
-    template <class Fp, class A0, class ...Args>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...args)
-        -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<Args>(args)...))
-    {
-        return ((*boost::forward<A0>(a0)).*f)(boost::forward<Args>(args)...);
-    }
-    template <class R, class Fp, class A0, class ...Args>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...args)
-        -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<Args>(args)...))
-    {
-        return ((*boost::forward<A0>(a0)).*f)(boost::forward<Args>(args)...);
-    }
+    args)
+    -> decltype((boost::forward<A0>(a0).*f)(boost::forward<Args>(args)...)) {
+    return (
+    boost::forward<A0>(a0)
+    .*f)(
+    boost::forward<Args>(args)
+    ...);
+}
 
-    // bullets 3 and 4
+template<class Fp, class A0, class ...Args>
+inline auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...
 
-    template <class Fp, class A0>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype(boost::forward<A0>(a0).*f)
-    {
-        return boost::forward<A0>(a0).*f;
-    }
+args)
+-> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<Args>(args)...))
+{
+return ((*
+boost::forward<A0>(a0)
+).*f)(
+boost::forward<Args>(args)
+...);
+}
 
-    template <class Fp, class A0>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype((*boost::forward<A0>(a0)).*f)
-    {
-        return (*boost::forward<A0>(a0)).*f;
-    }
+template<class R, class Fp, class A0, class ...Args>
+inline auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(Args) ...
 
-    template <class R, class Fp, class A0>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype(boost::forward<A0>(a0).*f)
-    {
-        return boost::forward<A0>(a0).*f;
-    }
+args)
+-> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<Args>(args)...))
+{
+return ((*
+boost::forward<A0>(a0)
+).*f)(
+boost::forward<Args>(args)
+...);
+}
 
-    template <class R, class Fp, class A0>
-    inline auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype((*boost::forward<A0>(a0)).*f)
-    {
-        return (*boost::forward<A0>(a0)).*f;
-    }
+// bullets 3 and 4
+
+template<class Fp, class A0>
+inline auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+-> decltype(boost::forward<A0>(a0).*f) {
+    return boost::forward<A0>(a0).*f;
+}
+
+template<class Fp, class A0>
+inline auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+-> decltype((*boost::forward<A0>(a0)).*f) {
+    return (*boost::forward<A0>(a0)).*f;
+}
+
+template<class R, class Fp, class A0>
+inline auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+-> decltype(boost::forward<A0>(a0).*f) {
+    return boost::forward<A0>(a0).*f;
+}
+
+template<class R, class Fp, class A0>
+inline auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+-> decltype((*boost::forward<A0>(a0)).*f) {
+    return (*boost::forward<A0>(a0)).*f;
+}
 
 
-    // bullet 5
+// bullet 5
 
-    template <class R, class Fp, class ...Args>
-    inline auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(Args) ...args)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<Args>(args)...))
-    {
-      return boost::forward<Fp>(f)(boost::forward<Args>(args)...);
-    }
-    template <class Fp, class ...Args>
-    inline auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(Args) ...args)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<Args>(args)...))
-    {
-      return boost::forward<Fp>(f)(boost::forward<Args>(args)...);
-    }
+template<class R, class Fp, class ...Args>
+inline auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(Args) ...
+
+args)
+-> decltype(boost::forward<Fp>(f)(boost::forward<Args>(args)...))
+{
+return
+
+boost::forward<Fp> (f)(boost::forward<Args>(args)...);
+
+}
+
+template<class Fp, class ...Args>
+inline auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(Args) ...
+
+args)
+-> decltype(boost::forward<Fp>(f)(boost::forward<Args>(args)...))
+{
+return
+
+boost::forward<Fp> (f)(boost::forward<Args>(args)...);
+
+}
 
 #else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
-    // bullets 1 and 2
+// bullets 1 and 2
 
-    template <class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype((boost::forward<A0>(a0).*f)())
-    {
-        return (boost::forward<A0>(a0).*f)();
-    }
-    template <class R, class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype((boost::forward<A0>(a0).*f)())
-    {
-        return (boost::forward<A0>(a0).*f)();
-    }
-    template <class Fp, class A0, class A1>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
-        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1)))
-    {
-        return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1));
-    }
-    template <class R, class Fp, class A0, class A1>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
-        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1)))
-    {
-        return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1));
-    }
-    template <class Fp, class A0, class A1, class A2>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
-        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
-    {
-        return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
-    }
-    template <class R, class Fp, class A0, class A1, class A2>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
-        -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
-    {
-        return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
-    }
+template <class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype((boost::forward<A0>(a0).*f)())
+{
+    return (boost::forward<A0>(a0).*f)();
+}
+template <class R, class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype((boost::forward<A0>(a0).*f)())
+{
+    return (boost::forward<A0>(a0).*f)();
+}
+template <class Fp, class A0, class A1>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
+    -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1)))
+{
+    return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1));
+}
+template <class R, class Fp, class A0, class A1>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
+    -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1)))
+{
+    return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1));
+}
+template <class Fp, class A0, class A1, class A2>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
+    -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
+{
+    return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
+}
+template <class R, class Fp, class A0, class A1, class A2>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
+    -> decltype((boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
+{
+    return (boost::forward<A0>(a0).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
+}
 
-    template <class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype(((*boost::forward<A0>(a0)).*f)())
-    {
-        return ((*boost::forward<A0>(a0)).*f)();
-    }
-    template <class R, class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype(((*boost::forward<A0>(a0)).*f)())
-    {
-        return ((*boost::forward<A0>(a0)).*f)();
-    }
-    template <class Fp, class A0, class A1>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
-        -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1)))
-    {
-        return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1));
-    }
-    template <class R, class Fp, class A0, class A1>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
-        -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1)))
-    {
-        return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1));
-    }
-    template <class Fp, class A0, class A1, class A2>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
-        -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
-    {
-        return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
-    }
-    template <class R, class Fp, class A0, class A1, class A2>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
-        -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
-    {
-        return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
-    }
+template <class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype(((*boost::forward<A0>(a0)).*f)())
+{
+    return ((*boost::forward<A0>(a0)).*f)();
+}
+template <class R, class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype(((*boost::forward<A0>(a0)).*f)())
+{
+    return ((*boost::forward<A0>(a0)).*f)();
+}
+template <class Fp, class A0, class A1>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
+    -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1)))
+{
+    return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1));
+}
+template <class R, class Fp, class A0, class A1>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1)
+    -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1)))
+{
+    return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1));
+}
+template <class Fp, class A0, class A1, class A2>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
+    -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
+{
+    return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
+}
+template <class R, class Fp, class A0, class A1, class A2>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
+    -> decltype(((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
+{
+    return ((*boost::forward<A0>(a0)).*f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
+}
 
-    // bullets 3 and 4
+// bullets 3 and 4
 
-    template <class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype(boost::forward<A0>(a0).*f)
-    {
-        return boost::forward<A0>(a0).*f;
-    }
-    template <class R, class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype(boost::forward<A0>(a0).*f)
-    {
-        return boost::forward<A0>(a0).*f;
-    }
+template <class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype(boost::forward<A0>(a0).*f)
+{
+    return boost::forward<A0>(a0).*f;
+}
+template <class R, class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype(boost::forward<A0>(a0).*f)
+{
+    return boost::forward<A0>(a0).*f;
+}
 
-    template <class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype((*boost::forward<A0>(a0)).*f)
-    {
-        return (*boost::forward<A0>(a0)).*f;
-    }
-    template <class R, class Fp, class A0>
-    inline
-    auto
-    invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
-        -> decltype((*boost::forward<A0>(a0)).*f)
-    {
-        return (*boost::forward<A0>(a0)).*f;
-    }
+template <class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype((*boost::forward<A0>(a0)).*f)
+{
+    return (*boost::forward<A0>(a0)).*f;
+}
+template <class R, class Fp, class A0>
+inline
+auto
+invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A0) a0)
+    -> decltype((*boost::forward<A0>(a0)).*f)
+{
+    return (*boost::forward<A0>(a0)).*f;
+}
 
-    // bullet 5
+// bullet 5
 
-    template <class Fp>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f)
-    -> decltype(boost::forward<Fp>(f)())
-    {
-      return boost::forward<Fp>(f)();
-    }
-    template <class Fp, class A1>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1)))
-    {
-      return boost::forward<Fp>(f)(boost::forward<A1>(a1));
-    }    template <class Fp, class A1, class A2>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
-    {
-      return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
-    }
-    template <class Fp, class A1, class A2, class A3>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2, BOOST_THREAD_RV_REF(A3) a3)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3)))
-    {
-      return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3));
-    }
+template <class Fp>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f)
+-> decltype(boost::forward<Fp>(f)())
+{
+  return boost::forward<Fp>(f)();
+}
+template <class Fp, class A1>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1)
+-> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1)))
+{
+  return boost::forward<Fp>(f)(boost::forward<A1>(a1));
+}    template <class Fp, class A1, class A2>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
+-> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
+{
+  return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
+}
+template <class Fp, class A1, class A2, class A3>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2, BOOST_THREAD_RV_REF(A3) a3)
+-> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3)))
+{
+  return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3));
+}
 
 
-    template <class R, class Fp>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f)
-    -> decltype(boost::forward<Fp>(f)())
-    {
-      return boost::forward<Fp>(f)();
-    }
-    template <class R, class Fp, class A1>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1)))
-    {
-      return boost::forward<Fp>(f)(boost::forward<A1>(a1));
-    }
-    template <class R, class Fp, class A1, class A2>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
-    {
-      return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
-    }
-    template <class R, class Fp, class A1, class A2, class A3>
-    inline
-    auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2, BOOST_THREAD_RV_REF(A3) a3)
-    -> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3)))
-    {
-      return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3));
-    }
+template <class R, class Fp>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f)
+-> decltype(boost::forward<Fp>(f)())
+{
+  return boost::forward<Fp>(f)();
+}
+template <class R, class Fp, class A1>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1)
+-> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1)))
+{
+  return boost::forward<Fp>(f)(boost::forward<A1>(a1));
+}
+template <class R, class Fp, class A1, class A2>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2)
+-> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2)))
+{
+  return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2));
+}
+template <class R, class Fp, class A1, class A2, class A3>
+inline
+auto invoke(BOOST_THREAD_RV_REF(Fp) f, BOOST_THREAD_RV_REF(A1) a1, BOOST_THREAD_RV_REF(A2) a2, BOOST_THREAD_RV_REF(A3) a3)
+-> decltype(boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3)))
+{
+  return boost::forward<Fp>(f)(boost::forward<A1>(a1), boost::forward<A2>(a2), boost::forward<A3>(a3));
+}
 
 #endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
-#elif ! defined(BOOST_NO_SFINAE_EXPR) && \
-    ! defined BOOST_NO_CXX11_HDR_FUNCTIONAL && \
+#elif !defined(BOOST_NO_SFINAE_EXPR) && \
+    !defined BOOST_NO_CXX11_HDR_FUNCTIONAL && \
     defined  BOOST_MSVC
 
 //#error
@@ -1600,7 +1632,7 @@ namespace boost
 #endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 #endif  // all
-      }
-    }
+}
+}
 
 #endif // header

@@ -23,91 +23,85 @@
 #include <boost/detail/sp_typeinfo.hpp>
 #include <atomic.h>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class sp_counted_base
-{
-private:
+        class sp_counted_base {
+        private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+            sp_counted_base(sp_counted_base const &);
 
-    uint32_t use_count_;        // #shared
-    uint32_t weak_count_;       // #weak + (#shared != 0)
+            sp_counted_base &operator=(sp_counted_base const &);
 
-public:
+            uint32_t use_count_;        // #shared
+            uint32_t weak_count_;       // #weak + (#shared != 0)
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {
-    }
+        public:
 
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
+            sp_counted_base() : use_count_(1), weak_count_(1) {
+            }
 
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
+            virtual ~sp_counted_base() // nothrow
+            {
+            }
 
-    virtual void dispose() = 0; // nothrow
+            // dispose() is called when use_count_ drops to zero, to release
+            // the resources managed by *this.
 
-    // destroy() is called when weak_count_ drops to zero.
+            virtual void dispose() = 0; // nothrow
 
-    virtual void destroy() // nothrow
-    {
-        delete this;
-    }
+            // destroy() is called when weak_count_ drops to zero.
 
-    virtual void * get_deleter( sp_typeinfo const & ti ) = 0;
-    virtual void * get_untyped_deleter() = 0;
+            virtual void destroy() // nothrow
+            {
+                delete this;
+            }
 
-    void add_ref_copy()
-    {
-        atomic_inc_32( &use_count_ );
-    }
+            virtual void *get_deleter(sp_typeinfo const &ti) = 0;
 
-    bool add_ref_lock() // true on success
-    {
-        for( ;; )
-        {
-            uint32_t tmp = static_cast< uint32_t const volatile& >( use_count_ );
-            if( tmp == 0 ) return false;
-            if( atomic_cas_32( &use_count_, tmp, tmp + 1 ) == tmp ) return true;
-        }
-    }
+            virtual void *get_untyped_deleter() = 0;
 
-    void release() // nothrow
-    {
-        if( atomic_dec_32_nv( &use_count_ ) == 0 )
-        {
-            dispose();
-            weak_release();
-        }
-    }
+            void add_ref_copy() {
+                atomic_inc_32(&use_count_);
+            }
 
-    void weak_add_ref() // nothrow
-    {
-        atomic_inc_32( &weak_count_ );
-    }
+            bool add_ref_lock() // true on success
+            {
+                for (;;) {
+                    uint32_t tmp = static_cast< uint32_t const volatile & >( use_count_ );
+                    if (tmp == 0) return false;
+                    if (atomic_cas_32(&use_count_, tmp, tmp + 1) == tmp) return true;
+                }
+            }
 
-    void weak_release() // nothrow
-    {
-        if( atomic_dec_32_nv( &weak_count_ ) == 0 )
-        {
-            destroy();
-        }
-    }
+            void release() // nothrow
+            {
+                if (atomic_dec_32_nv(&use_count_) == 0) {
+                    dispose();
+                    weak_release();
+                }
+            }
 
-    long use_count() const // nothrow
-    {
-        return static_cast<long const volatile &>( use_count_ );
-    }
-};
+            void weak_add_ref() // nothrow
+            {
+                atomic_inc_32(&weak_count_);
+            }
 
-} // namespace detail
+            void weak_release() // nothrow
+            {
+                if (atomic_dec_32_nv(&weak_count_) == 0) {
+                    destroy();
+                }
+            }
+
+            long use_count() const // nothrow
+            {
+                return static_cast<long const volatile &>( use_count_ );
+            }
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

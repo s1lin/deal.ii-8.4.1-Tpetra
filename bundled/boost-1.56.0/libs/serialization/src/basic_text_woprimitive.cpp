@@ -21,15 +21,17 @@
 #include <ostream>
 
 #define BOOST_WARCHIVE_SOURCE
+
 #include <boost/archive/detail/auto_link_warchive.hpp>
 #include <boost/archive/impl/basic_text_oprimitive.ipp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-template class basic_text_oprimitive<std::wostream> ;
+        template
+        class basic_text_oprimitive<std::wostream>;
 
-} // namespace archive
+    } // namespace archive
 } // namespace boost
 
 #endif // BOOST_NO_STD_WSTREAMBUF

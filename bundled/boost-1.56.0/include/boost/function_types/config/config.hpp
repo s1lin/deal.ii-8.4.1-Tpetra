@@ -33,7 +33,7 @@
 
 // where to place the cc specifier (the common way)
 #ifndef BOOST_FT_SYNTAX
-#   define BOOST_FT_SYNTAX(result,lparen,cc_spec,type_mod,name,rparen) \
+#   define BOOST_FT_SYNTAX(result, lparen, cc_spec, type_mod, name, rparen) \
                         result() lparen() cc_spec() type_mod() name() rparen()
 #endif
 
@@ -41,7 +41,7 @@
 // set to "void" for compilers that require nullary functions to read 
 // "R (void)" in template partial specialization
 #ifndef BOOST_FT_NULLARY_PARAM
-#define BOOST_FT_NULLARY_PARAM 
+#define BOOST_FT_NULLARY_PARAM
 #endif
 
 // there is a pending defect report on cv qualified function types, so support

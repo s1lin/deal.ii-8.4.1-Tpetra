@@ -22,19 +22,19 @@ ENABLE_IF_SUPPORTED(DEAL_II_CXX_FLAGS -Wno-switch)
 ENABLE_IF_SUPPORTED(DEAL_II_CXX_FLAGS -Wno-nested-anon-types)
 
 INCLUDE_DIRECTORIES(
-  include/
+        include/
 )
 
 DEAL_II_ADD_LIBRARY(obj_muparser OBJECT
-src/muParserBase.cpp
-src/muParserBytecode.cpp
-src/muParserCallback.cpp
-src/muParser.cpp
-src/muParserError.cpp
-src/muParserInt.cpp
-src/muParserTest.cpp
-src/muParserTokenReader.cpp
-  )
+        src/muParserBase.cpp
+        src/muParserBytecode.cpp
+        src/muParserCallback.cpp
+        src/muParser.cpp
+        src/muParserError.cpp
+        src/muParserInt.cpp
+        src/muParserTest.cpp
+        src/muParserTokenReader.cpp
+        )
 
 #IF(DEAL_II_WITH_THREADS)
 #  DEAL_II_ADD_DEFINITIONS(obj_muparser "FP_USE_THREAD_SAFE_EVAL")

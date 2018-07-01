@@ -67,12 +67,11 @@
  * It can probably be improved upon by the reader...
 */
 
-    inline bool
-    isws (char c, char const * const wstr)
-    {
-        using namespace std;
-        return (strchr(wstr,c) != NULL);
-    }
+inline bool
+isws(char c, char const *const wstr) {
+    using namespace std;
+    return (strchr(wstr, c) != NULL);
+}
 
 
 namespace boost {
@@ -85,30 +84,29 @@ namespace boost {
  * the user must supply it.  Enh, this lets them break up strings on
  * different things easier than traits would anyhow.
 */
-template <typename Container>
-void
-stringtok (Container &l, std::string const &s, char const * const ws = " \t\n")
-{
-  typedef std::string::size_type size_type;
-    const size_type  S = s.size();
-          size_type  i = 0;
+    template<typename Container>
+    void
+    stringtok(Container &l, std::string const &s, char const *const ws = " \t\n") {
+        typedef std::string::size_type size_type;
+        const size_type S = s.size();
+        size_type i = 0;
 
-    while (i < S) {
-        // eat leading whitespace
-        while ((i < S) && (isws(s[i],ws)))  ++i;
-        if (i == S)  return;  // nothing left but WS
+        while (i < S) {
+            // eat leading whitespace
+            while ((i < S) && (isws(s[i], ws))) ++i;
+            if (i == S) return;  // nothing left but WS
 
-        // find end of word
-        size_type  j = i+1;
-        while ((j < S) && (!isws(s[j],ws)))  ++j;
+            // find end of word
+            size_type j = i + 1;
+            while ((j < S) && (!isws(s[j], ws))) ++j;
 
-        // add word
-        l.push_back(s.substr(i,j-i));
+            // add word
+            l.push_back(s.substr(i, j - i));
 
-        // set up for next loop
-        i = j+1;
+            // set up for next loop
+            i = j + 1;
+        }
     }
-}
 
 
 } // namespace boost

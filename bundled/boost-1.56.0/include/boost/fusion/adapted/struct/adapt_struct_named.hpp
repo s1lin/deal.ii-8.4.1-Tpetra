@@ -22,7 +22,7 @@
 #define BOOST_FUSION_ADAPT_STRUCT_NAMED_FILLER_0_END
 #define BOOST_FUSION_ADAPT_STRUCT_NAMED_FILLER_1_END
 
-#define BOOST_FUSION_ADAPT_STRUCT_NAMED_NS(                                     \
+#define BOOST_FUSION_ADAPT_STRUCT_NAMED_NS(\
     WRAPPED_TYPE, NAMESPACE_SEQ, NAME, ATTRIBUTES)                              \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE_IMPL(                           \

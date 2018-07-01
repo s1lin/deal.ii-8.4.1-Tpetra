@@ -23,29 +23,43 @@
 #endif
 
 namespace boost {
-namespace atomics {
-namespace detail {
+    namespace atomics {
+        namespace detail {
 
-struct lockpool
-{
-    class scoped_lock
-    {
-        void* m_lock;
+            struct lockpool {
+                class scoped_lock {
+                    void *m_lock;
 
-    public:
-        explicit BOOST_ATOMIC_DECL scoped_lock(const volatile void* addr) BOOST_NOEXCEPT;
-        BOOST_ATOMIC_DECL ~scoped_lock() BOOST_NOEXCEPT;
+                public:
+                    explicit BOOST_ATOMIC_DECL scoped_lock(const volatile void *addr)
 
-        BOOST_DELETED_FUNCTION(scoped_lock(scoped_lock const&))
-        BOOST_DELETED_FUNCTION(scoped_lock& operator=(scoped_lock const&))
-    };
+                    BOOST_NOEXCEPT;
 
-    static BOOST_ATOMIC_DECL void thread_fence() BOOST_NOEXCEPT;
-    static BOOST_ATOMIC_DECL void signal_fence() BOOST_NOEXCEPT;
-};
+                    BOOST_ATOMIC_DECL ~scoped_lock()
 
-} // namespace detail
-} // namespace atomics
+                    BOOST_NOEXCEPT;
+
+                    BOOST_DELETED_FUNCTION (scoped_lock(scoped_lock const &))
+
+                    BOOST_DELETED_FUNCTION(scoped_lock
+                    &
+
+                    operator=(scoped_lock const &)
+
+                    )
+                };
+
+                static BOOST_ATOMIC_DECL void thread_fence()
+
+                BOOST_NOEXCEPT;
+
+                static BOOST_ATOMIC_DECL void signal_fence()
+
+                BOOST_NOEXCEPT;
+            };
+
+        } // namespace detail
+    } // namespace atomics
 } // namespace boost
 
 #endif // BOOST_ATOMIC_DETAIL_LOCKPOOL_HPP_INCLUDED_

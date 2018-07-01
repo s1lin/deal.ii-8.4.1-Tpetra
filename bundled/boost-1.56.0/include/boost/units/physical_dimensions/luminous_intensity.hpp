@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of luminous intensity
-struct luminous_intensity_base_dimension : 
-    boost::units::base_dimension<luminous_intensity_base_dimension,-3> 
-{ }; 
+        struct luminous_intensity_base_dimension :
+                boost::units::base_dimension<luminous_intensity_base_dimension, -3> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::luminous_intensity_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// dimension of luminous intensity (J)
-typedef luminous_intensity_base_dimension::dimension_type luminous_intensity_dimension;
+        typedef luminous_intensity_base_dimension::dimension_type luminous_intensity_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

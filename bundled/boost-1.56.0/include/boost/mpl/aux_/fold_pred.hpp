@@ -17,21 +17,22 @@
 #include <boost/mpl/same_as.hpp>
 #include <boost/mpl/apply.hpp>
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-template< typename Last >
-struct fold_pred
-{
-    template<
-          typename State
-        , typename Iterator
-        >
-    struct apply
-        : not_same_as<Last>::template apply<Iterator>
-    {
-    };
-};
+            template<typename Last>
+            struct fold_pred {
+                template<
+                        typename State, typename Iterator
+                >
+                struct apply
+                        : not_same_as<Last>::template apply<Iterator> {
+                };
+            };
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_AUX_FOLD_PRED_HPP_INCLUDED

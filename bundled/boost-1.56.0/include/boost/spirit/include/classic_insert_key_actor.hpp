@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_INSERT_KEY_ACTOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_INSERT_KEY_ACTOR
+
 #include <boost/spirit/home/classic/actor/insert_key_actor.hpp>
+
 #endif

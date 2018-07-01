@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_POSITION_ITERATOR_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_POSITION_ITERATOR_FWD
+
 #include <boost/spirit/home/classic/iterator/position_iterator_fwd.hpp>
+
 #endif

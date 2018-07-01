@@ -19,6 +19,7 @@
 
 #define BOOST_PP_FILENAME_1 <boost/spirit/home/karma/generate_attr.hpp>
 #define BOOST_PP_ITERATION_LIMITS (2, SPIRIT_ARGUMENTS_LIMIT)
+
 #include BOOST_PP_ITERATE()
 
 #endif

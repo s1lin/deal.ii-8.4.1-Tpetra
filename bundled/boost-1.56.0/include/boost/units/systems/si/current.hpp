@@ -15,18 +15,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<current_dimension,si::system>   current;
-    
-BOOST_UNITS_STATIC_CONSTANT(ampere,current);
-BOOST_UNITS_STATIC_CONSTANT(amperes,current);
+            typedef unit <current_dimension, si::system> current;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(ampere, current
+            );
+            BOOST_UNITS_STATIC_CONSTANT(amperes, current
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

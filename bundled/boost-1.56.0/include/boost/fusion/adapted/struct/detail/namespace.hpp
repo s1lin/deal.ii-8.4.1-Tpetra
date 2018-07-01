@@ -18,10 +18,10 @@
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-#define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_BEGIN_I(R,DATA,ELEM)                \
+#define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_BEGIN_I(R, DATA, ELEM)                \
     namespace ELEM {
-#define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_END_I(Z,I,DATA) }
-#define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DECLARATION_I(Z,I,ELEM) ELEM::
+#define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_END_I(Z, I, DATA) }
+#define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DECLARATION_I(Z, I, ELEM) ELEM::
 
 #define BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DEFINITION_BEGIN(NAMESPACE_SEQ)     \
     BOOST_PP_IF(                                                                \

@@ -17,14 +17,17 @@
 
 #define FUSION_VOID(z, n, _) void_
 
-namespace boost { namespace fusion
-{
-    struct nil_;
-    struct void_;
-}}
+namespace boost {
+    namespace fusion {
+        struct nil_;
+        struct void_;
+    }
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/list/detail/preprocessed/list_to_cons.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/list_to_cons" FUSION_MAX_LIST_SIZE_STR ".hpp")
@@ -56,7 +59,7 @@ namespace boost { namespace fusion { namespace detail
 
         typedef cons<head_type, tail_type> type;
 
-        #include <boost/fusion/container/list/detail/list_to_cons_call.hpp>
+#include <boost/fusion/container/list/detail/list_to_cons_call.hpp>
     };
 
     template <>

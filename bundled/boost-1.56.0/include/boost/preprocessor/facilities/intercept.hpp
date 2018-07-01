@@ -6,16 +6,24 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_FACILITIES_INTERCEPT_HPP
 # define BOOST_PREPROCESSOR_FACILITIES_INTERCEPT_HPP
 #
+
 # /* BOOST_PP_INTERCEPT */
+
 #
+
 # define BOOST_PP_INTERCEPT BOOST_PP_INTERCEPT_
 #
+
 # define BOOST_PP_INTERCEPT_0
 # define BOOST_PP_INTERCEPT_1
 # define BOOST_PP_INTERCEPT_2
@@ -274,4 +282,5 @@
 # define BOOST_PP_INTERCEPT_255
 # define BOOST_PP_INTERCEPT_256
 #
+
 # endif

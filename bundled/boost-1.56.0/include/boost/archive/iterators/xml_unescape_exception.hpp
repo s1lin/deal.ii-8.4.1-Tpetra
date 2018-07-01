@@ -17,32 +17,31 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+
 #ifndef BOOST_NO_EXCEPTIONS
+
 #include <exception>
 
 #include <boost/assert.hpp>
 
 namespace boost {
-namespace archive {
-namespace iterators {
+    namespace archive {
+        namespace iterators {
 
 //////////////////////////////////////////////////////////////////////
 // exceptions thrown by xml_unescapes
 //
-class xml_unescape_exception : public std::exception
-{
-public:
-    xml_unescape_exception()
-    {}
+            class xml_unescape_exception : public std::exception {
+            public:
+                xml_unescape_exception() {}
 
-    virtual const char *what( ) const throw( )
-    {
-        return "xml contained un-recognized escape code";
-    }
-};
+                virtual const char *what() const throw() {
+                    return "xml contained un-recognized escape code";
+                }
+            };
 
-} // namespace iterators
-} // namespace archive
+        } // namespace iterators
+    } // namespace archive
 } // namespace boost
 
 #endif //BOOST_NO_EXCEPTIONS

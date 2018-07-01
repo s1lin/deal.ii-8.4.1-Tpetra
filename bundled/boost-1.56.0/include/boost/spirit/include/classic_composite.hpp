@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_COMPOSITE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_COMPOSITE
+
 #include <boost/spirit/home/classic/core/composite/composite.hpp>
+
 #endif

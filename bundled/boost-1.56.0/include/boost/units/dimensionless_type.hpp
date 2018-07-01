@@ -24,23 +24,22 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace detail {
+        namespace detail {
 
-struct dimension_list_tag;
+            struct dimension_list_tag;
 
-}
+        }
 
 /// Dimension lists in which all exponents resolve to zero reduce to @c dimensionless_type.
-struct dimensionless_type
-{
-    typedef dimensionless_type          type;
-    typedef detail::dimension_list_tag  tag;
-    typedef mpl::long_<0>               size;
-};
+        struct dimensionless_type {
+            typedef dimensionless_type type;
+            typedef detail::dimension_list_tag tag;
+            typedef mpl::long_<0> size;
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

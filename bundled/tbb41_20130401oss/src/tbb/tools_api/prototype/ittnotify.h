@@ -65,7 +65,7 @@
 #endif /* ITT_PLATFORM_POSIX */
 
 #ifndef ITT_PLATFORM
-#  if ITT_OS==ITT_OS_WIN
+#  if ITT_OS == ITT_OS_WIN
 #    define ITT_PLATFORM ITT_PLATFORM_WIN
 #  else
 #    define ITT_PLATFORM ITT_PLATFORM_POSIX
@@ -74,12 +74,13 @@
 
 #include <stddef.h>
 #include <stdarg.h>
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
+
+#if ITT_PLATFORM == ITT_PLATFORM_WIN
 #include <tchar.h>
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
 #ifndef CDECL
-#  if ITT_PLATFORM==ITT_PLATFORM_WIN
+#  if ITT_PLATFORM == ITT_PLATFORM_WIN
 #    define CDECL __cdecl
 #  else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 #    define CDECL /* nothing */
@@ -87,7 +88,7 @@
 #endif /* CDECL */
 
 #ifndef STDCALL
-#  if ITT_PLATFORM==ITT_PLATFORM_WIN
+#  if ITT_PLATFORM == ITT_PLATFORM_WIN
 #    define STDCALL __stdcall
 #  else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 #    define STDCALL /* nothing */
@@ -97,8 +98,8 @@
 #define ITTAPI_CALL    CDECL
 #define LIBITTAPI_CALL /* nothing */
 
-#define ITT_JOIN_AUX(p,n) p##n
-#define ITT_JOIN(p,n)     ITT_JOIN_AUX(p,n)
+#define ITT_JOIN_AUX(p, n) p##n
+#define ITT_JOIN(p, n)     ITT_JOIN_AUX(p,n)
 
 #ifndef INTEL_ITTNOTIFY_PREFIX
 #  define INTEL_ITTNOTIFY_PREFIX __itt_
@@ -119,7 +120,7 @@
 #ifdef ITT_STUBV
 #undef ITT_STUBV
 #endif
-#define ITT_STUBV(api,type,name,args,params)                      \
+#define ITT_STUBV(api, type, name, args, params)                      \
     typedef type (api* ITT_JOIN(ITTNOTIFY_NAME(name),_t)) args;   \
     extern ITT_JOIN(ITTNOTIFY_NAME(name),_t) ITTNOTIFY_NAME(name);
 #define ITT_STUB ITT_STUBV

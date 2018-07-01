@@ -25,7 +25,7 @@
 #endif
 
 #if defined(__osf__) && !defined(_REENTRANT) \
-  && ( defined(_GLIBCXX_HAVE_GTHR_DEFAULT) || defined(_GLIBCPP_HAVE_GTHR_DEFAULT) )
+ && (defined(_GLIBCXX_HAVE_GTHR_DEFAULT) || defined(_GLIBCPP_HAVE_GTHR_DEFAULT))
 // GCC 3 on Tru64 forces the definition of _REENTRANT when any std lib header
 // file is included, therefore for consistency we define it here as well.
 #  define _REENTRANT
@@ -37,19 +37,19 @@
         || defined(_GLIBCXX_HAS_GTHREADS) \
         || defined(_WIN32) \
         || defined(_AIX)
-      //
-      // If the std lib has thread support turned on, then turn it on in Boost
-      // as well.  We do this because some gcc-3.4 std lib headers define _REENTANT
-      // while others do not...
-      //
+//
+// If the std lib has thread support turned on, then turn it on in Boost
+// as well.  We do this because some gcc-3.4 std lib headers define _REENTANT
+// while others do not...
+//
 #     define BOOST_HAS_THREADS
 #  else
 #     define BOOST_DISABLE_THREADS
 #  endif
 #elif defined(__GLIBCPP__) \
-        && !defined(_GLIBCPP_HAVE_GTHR_DEFAULT) \
-        && !defined(_GLIBCPP__PTHREADS)
-   // disable thread support if the std lib was built single threaded:
+ && !defined(_GLIBCPP_HAVE_GTHR_DEFAULT) \
+ && !defined(_GLIBCPP__PTHREADS)
+// disable thread support if the std lib was built single threaded:
 #  define BOOST_DISABLE_THREADS
 #endif
 
@@ -60,24 +60,26 @@
 #endif
 
 #if !defined(_GLIBCPP_USE_LONG_LONG) \
-    && !defined(_GLIBCXX_USE_LONG_LONG)\
-    && defined(BOOST_HAS_LONG_LONG)
+ && !defined(_GLIBCXX_USE_LONG_LONG)\
+ && defined(BOOST_HAS_LONG_LONG)
 // May have been set by compiler/*.hpp, but "long long" without library
 // support is useless.
 #  undef BOOST_HAS_LONG_LONG
 #endif
 
 // Apple doesn't seem to reliably defined a *unix* macro
-#if !defined(CYGWIN) && (  defined(__unix__)  \
-                        || defined(__unix)    \
-                        || defined(unix)      \
-                        || defined(__APPLE__) \
-                        || defined(__APPLE)   \
-                        || defined(APPLE))
+#if !defined(CYGWIN) && (defined(__unix__)  \
+ || defined(__unix)    \
+ || defined(unix)      \
+ || defined(__APPLE__) \
+ || defined(__APPLE)   \
+ || defined(APPLE))
+
 #  include <unistd.h>
+
 #endif
 
-#if defined(__GLIBCXX__) || (defined(__GLIBCPP__) && __GLIBCPP__>=20020514) // GCC >= 3.1.0
+#if defined(__GLIBCXX__) || (defined(__GLIBCPP__) && __GLIBCPP__ >= 20020514) // GCC >= 3.1.0
 #  define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
 #  define BOOST_HAS_SLIST
 #  define BOOST_HAS_HASH
@@ -124,8 +126,8 @@
 #  define BOOST_NO_CXX11_HDR_SYSTEM_ERROR
 #  define BOOST_NO_CXX11_SMART_PTR
 #else
-#  define BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG 
-#  define BOOST_HAS_TR1_COMPLEX_OVERLOADS 
+#  define BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
+#  define BOOST_HAS_TR1_COMPLEX_OVERLOADS
 #endif
 
 #if (!defined(_GLIBCXX_HAS_GTHREADS) || !defined(_GLIBCXX_USE_C99_STDINT_TR1)) && (!defined(BOOST_NO_CXX11_HDR_CONDITION_VARIABLE) || !defined(BOOST_NO_CXX11_HDR_MUTEX))

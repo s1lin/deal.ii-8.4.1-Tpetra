@@ -5,6 +5,7 @@
 
 #ifndef BOOST_TR1_TUPLE_HPP_INCLUDED
 #  define BOOST_TR1_TUPLE_HPP_INCLUDED
+
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_TUPLE
@@ -58,21 +59,23 @@ using ::boost::get;
 #include <boost/fusion/include/tuple.hpp>
 #include <boost/fusion/include/std_pair.hpp>
 
-namespace std{ namespace tr1{
+namespace std {
+    namespace tr1 {
 
-using ::boost::fusion::tuple;
+        using ::boost::fusion::tuple;
 
 // [6.1.3.2] Tuple creation functions
-using ::boost::fusion::ignore;
-using ::boost::fusion::make_tuple;
-using ::boost::fusion::tie;
-using ::boost::fusion::get;
+        using ::boost::fusion::ignore;
+        using ::boost::fusion::make_tuple;
+        using ::boost::fusion::tie;
+        using ::boost::fusion::get;
 
 // [6.1.3.3] Tuple helper classes
-using ::boost::fusion::tuple_size;
-using ::boost::fusion::tuple_element;
+        using ::boost::fusion::tuple_size;
+        using ::boost::fusion::tuple_element;
 
-}}
+    }
+}
 
 #endif
 

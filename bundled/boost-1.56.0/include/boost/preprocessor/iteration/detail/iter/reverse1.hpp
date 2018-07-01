@@ -6,9 +6,13 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # if BOOST_PP_ITERATION_FINISH_1 <= 256 && BOOST_PP_ITERATION_START_1 >= 256
 #    define BOOST_PP_ITERATION_1 256
 #    include BOOST_PP_FILENAME_1
@@ -1291,6 +1295,8 @@
 # endif
 # if BOOST_PP_ITERATION_FINISH_1 <= 0 && BOOST_PP_ITERATION_START_1 >= 0
 #    define BOOST_PP_ITERATION_1 0
+
 #    include BOOST_PP_FILENAME_1
+
 #    undef BOOST_PP_ITERATION_1
 # endif

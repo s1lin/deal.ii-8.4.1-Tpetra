@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SCOPED_LOCK
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SCOPED_LOCK
+
 #include <boost/spirit/home/classic/utility/scoped_lock.hpp>
+
 #endif

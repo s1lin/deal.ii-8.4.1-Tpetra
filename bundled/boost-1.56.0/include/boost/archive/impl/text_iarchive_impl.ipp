@@ -14,8 +14,9 @@
 
 #include <cstddef> // size_t, NULL
 #include <boost/config.hpp>
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::size_t; 
 } // namespace std
 #endif
@@ -25,68 +26,100 @@ namespace std{
 #include <boost/archive/text_iarchive.hpp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-template<class Archive>
-BOOST_ARCHIVE_DECL(void)
-text_iarchive_impl<Archive>::load(char *s)
-{
-    std::size_t size;
-    * this->This() >> size;
-    // skip separating space
-    is.get();
-    // Works on all tested platforms
-    is.read(s, size);
-    s[size] = '\0';
-}
+        template<class Archive>
+        BOOST_ARCHIVE_DECL(void)
 
-template<class Archive>
-BOOST_ARCHIVE_DECL(void)
-text_iarchive_impl<Archive>::load(std::string &s)
-{
-    std::size_t size;
-    * this->This() >> size;
-    // skip separating space
-    is.get();
-    // borland de-allocator fixup
-    #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
-    if(NULL != s.data())
-    #endif
-        s.resize(size);
-    if(0 < size)
-        is.read(&(*s.begin()), size);
-}
+        text_iarchive_impl<Archive>::load(char *s) {
+            std::size_t size;
+            *this->This() >> size;
+            // skip separating space
+            is.get();
+            // Works on all tested platforms
+            is.read(s, size);
+            s[size] = '\0';
+        }
+
+        template<class Archive>
+        BOOST_ARCHIVE_DECL(void)
+
+        text_iarchive_impl<Archive>::load(std::string
+        &s) {
+        std::size_t size;
+        * this->
+
+        This()
+
+        >>
+        size;
+        // skip separating space
+        is.
+
+        get();
+        // borland de-allocator fixup
+#if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
+        if(NULL != s.data())
+#endif
+        s.
+        resize(size);
+        if(0 < size)
+        is.
+        read(&(*s
+        .
+
+        begin()
+
+        ), size);
+    }
 
 #ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-template<class Archive>
-BOOST_ARCHIVE_DECL(void)
-text_iarchive_impl<Archive>::load(wchar_t *ws)
-{
-    std::size_t size;
-    * this->This() >> size;
-    // skip separating space
-    is.get();
-    is.read((char *)ws, size * sizeof(wchar_t)/sizeof(char));
-    ws[size] = L'\0';
-}
+
+    template<class Archive>
+    BOOST_ARCHIVE_DECL(void)
+
+    text_iarchive_impl<Archive>::load(wchar_t *ws) {
+        std::size_t size;
+        *this->This() >> size;
+        // skip separating space
+        is.get();
+        is.read((char *) ws, size * sizeof(wchar_t) / sizeof(char));
+        ws[size] = L'\0';
+    }
+
 #endif // BOOST_NO_INTRINSIC_WCHAR_T
 
 #ifndef BOOST_NO_STD_WSTRING
-template<class Archive>
-BOOST_ARCHIVE_DECL(void)
-text_iarchive_impl<Archive>::load(std::wstring &ws)
-{
+
+    template<class Archive>
+    BOOST_ARCHIVE_DECL(void)
+
+    text_iarchive_impl<Archive>::load(std::wstring
+    &ws) {
     std::size_t size;
-    * this->This() >> size;
+    * this->
+
+    This()
+
+    >>
+    size;
     // borland de-allocator fixup
-    #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
+#if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
     if(NULL != ws.data())
-    #endif
-        ws.resize(size);
+#endif
+    ws.
+    resize(size);
     // skip separating space
-    is.get();
-    is.read((char *)ws.data(), size * sizeof(wchar_t)/sizeof(char));
+    is.
+
+    get();
+
+    is.read((char *)ws.
+
+    data(), size
+
+    * sizeof(wchar_t)/sizeof(char));
 }
 
 #endif // BOOST_NO_STD_WSTRING
@@ -94,34 +127,38 @@ text_iarchive_impl<Archive>::load(std::wstring &ws)
 
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)
-text_iarchive_impl<Archive>::load_override(class_name_type & t, int){
-    basic_text_iarchive<Archive>::load_override(t, 0);
+
+text_iarchive_impl<Archive>::load_override(class_name_type
+& t, int){
+basic_text_iarchive<Archive>::load_override(t,
+0);
 }
 
 template<class Archive>
 BOOST_ARCHIVE_DECL(void)
-text_iarchive_impl<Archive>::init(){
+
+text_iarchive_impl<Archive>::init() {
     basic_text_iarchive<Archive>::init();
 }
 
 template<class Archive>
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
 text_iarchive_impl<Archive>::text_iarchive_impl(
-    std::istream & is, 
-    unsigned int flags
+        std::istream &is,
+        unsigned int flags
 ) :
-    basic_text_iprimitive<std::istream>(
-        is, 
-        0 != (flags & no_codecvt)
-    ),
-    basic_text_iarchive<Archive>(flags)
-{
-    if(0 == (flags & no_header))
-        #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+        basic_text_iprimitive<std::istream>(
+                is,
+                0 != (flags & no_codecvt)
+        ),
+        basic_text_iarchive<Archive>(flags) {
+    if (0 == (flags & no_header))
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
         this->init();
-        #else
+#else
         this->basic_text_iarchive<Archive>::init();
-        #endif
+#endif
 }
 
 } // namespace archive

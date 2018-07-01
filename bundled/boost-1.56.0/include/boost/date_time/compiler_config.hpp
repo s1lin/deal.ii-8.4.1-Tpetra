@@ -17,9 +17,9 @@
 // old compilers. The original date_time IO system remains for those
 // compilers. They must define this macro to use the legacy IO.
 //     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0581) ) )   &&
- #if(  BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) ) \
-    || BOOST_WORKAROUND( __GNUC__, < 3)                         \
-    || (BOOST_WORKAROUND( _MSC_VER, <= 1300) )                  \
+#if(BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581)) \
+ || BOOST_WORKAROUND(__GNUC__, < 3)                         \
+ || (BOOST_WORKAROUND(_MSC_VER, <= 1300))                  \
     )                                                           \
     && !defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 # define USE_DATE_TIME_PRE_1_33_FACET_IO
@@ -46,7 +46,7 @@
 #undef BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
 #endif
 
-#if (defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) || BOOST_WORKAROUND( __BORLANDC__,  BOOST_TESTED_AT(0x581) ) )
+#if (defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581)))
 #define BOOST_DATE_TIME_NO_MEMBER_INIT
 #endif
 
@@ -81,9 +81,9 @@ namespace std {
 // gcc295, msvc (neither with STLPort), any borland
 // 
 #if (((defined(__GNUC__) && (__GNUC__ < 3)) || \
-      (defined(_MSC_VER) && (_MSC_VER < 1300)) ) && \
-      !defined(_STLP_OWN_IOSTREAMS) ) || \
-      BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
+      (defined(_MSC_VER) && (_MSC_VER < 1300))) && \
+      !defined(_STLP_OWN_IOSTREAMS)) || \
+      BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
 #define BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
 #endif
 
@@ -123,7 +123,7 @@ namespace std {
 // libraries to be dynamically linked, or BOOST_DATE_TIME_DYN_LINK
 // if they want just this one to be dynamically liked:
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_DATE_TIME_DYN_LINK)
-    // export if this is our own source, otherwise import:
+// export if this is our own source, otherwise import:
 #   ifdef BOOST_DATE_TIME_SOURCE
 #     define BOOST_DATE_TIME_DECL BOOST_SYMBOL_EXPORT
 #   else
@@ -155,11 +155,12 @@ namespace std {
 // And include the header that does the work:
 //
 #include <boost/config/auto_link.hpp>
+
 #endif  // auto-linking disabled
 
-#if defined(BOOST_HAS_THREADS) 
+#if defined(BOOST_HAS_THREADS)
 #  if defined(_MSC_VER) || defined(__MWERKS__) || defined(__MINGW32__) ||  defined(__BORLANDC__)
-     //no reentrant posix functions (eg: localtime_r)
+//no reentrant posix functions (eg: localtime_r)
 #  elif (!defined(__hpux) || (defined(__hpux) && defined(_REENTRANT)))
 #   define BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS
 #  endif

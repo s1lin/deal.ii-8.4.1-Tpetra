@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace angle {
+        namespace angle {
 
-struct radian_base_unit : public base_unit<radian_base_unit, plane_angle_dimension, -2>
-{
-    static std::string name()   { return("radian"); }
-    static std::string symbol() { return("rad"); }
-};
+            struct radian_base_unit : public base_unit<radian_base_unit, plane_angle_dimension, -2> {
+                static std::string name() { return ("radian"); }
 
-} // namespace angle
+                static std::string symbol() { return ("rad"); }
+            };
 
-} // namespace units
+        } // namespace angle
+
+    } // namespace units
 
 } // namespace boost
 

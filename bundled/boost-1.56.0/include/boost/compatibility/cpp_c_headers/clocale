@@ -8,9 +8,9 @@
 #include <locale.h>
 
 namespace std {
-  using ::lconv;
-  using ::localeconv;
-  using ::setlocale;
+    using ::lconv;
+    using ::localeconv;
+    using ::setlocale;
 }
 
 #endif // CLOCALE_HEADER

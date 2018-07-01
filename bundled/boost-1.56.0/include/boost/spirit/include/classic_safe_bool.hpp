@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SAFE_BOOL
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SAFE_BOOL
+
 #include <boost/spirit/home/classic/core/safe_bool.hpp>
+
 #endif

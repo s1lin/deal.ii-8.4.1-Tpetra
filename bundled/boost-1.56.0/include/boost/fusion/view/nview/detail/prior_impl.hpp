@@ -11,40 +11,38 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/prior.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nview_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_iterator_tag;
 
-    template <typename Sequence, typename Pos>
-    struct nview_iterator;
+        template<typename Sequence, typename Pos>
+        struct nview_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct prior_impl;
+        namespace extension {
+            template<typename Tag>
+            struct prior_impl;
 
-        template <>
-        struct prior_impl<nview_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply 
-            {
-                typedef typename Iterator::first_type::iterator_type first_type;
-                typedef typename Iterator::sequence_type sequence_type;
+            template<>
+            struct prior_impl<nview_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename Iterator::first_type::iterator_type first_type;
+                    typedef typename Iterator::sequence_type sequence_type;
 
-                typedef nview_iterator<sequence_type,
-                    typename mpl::prior<first_type>::type> type;
+                    typedef nview_iterator<sequence_type,
+                            typename mpl::prior<first_type>::type> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return type(i.seq);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return type(i.seq);
+                    }
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif

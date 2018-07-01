@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_create_element
-(
-    NumericType *Numeric,
-    WorkType *Work,
-    SymbolicType *Symbolic
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work,
+                SymbolicType *Symbolic
+        );

@@ -34,17 +34,20 @@
             BOOST_FUNCTIONAL_DETAIL_arg_type, ~))
 
 // Do not use namespace ::detail because overloaded_function is already a class.
-namespace boost { namespace overloaded_function_detail {
+namespace boost {
+    namespace overloaded_function_detail {
 
-template<typename F>
-class base {}; // Empty template cannot be used directly (only its spec).
+        template<typename F>
+        class base {
+        }; // Empty template cannot be used directly (only its spec).
 
 #       define BOOST_PP_ITERATION_PARAMS_1 \
                 (3, (0, BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_ARITY_MAX, \
                 "boost/functional/overloaded_function/detail/base.hpp"))
+
 #       include BOOST_PP_ITERATE() // Iterate over funciton arity.
 
-} } // namespace
+    }} // namespace
 
 #undef BOOST_FUNCTIONAL_DETAIL_arg_type
 #undef BOOST_FUNCTIONAL_DETAIL_arg_name

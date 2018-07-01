@@ -10,7 +10,9 @@
 #if BOOST_FUNCTION_NUM_ARGS == 0
 #  ifndef BOOST_FUNCTION_0
 #    define BOOST_FUNCTION_0
+
 #    include <boost/function/function_template.hpp>
+
 #  endif
 #elif BOOST_FUNCTION_NUM_ARGS == 1
 #  ifndef BOOST_FUNCTION_1

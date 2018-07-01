@@ -24,68 +24,54 @@
 #include <boost/mpl/aux_/inserter_algorithm.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-namespace aux {
+        namespace aux {
 
-template<
-      typename Operation
-    , typename Predicate
-    >
-struct copy_if_op
-{
-    template< typename Sequence, typename T > struct apply
-#if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
-        : eval_if<
-              typename apply1<Predicate,T>::type
-            , apply2<Operation,Sequence,T>
-            , identity<Sequence>
+            template<
+                    typename Operation, typename Predicate
             >
-    {
+            struct copy_if_op {
+                template<typename Sequence, typename T> struct apply
+#if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
+                        : eval_if<
+                                typename apply1<Predicate, T>::type, apply2 < Operation, Sequence, T>,
+                          identity<Sequence>
+                >
+                {
 #else
-    {
-        typedef typename eval_if<
-              typename apply1<Predicate,T>::type
-            , apply2<Operation,Sequence,T>
-            , identity<Sequence>
-            >::type type;
+                    {
+                        typedef typename eval_if<
+                              typename apply1<Predicate,T>::type
+                            , apply2<Operation,Sequence,T>
+                            , identity<Sequence>
+                            >::type type;
 #endif
+                };
+            };
+
+            template<
+                    typename Sequence, typename Predicate, typename Inserter
+            >
+            struct copy_if_impl
+                    : fold<
+                            Sequence, typename Inserter::state, protect < aux::copy_if_op<
+                                    typename Inserter::operation, Predicate
+                            > >
+            > {
+        };
+
+        template<
+                typename Sequence, typename Predicate, typename Inserter
+        >
+        struct reverse_copy_if_impl
+                : reverse_fold<
+                        Sequence, typename Inserter::state, protect < aux::copy_if_op<
+                                typename Inserter::operation, Predicate
+                        > >
+        > {
     };
-};
-
-template<
-      typename Sequence
-    , typename Predicate
-    , typename Inserter
-    >
-struct copy_if_impl
-    : fold<
-          Sequence
-        , typename Inserter::state
-        , protect< aux::copy_if_op<
-              typename Inserter::operation
-            , Predicate
-            > >
-        >
-{
-};
-
-template<
-      typename Sequence
-    , typename Predicate
-    , typename Inserter
-    >
-struct reverse_copy_if_impl
-    : reverse_fold<
-          Sequence
-        , typename Inserter::state
-        , protect< aux::copy_if_op<
-              typename Inserter::operation
-            , Predicate
-            > >
-        >
-{
-};
 
 } // namespace aux
 

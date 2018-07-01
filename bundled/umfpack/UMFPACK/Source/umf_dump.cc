@@ -43,13 +43,13 @@ PRIVATE void UMF_DBinit
     /* Int_MAX is defined in umfpack.h */
     if (UMF_DBflag < 1 || UMF_DBflag == Int_MAX)
     {
-	/* clear the debugging arrays */
-	UMF_DBflag = 0 ;
-	for (i = 0 ; i <= UMF_DBMAX ; i++)
-	{
-	    UMF_DBscatter [i] = 0 ;
-	    UMF_DBpacked  [i] = 0 ;
-	}
+    /* clear the debugging arrays */
+    UMF_DBflag = 0 ;
+    for (i = 0 ; i <= UMF_DBMAX ; i++)
+    {
+        UMF_DBscatter [i] = 0 ;
+        UMF_DBpacked  [i] = 0 ;
+    }
     }
 
     UMF_DBflag++ ;
@@ -76,36 +76,36 @@ GLOBAL void UMF_dump_dense
     if (UMF_debug < 7) return ;
     if (C == (Entry *) NULL)
     {
-	DEBUG7 (("No dense matrix allocated\n")) ;
-	return ;
+    DEBUG7 (("No dense matrix allocated\n")) ;
+    return ;
     }
     DEBUG8 ((" dimension= " ID " rows= " ID " cols= " ID "\n", dim, m, n)) ;
 
     for (i = 0 ; i < m ; i++)
     {
-	DEBUG9 ((ID ": ", i)) ;
-	for (j = 0 ; j < n ; j++)
-	{
-	    EDEBUG9 (C [i+j*dim]) ;
-	    if (j % 6 == 5) DEBUG9 (("\n     ")) ;
-	}
-	DEBUG9 (("\n")) ;
+    DEBUG9 ((ID ": ", i)) ;
+    for (j = 0 ; j < n ; j++)
+    {
+        EDEBUG9 (C [i+j*dim]) ;
+        if (j % 6 == 5) DEBUG9 (("\n     ")) ;
+    }
+    DEBUG9 (("\n")) ;
     }
 
     for (i = 0 ; i < m ; i++)
     {
-	for (j = 0 ; j < n ; j++)
-	{
-	    if (IS_ZERO (C [i+j*dim]))
-	    {
-		DEBUG8 ((".")) ;
-	    }
-	    else
-	    {
-		DEBUG8 (("X")) ;
-	    }
-	}
-	DEBUG8 (("\n")) ;
+    for (j = 0 ; j < n ; j++)
+    {
+        if (IS_ZERO (C [i+j*dim]))
+        {
+        DEBUG8 ((".")) ;
+        }
+        else
+        {
+        DEBUG8 (("X")) ;
+        }
+    }
+    DEBUG8 (("\n")) ;
     }
 }
 
@@ -123,7 +123,7 @@ GLOBAL void UMF_dump_element
 {
 
     Int i, j, k, *Rows, *Cols, nrows, ncols, *E, row, col,
-	*Row_degree, *Col_degree ;
+    *Row_degree, *Col_degree ;
     Entry *C ;
     Element *ep ;
     Unit *p ;
@@ -132,32 +132,32 @@ GLOBAL void UMF_dump_element
 
     if (e == 0)
     {
-	UMF_dump_current_front (Numeric, Work, FALSE) ;
-	return ;
+    UMF_dump_current_front (Numeric, Work, FALSE) ;
+    return ;
     }
 
     DEBUG7 (("\n====================ELEMENT: " ID " ", e)) ;
     if (!Numeric || !Work || !Numeric->Memory)
     {
-	DEBUG7 ((" No Numeric, Work\n")) ;
-	return ;
+    DEBUG7 ((" No Numeric, Work\n")) ;
+    return ;
     }
     DEBUG7 ((" nel: " ID " of " ID, e, Work->nel)) ;
     E = Work->E ;
     if (!E)
     {
-	DEBUG7 ((" No elements\n")) ;
-	return ;
+    DEBUG7 ((" No elements\n")) ;
+    return ;
     }
     if (e < 0 || e > Work->nel)
     {
-	DEBUG7 (("e out of range!\n")) ;
-	return ;
+    DEBUG7 (("e out of range!\n")) ;
+    return ;
     }
     if (!E [e])
     {
-	DEBUG7 ((" deallocated\n")) ;
-	return ;
+    DEBUG7 ((" deallocated\n")) ;
+    return ;
     }
     DEBUG7 (("\n")) ;
     Col_degree = Numeric->Cperm ;
@@ -175,52 +175,52 @@ GLOBAL void UMF_dump_element
     k = 0 ;
     for (i = 0 ; i < ep->nrows ; i++)
     {
-	row = Rows [i] ;
-	if (row >= 0)
-	{
-	    DEBUG8 ((" " ID, row)) ;
-	    ASSERT (row < Work->n_row) ;
-	    if ((k++ % 10) == 9) DEBUG8 (("\n")) ;
-	    ASSERT (IMPLIES (clean, NON_PIVOTAL_ROW (row))) ;
-	}
+    row = Rows [i] ;
+    if (row >= 0)
+    {
+        DEBUG8 ((" " ID, row)) ;
+        ASSERT (row < Work->n_row) ;
+        if ((k++ % 10) == 9) DEBUG8 (("\n")) ;
+        ASSERT (IMPLIES (clean, NON_PIVOTAL_ROW (row))) ;
+    }
     }
 
     DEBUG8 (("\ncols: ")) ;
     k = 0 ;
     for (j = 0 ; j < ep->ncols ; j++)
     {
-	col = Cols [j] ;
-	if (col >= 0)
-	{
-	    DEBUG8 ((" " ID, col)) ;
-	    ASSERT (col < Work->n_col) ;
-	    if ((k++ % 10) == 9) DEBUG8 (("\n")) ;
-	    ASSERT (IMPLIES (clean, NON_PIVOTAL_COL (col))) ;
-	}
+    col = Cols [j] ;
+    if (col >= 0)
+    {
+        DEBUG8 ((" " ID, col)) ;
+        ASSERT (col < Work->n_col) ;
+        if ((k++ % 10) == 9) DEBUG8 (("\n")) ;
+        ASSERT (IMPLIES (clean, NON_PIVOTAL_COL (col))) ;
+    }
     }
 
     DEBUG8 (("\nvalues:\n")) ;
     if (UMF_debug >= 9)
     {
-	for (i = 0 ; i < ep->nrows ; i++)
-	{
-	    row = Rows [i] ;
-	    if (row >= 0)
-	    {
-		DEBUG9 ((ID ": ", row)) ;
-		k = 0 ;
-		for (j = 0 ; j < ep->ncols ; j++)
-		{
-		    col = Cols [j] ;
-		    if (col >= 0)
-		    {
-			EDEBUG9 (C [i+j*ep->nrows]) ;
-			if (k++ % 6 == 5) DEBUG9 (("\n     ")) ;
-		    }
-		}
-		DEBUG9 (("\n")) ;
-	    }
-	}
+    for (i = 0 ; i < ep->nrows ; i++)
+    {
+        row = Rows [i] ;
+        if (row >= 0)
+        {
+        DEBUG9 ((ID ": ", row)) ;
+        k = 0 ;
+        for (j = 0 ; j < ep->ncols ; j++)
+        {
+            col = Cols [j] ;
+            if (col >= 0)
+            {
+            EDEBUG9 (C [i+j*ep->nrows]) ;
+            if (k++ % 6 == 5) DEBUG9 (("\n     ")) ;
+            }
+        }
+        DEBUG9 (("\n")) ;
+        }
+    }
     }
 
     DEBUG7 (("====================\n")) ;
@@ -246,7 +246,7 @@ GLOBAL void UMF_dump_rowcol
     Entry value ;
     Entry *C ;
     Int f, nrows, j, jj, len, e, deg, index, n_row, n_col, *Cols, *Rows, nn,
-	dumpdeg, ncols, preve, *E, tpi, *Pattern, approx_deg, not_in_use ;
+    dumpdeg, ncols, preve, *E, tpi, *Pattern, approx_deg, not_in_use ;
     Tuple *tp, *tend ;
     Element *ep ;
     Int *Row_tuples, *Row_degree, *Row_tlen ;
@@ -259,17 +259,17 @@ GLOBAL void UMF_dump_rowcol
 
     if (dumpwhich == 0)
     {
-	DEBUG7 (("\n====================ROW: " ID, dumpindex)) ;
+    DEBUG7 (("\n====================ROW: " ID, dumpindex)) ;
     }
     else
     {
-	DEBUG7 (("\n====================COL: " ID, dumpindex)) ;
+    DEBUG7 (("\n====================COL: " ID, dumpindex)) ;
     }
 
     if (dumpindex == EMPTY)
     {
-	DEBUG7 ((" (EMPTY)\n")) ;
-	return ;
+    DEBUG7 ((" (EMPTY)\n")) ;
+    return ;
     }
 
     deg = 0 ;
@@ -277,8 +277,8 @@ GLOBAL void UMF_dump_rowcol
 
     if (!Numeric || !Work)
     {
-	DEBUG7 ((" No Numeric, Work\n")) ;
-	return ;
+    DEBUG7 ((" No Numeric, Work\n")) ;
+    return ;
     }
 
     n_row = Work->n_row ;
@@ -294,156 +294,156 @@ GLOBAL void UMF_dump_rowcol
     Col_tuples = Numeric->Lip ;
     Col_tlen   = Numeric->Lilen ;
 
-	if (!E
-	|| !Row_tuples || !Row_degree || !Row_tlen
-	|| !Col_tuples || !Col_degree || !Col_tlen)
-	{
-	    DEBUG7 ((" No E, Rows, Cols\n")) ;
-	    return ;
-	}
+    if (!E
+    || !Row_tuples || !Row_degree || !Row_tlen
+    || !Col_tuples || !Col_degree || !Col_tlen)
+    {
+        DEBUG7 ((" No E, Rows, Cols\n")) ;
+        return ;
+    }
 
-	if (dumpwhich == 0)
-	{
-	    /* dump a row */
-	    ASSERT (dumpindex >= 0 && dumpindex < n_row) ;
-	    if (!NON_PIVOTAL_ROW (dumpindex))
-	    {
-		DEBUG7 ((" Pivotal\n")) ;
-		return ;
-	    }
-	    len = Row_tlen [dumpindex] ;
-	    dumpdeg = Row_degree [dumpindex] ;
-	    tpi = Row_tuples [dumpindex] ;
-	}
-	else
-	{
-	    /* dump a column */
-	    ASSERT (dumpindex >= 0 && dumpindex < n_col) ;
-	    if (!NON_PIVOTAL_COL (dumpindex))
-	    {
-		DEBUG7 ((" Pivotal\n")) ;
-		return ;
-	    }
-	    len = Col_tlen [dumpindex] ;
-	    dumpdeg = Col_degree [dumpindex] ;
-	    tpi = Col_tuples [dumpindex] ;
-	}
+    if (dumpwhich == 0)
+    {
+        /* dump a row */
+        ASSERT (dumpindex >= 0 && dumpindex < n_row) ;
+        if (!NON_PIVOTAL_ROW (dumpindex))
+        {
+        DEBUG7 ((" Pivotal\n")) ;
+        return ;
+        }
+        len = Row_tlen [dumpindex] ;
+        dumpdeg = Row_degree [dumpindex] ;
+        tpi = Row_tuples [dumpindex] ;
+    }
+    else
+    {
+        /* dump a column */
+        ASSERT (dumpindex >= 0 && dumpindex < n_col) ;
+        if (!NON_PIVOTAL_COL (dumpindex))
+        {
+        DEBUG7 ((" Pivotal\n")) ;
+        return ;
+        }
+        len = Col_tlen [dumpindex] ;
+        dumpdeg = Col_degree [dumpindex] ;
+        tpi = Col_tuples [dumpindex] ;
+    }
 
-	p = Numeric->Memory + tpi ;
-	tp = (Tuple *) p ;
-	if (!tpi)
-	{
-	    DEBUG7 ((" Nonpivotal, No tuple list tuples " ID " tlen " ID "\n",
-		tpi, len)) ;
-	    return ;
-	}
-	ASSERT (p >= Numeric->Memory + Numeric->itail) ;
-	ASSERT (p <  Numeric->Memory + Numeric->size) ;
+    p = Numeric->Memory + tpi ;
+    tp = (Tuple *) p ;
+    if (!tpi)
+    {
+        DEBUG7 ((" Nonpivotal, No tuple list tuples " ID " tlen " ID "\n",
+        tpi, len)) ;
+        return ;
+    }
+    ASSERT (p >= Numeric->Memory + Numeric->itail) ;
+    ASSERT (p <  Numeric->Memory + Numeric->size) ;
 
-	DEBUG7 ((" degree: " ID " len: " ID "\n", dumpdeg, len)) ;
-	not_in_use = (p-1)->header.size - UNITS (Tuple, len) ;
-	DEBUG7 ((" Tuple list: p+1: " ID " size: " ID " units, " ID " not in use\n",
-		(Int) (p-Numeric->Memory), (p-1)->header.size, not_in_use)) ;
-	ASSERT (not_in_use >= 0) ;
-	tend = tp + len ;
-	preve = 0 ;
-	for ( ; tp < tend ; tp++)
-	{
-	    /* row/col of element e, offset is f: */
-	    /* DEBUG8 (("    (tp=" ID ")\n", tp)) ; */
-	    e = tp->e ;
-	    f = tp->f ;
-	    DEBUG8 (("    (e=" ID ", f=" ID ")\n", e, f)) ;
-	    ASSERT (e > 0 && e <= Work->nel) ;
-	    /* dump the pattern and values */
-	    if (E [e])
-	    {
-		p = Numeric->Memory + E [e] ;
-		GET_ELEMENT (ep, p, Cols, Rows, ncols, nrows, C) ;
-		if (dumpwhich == 0)
-		{
-		    Pattern = Cols ;
-		    jj = ep->ncols ;
-		    is_there = Rows [f] >= 0 ;
-		    if (is_there) approx_deg += ep->ncolsleft ;
-		}
-		else
-		{
-		    Pattern = Rows ;
-		    jj = ep->nrows ;
-		    is_there = Cols [f] >= 0 ;
-		    if (is_there) approx_deg += ep->nrowsleft ;
-		}
-		if (!is_there)
-		{
-			DEBUG8 (("\t\tnot present\n")) ;
-		}
-		else
-		{
-		    for (j = 0 ; j < jj ; j++)
-		    {
-			index = Pattern [j] ;
-			value =
-			    C [ (dumpwhich == 0) ? (f+nrows*j) : (j+nrows*f) ] ;
-			if (index >= 0)
-			{
-			    DEBUG8 (("\t\t" ID ":", index)) ;
-			    EDEBUG8 (value) ;
-			    DEBUG8 (("\n")) ;
-			    if (dumpwhich == 0)
-			    {
-				/* col must be in the range 0..n_col-1 */
-				ASSERT (index < n_col) ;
-			    }
-			    else
-			    {
-				/* row must be in the range 0..n_row-1 */
-				ASSERT (index < n_row) ;
-			    }
+    DEBUG7 ((" degree: " ID " len: " ID "\n", dumpdeg, len)) ;
+    not_in_use = (p-1)->header.size - UNITS (Tuple, len) ;
+    DEBUG7 ((" Tuple list: p+1: " ID " size: " ID " units, " ID " not in use\n",
+        (Int) (p-Numeric->Memory), (p-1)->header.size, not_in_use)) ;
+    ASSERT (not_in_use >= 0) ;
+    tend = tp + len ;
+    preve = 0 ;
+    for ( ; tp < tend ; tp++)
+    {
+        /* row/col of element e, offset is f: */
+        /* DEBUG8 (("    (tp=" ID ")\n", tp)) ; */
+        e = tp->e ;
+        f = tp->f ;
+        DEBUG8 (("    (e=" ID ", f=" ID ")\n", e, f)) ;
+        ASSERT (e > 0 && e <= Work->nel) ;
+        /* dump the pattern and values */
+        if (E [e])
+        {
+        p = Numeric->Memory + E [e] ;
+        GET_ELEMENT (ep, p, Cols, Rows, ncols, nrows, C) ;
+        if (dumpwhich == 0)
+        {
+            Pattern = Cols ;
+            jj = ep->ncols ;
+            is_there = Rows [f] >= 0 ;
+            if (is_there) approx_deg += ep->ncolsleft ;
+        }
+        else
+        {
+            Pattern = Rows ;
+            jj = ep->nrows ;
+            is_there = Cols [f] >= 0 ;
+            if (is_there) approx_deg += ep->nrowsleft ;
+        }
+        if (!is_there)
+        {
+            DEBUG8 (("\t\tnot present\n")) ;
+        }
+        else
+        {
+            for (j = 0 ; j < jj ; j++)
+            {
+            index = Pattern [j] ;
+            value =
+                C [ (dumpwhich == 0) ? (f+nrows*j) : (j+nrows*f) ] ;
+            if (index >= 0)
+            {
+                DEBUG8 (("\t\t" ID ":", index)) ;
+                EDEBUG8 (value) ;
+                DEBUG8 (("\n")) ;
+                if (dumpwhich == 0)
+                {
+                /* col must be in the range 0..n_col-1 */
+                ASSERT (index < n_col) ;
+                }
+                else
+                {
+                /* row must be in the range 0..n_row-1 */
+                ASSERT (index < n_row) ;
+                }
 
-			    if (nn <= UMF_DBMAX)
-			    {
-				if (UMF_DBscatter [index] != UMF_DBflag)
-				{
-				    UMF_DBpacked [deg++] = index ;
-				    UMF_DBscatter [index] = UMF_DBflag ;
-				}
-			    }
-			}
-		    }
-		}
-		/* the (e,f) tuples should be in order of their creation */
-		/* this means that garbage collection will not jumble them */
-		ASSERT (preve < e) ;
-		preve = e ;
-	    }
-	    else
-	    {
-		DEBUG8 (("\t\tdeallocated\n")) ;
-	    }
-	}
+                if (nn <= UMF_DBMAX)
+                {
+                if (UMF_DBscatter [index] != UMF_DBflag)
+                {
+                    UMF_DBpacked [deg++] = index ;
+                    UMF_DBscatter [index] = UMF_DBflag ;
+                }
+                }
+            }
+            }
+        }
+        /* the (e,f) tuples should be in order of their creation */
+        /* this means that garbage collection will not jumble them */
+        ASSERT (preve < e) ;
+        preve = e ;
+        }
+        else
+        {
+        DEBUG8 (("\t\tdeallocated\n")) ;
+        }
+    }
 
     if (nn <= UMF_DBMAX)
     {
-	if (deg > 0)
-	{
-	    DEBUG7 ((" Assembled, actual deg: " ID " : ", deg)) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		index = UMF_DBpacked [j] ;
-		DEBUG8 ((ID " ", index)) ;
-		if (j % 20 == 19) DEBUG8 (("\n ")) ;
-		ASSERT (UMF_DBscatter [index] == UMF_DBflag) ;
-	    }
-	    DEBUG7 (("\n")) ;
-	}
+    if (deg > 0)
+    {
+        DEBUG7 ((" Assembled, actual deg: " ID " : ", deg)) ;
+        for (j = 0 ; j < deg ; j++)
+        {
+        index = UMF_DBpacked [j] ;
+        DEBUG8 ((ID " ", index)) ;
+        if (j % 20 == 19) DEBUG8 (("\n ")) ;
+        ASSERT (UMF_DBscatter [index] == UMF_DBflag) ;
+        }
+        DEBUG7 (("\n")) ;
+    }
     }
 
     /* Col_degree is not maintained when fixQ is true */
     if (check_degree)
     {
-	DEBUG8 (("  approx_deg " ID "  dumpdeg " ID "\n", approx_deg, dumpdeg)) ;
-	ASSERT (approx_deg == dumpdeg) ;
+    DEBUG8 (("  approx_deg " ID "  dumpdeg " ID "\n", approx_deg, dumpdeg)) ;
+    ASSERT (approx_deg == dumpdeg) ;
     }
 
     DEBUG7 (("====================\n")) ;
@@ -475,47 +475,47 @@ GLOBAL void UMF_dump_matrix
     DEBUG6 (("=================================================== MATRIX:\n")) ;
     if (!Numeric || !Work)
     {
-	DEBUG6 (("No Numeric or Work allocated\n")) ;
-	return ;
+    DEBUG6 (("No Numeric or Work allocated\n")) ;
+    return ;
     }
     if (!Numeric->Memory)
     {
-	DEBUG6 (("No Numeric->Memory\n")) ;
-	return ;
+    DEBUG6 (("No Numeric->Memory\n")) ;
+    return ;
     }
 
-	n_row = Work->n_row ;
-	n_col = Work->n_col ;
-	DEBUG6 (("n_row " ID " n_col " ID " nz " ID "\n", n_row, n_col, Work->nz)) ;
-	DEBUG6 (("============================ ELEMENTS: " ID " \n", Work->nel)) ;
-	intfrag = 0 ;
-	E = Work->E ;
-	if (!E)
-	{
-	    DEBUG6 (("No elements allocated\n")) ;
-	}
-	else
-	{
-	    for (e = 0 ; e <= Work->nel ; e++)
-	    {
-		UMF_dump_element (Numeric, Work, e, FALSE) ;
-		if (e > 0 && E [e])
-		{
-		    p = Numeric->Memory + E [e] ;
-		    ep = (Element *) p ;
-		    ASSERT (ep->nrowsleft > 0 || ep->ncolsleft > 0) ;
-		    fullsize = GET_BLOCK_SIZE (p) ;
-		    actualsize = GET_ELEMENT_SIZE (ep->nrowsleft,ep->ncolsleft);
-		    frag =  fullsize - actualsize ;
-		    intfrag += frag ;
-		    DEBUG7 (("dump el: " ID ", full " ID " actual " ID " frag: " ID
-			" intfrag: " ID "\n", e, fullsize, actualsize, frag,
-			intfrag)) ;
-		}
-	    }
-	}
+    n_row = Work->n_row ;
+    n_col = Work->n_col ;
+    DEBUG6 (("n_row " ID " n_col " ID " nz " ID "\n", n_row, n_col, Work->nz)) ;
+    DEBUG6 (("============================ ELEMENTS: " ID " \n", Work->nel)) ;
+    intfrag = 0 ;
+    E = Work->E ;
+    if (!E)
+    {
+        DEBUG6 (("No elements allocated\n")) ;
+    }
+    else
+    {
+        for (e = 0 ; e <= Work->nel ; e++)
+        {
+        UMF_dump_element (Numeric, Work, e, FALSE) ;
+        if (e > 0 && E [e])
+        {
+            p = Numeric->Memory + E [e] ;
+            ep = (Element *) p ;
+            ASSERT (ep->nrowsleft > 0 || ep->ncolsleft > 0) ;
+            fullsize = GET_BLOCK_SIZE (p) ;
+            actualsize = GET_ELEMENT_SIZE (ep->nrowsleft,ep->ncolsleft);
+            frag =  fullsize - actualsize ;
+            intfrag += frag ;
+            DEBUG7 (("dump el: " ID ", full " ID " actual " ID " frag: " ID
+            " intfrag: " ID "\n", e, fullsize, actualsize, frag,
+            intfrag)) ;
+        }
+        }
+    }
 
-	DEBUG6 (("CURRENT INTERNAL FRAG in elements: " ID " \n", intfrag)) ;
+    DEBUG6 (("CURRENT INTERNAL FRAG in elements: " ID " \n", intfrag)) ;
 
 
 
@@ -523,14 +523,14 @@ GLOBAL void UMF_dump_matrix
     UMF_debug -= 2 ;
     for (row = 0 ; row < n_row ; row++)
     {
-	UMF_dump_rowcol (0, Numeric, Work, row, check_degree) ;
+    UMF_dump_rowcol (0, Numeric, Work, row, check_degree) ;
     }
     UMF_debug += 2 ;
     DEBUG6 (("======================================== COLS: " ID "\n", n_col)) ;
     UMF_debug -= 2 ;
     for (col = 0 ; col < n_col ; col++)
     {
-	UMF_dump_rowcol (1, Numeric, Work, col, FALSE) ;
+    UMF_dump_rowcol (1, Numeric, Work, col, FALSE) ;
     }
     UMF_debug += 2 ;
     DEBUG6 (("============================================= END OF MATRIX:\n"));
@@ -551,7 +551,7 @@ GLOBAL void UMF_dump_current_front
 
     Entry *Flublock, *Flblock, *Fublock, *Fcblock ;
     Int fnrows_max, fncols_max, fnrows, fncols, fnpiv, *Frows, *Fcols,
-	i, j, *Fcpos, *Frpos, fnr_curr, fnc_curr, *E ;
+    i, j, *Fcpos, *Frpos, fnr_curr, fnc_curr, *E ;
     if (!Work) return ;
     DEBUG7 (("\n\n========CURRENT FRONTAL MATRIX:\n")) ;
 
@@ -581,32 +581,32 @@ GLOBAL void UMF_dump_current_front
     DEBUG6 (("Pivot row pattern:\n")) ;
     for (j = 0 ; j < fncols ; j++)
     {
-	DEBUG7 ((ID " " ID " " ID " %d\n", j, Fcols [j], Fcpos [Fcols [j]],
-	    j < fncols)) ;
-	if (check)
-	{
-	    ASSERT (Fcols [j] >= 0 && Fcols [j] < Work->n_col) ;
-	    ASSERT (Fcpos [Fcols [j]] == j * fnr_curr) ;
-	}
+    DEBUG7 ((ID " " ID " " ID " %d\n", j, Fcols [j], Fcpos [Fcols [j]],
+        j < fncols)) ;
+    if (check)
+    {
+        ASSERT (Fcols [j] >= 0 && Fcols [j] < Work->n_col) ;
+        ASSERT (Fcpos [Fcols [j]] == j * fnr_curr) ;
+    }
     }
     DEBUG6 (("Pivot col pattern:\n")) ;
     for (i = 0 ; i < fnrows ; i++)
     {
-	DEBUG7 ((ID " " ID " " ID " %d\n", i, Frows [i], Frpos [Frows [i]],
-	    i < fnrows)) ;
-	if (check)
-	{
-	    ASSERT (Frows [i] >= 0 && Frows [i] < Work->n_row) ;
-	    ASSERT (Frpos [Frows [i]] == i) ;
-	}
+    DEBUG7 ((ID " " ID " " ID " %d\n", i, Frows [i], Frpos [Frows [i]],
+        i < fnrows)) ;
+    if (check)
+    {
+        ASSERT (Frows [i] >= 0 && Frows [i] < Work->n_row) ;
+        ASSERT (Frpos [Frows [i]] == i) ;
+    }
     }
     if (UMF_debug < 7) return ;
 
     if (!E [0])
     {
-	DEBUG6 (("current front not allocated\n")) ;
-	ASSERT (!Work->Flublock) ;
-	return ;
+    DEBUG6 (("current front not allocated\n")) ;
+    ASSERT (!Work->Flublock) ;
+    return ;
     }
 
     ASSERT (Work->Flublock == (Entry *) (Numeric->Memory + E [0])) ;
@@ -620,9 +620,9 @@ GLOBAL void UMF_dump_current_front
     UMF_dump_dense (Flublock, Work->nb, fnpiv, fnpiv) ;
     if (fnpiv > 0)
     {
-	DEBUG7 (("Pivot entry: ")) ;
-	EDEBUG7 (Flublock [(fnpiv-1)+(fnpiv-1)*Work->nb]) ;
-	DEBUG7 (("\n")) ;
+    DEBUG7 (("Pivot entry: ")) ;
+    EDEBUG7 (Flublock [(fnpiv-1)+(fnpiv-1)*Work->nb]) ;
+    DEBUG7 (("\n")) ;
     }
 }
 
@@ -640,47 +640,47 @@ GLOBAL void UMF_dump_lu
     DEBUG6 (("=============================================== LU factors:\n")) ;
     if (!Numeric)
     {
-	DEBUG6 (("No LU factors allocated\n")) ;
-	return ;
+    DEBUG6 (("No LU factors allocated\n")) ;
+    return ;
     }
     n_row = Numeric->n_row ;
     n_col = Numeric->n_col ;
     DEBUG6 (("n_row: " ID " n_col: " ID "\n", n_row, n_col)) ;
     DEBUG6 (("nLentries: " ID " nUentries: " ID "\n",
-	Numeric->nLentries, Numeric->nUentries)) ;
+    Numeric->nLentries, Numeric->nUentries)) ;
 
     if (Numeric->Cperm)
     {
-	Cperm = Numeric->Cperm ;
-	DEBUG7 (("Column permutations: (new: old)\n")) ;
-	for (i = 0 ; i < n_col ; i++)
-	{
-	    if (Cperm [i] != EMPTY)
-	    {
-		DEBUG7 ((ID ": " ID "\n", i, Cperm [i])) ;
-	    }
-	}
+    Cperm = Numeric->Cperm ;
+    DEBUG7 (("Column permutations: (new: old)\n")) ;
+    for (i = 0 ; i < n_col ; i++)
+    {
+        if (Cperm [i] != EMPTY)
+        {
+        DEBUG7 ((ID ": " ID "\n", i, Cperm [i])) ;
+        }
+    }
     }
     else
     {
-	DEBUG7 (("No Numeric->Cperm allocatated\n")) ;
+    DEBUG7 (("No Numeric->Cperm allocatated\n")) ;
     }
 
     if (Numeric->Rperm)
     {
-	Rperm = Numeric->Rperm ;
-	DEBUG7 (("row permutations: (new: old)\n")) ;
-	for (i = 0 ; i < n_row ; i++)
-	{
-	    if (Rperm [i] != EMPTY)
-	    {
-		DEBUG7 ((ID ": " ID "\n", i, Rperm [i])) ;
-	    }
-	}
+    Rperm = Numeric->Rperm ;
+    DEBUG7 (("row permutations: (new: old)\n")) ;
+    for (i = 0 ; i < n_row ; i++)
+    {
+        if (Rperm [i] != EMPTY)
+        {
+        DEBUG7 ((ID ": " ID "\n", i, Rperm [i])) ;
+        }
+    }
     }
     else
     {
-	DEBUG7 (("No Numeric->Rperm allocatated\n")) ;
+    DEBUG7 (("No Numeric->Rperm allocatated\n")) ;
     }
 
     DEBUG6 (("========================================= END OF LU factors:\n"));
@@ -703,15 +703,15 @@ GLOBAL void UMF_dump_memory
 
     if (!Numeric)
     {
-	DEBUG6 (("No memory space S allocated\n")) ;
-	return ;
+    DEBUG6 (("No memory space S allocated\n")) ;
+    return ;
     }
 
     DEBUG6 (("\n ============================================== MEMORY:\n")) ;
     if (!Numeric || !Numeric->Memory)
     {
-	DEBUG6 (("No memory space Numeric allocated\n")) ;
-	return ;
+    DEBUG6 (("No memory space Numeric allocated\n")) ;
+    return ;
     }
 
     DEBUG6 (("S: " ID "\n", (Int) Numeric)) ;
@@ -722,11 +722,11 @@ GLOBAL void UMF_dump_memory
     DEBUG6 (("S->nrealloc        : " ID "\n", Numeric->nrealloc)) ;
     DEBUG6 (("   in use at head           : " ID "\n", Numeric->ihead)) ;
     DEBUG6 (("   free space               : " ID "\n",
-	Numeric->itail - Numeric->ihead)) ;
+    Numeric->itail - Numeric->ihead)) ;
     DEBUG6 (("   blocks in use at tail    : " ID "\n",
-	Numeric->size - Numeric->itail)) ;
+    Numeric->size - Numeric->itail)) ;
     DEBUG6 (("   total in use             : " ID "\n",
-	Numeric->size - (Numeric->itail - Numeric->ihead))) ;
+    Numeric->size - (Numeric->itail - Numeric->ihead))) ;
 
     prevsize = 0 ;
     found = FALSE ;
@@ -739,42 +739,42 @@ GLOBAL void UMF_dump_memory
 
     while (p < Numeric->Memory + Numeric->size)
     {
-	DEBUG8 (("p: " ID " p+1: " ID " prevsize: " ID " size: " ID,
-	    (Int) (p-Numeric->Memory), (Int) (p+1-Numeric->Memory),
-	    p->header.prevsize, p->header.size)) ;
-	if (p->header.size < 0)
-	{
-	    DEBUG8 ((" free")) ;
-	}
+    DEBUG8 (("p: " ID " p+1: " ID " prevsize: " ID " size: " ID,
+        (Int) (p-Numeric->Memory), (Int) (p+1-Numeric->Memory),
+        p->header.prevsize, p->header.size)) ;
+    if (p->header.size < 0)
+    {
+        DEBUG8 ((" free")) ;
+    }
 
-	if (p == Numeric->Memory + Numeric->itail)
-	{
-	    ASSERT (p->header.prevsize == 0) ;
-	}
-	else
-	{
-	    ASSERT (p->header.prevsize > 0) ;
-	}
+    if (p == Numeric->Memory + Numeric->itail)
+    {
+        ASSERT (p->header.prevsize == 0) ;
+    }
+    else
+    {
+        ASSERT (p->header.prevsize > 0) ;
+    }
 
-	ASSERT (p->header.size != 0) ;
-	s = prevsize >= 0 ? prevsize : -prevsize ;
-	ASSERT (p->header.prevsize == s) ;
-	/* no adjacent free blocks */
-	ASSERT (p->header.size > 0 || prevsize > 0) ;
-	if (Numeric->ibig != EMPTY)
-	{
-	    if (p == Numeric->Memory + Numeric->ibig)
-	    {
-		ASSERT (p->header.size < 0) ;
-		DEBUG8 ((" <===== Numeric->ibig")) ;
-		found = TRUE ;
-	    }
-	}
-	s = p->header.size ;
-	prevsize = s ;
-	s = s >= 0 ? s : -s ;
-	p = p + 1 + s ;
-	DEBUG8 (("\n")) ;
+    ASSERT (p->header.size != 0) ;
+    s = prevsize >= 0 ? prevsize : -prevsize ;
+    ASSERT (p->header.prevsize == s) ;
+    /* no adjacent free blocks */
+    ASSERT (p->header.size > 0 || prevsize > 0) ;
+    if (Numeric->ibig != EMPTY)
+    {
+        if (p == Numeric->Memory + Numeric->ibig)
+        {
+        ASSERT (p->header.size < 0) ;
+        DEBUG8 ((" <===== Numeric->ibig")) ;
+        found = TRUE ;
+        }
+    }
+    s = p->header.size ;
+    prevsize = s ;
+    s = s >= 0 ? s : -s ;
+    p = p + 1 + s ;
+    DEBUG8 (("\n")) ;
     }
 
     ASSERT (p == Numeric->Memory + Numeric->size) ;
@@ -796,7 +796,7 @@ GLOBAL void UMF_dump_packed_memory
 {
     Unit *p, *p3 ;
     Int prevsize, col, row, *Rows, *Cols, ncols, nrows, k, esize,
-	*Row_tuples, *Row_degree, *Col_tuples, *Col_degree ;
+    *Row_tuples, *Row_degree, *Col_tuples, *Col_degree ;
     Entry *C ;
     Element *ep ;
 
@@ -808,8 +808,8 @@ GLOBAL void UMF_dump_packed_memory
     DEBUG6 (("============================================ PACKED MEMORY:\n")) ;
     if (!Numeric || !Numeric->Memory)
     {
-	DEBUG6 (("No memory space S allocated\n")) ;
-	return ;
+    DEBUG6 (("No memory space S allocated\n")) ;
+    return ;
     }
     DEBUG6 (("S: " ID "\n", (Int) Numeric)) ;
     DEBUG6 (("S->ihead           : " ID "\n", Numeric->ihead)) ;
@@ -819,11 +819,11 @@ GLOBAL void UMF_dump_packed_memory
     DEBUG6 (("S->nrealloc        : " ID "\n", Numeric->nrealloc)) ;
     DEBUG6 (("   in use at head           : " ID "\n", Numeric->ihead)) ;
     DEBUG6 (("   free space               : " ID "\n",
-	Numeric->itail - Numeric->ihead)) ;
+    Numeric->itail - Numeric->ihead)) ;
     DEBUG6 (("   blocks in use at tail    : " ID "\n",
-	Numeric->size - Numeric->itail)) ;
+    Numeric->size - Numeric->itail)) ;
     DEBUG6 (("   total in use             : " ID "\n",
-	Numeric->size - (Numeric->itail - Numeric->ihead))) ;
+    Numeric->size - (Numeric->itail - Numeric->ihead))) ;
 
     ASSERT (0 <= Numeric->ihead) ;
     ASSERT (Numeric->ihead <= Numeric->itail) ;
@@ -831,84 +831,84 @@ GLOBAL void UMF_dump_packed_memory
 
     for (row = 0 ; row < Work->n_row ; row++)
     {
-	ASSERT (IMPLIES (NON_PIVOTAL_ROW (row), !Row_tuples [row])) ;
+    ASSERT (IMPLIES (NON_PIVOTAL_ROW (row), !Row_tuples [row])) ;
     }
     for (col = 0 ; col < Work->n_col ; col++)
     {
-	ASSERT (IMPLIES (NON_PIVOTAL_COL (col), !Col_tuples [col])) ;
+    ASSERT (IMPLIES (NON_PIVOTAL_COL (col), !Col_tuples [col])) ;
     }
 
     prevsize = 0 ;
     p = Numeric->Memory + Numeric->itail ;
     while (p < Numeric->Memory + Numeric->size)
     {
-	DEBUG9 (("====================\n")) ;
-	DEBUG7 (("p: " ID " p+1: " ID " prevsize: " ID " size: " ID "\n",
-	    (Int) (p-Numeric->Memory), (Int) (p+1-Numeric->Memory),
-	    p->header.prevsize, p->header.size)) ;
-	ASSERT (p->header.size > 0) ;
+    DEBUG9 (("====================\n")) ;
+    DEBUG7 (("p: " ID " p+1: " ID " prevsize: " ID " size: " ID "\n",
+        (Int) (p-Numeric->Memory), (Int) (p+1-Numeric->Memory),
+        p->header.prevsize, p->header.size)) ;
+    ASSERT (p->header.size > 0) ;
 
-	if (p == Numeric->Memory + Numeric->itail)
-	{
-	    ASSERT (p->header.prevsize == 0) ;
-	}
-	else
-	{
-	    ASSERT (p->header.prevsize > 0) ;
-	}
+    if (p == Numeric->Memory + Numeric->itail)
+    {
+        ASSERT (p->header.prevsize == 0) ;
+    }
+    else
+    {
+        ASSERT (p->header.prevsize > 0) ;
+    }
 
-	ASSERT (p->header.prevsize == prevsize) ;
-	prevsize = p->header.size ;
+    ASSERT (p->header.prevsize == prevsize) ;
+    prevsize = p->header.size ;
 
-	if (p != Numeric->Memory + Numeric->size - 2)
-	{
+    if (p != Numeric->Memory + Numeric->size - 2)
+    {
 
-	    p3 = p + 1 ;
-	    if (p3 == Numeric->Memory + Work->E [0])
-	    {
-		/* this is the current frontal matrix */
-		UMF_dump_current_front (Numeric, Work, FALSE) ;
-	    }
-	    else
-	    {
+        p3 = p + 1 ;
+        if (p3 == Numeric->Memory + Work->E [0])
+        {
+        /* this is the current frontal matrix */
+        UMF_dump_current_front (Numeric, Work, FALSE) ;
+        }
+        else
+        {
 
-		/* this is a packed element */
-		GET_ELEMENT (ep, p3, Cols, Rows, ncols, nrows, C) ;
-		DEBUG9 (("ep " ID "\n nrows " ID " ncols " ID "\n",
-		    (Int) ((p+1)-Numeric->Memory), ep->nrows, ep->ncols)) ;
-		DEBUG9 (("rows:")) ;
-		for (k = 0 ; k < ep->nrows; k++)
-		{
-		    row = Rows [k] ;
-		    DEBUG9 ((" " ID, row)) ;
-		    ASSERT (row >= 0 && row <= Work->n_row) ;
-		    if ((k % 10) == 9) DEBUG9 (("\n")) ;
-		}
-		DEBUG9 (("\ncols:")) ;
-		for (k = 0 ; k < ep->ncols; k++)
-		{
-		    col = Cols [k] ;
-		    DEBUG9 ((" " ID, col)) ;
-		    ASSERT (col >= 0 && col <= Work->n_col) ;
-		    if ((k % 10) == 9) DEBUG9 (("\n")) ;
-		}
-		DEBUG9 (("\nvalues: ")) ;
-		if (UMF_debug >= 9)
-		{
-		    UMF_dump_dense (C, ep->nrows, ep->nrows, ep->ncols) ;
-		}
-		esize = GET_ELEMENT_SIZE (ep->nrows, ep->ncols) ;
-		DEBUG9 (("esize: " ID "\n", esize)) ;
-		ASSERT (esize <= p->header.size) ;
-	    }
+        /* this is a packed element */
+        GET_ELEMENT (ep, p3, Cols, Rows, ncols, nrows, C) ;
+        DEBUG9 (("ep " ID "\n nrows " ID " ncols " ID "\n",
+            (Int) ((p+1)-Numeric->Memory), ep->nrows, ep->ncols)) ;
+        DEBUG9 (("rows:")) ;
+        for (k = 0 ; k < ep->nrows; k++)
+        {
+            row = Rows [k] ;
+            DEBUG9 ((" " ID, row)) ;
+            ASSERT (row >= 0 && row <= Work->n_row) ;
+            if ((k % 10) == 9) DEBUG9 (("\n")) ;
+        }
+        DEBUG9 (("\ncols:")) ;
+        for (k = 0 ; k < ep->ncols; k++)
+        {
+            col = Cols [k] ;
+            DEBUG9 ((" " ID, col)) ;
+            ASSERT (col >= 0 && col <= Work->n_col) ;
+            if ((k % 10) == 9) DEBUG9 (("\n")) ;
+        }
+        DEBUG9 (("\nvalues: ")) ;
+        if (UMF_debug >= 9)
+        {
+            UMF_dump_dense (C, ep->nrows, ep->nrows, ep->ncols) ;
+        }
+        esize = GET_ELEMENT_SIZE (ep->nrows, ep->ncols) ;
+        DEBUG9 (("esize: " ID "\n", esize)) ;
+        ASSERT (esize <= p->header.size) ;
+        }
 
-	}
-	else
-	{
-	    /* this is the final marker block */
-	    ASSERT (p->header.size == 1) ;
-	}
-	p = p + 1 + p->header.size ;
+    }
+    else
+    {
+        /* this is the final marker block */
+        ASSERT (p->header.size == 1) ;
+    }
+    p = p + 1 + p->header.size ;
     }
 
     ASSERT (Numeric->ibig == EMPTY) ;
@@ -951,37 +951,37 @@ GLOBAL void UMF_dump_col_matrix
     DEBUG2 (("n_col " ID "  \n", n_col)) ;
 
     DEBUG6 ((" n_row = " ID ", n_col =" ID " nz = " ID " Ap [0] " ID ", Ap [n] " ID "\n",
-	n_row, n_col, nz, Ap [0], Ap [n_col])) ;
+    n_row, n_col, nz, Ap [0], Ap [n_col])) ;
     ASSERT (Ap [0] == 0) ;
     ASSERT (Ap [n_col] == nz) ;
     for (col = 0 ; col < n_col ; col++)
     {
-	p1 = Ap [col] ;
-	p2 = Ap [col+1] ;
-	DEBUG6 (("col: " ID ", length " ID "\n", col, p2 - p1)) ;
-	ASSERT (p2 >= p1) ;
-	for (p = p1 ; p < p2 ; p++)
-	{
-	    row = Ai [p] ;
-	    ASSERT (row >= 0 && row < n_row) ;
-	    DEBUG6 (("\t" ID " ", row)) ;
-	    if (Ax != (double *) NULL)
-	    {
+    p1 = Ap [col] ;
+    p2 = Ap [col+1] ;
+    DEBUG6 (("col: " ID ", length " ID "\n", col, p2 - p1)) ;
+    ASSERT (p2 >= p1) ;
+    for (p = p1 ; p < p2 ; p++)
+    {
+        row = Ai [p] ;
+        ASSERT (row >= 0 && row < n_row) ;
+        DEBUG6 (("\t" ID " ", row)) ;
+        if (Ax != (double *) NULL)
+        {
 #ifdef COMPLEX
-		if (split)
-		{
-		    DEBUG6 ((" (%e+%ei) ", Ax [p], Az [p])) ;
-		}
-		else
-		{
-		    DEBUG6 ((" (%e+%ei) ", Ax [2*p], Ax [2*p+1])) ;
-		}
+        if (split)
+        {
+            DEBUG6 ((" (%e+%ei) ", Ax [p], Az [p])) ;
+        }
+        else
+        {
+            DEBUG6 ((" (%e+%ei) ", Ax [2*p], Ax [2*p+1])) ;
+        }
 #else
-		DEBUG6 ((" %e", Ax [p])) ;
+        DEBUG6 ((" %e", Ax [p])) ;
 #endif
-	    }
-	    DEBUG6 (("\n")) ;
-	}
+        }
+        DEBUG6 (("\n")) ;
+    }
     }
     DEBUG6 (("========================================== COLUMN FORM done\n")) ;
 }
@@ -1006,33 +1006,33 @@ GLOBAL void UMF_dump_chain
     /* print a list of contiguous parents */
     i = frontid ;
     ASSERT (Front_parent [i] == EMPTY ||
-	(Front_parent [i] > i && Front_parent [i] < nfr)) ;
+    (Front_parent [i] > i && Front_parent [i] < nfr)) ;
 
     len++ ;
     DEBUG3 (("Chain:\n	" ID " [" ID "," ID "](" ID "-by-" ID ")\n", i,
-		Front_npivcol [i],
-		MIN (Front_npivcol [i], Front_nrows [i]),
-		Front_nrows [i],
-		Front_ncols [i])) ;
+        Front_npivcol [i],
+        MIN (Front_npivcol [i], Front_nrows [i]),
+        Front_nrows [i],
+        Front_ncols [i])) ;
 
     for (i = frontid ; i < nfr ; i++)
     {
-	ASSERT (Front_parent [i] == EMPTY ||
-	(Front_parent [i] > i && Front_parent [i] < nfr)) ;
-	if (Front_parent [i] == i+1)
-	{
-	    len++ ;
-	    DEBUG3 (("\t" ID " [" ID "," ID "](" ID "-by-" ID ")\n", i+1,
-		Front_npivcol [i+1],
-		MIN (Front_npivcol [i+1], Front_nrows [i+1]),
-		Front_nrows [i+1],
-		Front_ncols [i+1])) ;
-	}
-	else
-	{
-	    DEBUG2 (("Length of chain: " ID "\n", len)) ;
-	    return ;
-	}
+    ASSERT (Front_parent [i] == EMPTY ||
+    (Front_parent [i] > i && Front_parent [i] < nfr)) ;
+    if (Front_parent [i] == i+1)
+    {
+        len++ ;
+        DEBUG3 (("\t" ID " [" ID "," ID "](" ID "-by-" ID ")\n", i+1,
+        Front_npivcol [i+1],
+        MIN (Front_npivcol [i+1], Front_nrows [i+1]),
+        Front_nrows [i+1],
+        Front_ncols [i+1])) ;
+    }
+    else
+    {
+        DEBUG2 (("Length of chain: " ID "\n", len)) ;
+        return ;
+    }
     }
 }
 
@@ -1055,8 +1055,8 @@ GLOBAL void UMF_dump_start
     ff = fopen ("debug.umf", "r") ;
     if (ff)
     {
-	(void) fscanf (ff, ID, &UMF_debug) ;
-	(void) fclose (ff) ;
+    (void) fscanf (ff, ID, &UMF_debug) ;
+    (void) fclose (ff) ;
     }
 
     DEBUG0 (("umfpack: debug version (SLOW!) ")) ;
@@ -1076,9 +1076,9 @@ GLOBAL void UMF_dump_start
     ff = fopen ("gprob.umf", "r") ;
     if (ff)
     {
-	(void) fscanf (ff, "%lg", &UMF_gprob) ;
-	(void) fclose (ff) ;
-	srand (1) ;	/* restart the random number generator */
+    (void) fscanf (ff, "%lg", &UMF_gprob) ;
+    (void) fclose (ff) ;
+    srand (1) ;	/* restart the random number generator */
     }
 
     if (UMF_gprob > 1.0) UMF_gprob = 1.0 ;
@@ -1133,7 +1133,7 @@ GLOBAL void UMF_dump_rowmerge
 )
 {
     Int *Front_leftmostdesc, *Front_1strow, *Front_new1strow, row1, row2,
-	fleftmost, nfr, n_row, *Row_degree, i, frontid, row ;
+    fleftmost, nfr, n_row, *Row_degree, i, frontid, row ;
 
     nfr = Symbolic->nfr ;
     DEBUG3 (("\n================== Row merge sets: nfr " ID "\n", nfr)) ;
@@ -1146,33 +1146,33 @@ GLOBAL void UMF_dump_rowmerge
 
     for (i = frontid ; i <= nfr ; i++)
     {
-	DEBUG3 (("----------------------\n")) ;
-	if (i == nfr) DEBUG3 (("Dummy: ")) ;
-	DEBUG3 (("Front " ID " 1strow " ID " new1strow " ID " leftmostdesc " ID,
-	    i, Front_1strow [i], Front_new1strow [i], Front_leftmostdesc [i])) ;
-	DEBUG3 ((" parent " ID " pivcol " ID "\n", Symbolic->Front_parent [i],
-	    Symbolic->Front_npivcol [i])) ;
+    DEBUG3 (("----------------------\n")) ;
+    if (i == nfr) DEBUG3 (("Dummy: ")) ;
+    DEBUG3 (("Front " ID " 1strow " ID " new1strow " ID " leftmostdesc " ID,
+        i, Front_1strow [i], Front_new1strow [i], Front_leftmostdesc [i])) ;
+    DEBUG3 ((" parent " ID " pivcol " ID "\n", Symbolic->Front_parent [i],
+        Symbolic->Front_npivcol [i])) ;
 
-	if (i == nfr)
-	{
-	    fleftmost = -1 ;
-	    row1 = Front_new1strow [i] ;
-	    row2 = n_row-1 ;
-	}
-	else
-	{
-	    fleftmost = Front_leftmostdesc [i] ;
-	    row1 = Front_new1strow [fleftmost] ;
-	    row2 = Front_1strow [i+1] - 1 ;
-	}
-	DEBUG3 (("Leftmost: " ID "  Rows [" ID " to " ID "], search [" ID " to " ID "]\n",
-	    fleftmost, Front_1strow [i], row2, row1, row2)) ;
+    if (i == nfr)
+    {
+        fleftmost = -1 ;
+        row1 = Front_new1strow [i] ;
+        row2 = n_row-1 ;
+    }
+    else
+    {
+        fleftmost = Front_leftmostdesc [i] ;
+        row1 = Front_new1strow [fleftmost] ;
+        row2 = Front_1strow [i+1] - 1 ;
+    }
+    DEBUG3 (("Leftmost: " ID "  Rows [" ID " to " ID "], search [" ID " to " ID "]\n",
+        fleftmost, Front_1strow [i], row2, row1, row2)) ;
 
-	for (row = row1 ; row <= row2 ; row++)
-	{
-	    ASSERT (row >= 0 && row < n_row) ;
-	    DEBUG3 (("   Row " ID " live: %d\n", row, NON_PIVOTAL_ROW (row))) ;
-	}
+    for (row = row1 ; row <= row2 ; row++)
+    {
+        ASSERT (row >= 0 && row < n_row) ;
+        DEBUG3 (("   Row " ID " live: %d\n", row, NON_PIVOTAL_ROW (row))) ;
+    }
     }
 }
 
@@ -1192,17 +1192,17 @@ GLOBAL void UMF_dump_diagonal_map
     Int row, col ;
     if (Diagonal_map != (Int *) NULL)
     {
-	DEBUG2 (("\nDump the Diagonal_map: n1 " ID " nn " ID " nempty " ID "\n",
-	    n1, nn, nempty)) ;
-	for (col = n1 ; col < nn - nempty ; col++)
-	{
-	    row = Diagonal_map [col] ;
-	    DEBUG2 (("     Diagonal_map [col = " ID "] gives " ID ": ",
-		col, row)) ;
-	    row = UNFLIP (row) ;
-	    DEBUG2 ((" row " ID "\n", row)) ;
-	    ASSERT (Diagonal_imap [row] == col) ;
-	}
+    DEBUG2 (("\nDump the Diagonal_map: n1 " ID " nn " ID " nempty " ID "\n",
+        n1, nn, nempty)) ;
+    for (col = n1 ; col < nn - nempty ; col++)
+    {
+        row = Diagonal_map [col] ;
+        DEBUG2 (("     Diagonal_map [col = " ID "] gives " ID ": ",
+        col, row)) ;
+        row = UNFLIP (row) ;
+        DEBUG2 ((" row " ID "\n", row)) ;
+        ASSERT (Diagonal_imap [row] == col) ;
+    }
     }
 }
 

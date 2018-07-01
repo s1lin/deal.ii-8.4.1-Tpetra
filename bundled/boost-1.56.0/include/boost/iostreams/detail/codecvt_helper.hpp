@@ -41,30 +41,40 @@
 
 //------------------Definition of traits--------------------------------------//
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost {
+    namespace iostreams {
+        namespace detail {
 
 #if !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) //-----------------------//
 
-template<typename T>
-struct codecvt_intern { typedef typename T::intern_type type; };
+            template<typename T>
+            struct codecvt_intern { typedef typename T::intern_type type; };
 
-template<typename T>
-struct codecvt_extern { typedef typename T::extern_type type; };
+            template<typename T>
+            struct codecvt_extern { typedef typename T::extern_type type; };
 
 #else // #if !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) //--------------//
 
-template<typename T>
-struct codecvt_intern { typedef typename T::from_type type; };
+            template<typename T>
+            struct codecvt_intern {
+                typedef typename T::from_type type;
+            };
 
-template<typename T>
-struct codecvt_extern { typedef typename T::to_type type; };
+            template<typename T>
+            struct codecvt_extern {
+                typedef typename T::to_type type;
+            };
 
 #endif // #if !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) //-------------//
 
-template<typename T>
-struct codecvt_state { typedef typename T::state_type type; };
+            template<typename T>
+            struct codecvt_state {
+                typedef typename T::state_type type;
+            };
 
-} } } // End namespaces detail, iostreams, boost.
+        }
+    }
+} // End namespaces detail, iostreams, boost.
 
 //------------------Definition of codecvt_impl--------------------------------//
 
@@ -209,29 +219,35 @@ protected:
 # define BOOST_IOSTREAMS_CODECVT_SPEC(state)
 #endif // no primary codecvt definition, or empty definition.
 
-namespace boost { namespace iostreams { namespace detail {
-                    
+namespace boost {
+    namespace iostreams {
+        namespace detail {
+
 //------------------Definition of codecvt_helper------------------------------//
 
-template<typename Intern, typename Extern, typename State>
-struct codecvt_helper : std::codecvt<Intern, Extern, State> { 
-    typedef Intern  intern_type;
-    typedef Extern  extern_type;
-    typedef State   state_type;
-    codecvt_helper(std::size_t refs = 0) 
-    #if !defined(BOOST_IOSTREAMS_NO_CODECVT_CTOR_FROM_SIZE_T)
-        : std::codecvt<Intern, Extern, State>(refs)
-    #else
-        : std::codecvt<Intern, Extern, State>()
-    #endif
-        { }
-#ifdef BOOST_IOSTREAMS_NO_CODECVT_MAX_LENGTH
-    int max_length() const throw() { return do_max_length(); }
-protected:
-    virtual int do_max_length() const throw() { return 1; }
-#endif
-};
+            template<typename Intern, typename Extern, typename State>
+            struct codecvt_helper : std::codecvt<Intern, Extern, State> {
+                typedef Intern intern_type;
+                typedef Extern extern_type;
+                typedef State state_type;
 
-} } } // End namespaces detail, iostreams, boost.
+                codecvt_helper(std::size_t refs = 0)
+#if !defined(BOOST_IOSTREAMS_NO_CODECVT_CTOR_FROM_SIZE_T)
+                        : std::codecvt<Intern, Extern, State>(refs)
+#else
+                : std::codecvt<Intern, Extern, State>()
+#endif
+                {}
+
+#ifdef BOOST_IOSTREAMS_NO_CODECVT_MAX_LENGTH
+                int max_length() const throw() { return do_max_length(); }
+            protected:
+                virtual int do_max_length() const throw() { return 1; }
+#endif
+            };
+
+        }
+    }
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CODECVT_HELPER_HPP_INCLUDED

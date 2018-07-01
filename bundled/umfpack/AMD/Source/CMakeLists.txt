@@ -16,19 +16,19 @@
 INCLUDE_DIRECTORIES(${UMFPACK_BUNDLED_INCLUDE_DIRS})
 
 SET(src_amd
-  amd_1.cc
-  amd_2.cc
-  amd_aat.cc
-  amd_control.cc
-  amd_defaults.cc
-  amd_dump.cc
-  amd_info.cc
-  amd_order.cc
-  amd_postorder.cc
-  amd_post_tree.cc
-  amd_preprocess.cc
-  amd_valid.cc
-  )
+        amd_1.cc
+        amd_2.cc
+        amd_aat.cc
+        amd_control.cc
+        amd_defaults.cc
+        amd_dump.cc
+        amd_info.cc
+        amd_order.cc
+        amd_postorder.cc
+        amd_post_tree.cc
+        amd_preprocess.cc
+        amd_valid.cc
+        )
 
 DEAL_II_ADD_LIBRARY(obj_amd_int OBJECT ${src_amd})
 DEAL_II_ADD_DEFINITIONS(obj_amd_int "DINT")

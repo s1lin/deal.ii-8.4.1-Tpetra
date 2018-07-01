@@ -26,64 +26,70 @@
 
 namespace boost {
 
-namespace detail{
+    namespace detail {
 
 #ifndef BOOST_NO_CXX11_NOEXCEPT
 
-template <class T, class Enable = void>
-struct false_or_cpp11_noexcept_move_constructible: public ::boost::false_type {};
+        template<class T, class Enable = void>
+        struct false_or_cpp11_noexcept_move_constructible : public ::boost::false_type {
+        };
 
-template <class T>
-struct false_or_cpp11_noexcept_move_constructible <
-        T,
-        typename ::boost::enable_if_c<sizeof(T) && BOOST_NOEXCEPT_EXPR(T(::boost::declval<T>()))>::type
-    > : public ::boost::integral_constant<bool, BOOST_NOEXCEPT_EXPR(T(::boost::declval<T>()))>
-{};
+        template<class T>
+        struct false_or_cpp11_noexcept_move_constructible<
+                T,
+                typename ::boost::enable_if_c<sizeof(T) && BOOST_NOEXCEPT_EXPR(T(::boost::declval<T>()))>::type
+        > : public ::boost::integral_constant<bool, BOOST_NOEXCEPT_EXPR(T(::boost::declval<T>()))> {
+        };
 
-template <class T>
-struct is_nothrow_move_constructible_imp{
-   BOOST_STATIC_CONSTANT(bool, value = 
-        (::boost::type_traits::ice_and<
-            ::boost::type_traits::ice_not< ::boost::is_volatile<T>::value >::value,
-            ::boost::type_traits::ice_not< ::boost::is_reference<T>::value >::value,
-            ::boost::detail::false_or_cpp11_noexcept_move_constructible<T>::value
-        >::value));
-};
+        template<class T>
+        struct is_nothrow_move_constructible_imp {
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::type_traits::ice_and<
+                    ::boost::type_traits::ice_not<::boost::is_volatile<T>::value>::value,
+                    ::boost::type_traits::ice_not<::boost::is_reference<T>::value>::value,
+                    ::boost::detail::false_or_cpp11_noexcept_move_constructible<T>::value
+            >::value));
+        };
 
 #else
 
-template <class T>
-struct is_nothrow_move_constructible_imp{
-    BOOST_STATIC_CONSTANT(bool, value =(
-        ::boost::type_traits::ice_and<
-            ::boost::type_traits::ice_or<
-                ::boost::has_trivial_move_constructor<T>::value,
-                ::boost::has_nothrow_copy<T>::value
-            >::value,
-            ::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value
-        >::value));
-};
+        template <class T>
+        struct is_nothrow_move_constructible_imp{
+            BOOST_STATIC_CONSTANT(bool, value =(
+                ::boost::type_traits::ice_and<
+                    ::boost::type_traits::ice_or<
+                        ::boost::has_trivial_move_constructor<T>::value,
+                        ::boost::has_nothrow_copy<T>::value
+                    >::value,
+                    ::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value
+                >::value));
+        };
 
 #endif
 
 #ifdef BOOST_NO_NOEXCEPT
-//
-// The above logic doesn't quite work in the absense of noexcept, 
-// this is really to improve things with VC13:
-//
-template <class T>
-struct is_nothrow_move_constructible_imp<T&>{ BOOST_STATIC_CONSTANT(bool, value = false); };
+        //
+        // The above logic doesn't quite work in the absense of noexcept,
+        // this is really to improve things with VC13:
+        //
+        template <class T>
+        struct is_nothrow_move_constructible_imp<T&>{ BOOST_STATIC_CONSTANT(bool, value = false); };
 #endif
 
-}
+    }
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_nothrow_move_constructible,T,::boost::detail::is_nothrow_move_constructible_imp<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_nothrow_move_constructible, T, ::boost::detail::is_nothrow_move_constructible_imp<T>::value
+    )
 
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,void,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,
+    void,false)
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,void const volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,void volatile,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,
+    void const,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,
+    void const volatile,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_nothrow_move_constructible,
+    void volatile,false)
 #endif
 
 } // namespace boost

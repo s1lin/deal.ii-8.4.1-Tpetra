@@ -23,8 +23,8 @@
 # include <boost/preprocessor/repetition/enum_trailing.hpp>
 # include <boost/preprocessor/seq/first_n.hpp>
 # include <boost/preprocessor/seq/for_each_product.hpp>
-# include <boost/preprocessor/seq/for_each_i.hpp> 
-# include <boost/preprocessor/tuple/elem.hpp> 
+# include <boost/preprocessor/seq/for_each_i.hpp>
+# include <boost/preprocessor/tuple/elem.hpp>
 # include <boost/preprocessor/tuple/eat.hpp>
 # include <boost/preprocessor/seq/fold_left.hpp>
 # include <boost/preprocessor/seq/push_back.hpp>
@@ -41,191 +41,191 @@
 #  include <boost/type.hpp>
 # endif
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost {
+    namespace parameter {
+        namespace aux {
 
-#  if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
+#  if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 
-// Given Match, which is "void x" where x is an argument matching
-// criterion, extract a corresponding MPL predicate.
-template <class Match>
-struct unwrap_predicate;
+            // Given Match, which is "void x" where x is an argument matching
+            // criterion, extract a corresponding MPL predicate.
+            template <class Match>
+            struct unwrap_predicate;
 
-// Match anything
-template <>
-struct unwrap_predicate<void*>
-{
-    typedef mpl::always<mpl::true_> type;
-};
+            // Match anything
+            template <>
+            struct unwrap_predicate<void*>
+            {
+                typedef mpl::always<mpl::true_> type;
+            };
 
 #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
 
-typedef void* voidstar;
+            typedef void* voidstar;
 
-// A matching predicate is explicitly specified
-template <class Predicate>
-struct unwrap_predicate<voidstar (Predicate)>
-{
-    typedef Predicate type;
-};
+            // A matching predicate is explicitly specified
+            template <class Predicate>
+            struct unwrap_predicate<voidstar (Predicate)>
+            {
+                typedef Predicate type;
+            };
 
 #else
 
-// A matching predicate is explicitly specified
-template <class Predicate>
-struct unwrap_predicate<void *(Predicate)>
-{
-    typedef Predicate type;
-};
+            // A matching predicate is explicitly specified
+            template <class Predicate>
+            struct unwrap_predicate<void *(Predicate)>
+            {
+                typedef Predicate type;
+            };
 
-#endif 
+#endif
 
 
-// A type to which the argument is supposed to be convertible is
-// specified
-template <class Target>
-struct unwrap_predicate<void (Target)>
-{
-    typedef is_convertible<mpl::_, Target> type;
-};
+            // A type to which the argument is supposed to be convertible is
+            // specified
+            template <class Target>
+            struct unwrap_predicate<void (Target)>
+            {
+                typedef is_convertible<mpl::_, Target> type;
+            };
 
-// Recast the ParameterSpec's nested match metafunction as a free metafunction
-template <
-    class Parameters
-  , BOOST_PP_ENUM_BINARY_PARAMS(
-        BOOST_PARAMETER_MAX_ARITY, class A, = boost::parameter::void_ BOOST_PP_INTERCEPT
-    )
->
-struct match
-  : Parameters::template match<
-        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, A)
-    >
-{};
-# endif 
+            // Recast the ParameterSpec's nested match metafunction as a free metafunction
+            template <
+                class Parameters
+              , BOOST_PP_ENUM_BINARY_PARAMS(
+                    BOOST_PARAMETER_MAX_ARITY, class A, = boost::parameter::void_ BOOST_PP_INTERCEPT
+                )
+            >
+            struct match
+              : Parameters::template match<
+                    BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, A)
+                >
+            {};
+# endif
 
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
 
-// Function template argument deduction does many of the same things
-// as type matching during partial specialization, so we call a
-// function template to "store" T into the type memory addressed by
-// void(*)(T).
-template <class T>
-msvc_store_type<T,void*(*)(void**(T))>
-msvc_store_predicate_type(void*(*)(void**(T)));
+            // Function template argument deduction does many of the same things
+            // as type matching during partial specialization, so we call a
+            // function template to "store" T into the type memory addressed by
+            // void(*)(T).
+            template <class T>
+            msvc_store_type<T,void*(*)(void**(T))>
+            msvc_store_predicate_type(void*(*)(void**(T)));
 
-template <class T>
-msvc_store_type<boost::is_convertible<mpl::_,T>,void*(*)(void*(T))>
-msvc_store_predicate_type(void*(*)(void*(T)));
+            template <class T>
+            msvc_store_type<boost::is_convertible<mpl::_,T>,void*(*)(void*(T))>
+            msvc_store_predicate_type(void*(*)(void*(T)));
 
-template <class FunctionType>
-struct unwrap_predicate
-{
-    static FunctionType f;
+            template <class FunctionType>
+            struct unwrap_predicate
+            {
+                static FunctionType f;
 
-    // We don't want the function to be evaluated, just instantiated,
-    // so protect it inside of sizeof.
-    enum { dummy = sizeof(msvc_store_predicate_type(f)) };
+                // We don't want the function to be evaluated, just instantiated,
+                // so protect it inside of sizeof.
+                enum { dummy = sizeof(msvc_store_predicate_type(f)) };
 
-    // Now pull the type out of the instantiated base class
-    typedef typename msvc_type_memory<FunctionType>::storage::type type;
-};
+                // Now pull the type out of the instantiated base class
+                typedef typename msvc_type_memory<FunctionType>::storage::type type;
+            };
 
-template <>
-struct unwrap_predicate<void*(*)(void**)>
-{
-    typedef mpl::always<mpl::true_> type;
-};
+            template <>
+            struct unwrap_predicate<void*(*)(void**)>
+            {
+                typedef mpl::always<mpl::true_> type;
+            };
 
 # endif
 
 # undef false_
 
-template <
-    class Parameters
-  , BOOST_PP_ENUM_BINARY_PARAMS(
-        BOOST_PARAMETER_MAX_ARITY, class A, = boost::parameter::void_ BOOST_PP_INTERCEPT
-    )
->
-struct argument_pack
-{
-    typedef typename make_arg_list<
-        typename BOOST_PARAMETER_build_arg_list(
-            BOOST_PARAMETER_MAX_ARITY, make_items, typename Parameters::parameter_spec, A
-        )::type
-      , typename Parameters::deduced_list
-      , tag_keyword_arg
-      , mpl::false_
-    >::type result;
-    typedef typename mpl::first<result>::type type;
-};
+            template<
+                    class Parameters, BOOST_PP_ENUM_BINARY_PARAMS(
+                    BOOST_PARAMETER_MAX_ARITY, class A, =
+            boost::parameter::void_ BOOST_PP_INTERCEPT
+            )
+            >
+            struct argument_pack {
+                typedef typename make_arg_list<
+                        typename BOOST_PARAMETER_build_arg_list(
+                                BOOST_PARAMETER_MAX_ARITY, make_items, typename Parameters::parameter_spec, A
+                        )::type, typename Parameters::deduced_list, tag_keyword_arg, mpl::false_
+                >::type result;
+                typedef typename mpl::first<result>::type type;
+            };
 
 # if 1 //BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-// Works around VC6 problem where it won't accept rvalues.
-template <class T>
-T& as_lvalue(T& value, long)
-{
-    return value;
-}
 
-template <class T>
-T const& as_lvalue(T const& value, int)
-{
-    return value;
-}
+// Works around VC6 problem where it won't accept rvalues.
+            template<class T>
+            T &as_lvalue(T &value, long) {
+                return value;
+            }
+
+            template<class T>
+            T const &as_lvalue(T const &value, int) {
+                return value;
+            }
+
 # endif
 
 
 # if BOOST_WORKAROUND(BOOST_MSVC, < 1300) \
   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
-template <class Predicate, class T, class Args>
-struct apply_predicate
-{
-    BOOST_MPL_ASSERT((
-        mpl::and_<mpl::false_,T>
-    ));
+            template <class Predicate, class T, class Args>
+            struct apply_predicate
+            {
+                BOOST_MPL_ASSERT((
+                    mpl::and_<mpl::false_,T>
+                ));
 
-    typedef typename mpl::if_<
-        typename mpl::apply2<Predicate,T,Args>::type
-      , char
-      , int
-    >::type type;
-};
+                typedef typename mpl::if_<
+                    typename mpl::apply2<Predicate,T,Args>::type
+                  , char
+                  , int
+                >::type type;
+            };
 
-template <class P>
-struct funptr_predicate
-{
-    static P p;
+            template <class P>
+            struct funptr_predicate
+            {
+                static P p;
 
-    template <class T, class Args, class P0>
-    static typename apply_predicate<P0,T,Args>::type
-    check_predicate(type<T>, Args*, void**(*)(P0));
+                template <class T, class Args, class P0>
+                static typename apply_predicate<P0,T,Args>::type
+                check_predicate(type<T>, Args*, void**(*)(P0));
 
-    template <class T, class Args, class P0>
-    static typename mpl::if_<
-        is_convertible<T,P0>
-      , char
-      , int
-     >::type check_predicate(type<T>, Args*, void*(*)(P0));
+                template <class T, class Args, class P0>
+                static typename mpl::if_<
+                    is_convertible<T,P0>
+                  , char
+                  , int
+                 >::type check_predicate(type<T>, Args*, void*(*)(P0));
 
-    template <class T, class Args>
-    struct apply
-    {
-        BOOST_STATIC_CONSTANT(bool, result = 
-            sizeof(check_predicate(boost::type<T>(), (Args*)0, &p)) == 1
-        );
+                template <class T, class Args>
+                struct apply
+                {
+                    BOOST_STATIC_CONSTANT(bool, result =
+                        sizeof(check_predicate(boost::type<T>(), (Args*)0, &p)) == 1
+                    );
 
-        typedef mpl::bool_<apply<T,Args>::result> type;
-    };
-};
+                    typedef mpl::bool_<apply<T,Args>::result> type;
+                };
+            };
 
-template <>
-struct funptr_predicate<void**>
-  : mpl::always<mpl::true_>
-{};
+            template <>
+            struct funptr_predicate<void**>
+              : mpl::always<mpl::true_>
+            {};
 
 # endif
 
-}}} // namespace boost::parameter::aux
+        }
+    }
+} // namespace boost::parameter::aux
 
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // From Paul Mensonides
@@ -359,7 +359,7 @@ struct funptr_predicate<void**>
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, class ParameterArgumentType)>
 /**/
 
-# if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
+# if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 #  define BOOST_PARAMETER_FUNCTION_FWD_MATCH_Z(z, name, parameters, n) \
     , typename boost::parameter::aux::match< \
           parameters, BOOST_PP_ENUM_PARAMS(n, ParameterArgumentType) \
@@ -473,8 +473,8 @@ struct funptr_predicate<void**>
     )(z,n,data) \
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS0( \
-    result,name,args,const_,combinations,range \
+# define BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS0(\
+    result, name, args, const_, combinations, range \
 ) \
     BOOST_PP_REPEAT_FROM_TO( \
         BOOST_PP_TUPLE_ELEM(2,0,range), BOOST_PP_TUPLE_ELEM(2,1,range) \
@@ -483,7 +483,7 @@ struct funptr_predicate<void**>
     )
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS(result,name,args, const_, combinations) \
+# define BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS(result, name, args, const_, combinations) \
     BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS0( \
         result, name, args, const_, combinations, BOOST_PARAMETER_ARITY_RANGE(args) \
     )
@@ -872,9 +872,9 @@ struct funptr_predicate<void**>
     }
 
 // Helper for BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER below.
-# define BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER_AUX( \
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER_AUX(\
     name, split_args, skip_fwd_decl, const_, tag_namespace \
-  ) \
+) \
     BOOST_PP_REPEAT_FROM_TO( \
         0 \
       , BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(4, 2, split_args)) \
@@ -1108,7 +1108,7 @@ struct funptr_predicate<void**>
     )(z,n,data) \
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTORS0(class_,base,args,combinations,range) \
+# define BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTORS0(class_, base, args, combinations, range) \
     BOOST_PP_REPEAT_FROM_TO( \
         BOOST_PP_TUPLE_ELEM(2,0,range), BOOST_PP_TUPLE_ELEM(2,1,range) \
       , BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTOR \
@@ -1116,7 +1116,7 @@ struct funptr_predicate<void**>
     )
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTORS(class_,base,args,combinations) \
+# define BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTORS(class_, base, args, combinations) \
     BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTORS0( \
         class_, base, args, combinations, BOOST_PARAMETER_ARITY_RANGE(args) \
     )

@@ -5,6 +5,6 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_mem_init_memoryspace
-(
-    NumericType *Numeric
-) ;
+        (
+                NumericType *Numeric
+        );

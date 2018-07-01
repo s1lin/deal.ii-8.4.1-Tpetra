@@ -5,13 +5,13 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_store_lu
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );
 
 GLOBAL Int UMF_store_lu_drop
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );

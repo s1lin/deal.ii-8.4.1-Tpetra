@@ -16,31 +16,28 @@
 #pragma once
 #endif
 
-namespace boost
-{
-namespace detail
-{
-namespace winapi
-{
+namespace boost {
+    namespace detail {
+        namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::CreateDirectory;
-    using ::CreateDirectoryA;
-    using ::GetTempPathA;
-    using ::RemoveDirectoryA;
+            using ::CreateDirectory;
+            using ::CreateDirectoryA;
+            using ::GetTempPathA;
+            using ::RemoveDirectoryA;
 #else
-extern "C" { 
-    __declspec(dllimport) int __stdcall 
-        CreateDirectory(LPCTSTR_, LPSECURITY_ATTRIBUTES_*);
-    __declspec(dllimport) int __stdcall 
-        CreateDirectoryA(LPCTSTR_, interprocess_security_attributes*);
-    __declspec(dllimport) int __stdcall 
-        GetTempPathA(unsigned long length, char *buffer);
-    __declspec(dllimport) int __stdcall 
-        RemoveDirectoryA(LPCTSTR_);
-}    
+            extern "C" {
+            __declspec(dllimport) int __stdcall
+            CreateDirectory(LPCTSTR_, LPSECURITY_ATTRIBUTES_ *);
+            __declspec(dllimport) int __stdcall
+            CreateDirectoryA(LPCTSTR_, interprocess_security_attributes *);
+            __declspec(dllimport) int __stdcall
+            GetTempPathA(unsigned long length, char *buffer);
+            __declspec(dllimport) int __stdcall
+                    RemoveDirectoryA(LPCTSTR_);
+            }
 #endif
-}
-}
+        }
+    }
 }
 
 #endif // BOOST_DETAIL_WINAPI_THREAD_HPP

@@ -20,32 +20,35 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <int size, bool is_assoc>
-    struct as_map;
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<int size, bool is_assoc>
+            struct as_map;
 
-    template <bool is_assoc>
-    struct as_map<0, is_assoc>
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef map<> type;
-        };
+            template<bool is_assoc>
+            struct as_map<0, is_assoc> {
+                template<typename Iterator>
+                struct apply {
+                    typedef map<> type;
+                };
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        static typename apply<Iterator>::type
-        call(Iterator)
-        {
-            return map<>();
+                template<typename Iterator>
+                BOOST_FUSION_GPU_ENABLED
+                static typename apply<Iterator>::type
+                call(Iterator)
+                        {
+                                return map<>();
+                        }
+            };
         }
-    };
-}}}
+    }
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/as_map" FUSION_MAX_MAP_SIZE_STR ".hpp")

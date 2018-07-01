@@ -110,7 +110,9 @@
 # define BOOST_FT_cc_name implicit_cc
 # define BOOST_FT_cc BOOST_PP_EMPTY
 # define BOOST_FT_cond 0x00000001
+
 # include BOOST_FT_cc_file
+
 # undef BOOST_FT_cond
 # undef BOOST_FT_cc_name
 # undef BOOST_FT_cc

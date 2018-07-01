@@ -15,42 +15,45 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename F>
-        struct for_each
-        {
-            typedef void type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename F>
+            struct for_each {
+                typedef void type;
+            };
+        }
 
-    template <typename Sequence, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    inline
-    typename
-        enable_if<
-            traits::is_sequence<Sequence>
-          , void
-        >::type
-    for_each(Sequence& seq, F const& f)
-    {
-        detail::for_each(seq, f, typename traits::is_segmented<Sequence>::type());
-    }
+        template<typename Sequence, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        inline
+        typename
+                enable_if<
+                traits::is_sequence < Sequence>
+        ,
+        void
+        >
 
-    template <typename Sequence, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    inline
-    typename
-        enable_if<
-            traits::is_sequence<Sequence>
-          , void
-        >::type
-    for_each(Sequence const& seq, F const& f)
-    {
-        detail::for_each(seq, f, typename traits::is_segmented<Sequence>::type());
+        ::type
+        for_each(Sequence &seq, F const &f) {
+            detail::for_each(seq, f, typename traits::is_segmented<Sequence>::type());
+        }
+
+        template<typename Sequence, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        inline
+        typename
+                enable_if<
+                traits::is_sequence < Sequence>
+        ,
+        void
+        >
+
+        ::type
+        for_each(Sequence const &seq, F const &f) {
+            detail::for_each(seq, f, typename traits::is_segmented<Sequence>::type());
+        }
     }
-}}
+}
 
 #endif

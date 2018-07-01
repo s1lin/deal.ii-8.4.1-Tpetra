@@ -47,15 +47,15 @@ namespace boost {
                 the input parameter.
         */
         template<typename RangeT, typename FinderT>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
-        find( 
-            RangeT& Input, 
-            const FinderT& Finder)
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(::boost::as_literal(Input));
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        find(
+                RangeT &Input,
+                const FinderT &Finder) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type > lit_input(::boost::as_literal(Input));
 
-            return Finder(::boost::begin(lit_input),::boost::end(lit_input));
+            return Finder(::boost::begin(lit_input), ::boost::end(lit_input));
         }
 
 //  find_first  -----------------------------------------------//
@@ -75,12 +75,11 @@ namespace boost {
               \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
-        find_first( 
-            Range1T& Input, 
-            const Range2T& Search)
-        {
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
+        find_first(
+                Range1T &Input,
+                const Range2T &Search) {
             return ::boost::algorithm::find(Input, ::boost::algorithm::first_finder(Search));
         }
 
@@ -101,14 +100,13 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
-        ifind_first( 
-            Range1T& Input, 
-            const Range2T& Search,
-            const std::locale& Loc=std::locale())
-        {
-            return ::boost::algorithm::find(Input, ::boost::algorithm::first_finder(Search,is_iequal(Loc)));
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
+        ifind_first(
+                Range1T &Input,
+                const Range2T &Search,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find(Input, ::boost::algorithm::first_finder(Search, is_iequal(Loc)));
         }
 
 //  find_last  -----------------------------------------------//
@@ -128,12 +126,11 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
-        find_last( 
-            Range1T& Input, 
-            const Range2T& Search)
-        {
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
+        find_last(
+                Range1T &Input,
+                const Range2T &Search) {
             return ::boost::algorithm::find(Input, ::boost::algorithm::last_finder(Search));
         }
 
@@ -154,13 +151,12 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee    
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
-        ifind_last( 
-            Range1T& Input, 
-            const Range2T& Search,
-            const std::locale& Loc=std::locale())
-        {
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
+        ifind_last(
+                Range1T &Input,
+                const Range2T &Search,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find(Input, ::boost::algorithm::last_finder(Search, is_iequal(Loc)));
         }
 
@@ -182,14 +178,13 @@ namespace boost {
                 the input parameter.
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
-        find_nth( 
-            Range1T& Input, 
-            const Range2T& Search,
-            int Nth)
-        {
-            return ::boost::algorithm::find(Input, ::boost::algorithm::nth_finder(Search,Nth));
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
+        find_nth(
+                Range1T &Input,
+                const Range2T &Search,
+                int Nth) {
+            return ::boost::algorithm::find(Input, ::boost::algorithm::nth_finder(Search, Nth));
         }
 
         //! Find n-th algorithm ( case insensitive ).
@@ -212,15 +207,14 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename Range1T, typename Range2T>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
-        ifind_nth( 
-            Range1T& Input, 
-            const Range2T& Search,
-            int Nth,
-            const std::locale& Loc=std::locale())
-        {
-            return ::boost::algorithm::find(Input, ::boost::algorithm::nth_finder(Search,Nth,is_iequal(Loc)));
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
+        ifind_nth(
+                Range1T &Input,
+                const Range2T &Search,
+                int Nth,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find(Input, ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)));
         }
 
 //  find_head ----------------------------------------------------------------------//
@@ -244,12 +238,11 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename RangeT>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
-        find_head( 
-            RangeT& Input, 
-            int N)
-        {
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        find_head(
+                RangeT &Input,
+                int N) {
             return ::boost::algorithm::find(Input, ::boost::algorithm::head_finder(N));
         }
 
@@ -275,12 +268,11 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee
         */
         template<typename RangeT>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
-        find_tail( 
-            RangeT& Input, 
-            int N)
-        {
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        find_tail(
+                RangeT &Input,
+                int N) {
             return ::boost::algorithm::find(Input, ::boost::algorithm::tail_finder(N));
         }
 
@@ -304,13 +296,12 @@ namespace boost {
             \note This function provides the strong exception-safety guarantee    
         */
         template<typename RangeT, typename PredicateT>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
-        find_token( 
-            RangeT& Input,
-            PredicateT Pred,
-            token_compress_mode_type eCompress=token_compress_off)
-        {
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        find_token(
+                RangeT &Input,
+                PredicateT Pred,
+                token_compress_mode_type eCompress = token_compress_off) {
             return ::boost::algorithm::find(Input, ::boost::algorithm::token_finder(Pred, eCompress));
         }
 

@@ -10,17 +10,14 @@
 #ifndef BOOST_NUMERIC_CONVERSION_UDT_BUILTIN_MIXTURE_ENUM_FLC_12NOV2002_HPP
 #define BOOST_NUMERIC_CONVERSION_UDT_BUILTIN_MIXTURE_ENUM_FLC_12NOV2002_HPP
 
-namespace boost { namespace numeric
-{
-  enum udt_builtin_mixture_enum
-  {
-     builtin_to_builtin
-    ,builtin_to_udt
-    ,udt_to_builtin
-    ,udt_to_udt
-  } ;
+namespace boost {
+    namespace numeric {
+        enum udt_builtin_mixture_enum {
+            builtin_to_builtin, builtin_to_udt, udt_to_builtin, udt_to_udt
+        };
 
-} } // namespace boost::numeric
+    }
+} // namespace boost::numeric
 
 #endif
 

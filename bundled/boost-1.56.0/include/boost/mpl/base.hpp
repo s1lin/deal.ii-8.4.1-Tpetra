@@ -17,16 +17,16 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(T)
-    >
-struct base
-{
-    typedef typename T::base type;
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,base,(T))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(T)
+        >
+        struct base {
+            typedef typename T::base type;
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(1, base, (T))
+        };
 
 BOOST_MPL_AUX_NA_SPEC(1, base)
 

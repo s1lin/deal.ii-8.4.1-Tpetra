@@ -15,10 +15,8 @@
 #include <boost/range/concepts.hpp>
 #include <algorithm>
 
-namespace boost
-{
-    namespace range
-    {
+namespace boost {
+    namespace range {
 
 /// \brief template function copy_backward
 ///
@@ -27,14 +25,13 @@ namespace boost
 /// \pre BidirectionalRange is a model of the BidirectionalRangeConcept
 /// \pre BidirectionalTraversalWriteableIterator is a model of the BidirectionalIteratorConcept
 /// \pre BidirectionalTraversalWriteableIterator is a model of the WriteableIteratorConcept
-template< class BidirectionalRange, class BidirectionalTraversalWriteableIterator >
-inline BidirectionalTraversalWriteableIterator
-copy_backward(const BidirectionalRange& rng,
-              BidirectionalTraversalWriteableIterator out)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
-    return std::copy_backward(boost::begin(rng), boost::end(rng), out);
-}
+        template<class BidirectionalRange, class BidirectionalTraversalWriteableIterator>
+        inline BidirectionalTraversalWriteableIterator
+        copy_backward(const BidirectionalRange &rng,
+                      BidirectionalTraversalWriteableIterator out) {
+            BOOST_RANGE_CONCEPT_ASSERT((BidirectionalRangeConcept<const BidirectionalRange>));
+            return std::copy_backward(boost::begin(rng), boost::end(rng), out);
+        }
 
     } // namespace range
     using range::copy_backward;

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_MULTI_PASS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_MULTI_PASS
+
 #include <boost/spirit/home/classic/iterator/multi_pass.hpp>
+
 #endif

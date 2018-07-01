@@ -27,42 +27,44 @@
 #define STD std
 #endif
 
-namespace boost { 
-namespace serialization {
-namespace detail{
+namespace boost {
+    namespace serialization {
+        namespace detail {
 
-template <typename U, typename C>
-struct stack_save : public STD::stack<U, C> {
-    template<class Archive>
-    void operator()(Archive & ar, const unsigned int file_version) const {
-        save(ar, STD::stack<U, C>::c, file_version);
-    }
-};
-template <typename U, typename C>
-struct stack_load : public STD::stack<U, C> {
-    template<class Archive>
-    void operator()(Archive & ar, const unsigned int file_version) {
-        load(ar, STD::stack<U, C>::c, file_version);
-    }
-};
+            template<typename U, typename C>
+            struct stack_save : public STD::stack<U, C> {
+                template<class Archive>
+                void operator()(Archive &ar, const unsigned int file_version) const {
+                    save(ar, STD::stack<U, C>::c, file_version);
+                }
+            };
 
-} // detail
+            template<typename U, typename C>
+            struct stack_load : public STD::stack<U, C> {
+                template<class Archive>
+                void operator()(Archive &ar, const unsigned int file_version) {
+                    load(ar, STD::stack<U, C>::c, file_version);
+                }
+            };
 
-template<class Archive, class T, class C>
-inline void serialize(
-    Archive & ar,
-    std::stack< T, C> & t,
-    const unsigned int file_version 
-){
-    typedef typename mpl::eval_if<
-        typename Archive::is_saving,
-        mpl::identity<detail::stack_save<T, C> >,
-        mpl::identity<detail::stack_load<T, C> >
-    >::type typex;
-    static_cast<typex &>(t)(ar, file_version);
-}
+        } // detail
 
-} // namespace serialization
+        template<class Archive, class T, class C>
+        inline void serialize(
+                Archive &ar,
+                std::stack<T, C> &t,
+                const unsigned int file_version
+        ) {
+            typedef typename mpl::eval_if<
+                    typename Archive::is_saving,
+            mpl::identity < detail::stack_save<T, C> > ,
+                    mpl::identity < detail::stack_load<T, C> >
+                    > ::type
+            typex;
+            static_cast<typex &>(t)(ar, file_version);
+        }
+
+    } // namespace serialization
 } // namespace boost
 
 #include <boost/serialization/collection_traits.hpp>

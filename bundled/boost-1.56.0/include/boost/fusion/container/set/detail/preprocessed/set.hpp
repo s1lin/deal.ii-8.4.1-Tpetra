@@ -8,7 +8,9 @@
 ==============================================================================*/
 
 #if FUSION_MAX_SET_SIZE <= 10
+
 #include <boost/fusion/container/set/detail/preprocessed/set10.hpp>
+
 #elif FUSION_MAX_SET_SIZE <= 20
 #include <boost/fusion/container/set/detail/preprocessed/set20.hpp>
 #elif FUSION_MAX_SET_SIZE <= 30

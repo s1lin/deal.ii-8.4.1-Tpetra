@@ -24,95 +24,94 @@
 #  include <windows.h>
 #endif
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
 #ifndef BOOST_USE_WINDOWS_H
 
-struct critical_section
-{
-    struct critical_section_debug * DebugInfo;
-    long LockCount;
-    long RecursionCount;
-    void * OwningThread;
-    void * LockSemaphore;
+        struct critical_section {
+            struct critical_section_debug *DebugInfo;
+            long LockCount;
+            long RecursionCount;
+            void *OwningThread;
+            void *LockSemaphore;
 #if defined(_WIN64)
-    unsigned __int64 SpinCount;
+            unsigned __int64 SpinCount;
 #else
-    unsigned long SpinCount;
+            unsigned long SpinCount;
 #endif
-};
+        };
 
 #if BOOST_PLAT_WINDOWS_RUNTIME
-extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSectionEx(critical_section *, unsigned long, unsigned long);
+        extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSectionEx(critical_section *, unsigned long, unsigned long);
 #else
-extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(critical_section *);
+
+        extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(critical_section *);
+
 #endif
-extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(critical_section *);
+
+        extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(critical_section *);
+
+        extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(critical_section *);
+
+        extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(critical_section *);
 
 #else
 
-typedef ::CRITICAL_SECTION critical_section;
+        typedef ::CRITICAL_SECTION critical_section;
 
 #endif // #ifndef BOOST_USE_WINDOWS_H
 
-class lightweight_mutex
-{
-private:
+        class lightweight_mutex {
+        private:
 
-    critical_section cs_;
+            critical_section cs_;
 
-    lightweight_mutex(lightweight_mutex const &);
-    lightweight_mutex & operator=(lightweight_mutex const &);
+            lightweight_mutex(lightweight_mutex const &);
 
-public:
+            lightweight_mutex &operator=(lightweight_mutex const &);
 
-    lightweight_mutex()
-    {
+        public:
+
+            lightweight_mutex() {
 #if BOOST_PLAT_WINDOWS_RUNTIME
-        InitializeCriticalSectionEx(&cs_, 4000, 0);
+                InitializeCriticalSectionEx(&cs_, 4000, 0);
 #else
-        InitializeCriticalSection(&cs_);
+                InitializeCriticalSection(&cs_);
 #endif
-    }
+            }
 
-    ~lightweight_mutex()
-    {
-        DeleteCriticalSection(&cs_);
-    }
+            ~lightweight_mutex() {
+                DeleteCriticalSection(&cs_);
+            }
 
-    class scoped_lock;
-    friend class scoped_lock;
+            class scoped_lock;
 
-    class scoped_lock
-    {
-    private:
+            friend class scoped_lock;
 
-        lightweight_mutex & m_;
+            class scoped_lock {
+            private:
 
-        scoped_lock(scoped_lock const &);
-        scoped_lock & operator=(scoped_lock const &);
+                lightweight_mutex &m_;
 
-    public:
+                scoped_lock(scoped_lock const &);
 
-        explicit scoped_lock(lightweight_mutex & m): m_(m)
-        {
-            EnterCriticalSection(&m_.cs_);
-        }
+                scoped_lock &operator=(scoped_lock const &);
 
-        ~scoped_lock()
-        {
-            LeaveCriticalSection(&m_.cs_);
-        }
-    };
-};
+            public:
 
-} // namespace detail
+                explicit scoped_lock(lightweight_mutex &m) : m_(m) {
+                    EnterCriticalSection(&m_.cs_);
+                }
+
+                ~scoped_lock() {
+                    LeaveCriticalSection(&m_.cs_);
+                }
+            };
+        };
+
+    } // namespace detail
 
 } // namespace boost
 

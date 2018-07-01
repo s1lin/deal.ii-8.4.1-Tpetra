@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of mass
-struct mass_base_dimension : 
-    boost::units::base_dimension<mass_base_dimension,-8> 
-{ };
+        struct mass_base_dimension :
+                boost::units::base_dimension<mass_base_dimension, -8> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::mass_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// dimension of mass (M)
-typedef mass_base_dimension::dimension_type   mass_dimension;           
+        typedef mass_base_dimension::dimension_type mass_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

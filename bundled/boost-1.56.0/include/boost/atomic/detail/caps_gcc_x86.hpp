@@ -22,12 +22,12 @@
 #pragma once
 #endif
 
-#if defined(__i386__) &&\
+#if defined(__i386__) && \
     (\
-        defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8) ||\
-        defined(__i586__) || defined(__i686__) || defined(__pentium4__) || defined(__nocona__) || defined(__core2__) || defined(__corei7__) ||\
+        defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8) || \
+        defined(__i586__) || defined(__i686__) || defined(__pentium4__) || defined(__nocona__) || defined(__core2__) || defined(__corei7__) || \
         defined(__k6__) || defined(__athlon__) || defined(__k8__) || defined(__amdfam10__) || defined(__bdver1__) || defined(__bdver2__) || defined(__bdver3__) || defined(__btver1__) || defined(__btver2__)\
-    )
+)
 #define BOOST_ATOMIC_DETAIL_X86_HAS_CMPXCHG8B 1
 #endif
 

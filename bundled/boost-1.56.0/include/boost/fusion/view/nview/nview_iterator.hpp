@@ -27,32 +27,32 @@
 #include <boost/fusion/view/nview/detail/distance_impl.hpp>
 #include <boost/fusion/view/nview/detail/equal_to_impl.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nview_iterator_tag;
-    struct random_access_traversal_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_iterator_tag;
+        struct random_access_traversal_tag;
 
-    template<typename Sequence, typename Pos>
-    struct nview_iterator
-      : iterator_base<nview_iterator<Sequence, Pos> >
-    {
-        typedef nview_iterator_tag fusion_tag;
-        typedef random_access_traversal_tag category;
+        template<typename Sequence, typename Pos>
+        struct nview_iterator
+                : iterator_base<nview_iterator<Sequence, Pos> > {
+            typedef nview_iterator_tag fusion_tag;
+            typedef random_access_traversal_tag category;
 
-        typedef Sequence sequence_type;
-        typedef mpl_iterator<Pos> first_type;
+            typedef Sequence sequence_type;
+            typedef mpl_iterator <Pos> first_type;
 
-        BOOST_FUSION_GPU_ENABLED explicit nview_iterator(Sequence& in_seq)
-          : seq(in_seq) {}
+            BOOST_FUSION_GPU_ENABLED explicit nview_iterator(Sequence &in_seq)
+                    : seq(in_seq) {}
 
-        Sequence& seq;
+            Sequence &seq;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        nview_iterator& operator= (nview_iterator const&);
-    };
+        private:
+            // silence MSVC warning C4512: assignment operator could not be generated
+            nview_iterator &operator=(nview_iterator const &);
+        };
 
-}}
+    }
+}
 
 #endif
 

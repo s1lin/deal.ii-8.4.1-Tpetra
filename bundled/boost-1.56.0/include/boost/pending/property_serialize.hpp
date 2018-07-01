@@ -7,6 +7,7 @@
 #define BOOST_PROPERTY_SERIALIZE_HPP
 
 #include <boost/pending/property.hpp>
+
 #ifdef BOOST_GRAPH_USE_MPI
 #include <boost/mpi/datatype.hpp>
 #include <boost/serialization/is_bitwise_serializable.hpp>
@@ -16,43 +17,42 @@
 #include <boost/serialization/nvp.hpp>
 
 namespace boost {
-  template<class Archive>
-  inline void serialize(Archive&, no_property&, const unsigned int) { }
+    template<class Archive>
+    inline void serialize(Archive &, no_property &, const unsigned int) {}
 
-  template<class Archive, class Tag, class T, class Base>
-  void 
-  serialize(Archive& ar, property<Tag, T, Base>& prop, 
-            const unsigned int /*version*/) 
-  {
-    ar & serialization::make_nvp( "property_value" , prop.m_value );
-    ar & serialization::make_nvp( "property_base" , prop.m_base );
-  }
+    template<class Archive, class Tag, class T, class Base>
+    void
+    serialize(Archive &ar, property <Tag, T, Base> &prop,
+              const unsigned int /*version*/) {
+        ar & serialization::make_nvp("property_value", prop.m_value);
+        ar & serialization::make_nvp("property_base", prop.m_base);
+    }
 
 #ifdef BOOST_GRAPH_USE_MPI
-  namespace mpi {
+    namespace mpi {
+      template<typename Tag, typename T, typename Base>
+      struct is_mpi_datatype<property<Tag, T, Base> >
+        : mpl::and_<is_mpi_datatype<T>,
+                    is_mpi_datatype<Base> > { };
+    }
+
+    namespace serialization {
+      template<typename Tag, typename T, typename Base>
+      struct is_bitwise_serializable<property<Tag, T, Base> >
+        : mpl::and_<is_bitwise_serializable<T>,
+                    is_bitwise_serializable<Base> > { };
+
     template<typename Tag, typename T, typename Base>
-    struct is_mpi_datatype<property<Tag, T, Base> >
-      : mpl::and_<is_mpi_datatype<T>,
-                  is_mpi_datatype<Base> > { };
-  }
+    struct implementation_level<property<Tag, T, Base>  >
+     : mpl::int_<object_serializable> {} ;
 
-  namespace serialization {
     template<typename Tag, typename T, typename Base>
-    struct is_bitwise_serializable<property<Tag, T, Base> >
-      : mpl::and_<is_bitwise_serializable<T>,
-                  is_bitwise_serializable<Base> > { };
+    struct tracking_level<property<Tag, T, Base>  >
+     : mpl::int_<track_never> {} ;
 
-  template<typename Tag, typename T, typename Base>
-  struct implementation_level<property<Tag, T, Base>  >
-   : mpl::int_<object_serializable> {} ;
-
-  template<typename Tag, typename T, typename Base>
-  struct tracking_level<property<Tag, T, Base>  >
-   : mpl::int_<track_never> {} ;
-
-  }
+    }
 #endif // BOOST_GRAPH_USE_MPI
-  
+
 } // end namespace boost
 
 #ifdef BOOST_GRAPH_USE_MPI

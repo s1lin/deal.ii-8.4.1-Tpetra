@@ -13,21 +13,22 @@
 #include <boost/fusion/iterator/prior.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct back_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct back_impl;
 
-    template <>
-    struct back_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply : 
-            fusion::result_of::value_of<
-                typename fusion::result_of::prior<
-                    typename fusion::result_of::end<Sequence>::type
-                >::type> {};
-    };
-}}
+        template<>
+        struct back_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply :
+                    fusion::result_of::value_of<
+                            typename fusion::result_of::prior<
+                                    typename fusion::result_of::end<Sequence>::type
+                            >::type> {
+            };
+        };
+    }
+}
 
 #endif

@@ -19,21 +19,23 @@
 //#include <boost/units/base_units/cgs/gram.hpp>
 
 namespace boost {
-namespace units {
-namespace metric {
+    namespace units {
+        namespace metric {
 
 //typedef scaled_base_unit<boost::units::cgs::gram_base_unit, scale<10, static_rational<6> > > ton_base_unit;
-typedef scaled_base_unit<boost::units::si::kilogram_base_unit, scale<1000, static_rational<1> > > ton_base_unit;
+            typedef scaled_base_unit <boost::units::si::kilogram_base_unit, scale<1000, static_rational < 1>> >
+            ton_base_unit;
 
-}
+        }
 
-template<>
-struct base_unit_info<metric::ton_base_unit> {
-    static const char* name()   { return("metric ton"); }
-    static const char* symbol() { return("t"); }
-};
+        template<>
+        struct base_unit_info<metric::ton_base_unit> {
+            static const char *name() { return ("metric ton"); }
 
-}
+            static const char *symbol() { return ("t"); }
+        };
+
+    }
 }
 
 #endif // BOOST_UNIT_SYSTEMS_METRIC_TON_HPP_INCLUDED

@@ -10,29 +10,27 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/at.hpp>
 
-namespace boost { namespace fusion
-{
-    struct map_tag;
+namespace boost {
+    namespace fusion {
+        struct map_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_at_impl;
 
-        template <>
-        struct value_at_impl<map_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply
-            {
-                typedef mpl::int_<N::value> index;
-                typedef
+            template<>
+            struct value_at_impl<map_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef mpl::int_ <N::value> index;
+                    typedef
                     decltype(std::declval<Sequence>().get_val(index()))
-                type;
+                            type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

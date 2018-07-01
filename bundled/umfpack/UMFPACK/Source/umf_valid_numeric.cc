@@ -14,33 +14,29 @@
 #include "umf_internal.h"
 
 GLOBAL Int UMF_valid_numeric
-(
-    NumericType *Numeric
-)
-{
+        (
+                NumericType *Numeric
+        ) {
     /* This routine does not check the contents of the individual arrays, so */
     /* it can miss some errors.  All it checks for is the presence of the */
     /* arrays, and the Numeric "valid" entry. */
 
-    if (!Numeric)
-    {
-	return (FALSE) ;
+    if (!Numeric) {
+        return (FALSE);
     }
 
-    if (Numeric->valid != NUMERIC_VALID)
-    {
-	/* Numeric does not point to a NumericType object */
-	return (FALSE) ;
+    if (Numeric->valid != NUMERIC_VALID) {
+        /* Numeric does not point to a NumericType object */
+        return (FALSE);
     }
 
     if (Numeric->n_row <= 0 || Numeric->n_col <= 0 || !Numeric->D ||
-	!Numeric->Rperm || !Numeric->Cperm ||
-	!Numeric->Lpos || !Numeric->Upos ||
-	!Numeric->Lilen || !Numeric->Uilen || !Numeric->Lip || !Numeric->Uip ||
-	!Numeric->Memory || (Numeric->ulen > 0 && !Numeric->Upattern))
-    {
-	return (FALSE) ;
+        !Numeric->Rperm || !Numeric->Cperm ||
+        !Numeric->Lpos || !Numeric->Upos ||
+        !Numeric->Lilen || !Numeric->Uilen || !Numeric->Lip || !Numeric->Uip ||
+        !Numeric->Memory || (Numeric->ulen > 0 && !Numeric->Upattern)) {
+        return (FALSE);
     }
 
-    return (TRUE) ;
+    return (TRUE);
 }

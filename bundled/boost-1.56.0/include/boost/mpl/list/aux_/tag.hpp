@@ -14,11 +14,15 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-struct list_tag;
-struct l_iter_tag;
+            struct list_tag;
+            struct l_iter_tag;
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_LIST_AUX_TAG_HPP_INCLUDED

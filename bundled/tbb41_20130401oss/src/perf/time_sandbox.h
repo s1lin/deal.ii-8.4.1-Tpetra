@@ -137,41 +137,42 @@ namespace sandbox9 {
 class TEST_PROCESSOR_NAME : public TestProcessor {
 public:
     TEST_PROCESSOR_NAME(const char *name, StatisticsCollector::Sorting sort_by = StatisticsCollector::ByAlg)
-        : TestProcessor(name, sort_by) {}
+            : TestProcessor(name, sort_by) {}
+
     void factory(arg_t value, int threads) {
 #ifdef TEST_PREFIX
         TEST_PREFIX
 #endif
-        process( value, threads,
+        process(value, threads,
 #define RUNBOX(n) run(#n"."BOX##n, new sandbox##n::testbox() )
 #ifdef BOX1
-        RUNBOX(1),
+                RUNBOX(1),
 #endif
 #ifdef BOX2
-        RUNBOX(2),
+                RUNBOX(2),
 #endif
 #ifdef BOX3
-        RUNBOX(3),
+                RUNBOX(3),
 #endif
 #ifdef BOX4
-        RUNBOX(4),
+                RUNBOX(4),
 #endif
 #ifdef BOX5
-        RUNBOX(5),
+                RUNBOX(5),
 #endif
 #ifdef BOX6
-        RUNBOX(6),
+                RUNBOX(6),
 #endif
 #ifdef BOX7
-        RUNBOX(7),
+                RUNBOX(7),
 #endif
 #ifdef BOX8
-        RUNBOX(8),
+                RUNBOX(8),
 #endif
 #ifdef BOX9
-        RUNBOX(9),
+                RUNBOX(9),
 #endif
-        end );
+                end);
 #ifdef TEST_POSTFIX
         TEST_POSTFIX
 #endif

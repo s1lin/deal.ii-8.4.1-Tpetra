@@ -33,62 +33,58 @@
 // TODO: add BOOST_TYPEID_COMPARE_BY_NAME to config.hpp
 # if defined(__GNUC__) \
  || defined(_AIX) \
- || (   defined(__sgi) && defined(__host_mips)) \
+ || (defined(__sgi) && defined(__host_mips)) \
  || (defined(__hpux) && defined(__HP_aCC)) \
  || (defined(linux) && defined(__INTEL_COMPILER) && defined(__ICC))
 #  define BOOST_AUX_ANY_TYPE_ID_NAME
-#include <cstring>
-# endif 
 
-namespace boost
-{
-    class any
-    {
+#include <cstring>
+
+# endif
+
+namespace boost {
+    class any {
     public: // structors
 
         any() BOOST_NOEXCEPT
-          : content(0)
-        {
+                : content(0) {
         }
 
         template<typename ValueType>
-        any(const ValueType & value)
-          : content(new holder<BOOST_DEDUCED_TYPENAME decay<const ValueType>::type>(value))
-        {
+        any(const ValueType &value)
+                : content(new holder<BOOST_DEDUCED_TYPENAME decay<const ValueType>::type>(value)) {
         }
 
-        any(const any & other)
-          : content(other.content ? other.content->clone() : 0)
-        {
+        any(const any &other)
+                : content(other.content ? other.content->clone() : 0) {
         }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
         // Move constructor
-        any(any&& other) BOOST_NOEXCEPT
-          : content(other.content)
-        {
+        any(any &&other) BOOST_NOEXCEPT
+                : content(other.content) {
             other.content = 0;
         }
 
         // Perfect forwarding of ValueType
         template<typename ValueType>
-        any(ValueType&& value
-            , typename boost::disable_if<boost::is_same<any&, ValueType> >::type* = 0 // disable if value has type `any&`
-            , typename boost::disable_if<boost::is_const<ValueType> >::type* = 0) // disable if value has type `const ValueType&&`
-          : content(new holder< typename decay<ValueType>::type >(static_cast<ValueType&&>(value)))
-        {
+        any(ValueType &&value,
+            typename boost::disable_if<boost::is_same<any &, ValueType> >::type * = 0 // disable if value has type `any&`
+                ,
+            typename boost::disable_if<boost::is_const<ValueType> >::type * = 0) // disable if value has type `const ValueType&&`
+                : content(new holder<typename decay<ValueType>::type>(static_cast<ValueType &&>(value))) {
         }
+
 #endif
 
-        ~any() BOOST_NOEXCEPT
-        {
+        ~any() BOOST_NOEXCEPT {
             delete content;
         }
 
     public: // modifiers
 
-        any & swap(any & rhs) BOOST_NOEXCEPT
-        {
+        any &swap(any &rhs) BOOST_NOEXCEPT {
             std::swap(content, rhs.content);
             return *this;
         }
@@ -108,94 +104,85 @@ namespace boost
             return *this;
         }
 
-#else 
-        any & operator=(const any& rhs)
-        {
+#else
+
+        any &operator=(const any &rhs) {
             any(rhs).swap(*this);
             return *this;
         }
 
         // move assignement
-        any & operator=(any&& rhs) BOOST_NOEXCEPT
-        {
+        any &operator=(any &&rhs) BOOST_NOEXCEPT {
             rhs.swap(*this);
             any().swap(rhs);
             return *this;
         }
 
         // Perfect forwarding of ValueType
-        template <class ValueType>
-        any & operator=(ValueType&& rhs)
-        {
-            any(static_cast<ValueType&&>(rhs)).swap(*this);
+        template<class ValueType>
+        any &operator=(ValueType &&rhs) {
+            any(static_cast<ValueType &&>(rhs)).swap(*this);
             return *this;
         }
+
 #endif
 
     public: // queries
 
-        bool empty() const BOOST_NOEXCEPT
-        {
+        bool empty() const BOOST_NOEXCEPT {
             return !content;
         }
 
-        void clear() BOOST_NOEXCEPT
-        {
+        void clear() BOOST_NOEXCEPT {
             any().swap(*this);
         }
 
-        const std::type_info & type() const BOOST_NOEXCEPT
-        {
+        const std::type_info &type() const BOOST_NOEXCEPT {
             return content ? content->type() : typeid(void);
         }
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     private: // types
 #else
-    public: // types (public so any_cast can be non-friend)
+        public: // types (public so any_cast can be non-friend)
 #endif
 
-        class placeholder
-        {
+        class placeholder {
         public: // structors
 
-            virtual ~placeholder()
-            {
+            virtual ~placeholder() {
             }
 
         public: // queries
 
-            virtual const std::type_info & type() const BOOST_NOEXCEPT = 0;
+            virtual const std::type_info &type() const BOOST_NOEXCEPT = 0;
 
-            virtual placeholder * clone() const = 0;
+            virtual placeholder *clone() const = 0;
 
         };
 
         template<typename ValueType>
-        class holder : public placeholder
-        {
+        class holder : public placeholder {
         public: // structors
 
-            holder(const ValueType & value)
-              : held(value)
-            {
+            holder(const ValueType &value)
+                    : held(value) {
             }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-            holder(ValueType&& value)
-              : held(static_cast< ValueType&& >(value))
-            {
+
+            holder(ValueType &&value)
+                    : held(static_cast< ValueType && >(value)) {
             }
+
 #endif
         public: // queries
 
-            virtual const std::type_info & type() const BOOST_NOEXCEPT
-            {
+            virtual const std::type_info &type() const BOOST_NOEXCEPT {
                 return typeid(ValueType);
             }
 
-            virtual placeholder * clone() const
-            {
+            virtual placeholder *clone() const {
                 return new holder(held);
             }
 
@@ -204,7 +191,7 @@ namespace boost
             ValueType held;
 
         private: // intentionally left unimplemented
-            holder & operator=(const holder &);
+            holder &operator=(const holder &);
         };
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -212,63 +199,57 @@ namespace boost
     private: // representation
 
         template<typename ValueType>
-        friend ValueType * any_cast(any *) BOOST_NOEXCEPT;
+        friend ValueType *any_cast(any *) BOOST_NOEXCEPT;
 
         template<typename ValueType>
-        friend ValueType * unsafe_any_cast(any *) BOOST_NOEXCEPT;
+        friend ValueType *unsafe_any_cast(any *) BOOST_NOEXCEPT;
 
 #else
 
-    public: // representation (public so any_cast can be non-friend)
+        public: // representation (public so any_cast can be non-friend)
 
 #endif
 
-        placeholder * content;
+        placeholder *content;
 
     };
- 
-    inline void swap(any & lhs, any & rhs) BOOST_NOEXCEPT
-    {
+
+    inline void swap(any &lhs, any &rhs) BOOST_NOEXCEPT {
         lhs.swap(rhs);
     }
 
-    class BOOST_SYMBOL_VISIBLE bad_any_cast : public std::bad_cast
-    {
+    class BOOST_SYMBOL_VISIBLE bad_any_cast : public std::bad_cast {
     public:
-        virtual const char * what() const BOOST_NOEXCEPT_OR_NOTHROW
-        {
+        virtual const char *what() const BOOST_NOEXCEPT_OR_NOTHROW {
             return "boost::bad_any_cast: "
                    "failed conversion using boost::any_cast";
         }
     };
 
     template<typename ValueType>
-    ValueType * any_cast(any * operand) BOOST_NOEXCEPT
-    {
-        return operand && 
-#ifdef BOOST_AUX_ANY_TYPE_ID_NAME
-            std::strcmp(operand->type().name(), typeid(ValueType).name()) == 0
-#else
-            operand->type() == typeid(ValueType)
-#endif
-            ? &static_cast<any::holder<ValueType> *>(operand->content)->held
-            : 0;
+    ValueType *any_cast(any *operand) BOOST_NOEXCEPT {
+        return operand &&
+               #ifdef BOOST_AUX_ANY_TYPE_ID_NAME
+               std::strcmp(operand->type().name(), typeid(ValueType).name()) == 0
+               #else
+               operand->type() == typeid(ValueType)
+               #endif
+               ? &static_cast<any::holder<ValueType> *>(operand->content)->held
+               : 0;
     }
 
     template<typename ValueType>
-    inline const ValueType * any_cast(const any * operand) BOOST_NOEXCEPT
-    {
+    inline const ValueType *any_cast(const any *operand) BOOST_NOEXCEPT {
         return any_cast<ValueType>(const_cast<any *>(operand));
     }
 
     template<typename ValueType>
-    ValueType any_cast(any & operand)
-    {
+    ValueType any_cast(any &operand) {
         typedef BOOST_DEDUCED_TYPENAME remove_reference<ValueType>::type nonref;
 
 
-        nonref * result = any_cast<nonref>(&operand);
-        if(!result)
+        nonref *result = any_cast<nonref>(&operand);
+        if (!result)
             boost::throw_exception(bad_any_cast());
 
         // Attempt to avoid construction of a temporary object in cases when 
@@ -276,32 +257,32 @@ namespace boost
         // `static_cast<std::string>(*result);` 
         // which is equal to `std::string(*result);`
         typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
-            boost::is_reference<ValueType>,
-            ValueType,
-            BOOST_DEDUCED_TYPENAME boost::add_reference<ValueType>::type
+                boost::is_reference<ValueType>,
+                ValueType,
+                BOOST_DEDUCED_TYPENAME boost::add_reference<ValueType>::type
         >::type ref_type;
 
         return static_cast<ref_type>(*result);
     }
 
     template<typename ValueType>
-    inline ValueType any_cast(const any & operand)
-    {
+    inline ValueType any_cast(const any &operand) {
         typedef BOOST_DEDUCED_TYPENAME remove_reference<ValueType>::type nonref;
         return any_cast<const nonref &>(const_cast<any &>(operand));
     }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
     template<typename ValueType>
-    inline ValueType any_cast(any&& operand)
-    {
+    inline ValueType any_cast(any &&operand) {
         BOOST_STATIC_ASSERT_MSG(
-            boost::is_rvalue_reference<ValueType&&>::value /*true if ValueType is rvalue or just a value*/
-            || boost::is_const< typename boost::remove_reference<ValueType>::type >::value,
-            "boost::any_cast shall not be used for getting nonconst references to temporary objects" 
+                boost::is_rvalue_reference<ValueType &&>::value /*true if ValueType is rvalue or just a value*/
+                || boost::is_const<typename boost::remove_reference<ValueType>::type>::value,
+                "boost::any_cast shall not be used for getting nonconst references to temporary objects"
         );
         return any_cast<ValueType>(operand);
     }
+
 #endif
 
 
@@ -311,14 +292,12 @@ namespace boost
     // use typeid() comparison, e.g., when our types may travel across
     // different shared libraries.
     template<typename ValueType>
-    inline ValueType * unsafe_any_cast(any * operand) BOOST_NOEXCEPT
-    {
+    inline ValueType *unsafe_any_cast(any *operand) BOOST_NOEXCEPT {
         return &static_cast<any::holder<ValueType> *>(operand->content)->held;
     }
 
     template<typename ValueType>
-    inline const ValueType * unsafe_any_cast(const any * operand) BOOST_NOEXCEPT
-    {
+    inline const ValueType *unsafe_any_cast(const any *operand) BOOST_NOEXCEPT {
         return unsafe_any_cast<ValueType>(const_cast<any *>(operand));
     }
 }

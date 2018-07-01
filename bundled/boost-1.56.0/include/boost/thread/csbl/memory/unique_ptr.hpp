@@ -95,12 +95,10 @@ namespace boost
   }
 }
 #else
-namespace boost
-{
-  namespace csbl
-  {
-    using ::std::unique_ptr;
-  }
+namespace boost {
+    namespace csbl {
+        using ::std::unique_ptr;
+    }
 }
 #endif // BOOST_NO_CXX11_SMART_PTR
 #endif // header

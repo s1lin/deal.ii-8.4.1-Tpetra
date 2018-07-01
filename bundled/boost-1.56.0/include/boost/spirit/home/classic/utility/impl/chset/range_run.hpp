@@ -14,113 +14,122 @@
 #include <boost/spirit/home/classic/namespace.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { 
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-namespace utility { namespace impl {
+        namespace utility {
+            namespace impl {
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  range class
-    //
-    //      Implements a closed range of values. This class is used in
-    //      the implementation of the range_run class.
-    //
-    //      { Low level implementation detail }
-    //      { Not to be confused with BOOST_SPIRIT_CLASSIC_NS::range }
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharT>
-    struct range {
+                ///////////////////////////////////////////////////////////////////////////
+                //
+                //  range class
+                //
+                //      Implements a closed range of values. This class is used in
+                //      the implementation of the range_run class.
+                //
+                //      { Low level implementation detail }
+                //      { Not to be confused with BOOST_SPIRIT_CLASSIC_NS::range }
+                //
+                ///////////////////////////////////////////////////////////////////////////
+                template<typename CharT>
+                struct range {
 
-                        range(CharT first, CharT last);
+                    range(CharT first, CharT last);
 
-        bool            is_valid() const;
-        bool            includes(CharT v) const;
-        bool            includes(range const& r) const;
-        bool            overlaps(range const& r) const;
-        void            merge(range const& r);
+                    bool is_valid() const;
 
-        CharT first;
-        CharT last;
-    };
+                    bool includes(CharT v) const;
 
-    //////////////////////////////////
-    template <typename CharT>
-    struct range_char_compare {
+                    bool includes(range const &r) const;
 
-        bool operator()(range<CharT> const& x, const CharT y) const
-        { return x.first < y; }
-        
-        bool operator()(const CharT x, range<CharT> const& y) const
-        { return x < y.first; }
-        
-        // This additional operator is required for the checked STL shipped
-        // with VC8 testing the ordering of the iterators passed to the
-        // std::lower_bound algo this range_char_compare<> predicate is passed
-        // to.
-        bool operator()(range<CharT> const& x, range<CharT> const& y) const
-        { return x.first < y.first; }
-    };
+                    bool overlaps(range const &r) const;
 
-    //////////////////////////////////
-    template <typename CharT>
-    struct range_compare {
+                    void merge(range const &r);
 
-        bool operator()(range<CharT> const& x, range<CharT> const& y) const
-        { return x.first < y.first; }
-    };
+                    CharT first;
+                    CharT last;
+                };
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  range_run
-    //
-    //      An implementation of a sparse bit (boolean) set. The set uses
-    //      a sorted vector of disjoint ranges. This class implements the
-    //      bare minimum essentials from which the full range of set
-    //      operators can be implemented. The set is constructed from
-    //      ranges. Internally, adjacent or overlapping ranges are
-    //      coalesced.
-    //
-    //      range_runs are very space-economical in situations where there
-    //      are lots of ranges and a few individual disjoint values.
-    //      Searching is O(log n) where n is the number of ranges.
-    //
-    //      { Low level implementation detail }
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharT>
-    class range_run {
+                //////////////////////////////////
+                template<typename CharT>
+                struct range_char_compare {
 
-    public:
+                    bool operator()(range<CharT> const &x, const CharT y) const { return x.first < y; }
 
-        typedef range<CharT> range_t;
-        typedef std::vector<range_t> run_t;
-        typedef typename run_t::iterator iterator;
-        typedef typename run_t::const_iterator const_iterator;
+                    bool operator()(const CharT x, range<CharT> const &y) const { return x < y.first; }
 
-        void            swap(range_run& rr);
-        bool            test(CharT v) const;
-        void            set(range_t const& r);
-        void            clear(range_t const& r);
-        void            clear();
+                    // This additional operator is required for the checked STL shipped
+                    // with VC8 testing the ordering of the iterators passed to the
+                    // std::lower_bound algo this range_char_compare<> predicate is passed
+                    // to.
+                    bool operator()(range<CharT> const &x, range<CharT> const &y) const { return x.first < y.first; }
+                };
 
-        const_iterator  begin() const;
-        const_iterator  end() const;
+                //////////////////////////////////
+                template<typename CharT>
+                struct range_compare {
 
-    private:
+                    bool operator()(range<CharT> const &x, range<CharT> const &y) const { return x.first < y.first; }
+                };
 
-        void            merge(iterator iter, range_t const& r);
+                ///////////////////////////////////////////////////////////////////////////
+                //
+                //  range_run
+                //
+                //      An implementation of a sparse bit (boolean) set. The set uses
+                //      a sorted vector of disjoint ranges. This class implements the
+                //      bare minimum essentials from which the full range of set
+                //      operators can be implemented. The set is constructed from
+                //      ranges. Internally, adjacent or overlapping ranges are
+                //      coalesced.
+                //
+                //      range_runs are very space-economical in situations where there
+                //      are lots of ranges and a few individual disjoint values.
+                //      Searching is O(log n) where n is the number of ranges.
+                //
+                //      { Low level implementation detail }
+                //
+                ///////////////////////////////////////////////////////////////////////////
+                template<typename CharT>
+                class range_run {
 
-        run_t run;
-    };
+                public:
 
-}}
+                    typedef range<CharT> range_t;
+                    typedef std::vector<range_t> run_t;
+                    typedef typename run_t::iterator iterator;
+                    typedef typename run_t::const_iterator const_iterator;
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+                    void swap(range_run &rr);
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS::utility::impl
+                    bool test(CharT v) const;
+
+                    void set(range_t const &r);
+
+                    void clear(range_t const &r);
+
+                    void clear();
+
+                    const_iterator begin() const;
+
+                    const_iterator end() const;
+
+                private:
+
+                    void merge(iterator iter, range_t const &r);
+
+                    run_t run;
+                };
+
+            }
+        }
+
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+
+    }
+} // namespace BOOST_SPIRIT_CLASSIC_NS::utility::impl
 
 #endif
 

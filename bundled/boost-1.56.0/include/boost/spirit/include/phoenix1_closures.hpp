@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_CLOSURES
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_CLOSURES
+
 #include <boost/spirit/home/classic/phoenix/closures.hpp>
+
 #endif

@@ -18,36 +18,45 @@
 
 namespace boost {
     namespace alignment {
-        inline void* aligned_alloc(std::size_t alignment,
-            std::size_t size) BOOST_NOEXCEPT
-        {
-            BOOST_ASSERT(detail::is_alignment(alignment));
-            enum {
-                void_align = alignment_of<void*>::value,
-            };
-            if (alignment < void_align) {
-                alignment = void_align;
-            }
-            std::size_t n = size + alignment - 1;
-            void* p1 = 0;
-            void* p2 = std::malloc(n + sizeof p1);
-            if (p2) {
-                p1 = static_cast<char*>(p2) + sizeof p1;
-                (void)align(alignment, size, p1, n);
-                *(static_cast<void**>(p1) - 1) = p2;
-            }
-            return p1;
-        }
+        inline void *aligned_alloc(std::size_t alignment,
+                                   std::size_t size)
 
-        inline void aligned_free(void* ptr)
-            BOOST_NOEXCEPT
-        {
-            if (ptr) {
-                void* p = *(static_cast<void**>(ptr) - 1);
-                std::free(p);
-            }
-        }
+        BOOST_NOEXCEPT {
+        BOOST_ASSERT (detail::is_alignment(alignment));
+
+        enum {
+            void_align = alignment_of<void *>::value,
+        };
+        if (alignment<void_align) {
+        alignment = void_align;
     }
+    std::size_t n = size + alignment - 1;
+    void *p1 = 0;
+    void *p2 = std::malloc(n + sizeof p1);
+    if (p2) {
+    p1 = static_cast<char *>(p2) + sizeof p1;
+    (void)
+    align(alignment, size, p1, n
+    );
+    *(static_cast
+    <void **>(p1)
+    - 1) =
+    p2;
+}
+return
+p1;
+}
+
+inline void aligned_free(void *ptr)
+
+BOOST_NOEXCEPT
+{
+if (ptr) {
+void *p = *(static_cast<void **>(ptr) - 1);
+std::free(p);
+}
+}
+}
 }
 
 #endif

@@ -20,19 +20,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-struct gram_base_unit : public base_unit<gram_base_unit, mass_dimension, -8>
-{
-    static std::string name()    { return("gram"); }
-    static std::string symbol() { return("g"); }
-};
+            struct gram_base_unit : public base_unit<gram_base_unit, mass_dimension, -8> {
+                static std::string name() { return ("gram"); }
 
-} // namespace cgs
+                static std::string symbol() { return ("g"); }
+            };
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

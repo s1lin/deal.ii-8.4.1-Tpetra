@@ -5,13 +5,13 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_assemble
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );
 
 GLOBAL void UMF_assemble_fixq
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );

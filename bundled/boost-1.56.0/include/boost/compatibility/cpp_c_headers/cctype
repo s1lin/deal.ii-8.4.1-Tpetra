@@ -8,19 +8,19 @@
 #include <ctype.h>
 
 namespace std {
-  using ::isalnum;
-  using ::isdigit;
-  using ::isprint;
-  using ::isupper;
-  using ::tolower;
-  using ::isalpha;
-  using ::isgraph;
-  using ::ispunct;
-  using ::isxdigit;
-  using ::toupper;
-  using ::iscntrl;
-  using ::islower;
-  using ::isspace;
+    using ::isalnum;
+    using ::isdigit;
+    using ::isprint;
+    using ::isupper;
+    using ::tolower;
+    using ::isalpha;
+    using ::isgraph;
+    using ::ispunct;
+    using ::isxdigit;
+    using ::toupper;
+    using ::iscntrl;
+    using ::islower;
+    using ::isspace;
 }
 
 #endif // CCTYPE_HEADER

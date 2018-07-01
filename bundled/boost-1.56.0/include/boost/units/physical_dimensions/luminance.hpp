@@ -17,13 +17,13 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for luminance : L^-2 I
-typedef derived_dimension<length_base_dimension,-2,
-                          luminous_intensity_base_dimension,1>::type luminance_dimension;
+        typedef derived_dimension<length_base_dimension, -2,
+                luminous_intensity_base_dimension, 1>::type luminance_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

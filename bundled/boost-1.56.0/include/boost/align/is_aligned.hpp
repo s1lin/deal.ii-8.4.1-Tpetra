@@ -46,7 +46,9 @@ namespace boost {
            `alignment`.
         */
         inline bool is_aligned(std::size_t alignment,
-            const void* ptr) BOOST_NOEXCEPT;
+                               const void *ptr)
+
+        BOOST_NOEXCEPT;
     }
 }
 

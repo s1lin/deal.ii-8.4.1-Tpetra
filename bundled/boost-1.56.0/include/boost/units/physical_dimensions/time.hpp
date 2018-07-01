@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of time
-struct time_base_dimension : 
-    boost::units::base_dimension<time_base_dimension,-7> 
-{ };
+        struct time_base_dimension :
+                boost::units::base_dimension<time_base_dimension, -7> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::time_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// dimension of time (T)
-typedef time_base_dimension::dimension_type time_dimension;
+        typedef time_base_dimension::dimension_type time_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

@@ -5,7 +5,7 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_mem_alloc_tail_block
-(
-    NumericType *Numeric,
-    Int nunits
-) ;
+        (
+                NumericType *Numeric,
+                Int nunits
+        );

@@ -11,32 +11,36 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename State, typename F>
-        struct accumulate;
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename State, typename F>
+            struct accumulate;
+        }
+
+        template<typename Sequence, typename State, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        typename
+                lazy_enable_if<
+                traits::is_sequence < Sequence>
+        , result_of::accumulate<Sequence, State const, F>
+        >
+
+        ::type
+        accumulate(Sequence &seq, State const &state, F f);
+
+        template<typename Sequence, typename State, typename F>
+        BOOST_FUSION_GPU_ENABLED
+        typename
+                lazy_enable_if<
+                traits::is_sequence < Sequence>
+        , result_of::accumulate<Sequence const, State const, F>
+        >
+
+        ::type
+        accumulate(Sequence const &seq, State const &state, F f);
     }
-
-    template <typename Sequence, typename State, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    typename
-        lazy_enable_if<
-            traits::is_sequence<Sequence>
-          , result_of::accumulate<Sequence, State const, F>
-        >::type
-    accumulate(Sequence& seq, State const& state, F f);
-
-    template <typename Sequence, typename State, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    typename
-        lazy_enable_if<
-            traits::is_sequence<Sequence>
-          , result_of::accumulate<Sequence const, State const, F>
-        >::type
-    accumulate(Sequence const& seq, State const& state, F f);
-}}
+}
 
 #endif
 

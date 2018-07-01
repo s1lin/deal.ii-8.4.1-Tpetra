@@ -6,14 +6,22 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LIST_FOR_EACH_PRODUCT_HPP
 # define BOOST_PREPROCESSOR_LIST_FOR_EACH_PRODUCT_HPP
 #
+
+
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/control/if.hpp>
 # include <boost/preprocessor/list/adt.hpp>
@@ -23,9 +31,13 @@
 # include <boost/preprocessor/tuple/to_list.hpp>
 # include <boost/preprocessor/tuple/rem.hpp>
 # include <boost/preprocessor/tuple/reverse.hpp>
+
 #
+
 # /* BOOST_PP_LIST_FOR_EACH_PRODUCT */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT(macro, size, tuple) BOOST_PP_LIST_FOR_EACH_PRODUCT_E(BOOST_PP_FOR, macro, size, BOOST_PP_TUPLE_TO_LIST(size, tuple))
 # else
@@ -33,8 +45,11 @@
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_Q(macro, size, tuple) BOOST_PP_LIST_FOR_EACH_PRODUCT_E(BOOST_PP_FOR, macro, size, BOOST_PP_TUPLE_TO_LIST(size, tuple))
 # endif
 #
+
 # /* BOOST_PP_LIST_FOR_EACH_PRODUCT_R */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_R(r, macro, size, tuple) BOOST_PP_LIST_FOR_EACH_PRODUCT_E(BOOST_PP_FOR_ ## r, macro, size, BOOST_PP_TUPLE_TO_LIST(size, tuple))
 # else
@@ -42,6 +57,7 @@
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_R_Q(r, macro, size, tuple) BOOST_PP_LIST_FOR_EACH_PRODUCT_E(BOOST_PP_FOR_ ## r, macro, size, BOOST_PP_TUPLE_TO_LIST(size, tuple))
 # endif
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_E(impl, macro, size, lists) impl((BOOST_PP_LIST_FIRST(lists), BOOST_PP_LIST_REST(lists), BOOST_PP_NIL, macro, size), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_0)
 # else
@@ -49,6 +65,7 @@
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_E_D(impl, macro, size, lists) impl((BOOST_PP_LIST_FIRST(lists), BOOST_PP_LIST_REST(lists), BOOST_PP_NIL, macro, size), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_0)
 # endif
 #
+
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_STRICT()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_P(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_P_I data
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_P_I(a, b, res, macro, size) BOOST_PP_LIST_IS_CONS(a)
@@ -56,6 +73,7 @@
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_P(r, data) BOOST_PP_LIST_IS_CONS(BOOST_PP_TUPLE_ELEM(5, 0, data))
 # endif
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_O(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_O_I data
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_O_I(a, b, res, macro, size) (BOOST_PP_LIST_REST(a), b, res, macro, size)
@@ -63,6 +81,7 @@
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_O(r, data) (BOOST_PP_LIST_REST(BOOST_PP_TUPLE_ELEM(5, 0, data)), BOOST_PP_TUPLE_ELEM(5, 1, data), BOOST_PP_TUPLE_ELEM(5, 2, data), BOOST_PP_TUPLE_ELEM(5, 3, data), BOOST_PP_TUPLE_ELEM(5, 4, data))
 # endif
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_I(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_I_I(r, BOOST_PP_TUPLE_ELEM(5, 0, data), BOOST_PP_TUPLE_ELEM(5, 1, data), BOOST_PP_TUPLE_ELEM(5, 2, data), BOOST_PP_TUPLE_ELEM(5, 3, data), BOOST_PP_TUPLE_ELEM(5, 4, data))
 # else
@@ -70,20 +89,25 @@
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_I_D(r, data_e) BOOST_PP_LIST_FOR_EACH_PRODUCT_I_I(r, data_e)
 # endif
 #
+
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_I_I(r, a, b, res, macro, size) BOOST_PP_LIST_FOR_EACH_PRODUCT_I_II(r, macro, BOOST_PP_LIST_TO_TUPLE_R(r, (BOOST_PP_LIST_FIRST(a), res)), size)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_I_II(r, macro, args, size) BOOST_PP_LIST_FOR_EACH_PRODUCT_I_III(r, macro, args, size)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_I_III(r, macro, args, size) macro(r, BOOST_PP_TUPLE_REVERSE(size, args))
 #
+
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_C(data, i) BOOST_PP_IF(BOOST_PP_LIST_IS_CONS(BOOST_PP_TUPLE_ELEM(5, 1, data)), BOOST_PP_LIST_FOR_EACH_PRODUCT_N_ ## i, BOOST_PP_LIST_FOR_EACH_PRODUCT_I)
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data) BOOST_PP_LIST_FOR_EACH_PRODUCT_H_I data
 # else
 #    define BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data) BOOST_PP_LIST_FOR_EACH_PRODUCT_H_I(BOOST_PP_TUPLE_ELEM(5, 0, data), BOOST_PP_TUPLE_ELEM(5, 1, data), BOOST_PP_TUPLE_ELEM(5, 2, data), BOOST_PP_TUPLE_ELEM(5, 3, data), BOOST_PP_TUPLE_ELEM(5, 4, data))
 # endif
 #
+
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_H_I(a, b, res, macro, size) (BOOST_PP_LIST_FIRST(b), BOOST_PP_LIST_REST(b), (BOOST_PP_LIST_FIRST(a), res), macro, size)
 #
+
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_M_0(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_C(data, 0)(r, data)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_M_1(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_C(data, 1)(r, data)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_M_2(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_C(data, 2)(r, data)
@@ -111,6 +135,7 @@
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_M_24(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_C(data, 24)(r, data)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_M_25(r, data) BOOST_PP_LIST_FOR_EACH_PRODUCT_C(data, 25)(r, data)
 #
+
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_N_0(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_1)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_N_1(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_2)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_N_2(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_3)
@@ -138,4 +163,5 @@
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_N_24(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_25)
 # define BOOST_PP_LIST_FOR_EACH_PRODUCT_N_25(r, data) BOOST_PP_FOR_ ## r(BOOST_PP_LIST_FOR_EACH_PRODUCT_H(data), BOOST_PP_LIST_FOR_EACH_PRODUCT_P, BOOST_PP_LIST_FOR_EACH_PRODUCT_O, BOOST_PP_LIST_FOR_EACH_PRODUCT_M_26)
 #
+
 # endif

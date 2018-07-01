@@ -48,17 +48,16 @@ namespace boost {
         */
         template<typename OutputIteratorT, typename RangeT>
         inline OutputIteratorT erase_range_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const iterator_range<
-                BOOST_STRING_TYPENAME 
-                    range_const_iterator<RangeT>::type>& SearchRange )
-        {
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const iterator_range<
+                        BOOST_STRING_TYPENAME
+                        range_const_iterator<RangeT>::type> &SearchRange) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::range_finder(SearchRange),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::range_finder(SearchRange),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase range algorithm
@@ -66,16 +65,15 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT erase_range_copy( 
-            const SequenceT& Input,
-            const iterator_range<
-                BOOST_STRING_TYPENAME 
-                    range_const_iterator<SequenceT>::type>& SearchRange )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::range_finder(SearchRange),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT erase_range_copy(
+                const SequenceT &Input,
+                const iterator_range<
+                        BOOST_STRING_TYPENAME
+                        range_const_iterator<SequenceT>::type> &SearchRange) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::range_finder(SearchRange),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase range algorithm
@@ -87,16 +85,15 @@ namespace boost {
             \param SearchRange A range in the input to be removed
         */
         template<typename SequenceT>
-        inline void erase_range( 
-            SequenceT& Input,
-            const iterator_range<
-                BOOST_STRING_TYPENAME 
-                    range_iterator<SequenceT>::type>& SearchRange )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::range_finder(SearchRange),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void erase_range(
+                SequenceT &Input,
+                const iterator_range<
+                        BOOST_STRING_TYPENAME
+                        range_iterator<SequenceT>::type> &SearchRange) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::range_finder(SearchRange),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_first  --------------------------------------------------------//
@@ -116,19 +113,18 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT erase_first_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase first algorithm
@@ -136,14 +132,13 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT erase_first_copy( 
-            const SequenceT& Input,
-            const RangeT& Search )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT erase_first_copy(
+                const SequenceT &Input,
+                const RangeT &Search) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase first algorithm
@@ -155,14 +150,13 @@ namespace boost {
             \param Search A substring to be searched for. 
         */
         template<typename SequenceT, typename RangeT>
-        inline void erase_first( 
-            SequenceT& Input,
-            const RangeT& Search )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void erase_first(
+                SequenceT &Input,
+                const RangeT &Search) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_first ( case insensitive ) ------------------------------------//
@@ -184,20 +178,19 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT ierase_first_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase first algorithm ( case insensitive )
@@ -205,15 +198,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT ierase_first_copy( 
-            const SequenceT& Input,
-            const RangeT& Search,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT ierase_first_copy(
+                const SequenceT &Input,
+                const RangeT &Search,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase first algorithm ( case insensitive )
@@ -226,15 +218,14 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename RangeT>
-        inline void ierase_first( 
-            SequenceT& Input,
-            const RangeT& Search,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void ierase_first(
+                SequenceT &Input,
+                const RangeT &Search,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_last  --------------------------------------------------------//
@@ -254,19 +245,18 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT erase_last_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::last_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::last_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase last algorithm
@@ -274,14 +264,13 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT erase_last_copy( 
-            const SequenceT& Input,
-            const RangeT& Search )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::last_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT erase_last_copy(
+                const SequenceT &Input,
+                const RangeT &Search) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::last_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase last algorithm
@@ -293,14 +282,13 @@ namespace boost {
             \param Search A substring to be searched for 
         */
         template<typename SequenceT, typename RangeT>
-        inline void erase_last( 
-            SequenceT& Input,
-            const RangeT& Search )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::last_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void erase_last(
+                SequenceT &Input,
+                const RangeT &Search) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::last_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_last ( case insensitive ) ------------------------------------//
@@ -322,20 +310,19 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT ierase_last_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase last algorithm ( case insensitive )
@@ -343,15 +330,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT ierase_last_copy( 
-            const SequenceT& Input,
-            const RangeT& Search,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT ierase_last_copy(
+                const SequenceT &Input,
+                const RangeT &Search,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase last algorithm ( case insensitive )
@@ -364,15 +350,14 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename RangeT>
-        inline void ierase_last( 
-            SequenceT& Input,
-            const RangeT& Search,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void ierase_last(
+                SequenceT &Input,
+                const RangeT &Search,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::last_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_nth --------------------------------------------------------------------//
@@ -395,20 +380,19 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT erase_nth_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            int Nth )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                int Nth) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::nth_finder(Search, Nth),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase nth algorithm
@@ -416,15 +400,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT erase_nth_copy( 
-            const SequenceT& Input,
-            const RangeT& Search,
-            int Nth )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::nth_finder(Search, Nth),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT erase_nth_copy(
+                const SequenceT &Input,
+                const RangeT &Search,
+                int Nth) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase nth algorithm
@@ -438,15 +421,14 @@ namespace boost {
                 For negative N, matches are counted from the end of string.
         */
         template<typename SequenceT, typename RangeT>
-        inline void erase_nth( 
-            SequenceT& Input,
-            const RangeT& Search,
-            int Nth )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::nth_finder(Search, Nth),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void erase_nth(
+                SequenceT &Input,
+                const RangeT &Search,
+                int Nth) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_nth ( case insensitive ) ---------------------------------------------//
@@ -470,21 +452,20 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT ierase_nth_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            int Nth,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                int Nth,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase nth algorithm
@@ -492,16 +473,15 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT ierase_nth_copy( 
-            const SequenceT& Input,
-            const RangeT& Search,
-            int Nth,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
-                empty_formatter(Input) );
+        inline SequenceT ierase_nth_copy(
+                const SequenceT &Input,
+                const RangeT &Search,
+                int Nth,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
+                    empty_formatter(Input));
         }
 
         //! Erase nth algorithm
@@ -516,16 +496,15 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename RangeT>
-        inline void ierase_nth( 
-            SequenceT& Input,
-            const RangeT& Search,
-            int Nth,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void ierase_nth(
+                SequenceT &Input,
+                const RangeT &Search,
+                int Nth,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::nth_finder(Search, Nth, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 
@@ -547,34 +526,32 @@ namespace boost {
             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT erase_all_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search) {
             return ::boost::algorithm::find_format_all_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase all algorithm
         /*!
             \overload
-        */  
+        */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT erase_all_copy( 
-            const SequenceT& Input,
-            const RangeT& Search )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Input, 
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT erase_all_copy(
+                const SequenceT &Input,
+                const RangeT &Search) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase all algorithm
@@ -586,14 +563,13 @@ namespace boost {
             \param Search A substring to be searched for. 
         */
         template<typename SequenceT, typename RangeT>
-        inline void erase_all( 
-            SequenceT& Input,
-            const RangeT& Search )
-        {
-            ::boost::algorithm::find_format_all( 
-                Input, 
-                ::boost::algorithm::first_finder(Search),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void erase_all(
+                SequenceT &Input,
+                const RangeT &Search) {
+            ::boost::algorithm::find_format_all(
+                    Input,
+                    ::boost::algorithm::first_finder(Search),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_all ( case insensitive ) ------------------------------------//
@@ -615,20 +591,19 @@ namespace boost {
               \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename Range1T, 
-            typename Range2T>
+                typename OutputIteratorT,
+                typename Range1T,
+                typename Range2T>
         inline OutputIteratorT ierase_all_copy(
-            OutputIteratorT Output,
-            const Range1T& Input,
-            const Range2T& Search,
-            const std::locale& Loc=std::locale() )
-        {
+                OutputIteratorT Output,
+                const Range1T &Input,
+                const Range2T &Search,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::find_format_all_copy(
-                Output,
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase all algorithm ( case insensitive )
@@ -636,15 +611,14 @@ namespace boost {
             \overload
         */
         template<typename SequenceT, typename RangeT>
-        inline SequenceT ierase_all_copy( 
-            const SequenceT& Input,
-            const RangeT& Search,
-            const std::locale& Loc=std::locale() )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Input, 
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline SequenceT ierase_all_copy(
+                const SequenceT &Input,
+                const RangeT &Search,
+                const std::locale &Loc = std::locale()) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase all algorithm ( case insensitive )
@@ -657,15 +631,14 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename RangeT>
-        inline void ierase_all( 
-            SequenceT& Input,
-            const RangeT& Search,
-            const std::locale& Loc=std::locale() )
-        {
-            ::boost::algorithm::find_format_all( 
-                Input, 
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
-                ::boost::algorithm::empty_formatter(Input) );
+        inline void ierase_all(
+                SequenceT &Input,
+                const RangeT &Search,
+                const std::locale &Loc = std::locale()) {
+            ::boost::algorithm::find_format_all(
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_head --------------------------------------------------------------------//
@@ -689,18 +662,17 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename RangeT>
+                typename OutputIteratorT,
+                typename RangeT>
         inline OutputIteratorT erase_head_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            int N )
-        {
+                OutputIteratorT Output,
+                const RangeT &Input,
+                int N) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::head_finder(N),
-                ::boost::algorithm::empty_formatter( Input ) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::head_finder(N),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase head algorithm
@@ -708,14 +680,13 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT erase_head_copy( 
-            const SequenceT& Input,
-            int N )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::head_finder(N),
-                ::boost::algorithm::empty_formatter( Input ) );
+        inline SequenceT erase_head_copy(
+                const SequenceT &Input,
+                int N) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::head_finder(N),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase head algorithm
@@ -730,14 +701,13 @@ namespace boost {
                 For N<0, size(Input)-|N| characters are extracted.
         */
         template<typename SequenceT>
-        inline void erase_head( 
-            SequenceT& Input,
-            int N )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::head_finder(N),
-                ::boost::algorithm::empty_formatter( Input ) );
+        inline void erase_head(
+                SequenceT &Input,
+                int N) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::head_finder(N),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_tail --------------------------------------------------------------------//
@@ -761,18 +731,17 @@ namespace boost {
              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
-            typename OutputIteratorT,
-            typename RangeT>
+                typename OutputIteratorT,
+                typename RangeT>
         inline OutputIteratorT erase_tail_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            int N )
-        {
+                OutputIteratorT Output,
+                const RangeT &Input,
+                int N) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::tail_finder(N),
-                ::boost::algorithm::empty_formatter( Input ) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::tail_finder(N),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase tail algorithm
@@ -780,14 +749,13 @@ namespace boost {
             \overload
         */
         template<typename SequenceT>
-        inline SequenceT erase_tail_copy( 
-            const SequenceT& Input,
-            int N )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::tail_finder(N),
-                ::boost::algorithm::empty_formatter( Input ) );
+        inline SequenceT erase_tail_copy(
+                const SequenceT &Input,
+                int N) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::tail_finder(N),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase tail algorithm
@@ -802,14 +770,13 @@ namespace boost {
                 For N<0, size(Input)-|N| characters are extracted.
         */
         template<typename SequenceT>
-        inline void erase_tail( 
-            SequenceT& Input,
-            int N )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::tail_finder(N),
-                ::boost::algorithm::empty_formatter( Input ) );
+        inline void erase_tail(
+                SequenceT &Input,
+                int N) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::tail_finder(N),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
     } // namespace algorithm

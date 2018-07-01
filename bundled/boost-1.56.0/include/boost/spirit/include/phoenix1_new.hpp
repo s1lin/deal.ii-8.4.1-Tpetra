@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_NEW
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_NEW
+
 #include <boost/spirit/home/classic/phoenix/new.hpp>
+
 #endif

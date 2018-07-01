@@ -33,10 +33,12 @@ namespace phoenix {
 #endif
 
 // ensure PHOENIX_CONSTRUCT_LIMIT <= PHOENIX_LIMIT
-BOOST_STATIC_ASSERT(PHOENIX_CONSTRUCT_LIMIT <= PHOENIX_LIMIT);
+    BOOST_STATIC_ASSERT(PHOENIX_CONSTRUCT_LIMIT
+    <= PHOENIX_LIMIT);
 
 // ensure PHOENIX_CONSTRUCT_LIMIT <= 15
-BOOST_STATIC_ASSERT(PHOENIX_CONSTRUCT_LIMIT <= 15);
+    BOOST_STATIC_ASSERT(PHOENIX_CONSTRUCT_LIMIT
+    <= 15);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -53,48 +55,52 @@ BOOST_STATIC_ASSERT(PHOENIX_CONSTRUCT_LIMIT <= 15);
 //      returns a convertible type.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T, typename A>
-struct static_cast_l {
+    template<typename T, typename A>
+    struct static_cast_l {
 
-    template <typename TupleT>
-    struct result { typedef T type; };
+        template<typename TupleT>
+        struct result {
+            typedef T type;
+        };
 
-    static_cast_l(A const& a_)
-    :   a(a_) {}
+        static_cast_l(A const &a_)
+                : a(a_) {}
 
-    template <typename TupleT>
-    T
-    eval(TupleT const& args) const
-    {
-        return static_cast<T>(a.eval(args));
-    }
+        template<typename TupleT>
+        T
+        eval(TupleT const &args) const {
+            return static_cast<T>(a.eval(args));
+        }
 
-    A a;
-};
+        A a;
+    };
 
 //////////////////////////////////
-template <typename T, typename BaseAT>
-inline actor<static_cast_l<T, BaseAT> >
-static_cast_(actor<BaseAT> const& a)
-{
+    template<typename T, typename BaseAT>
+    inline actor <static_cast_l<T, BaseAT>>
+            static_cast_(actor < BaseAT >
+    const& a) {
     typedef static_cast_l<T, BaseAT> cast_t;
-    return actor<cast_t>(cast_t(a));
+    return
+
+    actor<cast_t> (cast_t(a));
 }
 
 //////////////////////////////////
-template <typename T, typename A>
+template<typename T, typename A>
 struct dynamic_cast_l {
 
-    template <typename TupleT>
-    struct result { typedef T type; };
+    template<typename TupleT>
+    struct result {
+        typedef T type;
+    };
 
-    dynamic_cast_l(A const& a_)
-    :   a(a_) {}
+    dynamic_cast_l(A const &a_)
+            : a(a_) {}
 
-    template <typename TupleT>
+    template<typename TupleT>
     T
-    eval(TupleT const& args) const
-    {
+    eval(TupleT const &args) const {
         return dynamic_cast<T>(a.eval(args));
     }
 
@@ -102,28 +108,33 @@ struct dynamic_cast_l {
 };
 
 //////////////////////////////////
-template <typename T, typename BaseAT>
-inline actor<dynamic_cast_l<T, BaseAT> >
-dynamic_cast_(actor<BaseAT> const& a)
+template<typename T, typename BaseAT>
+inline actor <dynamic_cast_l<T, BaseAT>>
+        dynamic_cast_(actor < BaseAT >
+const& a)
 {
-    typedef dynamic_cast_l<T, BaseAT> cast_t;
-    return actor<cast_t>(cast_t(a));
+typedef dynamic_cast_l<T, BaseAT> cast_t;
+return
+
+actor<cast_t> (cast_t(a));
+
 }
 
 //////////////////////////////////
-template <typename T, typename A>
+template<typename T, typename A>
 struct reinterpret_cast_l {
 
-    template <typename TupleT>
-    struct result { typedef T type; };
+    template<typename TupleT>
+    struct result {
+        typedef T type;
+    };
 
-    reinterpret_cast_l(A const& a_)
-    :   a(a_) {}
+    reinterpret_cast_l(A const &a_)
+            : a(a_) {}
 
-    template <typename TupleT>
+    template<typename TupleT>
     T
-    eval(TupleT const& args) const
-    {
+    eval(TupleT const &args) const {
         return reinterpret_cast<T>(a.eval(args));
     }
 
@@ -131,28 +142,33 @@ struct reinterpret_cast_l {
 };
 
 //////////////////////////////////
-template <typename T, typename BaseAT>
-inline actor<reinterpret_cast_l<T, BaseAT> >
-reinterpret_cast_(actor<BaseAT> const& a)
+template<typename T, typename BaseAT>
+inline actor <reinterpret_cast_l<T, BaseAT>>
+        reinterpret_cast_(actor < BaseAT >
+const& a)
 {
-    typedef reinterpret_cast_l<T, BaseAT> cast_t;
-    return actor<cast_t>(cast_t(a));
+typedef reinterpret_cast_l<T, BaseAT> cast_t;
+return
+
+actor<cast_t> (cast_t(a));
+
 }
 
 //////////////////////////////////
-template <typename T, typename A>
+template<typename T, typename A>
 struct const_cast_l {
 
-    template <typename TupleT>
-    struct result { typedef T type; };
+    template<typename TupleT>
+    struct result {
+        typedef T type;
+    };
 
-    const_cast_l(A const& a_)
-    :   a(a_) {}
+    const_cast_l(A const &a_)
+            : a(a_) {}
 
-    template <typename TupleT>
+    template<typename TupleT>
     T
-    eval(TupleT const& args) const
-    {
+    eval(TupleT const &args) const {
         return const_cast<T>(a.eval(args));
     }
 
@@ -160,12 +176,16 @@ struct const_cast_l {
 };
 
 //////////////////////////////////
-template <typename T, typename BaseAT>
-inline actor<const_cast_l<T, BaseAT> >
-const_cast_(actor<BaseAT> const& a)
+template<typename T, typename BaseAT>
+inline actor <const_cast_l<T, BaseAT>>
+        const_cast_(actor < BaseAT >
+const& a)
 {
-    typedef const_cast_l<T, BaseAT> cast_t;
-    return actor<cast_t>(cast_t(a));
+typedef const_cast_l<T, BaseAT> cast_t;
+return
+
+actor<cast_t> (cast_t(a));
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,7 +212,7 @@ const_cast_(actor<BaseAT> const& a)
 //      limit should not be greater than PHOENIX_LIMIT.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename T>
+template<typename T>
 struct construct_l_0 {
     typedef T result_type;
 
@@ -202,62 +222,58 @@ struct construct_l_0 {
 };
 
 
-template <typename T>
+template<typename T>
 struct construct_l {
 
-    template <
-            typename A
-        ,   typename B
-        ,   typename C
+    template<
+            typename A, typename B, typename C
 
 #if PHOENIX_CONSTRUCT_LIMIT > 3
-        ,   typename D
-        ,   typename E
-        ,   typename F
+    ,   typename D
+    ,   typename E
+    ,   typename F
 
 #if PHOENIX_CONSTRUCT_LIMIT > 6
-        ,   typename G
-        ,   typename H
-        ,   typename I
+    ,   typename G
+    ,   typename H
+    ,   typename I
 
 #if PHOENIX_CONSTRUCT_LIMIT > 9
-        ,   typename J
-        ,   typename K
-        ,   typename L
+    ,   typename J
+    ,   typename K
+    ,   typename L
 
 #if PHOENIX_CONSTRUCT_LIMIT > 12
-        ,   typename M
-        ,   typename N
-        ,   typename O
+    ,   typename M
+    ,   typename N
+    ,   typename O
 #endif
 #endif
 #endif
 #endif
     >
-    struct result { typedef T type; };
+    struct result {
+        typedef T type;
+    };
 
-    T operator()() const 
-    {
+    T operator()() const {
         return T();
     }
 
-    template <typename A>
-    T operator()(A const& a) const 
-    {
-        T t(a); 
+    template<typename A>
+    T operator()(A const &a) const {
+        T t(a);
         return t;
     }
 
-    template <typename A, typename B>
-    T operator()(A const& a, B const& b) const 
-    {
+    template<typename A, typename B>
+    T operator()(A const &a, B const &b) const {
         T t(a, b);
         return t;
     }
 
-    template <typename A, typename B, typename C>
-    T operator()(A const& a, B const& b, C const& c) const 
-    {
+    template<typename A, typename B, typename C>
+    T operator()(A const &a, B const &b, C const &c) const {
         T t(a, b, c);
         return t;
     }
@@ -423,54 +439,54 @@ struct construct_l {
 };
 
 
-template <typename T>
+template<typename T>
 struct construct_1 {
 
-    template <
+    template<
             typename A
     >
-    struct result { typedef T type; };
+    struct result {
+        typedef T type;
+    };
 
-    template <typename A>
-    T operator()(A const& a) const 
-    {
+    template<typename A>
+    T operator()(A const &a) const {
         T t(a);
         return t;
     }
 
 };
 
-template <typename T>
+template<typename T>
 struct construct_2 {
 
-    template <
-            typename A
-        ,   typename B
+    template<
+            typename A, typename B
     >
-    struct result { typedef T type; };
+    struct result {
+        typedef T type;
+    };
 
-    template <typename A, typename B>
-    T operator()(A const& a, B const& b) const 
-    {
+    template<typename A, typename B>
+    T operator()(A const &a, B const &b) const {
         T t(a, b);
         return t;
     }
 
 };
 
-template <typename T>
+template<typename T>
 struct construct_3 {
 
-    template <
-            typename A
-        ,   typename B
-        ,   typename C
+    template<
+            typename A, typename B, typename C
     >
-    struct result { typedef T type; };
+    struct result {
+        typedef T type;
+    };
 
-    template <typename A, typename B, typename C>
-    T operator()(A const& a, B const& b, C const& c) const 
-    {
+    template<typename A, typename B, typename C>
+    T operator()(A const &a, B const &b, C const &c) const {
         T t(a, b, c);
         return t;
     }
@@ -1022,59 +1038,55 @@ struct composite15_result<construct_l<T>, TupleT,
 #endif
 
 //////////////////////////////////
-template <typename T>
+template<typename T>
 inline typename impl::make_composite<construct_l_0<T> >::type
-construct_()
-{
-    typedef impl::make_composite<construct_l_0<T> > make_composite_t;
+construct_() {
+    typedef impl::make_composite <construct_l_0<T>> make_composite_t;
     typedef typename make_composite_t::type type_t;
     typedef typename make_composite_t::composite_type composite_type_t;
-    
+
     return type_t(composite_type_t(construct_l_0<T>()));
 }
 
 //////////////////////////////////
-template <typename T, typename A>
+template<typename T, typename A>
 inline typename impl::make_composite<construct_1<T>, A>::type
-construct_(A const& a)
-{
-    typedef impl::make_composite<construct_1<T>, A> make_composite_t;
+construct_(A const &a) {
+    typedef impl::make_composite <construct_1<T>, A> make_composite_t;
     typedef typename make_composite_t::type type_t;
     typedef typename make_composite_t::composite_type composite_type_t;
 
-    return type_t(composite_type_t(construct_1<T>(), 
-        as_actor<A>::convert(a)
+    return type_t(composite_type_t(construct_1<T>(),
+                                   as_actor<A>::convert(a)
     ));
 }
 
 //////////////////////////////////
-template <typename T, typename A, typename B>
+template<typename T, typename A, typename B>
 inline typename impl::make_composite<construct_2<T>, A, B>::type
-construct_(A const& a, B const& b)
-{
-    typedef impl::make_composite<construct_2<T>, A, B> make_composite_t;
+construct_(A const &a, B const &b) {
+    typedef impl::make_composite <construct_2<T>, A, B> make_composite_t;
     typedef typename make_composite_t::type type_t;
     typedef typename make_composite_t::composite_type composite_type_t;
 
-    return type_t(composite_type_t(construct_2<T>(), 
-        as_actor<A>::convert(a), 
-        as_actor<B>::convert(b)
+    return type_t(composite_type_t(construct_2<T>(),
+                                   as_actor<A>::convert(a),
+                                   as_actor<B>::convert(b)
     ));
 }
 
 //////////////////////////////////
-template <typename T, typename A, typename B, typename C>
+template<typename T, typename A, typename B, typename C>
 inline typename impl::make_composite<construct_3<T>, A, B, C>::type
-construct_(A const& a, B const& b, C const& c)
-{
-    typedef impl::make_composite<construct_3<T>, A, B, C> make_composite_t;
+construct_(A const &a, B const &b, C const &c) {
+    typedef impl::make_composite <construct_3<T>, A, B, C> make_composite_t;
     typedef typename make_composite_t::type type_t;
     typedef typename make_composite_t::composite_type composite_type_t;
 
-    return type_t(composite_type_t(construct_3<T>(), 
-        as_actor<A>::convert(a), 
-        as_actor<B>::convert(b),
-        as_actor<C>::convert(c)
+    return type_t(composite_type_t(construct_3<T>(),
+                                   as_actor<A>::convert(a),
+                                   as_actor<B>::convert(b),
+                                   as_actor<C>::convert(c)
     ));
 }
 

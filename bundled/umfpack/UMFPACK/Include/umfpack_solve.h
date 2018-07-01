@@ -9,56 +9,56 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_solve
-(
-    int sys,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    double X [ ],
-    const double B [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                int sys,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                double X[],
+                const double B[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_dl_solve
-(
-    UF_long sys,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    double X [ ],
-    const double B [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                UF_long sys,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                double X[],
+                const double B[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 int umfpack_zi_solve
-(
-    int sys,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    double Xx [ ],	 double Xz [ ],
-    const double Bx [ ], const double Bz [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                int sys,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                double Xx[], double Xz[],
+                const double Bx[], const double Bz[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_zl_solve
-(
-    UF_long sys,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    double Xx [ ],	 double Xz [ ],
-    const double Bx [ ], const double Bz [ ],
-    void *Numeric,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                UF_long sys,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                double Xx[], double Xz[],
+                const double Bx[], const double Bz[],
+                void *Numeric,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 /*
 double int Syntax:

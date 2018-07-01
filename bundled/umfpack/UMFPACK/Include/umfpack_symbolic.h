@@ -9,52 +9,52 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_symbolic
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_dl_symbolic
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 int umfpack_zi_symbolic
-(
-    int n_row,
-    int n_col,
-    const int Ap [ ],
-    const int Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                int n_row,
+                int n_col,
+                const int Ap[],
+                const int Ai[],
+                const double Ax[], const double Az[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 UF_long umfpack_zl_symbolic
-(
-    UF_long n_row,
-    UF_long n_col,
-    const UF_long Ap [ ],
-    const UF_long Ai [ ],
-    const double Ax [ ], const double Az [ ],
-    void **Symbolic,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-) ;
+        (
+                UF_long n_row,
+                UF_long n_col,
+                const UF_long Ap[],
+                const UF_long Ai[],
+                const double Ax[], const double Az[],
+                void **Symbolic,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+        );
 
 /*
 double int Syntax:

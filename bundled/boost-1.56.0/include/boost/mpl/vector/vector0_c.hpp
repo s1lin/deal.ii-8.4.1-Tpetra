@@ -17,15 +17,17 @@
 #include <boost/mpl/vector/vector0.hpp>
 #include <boost/mpl/integral_c.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename T > struct vector0_c
-    : vector0<>
-{
-    typedef vector0_c type;
-    typedef T value_type;
-};
+        template<typename T>
+        struct vector0_c
+                : vector0<> {
+            typedef vector0_c type;
+            typedef T value_type;
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_VECTOR_VECTOR0_C_HPP_INCLUDED

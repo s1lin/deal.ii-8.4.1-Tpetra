@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_LOOPS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_LOOPS
+
 #include <boost/spirit/home/classic/utility/loops.hpp>
+
 #endif

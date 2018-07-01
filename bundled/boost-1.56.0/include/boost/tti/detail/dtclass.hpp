@@ -11,24 +11,20 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_class.hpp>
 
-namespace boost
-  {
-  namespace tti
-    {
-    namespace detail
-      {
-      template <class BOOST_TTI_DETAIL_TP_T>
-      struct tclass :
-        boost::mpl::eval_if
-          <
-          boost::is_class<BOOST_TTI_DETAIL_TP_T>,
-          BOOST_TTI_DETAIL_TP_T,
-          boost::mpl::identity<BOOST_TTI_DETAIL_TP_T>
-          >
-        {
-        };
-      }
+namespace boost {
+    namespace tti {
+        namespace detail {
+            template<class BOOST_TTI_DETAIL_TP_T>
+            struct tclass :
+                    boost::mpl::eval_if
+                            <
+                                    boost::is_class<BOOST_TTI_DETAIL_TP_T>,
+                                    BOOST_TTI_DETAIL_TP_T,
+                                    boost::mpl::identity<BOOST_TTI_DETAIL_TP_T>
+                            > {
+            };
+        }
     }
-  }
-  
+}
+
 #endif // BOOST_TTI_DETAIL_TCLASS_HPP

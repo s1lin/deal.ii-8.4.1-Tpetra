@@ -15,15 +15,16 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-BOOST_UNITS_STATIC_CONSTANT(si_dimensionless,dimensionless);
+            BOOST_UNITS_STATIC_CONSTANT(si_dimensionless, dimensionless
+            );
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

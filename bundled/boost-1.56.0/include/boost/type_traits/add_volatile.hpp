@@ -23,20 +23,21 @@ namespace boost {
 // from some compilers:
 
 #if defined(BOOST_MSVC)
-// This bogus warning will appear when add_volatile is applied to a
-// const volatile reference because we can't detect const volatile
-// references with MSVC6.
+    // This bogus warning will appear when add_volatile is applied to a
+    // const volatile reference because we can't detect const volatile
+    // references with MSVC6.
 #   pragma warning(push)
 #   pragma warning(disable:4181) // warning C4181: qualifier applied to reference type ignored
-#endif 
+#endif
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_volatile,T,T volatile)
+    BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_volatile, T, T
+    volatile)
 
 #if defined(BOOST_MSVC)
 #   pragma warning(pop)
-#endif 
+#endif
 
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,add_volatile,T&,T&)
+    BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T, add_volatile, T &, T &)
 
 } // namespace boost
 

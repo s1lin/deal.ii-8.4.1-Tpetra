@@ -52,17 +52,17 @@
                            otherwise 'value' is false.
                           
 */
-#define BOOST_TTI_TRAIT_HAS_MEMBER_DATA(trait,name) \
+#define BOOST_TTI_TRAIT_HAS_MEMBER_DATA(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
   template<class BOOST_TTI_TP_ET,class BOOST_TTI_TP_TYPE = BOOST_TTI_NAMESPACE::detail::deftype> \
   struct trait \
     { \
     typedef typename \
     BOOST_PP_CAT(trait,_detail_hmd) \
-      	< \
-      	BOOST_TTI_TP_ET, \
-      	BOOST_TTI_TP_TYPE \
-      	>::type type; \
+        < \
+        BOOST_TTI_TP_ET, \
+        BOOST_TTI_TP_TYPE \
+        >::type type; \
     BOOST_STATIC_CONSTANT(bool,value=type::value); \
     }; \
 /**/

@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<mass_density_dimension,cgs::system>     mass_density;
+            typedef unit <mass_density_dimension, cgs::system> mass_density;
 
-} // namespace cgs
+        } // namespace cgs
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

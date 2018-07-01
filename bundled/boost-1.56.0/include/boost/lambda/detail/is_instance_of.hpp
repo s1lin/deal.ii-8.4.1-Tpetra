@@ -38,9 +38,9 @@
 // Now we only have one version of is_instance_of templates, which delagate
 // all the nasty compiler tricks to is_convertible. 
 
-#define BOOST_LAMBDA_CLASS(z, N,A) BOOST_PP_COMMA_IF(N) class
-#define BOOST_LAMBDA_CLASS_ARG(z, N,A) BOOST_PP_COMMA_IF(N) class A##N 
-#define BOOST_LAMBDA_ARG(z, N,A) BOOST_PP_COMMA_IF(N) A##N 
+#define BOOST_LAMBDA_CLASS(z, N, A) BOOST_PP_COMMA_IF(N) class
+#define BOOST_LAMBDA_CLASS_ARG(z, N, A) BOOST_PP_COMMA_IF(N) class A##N
+#define BOOST_LAMBDA_ARG(z, N, A) BOOST_PP_COMMA_IF(N) A##N
 
 #define BOOST_LAMBDA_CLASS_LIST(n, NAME) BOOST_PP_REPEAT(n, BOOST_LAMBDA_CLASS, NAME)
 
@@ -49,7 +49,7 @@
 #define BOOST_LAMBDA_ARG_LIST(n, NAME) BOOST_PP_REPEAT(n, BOOST_LAMBDA_ARG, NAME)
 
 namespace boost {
-namespace lambda {
+    namespace lambda {
 
 #define BOOST_LAMBDA_IS_INSTANCE_OF_TEMPLATE(INDEX)                         \
                                                                             \
@@ -82,7 +82,7 @@ public:                                                                     \
 
 // Generate the traits for 1-4 argument templates
 
-BOOST_PP_REPEAT_2ND(4,BOOST_LAMBDA_HELPER,FOO)
+        BOOST_PP_REPEAT_2ND(4,BOOST_LAMBDA_HELPER,FOO)
 
 #undef BOOST_LAMBDA_HELPER
 #undef BOOST_LAMBDA_IS_INSTANCE_OF_TEMPLATE
@@ -93,7 +93,7 @@ BOOST_PP_REPEAT_2ND(4,BOOST_LAMBDA_HELPER,FOO)
 #undef BOOST_LAMBDA_ARG_LIST
 #undef BOOST_LAMBDA_CLASS_ARG_LIST
 
-} // lambda
+    } // lambda
 } // boost
 
 #endif

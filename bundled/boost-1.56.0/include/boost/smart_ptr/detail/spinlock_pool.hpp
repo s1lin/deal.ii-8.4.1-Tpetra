@@ -25,67 +25,70 @@
 #include <boost/smart_ptr/detail/spinlock.hpp>
 #include <cstddef>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-template< int I > class spinlock_pool
-{
-private:
+        template<int I>
+        class spinlock_pool {
+        private:
 
-    static spinlock pool_[ 41 ];
+            static spinlock pool_[41];
 
-public:
+        public:
 
-    static spinlock & spinlock_for( void const * pv )
-    {
-#if defined(__VMS) && __INITIAL_POINTER_SIZE == 64  
-        std::size_t i = reinterpret_cast< unsigned long long >( pv ) % 41;
-#else  
-        std::size_t i = reinterpret_cast< std::size_t >( pv ) % 41;
-#endif  
-        return pool_[ i ];
-    }
+            static spinlock &spinlock_for(void const *pv) {
+#if defined(__VMS) && __INITIAL_POINTER_SIZE == 64
+                std::size_t i = reinterpret_cast< unsigned long long >( pv ) % 41;
+#else
+                std::size_t i = reinterpret_cast< std::size_t >( pv ) % 41;
+#endif
+                return pool_[i];
+            }
 
-    class scoped_lock
-    {
-    private:
+            class scoped_lock {
+            private:
 
-        spinlock & sp_;
+                spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+                scoped_lock(scoped_lock const &);
 
-    public:
+                scoped_lock &operator=(scoped_lock const &);
 
-        explicit scoped_lock( void const * pv ): sp_( spinlock_for( pv ) )
-        {
-            sp_.lock();
-        }
+            public:
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
-};
+                explicit scoped_lock(void const *pv) : sp_(spinlock_for(pv)) {
+                    sp_.lock();
+                }
 
-template< int I > spinlock spinlock_pool< I >::pool_[ 41 ] =
-{
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, 
-    BOOST_DETAIL_SPINLOCK_INIT
-};
+                ~scoped_lock() {
+                    sp_.unlock();
+                }
+            };
+        };
 
-} // namespace detail
+        template<int I> spinlock spinlock_pool<I>::pool_[41] =
+                {
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT, BOOST_DETAIL_SPINLOCK_INIT,
+                        BOOST_DETAIL_SPINLOCK_INIT
+                };
+
+    } // namespace detail
 } // namespace boost
 
 #endif // #ifndef BOOST_SMART_PTR_DETAIL_SPINLOCK_POOL_HPP_INCLUDED

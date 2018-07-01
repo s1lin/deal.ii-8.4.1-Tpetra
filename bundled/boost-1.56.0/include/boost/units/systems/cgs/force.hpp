@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<force_dimension,cgs::system>        force;
-    
-BOOST_UNITS_STATIC_CONSTANT(dyne,force);
-BOOST_UNITS_STATIC_CONSTANT(dynes,force);
+            typedef unit <force_dimension, cgs::system> force;
 
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(dyne, force
+            );
+            BOOST_UNITS_STATIC_CONSTANT(dynes, force
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

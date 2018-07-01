@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_LISTS_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_LISTS_FWD
+
 #include <boost/spirit/home/classic/utility/lists_fwd.hpp>
+
 #endif

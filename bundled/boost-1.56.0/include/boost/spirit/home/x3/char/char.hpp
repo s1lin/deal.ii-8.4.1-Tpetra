@@ -16,73 +16,66 @@
 #include <boost/spirit/home/support/char_encoding/standard.hpp>
 #include <boost/spirit/home/support/char_encoding/standard_wide.hpp>
 
-namespace boost { namespace spirit { namespace x3
-{
-    namespace standard
-    {
-        typedef any_char<char_encoding::standard> char_type;
-        char_type const char_ = char_type();
-    }
-
-    using standard::char_type;
-    using standard::char_;
-
-    namespace standard_wide
-    {
-        typedef any_char<char_encoding::standard_wide> char_type;
-        char_type const char_ = char_type();
-    }
-
-    namespace ascii
-    {
-        typedef any_char<char_encoding::ascii> char_type;
-        char_type const char_ = char_type();
-    }
-
-    namespace extension
-    {
-        template <>
-        struct as_parser<char>
-        {
-            typedef literal_char<
-                char_encoding::standard, unused_type>
-            type;
-
-            typedef type value_type;
-
-            static type call(char ch)
-            {
-                return type(ch);
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            namespace standard {
+                typedef any_char <char_encoding::standard> char_type;
+                char_type const char_ = char_type();
             }
-        };
 
-        template <>
-        struct as_parser<wchar_t>
-        {
-            typedef literal_char<
-                char_encoding::standard_wide, unused_type>
-            type;
+            using standard::char_type;
+            using standard::char_;
 
-            typedef type value_type;
-
-            static type call(wchar_t ch)
-            {
-                return type(ch);
+            namespace standard_wide {
+                typedef any_char <char_encoding::standard_wide> char_type;
+                char_type const char_ = char_type();
             }
-        };
-    }
 
-    inline literal_char<char_encoding::standard, unused_type>
-    lit(char ch)
-    {
-        return literal_char<char_encoding::standard, unused_type>(ch);
-    }
+            namespace ascii {
+                typedef any_char <char_encoding::ascii> char_type;
+                char_type const char_ = char_type();
+            }
 
-    inline literal_char<char_encoding::standard_wide, unused_type>
-    lit(wchar_t ch)
-    {
-        return literal_char<char_encoding::standard_wide, unused_type>(ch);
+            namespace extension {
+                template<>
+                struct as_parser<char> {
+                    typedef literal_char <
+                    char_encoding::standard, unused_type>
+                            type;
+
+                    typedef type value_type;
+
+                    static type call(char ch) {
+                        return type(ch);
+                    }
+                };
+
+                template<>
+                struct as_parser<wchar_t> {
+                    typedef literal_char <
+                    char_encoding::standard_wide, unused_type>
+                            type;
+
+                    typedef type value_type;
+
+                    static type call(wchar_t ch) {
+                        return type(ch);
+                    }
+                };
+            }
+
+            inline literal_char <char_encoding::standard, unused_type>
+            lit(char ch) {
+                return literal_char<char_encoding::standard, unused_type>(ch);
+            }
+
+            inline literal_char <char_encoding::standard_wide, unused_type>
+            lit(wchar_t ch) {
+                return literal_char<char_encoding::standard_wide, unused_type>(ch);
+            }
+        }
     }
-}}}
+}
 
 #endif

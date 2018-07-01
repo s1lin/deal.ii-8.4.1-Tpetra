@@ -12,9 +12,10 @@
 #include <boost/spirit/home/classic/namespace.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 #if !defined(BOOST_SPIRIT_CLOSURE_CONTEXT_LINKER_DEFINED)
 #define BOOST_SPIRIT_CLOSURE_CONTEXT_LINKER_DEFINED
@@ -29,28 +30,28 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template<typename ContextT>
-struct closure_context_linker : public ContextT
-{
-    template <typename ParserT>
-    closure_context_linker(ParserT const& p)
-    : ContextT(p) {}
+        template<typename ContextT>
+        struct closure_context_linker : public ContextT {
+            template<typename ParserT>
+            closure_context_linker(ParserT const &p)
+                    : ContextT(p) {}
 
-    template <typename ParserT, typename ScannerT>
-    void pre_parse(ParserT const& p, ScannerT const& scan)
-    { ContextT::pre_parse(p, scan); }
+            template<typename ParserT, typename ScannerT>
+            void pre_parse(ParserT const &p, ScannerT const &scan) { ContextT::pre_parse(p, scan); }
 
-    template <typename ResultT, typename ParserT, typename ScannerT>
-    ResultT&
-    post_parse(ResultT& hit, ParserT const& p, ScannerT const& scan)
-    { return ContextT::post_parse(hit, p, scan); }
-};
+            template<typename ResultT, typename ParserT, typename ScannerT>
+            ResultT &
+            post_parse(ResultT &hit, ParserT const &p, ScannerT const &scan) {
+                return ContextT::post_parse(hit, p, scan);
+            }
+        };
 
 #endif // !defined(BOOST_SPIRIT_CLOSURE_CONTEXT_LINKER_DEFINED)
 
 ///////////////////////////////////////////////////////////////////////////////
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+    }
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif // BOOST_SPIRIT_CLOSURE_CONTEXT_HPP

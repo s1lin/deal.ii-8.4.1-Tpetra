@@ -21,16 +21,15 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Utility class to simplify construction of dimensionless quantities.
-template<class System,class Y>
-struct dimensionless_quantity
-{
-    typedef quantity<typename dimensionless_unit<System>::type,Y>   type;
-};
+        template<class System, class Y>
+        struct dimensionless_quantity {
+            typedef quantity<typename dimensionless_unit<System>::type, Y> type;
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

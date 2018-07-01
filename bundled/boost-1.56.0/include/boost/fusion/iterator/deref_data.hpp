@@ -11,41 +11,40 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
-namespace boost { namespace fusion
-{
-    struct iterator_facade_tag;
+namespace boost {
+    namespace fusion {
+        struct iterator_facade_tag;
 
-    namespace extension
-    {
-        template <typename>
-        struct deref_data_impl;
+        namespace extension {
+            template<typename>
+            struct deref_data_impl;
 
-        template <>
-        struct deref_data_impl<iterator_facade_tag>
-        {
-            template <typename It>
-            struct apply
-              : It::template deref_data<It>
-            {};
-       };
+            template<>
+            struct deref_data_impl<iterator_facade_tag> {
+                template<typename It>
+                struct apply
+                        : It::template deref_data<It> {
+                };
+            };
+        }
+
+        namespace result_of {
+            template<typename It>
+            struct deref_data
+                    : extension::deref_data_impl<typename traits::tag_of<It>::type>::
+                      template apply<It> {
+            };
+        }
+
+        template<typename It>
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::deref_data<It>::type
+        deref_data(It
+        const& it) {
+        return
+        result_of::deref_data<It>::call(it);
     }
-
-    namespace result_of
-    {
-        template <typename It>
-        struct deref_data
-          : extension::deref_data_impl<typename traits::tag_of<It>::type>::
-                template apply<It>
-        {};
-    }
-
-    template <typename It>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::deref_data<It>::type
-    deref_data(It const& it)
-    {
-        return result_of::deref_data<It>::call(it);
-    }
-}}
+}
+}
 
 #endif

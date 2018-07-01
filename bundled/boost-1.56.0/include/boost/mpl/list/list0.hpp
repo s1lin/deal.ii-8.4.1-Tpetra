@@ -27,16 +27,19 @@
 #include <boost/mpl/list/aux_/begin_end.hpp>
 #include <boost/mpl/list/aux_/item.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Dummy = na > struct list0;
+        template<typename Dummy = na>
+        struct list0;
 
-template<> struct list0<na>
-    : l_end
-{
-    typedef l_end type;
-};
+        template<>
+        struct list0<na>
+                : l_end {
+            typedef l_end type;
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_LIST_LIST0_HPP_INCLUDED

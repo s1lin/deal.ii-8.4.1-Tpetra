@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SCANNER_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SCANNER_FWD
+
 #include <boost/spirit/home/classic/core/scanner/scanner_fwd.hpp>
+
 #endif

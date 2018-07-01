@@ -8,7 +8,9 @@
 ==============================================================================*/
 
 #if FUSION_MAX_DEQUE_SIZE <= 10
+
 #include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque10_fwd.hpp>
+
 #elif FUSION_MAX_DEQUE_SIZE <= 20
 #include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque20_fwd.hpp>
 #elif FUSION_MAX_DEQUE_SIZE <= 30

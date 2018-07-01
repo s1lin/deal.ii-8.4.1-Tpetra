@@ -22,51 +22,52 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename T>
-        struct find
-          : mpl::if_<
-                traits::is_segmented<Sequence>
-              , detail::result_of_segmented_find<Sequence, T>
-              , detail::result_of_find_if<
-                    Sequence,
-                    is_same<
-                        typename mpl::if_<
-                            traits::is_associative<Sequence>
-                          , key_of<mpl::_1>
-                          , value_of<mpl::_1>
-                        >::type
-                      , T
-                    >
-                >
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename T>
+            struct find
+                    : mpl::if_<
+                            traits::is_segmented < Sequence>,
+                      detail::result_of_segmented_find<Sequence, T>,
+                      detail::result_of_find_if<
+                              Sequence,
+                              is_same <
+                              typename mpl::if_<
+                                      traits::is_associative < Sequence>, key_of < mpl::_1>,
+                      value_of<mpl::_1>
             >::type
-        {};
+            , T
+            >
+            >
+            >::type {
+        };
     }
 
-    template <typename T, typename Sequence>
+    template<typename T, typename Sequence>
     BOOST_FUSION_GPU_ENABLED
-    inline typename 
-        lazy_disable_if<
-            is_const<Sequence>
-          , result_of::find<Sequence, T>
-        >::type const
-    find(Sequence& seq)
-    {
+    inline typename
+            lazy_disable_if<
+            is_const < Sequence>
+    , result_of::find<Sequence, T>
+    >
+
+    ::type const
+    find(Sequence &seq) {
         typedef typename result_of::find<Sequence, T>::filter filter;
         return filter::call(seq);
     }
 
-    template <typename T, typename Sequence>
+    template<typename T, typename Sequence>
     BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::find<Sequence const, T>::type const
-    find(Sequence const& seq)
-    {
-        typedef typename result_of::find<Sequence const, T>::filter filter;
-        return filter::call(seq);
-    }
+    inline typename result_of::find<Sequence const, T>::type
+    const
+    find(Sequence
+    const& seq) {
+    typedef typename result_of::find<Sequence const, T>::filter filter;
+    return
+    filter::call(seq);
+}
 }}
 
 #endif

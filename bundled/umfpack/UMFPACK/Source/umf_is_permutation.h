@@ -5,9 +5,9 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_is_permutation
-(
-    const Int P [ ],
-    Int W [ ],
-    Int n,
-    Int r
-) ;
+        (
+                const Int P[],
+                Int W[],
+                Int n,
+                Int r
+        );

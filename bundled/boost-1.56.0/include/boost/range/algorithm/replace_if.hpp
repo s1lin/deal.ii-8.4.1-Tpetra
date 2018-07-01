@@ -15,10 +15,8 @@
 #include <boost/range/concepts.hpp>
 #include <algorithm>
 
-namespace boost
-{
-    namespace range
-    {
+namespace boost {
+    namespace range {
 
 /// \brief template function replace_if
 ///
@@ -26,26 +24,24 @@ namespace boost
 ///
 /// \pre ForwardRange is a model of the ForwardRangeConcept
 /// \pre UnaryPredicate is a model of the UnaryPredicateConcept
-template< class ForwardRange, class UnaryPredicate, class Value >
-inline ForwardRange&
-    replace_if(ForwardRange& rng, UnaryPredicate pred,
-               const Value& val)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
-    std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
-    return rng;
-}
+        template<class ForwardRange, class UnaryPredicate, class Value>
+        inline ForwardRange &
+        replace_if(ForwardRange &rng, UnaryPredicate pred,
+                   const Value &val) {
+            BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept < ForwardRange > ));
+            std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
+            return rng;
+        }
 
 /// \overload
-template< class ForwardRange, class UnaryPredicate, class Value >
-inline const ForwardRange&
-    replace_if(const ForwardRange& rng, UnaryPredicate pred,
-               const Value& val)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
-    std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
-    return rng;
-}
+        template<class ForwardRange, class UnaryPredicate, class Value>
+        inline const ForwardRange &
+        replace_if(const ForwardRange &rng, UnaryPredicate pred,
+                   const Value &val) {
+            BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<const ForwardRange>));
+            std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
+            return rng;
+        }
 
     } // namespace range
     using range::replace_if;

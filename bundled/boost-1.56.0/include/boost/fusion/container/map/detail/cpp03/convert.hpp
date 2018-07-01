@@ -14,44 +14,44 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct as_map
-        {
-            typedef typename
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence>
+            struct as_map {
+                typedef typename
                 detail::as_map<
-                    result_of::size<Sequence>::value
-                  , is_base_of<
-                        associative_tag
-                      , typename traits::category_of<Sequence>::type>::value
+                        result_of::size<Sequence>::value, is_base_of<
+                                associative_tag, typename traits::category_of<Sequence>::type>::value
                 >
-            gen;
-            typedef typename gen::
+                        gen;
+                typedef typename gen::
                 template apply<typename result_of::begin<Sequence>::type>::type
-            type;
-        };
-    }
+                        type;
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::as_map<Sequence>::type
-    as_map(Sequence& seq)
-    {
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::as_map<Sequence>::type
+        as_map(Sequence
+        & seq) {
         typedef typename result_of::as_map<Sequence>::gen gen;
-        return gen::call(fusion::begin(seq));
+        return
+
+        gen::call (fusion::begin(seq));
     }
 
-    template <typename Sequence>
+    template<typename Sequence>
     BOOST_FUSION_GPU_ENABLED
     inline typename result_of::as_map<Sequence const>::type
-    as_map(Sequence const& seq)
-    {
-        typedef typename result_of::as_map<Sequence const>::gen gen;
-        return gen::call(fusion::begin(seq));
-    }
+    as_map(Sequence
+    const& seq) {
+    typedef typename result_of::as_map<Sequence const>::gen gen;
+    return
+
+    gen::call (fusion::begin(seq));
+}
 }}
 
 #endif

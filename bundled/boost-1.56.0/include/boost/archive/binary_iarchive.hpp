@@ -26,31 +26,30 @@
 #endif
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from binary_iarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class binary_iarchive : 
-    public binary_iarchive_impl<
-        boost::archive::binary_iarchive, 
-        std::istream::char_type, 
-        std::istream::traits_type
-    >{
-public:
-    binary_iarchive(std::istream & is, unsigned int flags = 0) :
-        binary_iarchive_impl<
-            binary_iarchive, std::istream::char_type, std::istream::traits_type
-        >(is, flags)
-    {}
-    binary_iarchive(std::streambuf & bsb, unsigned int flags = 0) :
-        binary_iarchive_impl<
-            binary_iarchive, std::istream::char_type, std::istream::traits_type
-        >(bsb, flags)
-    {}
-};
+        class binary_iarchive :
+                public binary_iarchive_impl<
+                        boost::archive::binary_iarchive,
+                        std::istream::char_type,
+                        std::istream::traits_type
+                > {
+        public:
+            binary_iarchive(std::istream &is, unsigned int flags = 0) :
+                    binary_iarchive_impl<
+                            binary_iarchive, std::istream::char_type, std::istream::traits_type
+                    >(is, flags) {}
 
-} // namespace archive
+            binary_iarchive(std::streambuf &bsb, unsigned int flags = 0) :
+                    binary_iarchive_impl<
+                            binary_iarchive, std::istream::char_type, std::istream::traits_type
+                    >(bsb, flags) {}
+        };
+
+    } // namespace archive
 } // namespace boost
 
 // required by export

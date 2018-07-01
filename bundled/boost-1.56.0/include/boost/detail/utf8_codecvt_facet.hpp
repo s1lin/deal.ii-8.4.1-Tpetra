@@ -93,9 +93,9 @@ namespace std {
 #endif
 
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
-    #define BOOST_CODECVT_DO_LENGTH_CONST const
+#define BOOST_CODECVT_DO_LENGTH_CONST const
 #else
-    #define BOOST_CODECVT_DO_LENGTH_CONST
+#define BOOST_CODECVT_DO_LENGTH_CONST
 #endif
 
 // maximum lenght of a multibyte string
@@ -103,87 +103,99 @@ namespace std {
 
 BOOST_UTF8_BEGIN_NAMESPACE
 
-struct BOOST_UTF8_DECL utf8_codecvt_facet :
-    public std::codecvt<wchar_t, char, std::mbstate_t>  
+struct BOOST_UTF8_DECL utf8_codecvt_facet
+:
+public std::codecvt<wchar_t, char, std::mbstate_t>
 {
 public:
-    explicit utf8_codecvt_facet(std::size_t no_locale_manage=0)
-        : std::codecvt<wchar_t, char, std::mbstate_t>(no_locale_manage) 
-    {}
+explicit utf8_codecvt_facet(std::size_t
+no_locale_manage = 0
+)
+:
+std::codecvt<wchar_t, char, std::mbstate_t>(no_locale_manage)
+        {}
 protected:
-    virtual std::codecvt_base::result do_in(
-        std::mbstate_t& state, 
-        const char * from,
-        const char * from_end, 
-        const char * & from_next,
-        wchar_t * to, 
-        wchar_t * to_end, 
-        wchar_t*& to_next
-    ) const;
 
-    virtual std::codecvt_base::result do_out(
-        std::mbstate_t & state,
-        const wchar_t * from,
-        const wchar_t * from_end,
-        const wchar_t*  & from_next,
-        char * to,
-        char * to_end,
-        char * & to_next
-    ) const;
+virtual std::codecvt_base::result do_in(
+        std::mbstate_t &state,
+        const char *from,
+        const char *from_end,
+        const char *&from_next,
+        wchar_t *to,
+        wchar_t *to_end,
+        wchar_t *&to_next
+) const;
 
-    bool invalid_continuing_octet(unsigned char octet_1) const {
-        return (octet_1 < 0x80|| 0xbf< octet_1);
-    }
+virtual std::codecvt_base::result do_out(
+        std::mbstate_t &state,
+        const wchar_t *from,
+        const wchar_t *from_end,
+        const wchar_t *&from_next,
+        char *to,
+        char *to_end,
+        char *&to_next
+) const;
 
-    bool invalid_leading_octet(unsigned char octet_1)   const {
-        return (0x7f < octet_1 && octet_1 < 0xc0) ||
-            (octet_1 > 0xfd);
-    }
+bool invalid_continuing_octet(unsigned char octet_1) const {
+    return (octet_1 < 0x80 || 0xbf < octet_1);
+}
 
-    // continuing octets = octets except for the leading octet
-    static unsigned int get_cont_octet_count(unsigned char lead_octet) {
-        return get_octet_count(lead_octet) - 1;
-    }
+bool invalid_leading_octet(unsigned char octet_1) const {
+    return (0x7f < octet_1 && octet_1 < 0xc0) ||
+           (octet_1 > 0xfd);
+}
 
-    static unsigned int get_octet_count(unsigned char lead_octet);
+// continuing octets = octets except for the leading octet
+static unsigned int get_cont_octet_count(unsigned char lead_octet) {
+    return get_octet_count(lead_octet) - 1;
+}
 
-    // How many "continuing octets" will be needed for this word
-    // ==   total octets - 1.
-    int get_cont_octet_out_count(wchar_t word) const ;
+static unsigned int get_octet_count(unsigned char lead_octet);
 
-    virtual bool do_always_noconv() const BOOST_NOEXCEPT_OR_NOTHROW {
-        return false;
-    }
+// How many "continuing octets" will be needed for this word
+// ==   total octets - 1.
+int get_cont_octet_out_count(wchar_t word) const;
 
-    // UTF-8 isn't really stateful since we rewind on partial conversions
-    virtual std::codecvt_base::result do_unshift(
-        std::mbstate_t&,
-        char * from,
+virtual bool do_always_noconv() const
+
+BOOST_NOEXCEPT_OR_NOTHROW {
+return false;
+}
+
+// UTF-8 isn't really stateful since we rewind on partial conversions
+virtual std::codecvt_base::result do_unshift(
+        std::mbstate_t &,
+        char *from,
         char * /*to*/,
-        char * & next
-    ) const {
-        next = from;
-        return ok;
-    }
+        char *&next
+) const {
+    next = from;
+    return ok;
+}
 
-    virtual int do_encoding() const BOOST_NOEXCEPT_OR_NOTHROW {
-        const int variable_byte_external_encoding=0;
-        return variable_byte_external_encoding;
-    }
+virtual int do_encoding() const
 
-    // How many char objects can I process to get <= max_limit
-    // wchar_t objects?
-    virtual int do_length(
+BOOST_NOEXCEPT_OR_NOTHROW {
+const int variable_byte_external_encoding = 0;
+return
+variable_byte_external_encoding;
+}
+
+// How many char objects can I process to get <= max_limit
+// wchar_t objects?
+virtual int do_length(
         BOOST_CODECVT_DO_LENGTH_CONST std::mbstate_t &,
-        const char * from,
-        const char * from_end, 
+        const char *from,
+        const char *from_end,
         std::size_t max_limit
-    ) const;
+) const;
 
-    // Largest possible value do_length(state,from,from_end,1) could return.
-    virtual int do_max_length() const BOOST_NOEXCEPT_OR_NOTHROW {
-        return 6; // largest UTF-8 encoding of a UCS-4 character
-    }
+// Largest possible value do_length(state,from,from_end,1) could return.
+virtual int do_max_length() const
+
+BOOST_NOEXCEPT_OR_NOTHROW {
+return 6; // largest UTF-8 encoding of a UCS-4 character
+}
 };
 
 BOOST_UTF8_END_NAMESPACE

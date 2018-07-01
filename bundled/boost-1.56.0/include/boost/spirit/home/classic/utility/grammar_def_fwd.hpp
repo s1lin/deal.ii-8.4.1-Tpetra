@@ -31,22 +31,26 @@
 #define BOOST_SPIRIT_GRAMMAR_STARTRULE_TYPE_LIMIT_A     3
 #endif
 
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template <
-        typename T,
-        BOOST_PP_ENUM_BINARY_PARAMS(
-            BOOST_PP_DEC(BOOST_SPIRIT_GRAMMAR_STARTRULE_TYPE_LIMIT_A),
-            typename T, = ::phoenix::nil_t BOOST_PP_INTERCEPT
+        template<
+                typename T,
+                BOOST_PP_ENUM_BINARY_PARAMS(
+                BOOST_PP_DEC( BOOST_SPIRIT_GRAMMAR_STARTRULE_TYPE_LIMIT_A),
+        typename T, =
+        ::phoenix::nil_t BOOST_PP_INTERCEPT
         )
-    >
-    class grammar_def;
+        >
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        class grammar_def;
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+
+    }
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

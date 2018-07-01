@@ -23,28 +23,19 @@
 #include <blaze/math/dense/DynamicVector.h>
 
 
-
-
-
-
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
-template< typename T , size_t N , bool TF >
-struct algebra_dispatcher< blaze::StaticVector< T , N , TF >  >
-{
-    typedef vector_space_algebra algebra_type;
-};
+            template<typename T, size_t N, bool TF>
+            struct algebra_dispatcher<blaze::StaticVector < T, N, TF>  > {
+            typedef vector_space_algebra algebra_type;
+        };
 
-template< typename T , bool TF >
-struct algebra_dispatcher< blaze::DynamicVector< T , TF > >
-{
-    typedef vector_space_algebra algebra_type;
-};
-
-
-
+        template<typename T, bool TF>
+        struct algebra_dispatcher<blaze::DynamicVector < T, TF> > {
+        typedef vector_space_algebra algebra_type;
+    };
 
 
 }

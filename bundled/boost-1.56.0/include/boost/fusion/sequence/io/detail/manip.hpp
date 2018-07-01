@@ -31,125 +31,104 @@
 //    open, close and delimeter and add these synonyms to the
 //    TR1 tuple module.
 
-namespace boost { namespace fusion
-{
-    namespace detail
-    {
-        template <typename Tag>
-        int get_xalloc_index(Tag* = 0)
-        {
-            // each Tag will have a unique index
-            static int index = std::ios::xalloc();
-            return index;
-        }
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename Tag>
+            int get_xalloc_index(Tag * = 0) {
+                // each Tag will have a unique index
+                static int index = std::ios::xalloc();
+                return index;
+            }
 
-        template <typename Stream, typename Tag, typename T>
-        struct stream_data
-        {
-            struct arena
-            {
-                ~arena()
-                {
-                    for (
-                        typename std::vector<T*>::iterator i = data.begin()
-                      ; i != data.end()
-                      ; ++i)
-                    {
-                        delete *i;
+            template<typename Stream, typename Tag, typename T>
+            struct stream_data {
+                struct arena {
+                    ~arena() {
+                        for (
+                                typename std::vector<T *>::iterator i = data.begin(); i != data.end(); ++i) {
+                            delete *i;
+                        }
                     }
+
+                    std::vector<T *> data;
+                };
+
+                static void attach(Stream &stream, T const &data) {
+                    static arena ar; // our arena
+                    ar.data.push_back(new T(data));
+                    stream.pword(get_xalloc_index<Tag>()) = ar.data.back();
                 }
 
-                std::vector<T*> data;
+                static T const *get(Stream &stream) {
+                    return (T const *) stream.pword(get_xalloc_index<Tag>());
+                }
             };
 
-            static void attach(Stream& stream, T const& data)
-            {
-                static arena ar; // our arena
-                ar.data.push_back(new T(data));
-                stream.pword(get_xalloc_index<Tag>()) = ar.data.back();
-            }
+            template<typename Tag, typename Stream>
+            class string_ios_manip {
+            public:
 
-            static T const* get(Stream& stream)
-            {
-                return (T const*)stream.pword(get_xalloc_index<Tag>());
-            }
-        };
+                typedef FUSION_STRING_OF_STREAM(Stream) string_type;
 
-        template <typename Tag, typename Stream>
-        class string_ios_manip
-        {
-        public:
+                typedef stream_data<Stream, Tag, string_type> stream_data_t;
 
-            typedef FUSION_STRING_OF_STREAM(Stream) string_type;
+                string_ios_manip(Stream &str_)
+                        : stream(str_) {}
 
-            typedef stream_data<Stream, Tag, string_type> stream_data_t;
-
-            string_ios_manip(Stream& str_)
-                : stream(str_)
-            {}
-
-            void
-            set(string_type const& s)
-            {
-                stream_data_t::attach(stream, s);
-            }
-
-            void
-            print(char const* default_) const
-            {
-                // print a delimiter
-                string_type const* p = stream_data_t::get(stream);
-                if (p)
-                    stream << *p;
-                else
-                    stream << default_;
-            }
-
-            void
-            read(char const* default_) const
-            {
-                // read a delimiter
-                string_type const* p = stream_data_t::get(stream);
-                using namespace std;
-                ws(stream);
-
-                if (p)
-                {
-                    typedef typename string_type::const_iterator iterator;
-                    for (iterator i = p->begin(); i != p->end(); ++i)
-                        check_delim(*i);
+                void
+                set(string_type const &s) {
+                    stream_data_t::attach(stream, s);
                 }
-                else
-                {
-                    while (*default_)
-                        check_delim(*default_++);
+
+                void
+                print(char const *default_) const {
+                    // print a delimiter
+                    string_type const *p = stream_data_t::get(stream);
+                    if (p)
+                        stream << *p;
+                    else
+                        stream << default_;
                 }
-            }
 
-        private:
+                void
+                read(char const *default_) const {
+                    // read a delimiter
+                    string_type const *p = stream_data_t::get(stream);
+                    using namespace std;
+                    ws(stream);
 
-            template <typename Char>
-            void
-            check_delim(Char c) const
-            {
-                if (!isspace(c))
-                {
-                    if (stream.get() != c)
-                    {
-                        stream.unget();
-                        stream.setstate(std::ios::failbit);
+                    if (p) {
+                        typedef typename string_type::const_iterator iterator;
+                        for (iterator i = p->begin(); i != p->end(); ++i)
+                            check_delim(*i);
+                    } else {
+                        while (*default_)
+                            check_delim(*default_++);
                     }
                 }
-            }
 
-            Stream& stream;
+            private:
 
-        private:
-            // silence MSVC warning C4512: assignment operator could not be generated
-            string_ios_manip& operator= (string_ios_manip const&);
-        };
+                template<typename Char>
+                void
+                check_delim(Char c) const {
+                    if (!isspace(c)) {
+                        if (stream.get() != c) {
+                            stream.unget();
+                            stream.setstate(std::ios::failbit);
+                        }
+                    }
+                }
 
-    } // detail
+                Stream &stream;
+
+            private:
+                // silence MSVC warning C4512: assignment operator could not be generated
+                string_ios_manip &operator=(string_ios_manip const &);
+            };
+
+        } // detail
 
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -248,13 +227,15 @@ namespace boost { namespace fusion
     }                                                                           \
 
 
-    STD_TUPLE_DEFINE_MANIPULATOR(tuple_open)
-    STD_TUPLE_DEFINE_MANIPULATOR(tuple_close)
-    STD_TUPLE_DEFINE_MANIPULATOR(tuple_delimiter)
+        STD_TUPLE_DEFINE_MANIPULATOR(tuple_open)
+        STD_TUPLE_DEFINE_MANIPULATOR(tuple_close)
+        STD_TUPLE_DEFINE_MANIPULATOR(tuple_delimiter)
 
-    STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS(tuple_open)
-    STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS(tuple_close)
-    STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS(tuple_delimiter)
+        STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS(tuple_open)
+
+        STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS(tuple_close)
+
+        STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS(tuple_delimiter)
 
 #undef STD_TUPLE_DEFINE_MANIPULATOR
 #undef STD_TUPLE_DEFINE_MANIPULATOR_FUNCTIONS
@@ -262,6 +243,7 @@ namespace boost { namespace fusion
 #undef FUSION_GET_CHAR_TYPE
 #undef FUSION_GET_TRAITS_TYPE
 
-}}
+    }
+}
 
 #endif

@@ -60,7 +60,7 @@
 
 #  if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(__BORLANDC__)
 #     ifdef __SUNPRO_CC
-         // can't use <../stlport/name> since some compilers put stlport in a different directory:
+// can't use <../stlport/name> since some compilers put stlport in a different directory:
 #        define BOOST_TR1_STD_HEADER(name) <../stlport4/name>
 #     elif defined(__PGI)
 #        define BOOST_TR1_STD_HEADER(name) <../CC/name>
@@ -74,7 +74,7 @@
 #     define BOOST_TR1_STD_HEADER(name) <../stdcxx4/name>
 
 #  elif defined(__HP_aCC)
-      // HP aCC include path:
+// HP aCC include path:
 #     define BOOST_TR1_STD_HEADER(name) <../include_std/name>
 
 #  elif defined(__DECCXX)
@@ -95,15 +95,15 @@
 #    elif (defined(__FreeBSD__))
 #      define BOOST_TR1_STD_HEADER(name) <../__GNUC__.__GNUC_MINOR__/name>
 #    else
-#      if ( (__GNUC__ == 3) && (defined(__APPLE_CC__) || defined(__CYGWIN__)))
+#      if ((__GNUC__ == 3) && (defined(__APPLE_CC__) || defined(__CYGWIN__)))
 #        define BOOST_TR1_STD_HEADER(name) <../c++/name>
 #      elif ((__GLIBCXX__ == 20050421) && defined(__APPLE_CC__))
-         // Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
-         // compiler version:
+// Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
+// compiler version:
 #        define BOOST_TR1_STD_HEADER(name) <../4.0.0/name>
-         /*
-          *  Before version 3.4.0 the 0 patch level was not part of the include path:
-          */
+/*
+ *  Before version 3.4.0 the 0 patch level was not part of the include path:
+ */
 #      elif defined (__GNUC_PATCHLEVEL__) && ((__GNUC_PATCHLEVEL__ > 0) || \
                                               (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || \
                                               (__GNUC__ > 3))
@@ -114,9 +114,9 @@
 #    endif
 
 #      if !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT) && !defined(__ICC) \
-            && (defined(__FreeBSD__) || defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
-         // Disable use of #include_next on Linux as typically we are installed in a directory that is searched
-         // *after* the std lib include path:
+ && (defined(__FreeBSD__) || defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
+// Disable use of #include_next on Linux as typically we are installed in a directory that is searched
+// *after* the std lib include path:
 #        define BOOST_TR1_DISABLE_INCLUDE_NEXT
 #      endif
 
@@ -161,7 +161,9 @@
 #     undef BOOST_TR1_NO_RECURSION
 #  endif
 #else
+
 #  include BOOST_TR1_STD_HEADER(utility)
+
 #endif
 
 #include <boost/tr1/detail/config.hpp>

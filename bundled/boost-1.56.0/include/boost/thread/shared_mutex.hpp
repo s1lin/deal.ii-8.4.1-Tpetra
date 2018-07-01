@@ -11,6 +11,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/thread/detail/config.hpp>
+
 #if defined(BOOST_THREAD_PLATFORM_WIN32)
 #if defined(BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN)
 #include <boost/thread/pthread/shared_mutex.hpp>
@@ -26,24 +27,22 @@
 
 #include <boost/thread/lockable_traits.hpp>
 
-namespace boost
-{
-  namespace sync
-  {
+namespace boost {
+    namespace sync {
 #ifdef BOOST_THREAD_NO_AUTO_DETECT_MUTEX_TYPES
-    template<>
-    struct is_basic_lockable<shared_mutex>
-    {
-      BOOST_STATIC_CONSTANT(bool, value = true);
-    };
-    template<>
-    struct is_lockable<shared_mutex>
-    {
-      BOOST_STATIC_CONSTANT(bool, value = true);
-    };
+        template<>
+        struct is_basic_lockable<shared_mutex>
+        {
+          BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+        template<>
+        struct is_lockable<shared_mutex>
+        {
+          BOOST_STATIC_CONSTANT(bool, value = true);
+        };
 #endif
 
-  }
+    }
 }
 
 #endif

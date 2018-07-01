@@ -8,28 +8,27 @@
 #if !defined(FUSION_SIZE_IMPL_20060124_0800)
 #define FUSION_SIZE_IMPL_20060124_0800
 
-namespace boost { namespace fusion {
-    
-    struct zip_view_tag;
+namespace boost {
+    namespace fusion {
 
-    namespace extension
-    {
-        template<typename Sequence>
-        struct size;
+        struct zip_view_tag;
 
-        template<typename Tag>
-        struct size_impl;
-
-        template<>
-        struct size_impl<zip_view_tag>
-        {
+        namespace extension {
             template<typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::size type;
+            struct size;
+
+            template<typename Tag>
+            struct size_impl;
+
+            template<>
+            struct size_impl<zip_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::size type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

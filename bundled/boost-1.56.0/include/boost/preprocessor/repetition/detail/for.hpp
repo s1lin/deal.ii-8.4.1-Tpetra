@@ -6,19 +6,29 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_REPETITION_DETAIL_FOR_HPP
 # define BOOST_PREPROCESSOR_REPETITION_DETAIL_FOR_HPP
 #
+
+
 # include <boost/preprocessor/control/expr_iif.hpp>
 # include <boost/preprocessor/control/iif.hpp>
 # include <boost/preprocessor/logical/bool.hpp>
 # include <boost/preprocessor/tuple/eat.hpp>
+
 #
+
 # define BOOST_PP_FOR_1(s, p, o, m) BOOST_PP_FOR_1_C(BOOST_PP_BOOL(p(2, s)), s, p, o, m)
 # define BOOST_PP_FOR_2(s, p, o, m) BOOST_PP_FOR_2_C(BOOST_PP_BOOL(p(3, s)), s, p, o, m)
 # define BOOST_PP_FOR_3(s, p, o, m) BOOST_PP_FOR_3_C(BOOST_PP_BOOL(p(4, s)), s, p, o, m)
@@ -276,6 +286,7 @@
 # define BOOST_PP_FOR_255(s, p, o, m) BOOST_PP_FOR_255_C(BOOST_PP_BOOL(p(256, s)), s, p, o, m)
 # define BOOST_PP_FOR_256(s, p, o, m) BOOST_PP_FOR_256_C(BOOST_PP_BOOL(p(257, s)), s, p, o, m)
 #
+
 # define BOOST_PP_FOR_1_C(c, s, p, o, m) BOOST_PP_IIF(c, m, BOOST_PP_TUPLE_EAT_2)(2, s) BOOST_PP_IIF(c, BOOST_PP_FOR_2, BOOST_PP_TUPLE_EAT_4)(BOOST_PP_EXPR_IIF(c, o)(2, s), p, o, m)
 # define BOOST_PP_FOR_2_C(c, s, p, o, m) BOOST_PP_IIF(c, m, BOOST_PP_TUPLE_EAT_2)(3, s) BOOST_PP_IIF(c, BOOST_PP_FOR_3, BOOST_PP_TUPLE_EAT_4)(BOOST_PP_EXPR_IIF(c, o)(3, s), p, o, m)
 # define BOOST_PP_FOR_3_C(c, s, p, o, m) BOOST_PP_IIF(c, m, BOOST_PP_TUPLE_EAT_2)(4, s) BOOST_PP_IIF(c, BOOST_PP_FOR_4, BOOST_PP_TUPLE_EAT_4)(BOOST_PP_EXPR_IIF(c, o)(4, s), p, o, m)
@@ -533,4 +544,5 @@
 # define BOOST_PP_FOR_255_C(c, s, p, o, m) BOOST_PP_IIF(c, m, BOOST_PP_TUPLE_EAT_2)(256, s) BOOST_PP_IIF(c, BOOST_PP_FOR_256, BOOST_PP_TUPLE_EAT_4)(BOOST_PP_EXPR_IIF(c, o)(256, s), p, o, m)
 # define BOOST_PP_FOR_256_C(c, s, p, o, m) BOOST_PP_IIF(c, m, BOOST_PP_TUPLE_EAT_2)(257, s) BOOST_PP_IIF(c, BOOST_PP_FOR_257, BOOST_PP_TUPLE_EAT_4)(BOOST_PP_EXPR_IIF(c, o)(257, s), p, o, m)
 #
+
 # endif

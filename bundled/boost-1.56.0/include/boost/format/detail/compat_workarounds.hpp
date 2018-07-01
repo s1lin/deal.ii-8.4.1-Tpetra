@@ -36,30 +36,31 @@ namespace boost {
         // gcc-2.95 char traits (non-conformantly named string_char_traits) 
         // lack several functions so we extend them in a replacement class.
         template<class Tr>
-        class CompatTraits; 
+        class CompatTraits;
 
         // std::allocator<Ch> in gcc-2.95 is ok, but basic_string only works 
         // with plain 'std::alloc' still, alt_stringbuf requires a functionnal
         // alloc template argument, so we need a replacement allocator
         template<class Alloc>
-        class CompatAlloc; 
+        class CompatAlloc;
     } // N.S. io
 }// N.S. boost
 
 
 #include <boost/format/detail/config_macros.hpp>
-   // sets-up macros and load compiler-specific workarounds headers.
+// sets-up macros and load compiler-specific workarounds headers.
 
 #if !defined(BOOST_FORMAT_STREAMBUF_DEFINED)
 // workarounds-gcc-2.95 might have defined own streambuf
 #include <streambuf>
+
 #endif
 
 #if !defined(BOOST_FORMAT_OSTREAM_DEFINED)
 // workarounds-gcc-2.95 might already have included <iostream>
 #include <ostream>
-#endif
 
+#endif
 
 
 namespace boost {
@@ -67,18 +68,16 @@ namespace boost {
 
         // **** CompatTraits general definitions : ----------------------------
         template<class Tr>
-        class CompatTraits
-        {        // general case : be transparent
+        class CompatTraits {        // general case : be transparent
         public:
-            typedef Tr  compatible_type;
+            typedef Tr compatible_type;
         };
 
         // **** CompatAlloc general definitions : -----------------------------
         template<class Alloc>
-        class CompatAlloc
-        {        // general case : be transparent
+        class CompatAlloc {        // general case : be transparent
         public:
-            typedef Alloc  compatible_type;
+            typedef Alloc compatible_type;
         };
 
     } //N.S. io

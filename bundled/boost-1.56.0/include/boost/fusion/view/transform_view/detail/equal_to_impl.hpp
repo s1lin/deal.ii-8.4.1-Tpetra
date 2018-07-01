@@ -10,34 +10,33 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct transform_view_iterator_tag;
-    struct transform_view_iterator2_tag;
+        struct transform_view_iterator_tag;
+        struct transform_view_iterator2_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct equal_to_impl;
+        namespace extension {
+            template<typename Tag>
+            struct equal_to_impl;
 
-        template<>
-        struct equal_to_impl<transform_view_iterator_tag>
-        {
-            template<typename It1, typename It2>
-            struct apply
-                : result_of::equal_to<typename It1::first_type, typename It2::first_type>
-            {};
-        };
+            template<>
+            struct equal_to_impl<transform_view_iterator_tag> {
+                template<typename It1, typename It2>
+                struct apply
+                        : result_of::equal_to<typename It1::first_type, typename It2::first_type> {
+                };
+            };
 
-        template<>
-        struct equal_to_impl<transform_view_iterator2_tag>
-        {
-            template<typename It1, typename It2>
-            struct apply
-                : result_of::equal_to<typename It1::first1_type, typename It2::first1_type>
-            {};
-        };
+            template<>
+            struct equal_to_impl<transform_view_iterator2_tag> {
+                template<typename It1, typename It2>
+                struct apply
+                        : result_of::equal_to<typename It1::first1_type, typename It2::first1_type> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

@@ -7,10 +7,15 @@
 #if !defined(BOOST_SPIRIT_X3_DETAIL_TESTING_JUNE_05_2014_00422PM)
 #define BOOST_SPIRIT_X3_DETAIL_TESTING_JUNE_05_2014_00422PM
 
-namespace boost { namespace spirit { namespace x3 { namespace testing
-{
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            namespace testing {
 
 
-}}}}
+            }
+        }
+    }
+}
 
 #endif

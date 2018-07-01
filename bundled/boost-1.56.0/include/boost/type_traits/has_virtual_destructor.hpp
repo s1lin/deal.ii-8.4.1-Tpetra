@@ -17,9 +17,10 @@
 namespace boost {
 
 #ifdef BOOST_HAS_VIRTUAL_DESTRUCTOR
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_virtual_destructor,T,BOOST_HAS_VIRTUAL_DESTRUCTOR(T))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_virtual_destructor,T,BOOST_HAS_VIRTUAL_DESTRUCTOR(T))
 #else
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_virtual_destructor,T,false)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_virtual_destructor, T,
+    false)
 #endif
 
 } // namespace boost

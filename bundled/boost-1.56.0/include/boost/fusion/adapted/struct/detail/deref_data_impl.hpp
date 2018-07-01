@@ -8,15 +8,18 @@
 #ifndef BOOST_FUSION_ADAPTED_STRUCT_DETAIL_DEREF_DATA_IMPL_HPP
 #define BOOST_FUSION_ADAPTED_STRUCT_DETAIL_DEREF_DATA_IMPL_HPP
 
-namespace boost { namespace fusion { namespace extension
-{
-    template <typename>
-    struct deref_data_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct deref_data_impl;
 
-    template <>
-    struct deref_data_impl<struct_iterator_tag>
-      : deref_impl<struct_iterator_tag>
-    {};
-}}}
+            template<>
+            struct deref_data_impl<struct_iterator_tag>
+                    : deref_impl<struct_iterator_tag> {
+            };
+        }
+    }
+}
 
 #endif

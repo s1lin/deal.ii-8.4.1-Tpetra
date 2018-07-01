@@ -9,24 +9,24 @@
 /* -------------------------------------------------------------------------- */
 
 void umfpack_di_report_control
-(
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                const double Control[UMFPACK_CONTROL]
+        );
 
 void umfpack_dl_report_control
-(
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                const double Control[UMFPACK_CONTROL]
+        );
 
 void umfpack_zi_report_control
-(
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                const double Control[UMFPACK_CONTROL]
+        );
 
 void umfpack_zl_report_control
-(
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                const double Control[UMFPACK_CONTROL]
+        );
 
 /*
 double int Syntax:

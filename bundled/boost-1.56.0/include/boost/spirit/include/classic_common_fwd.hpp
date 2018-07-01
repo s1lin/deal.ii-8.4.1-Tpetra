@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_COMMON_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_COMMON_FWD
+
 #include <boost/spirit/home/classic/tree/common_fwd.hpp>
+
 #endif

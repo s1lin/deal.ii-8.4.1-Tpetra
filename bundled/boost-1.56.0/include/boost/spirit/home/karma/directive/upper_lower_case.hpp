@@ -16,70 +16,74 @@
 #include <boost/spirit/home/karma/domain.hpp>
 #include <boost/spirit/home/karma/meta_compiler.hpp>
 
-namespace boost { namespace spirit
+namespace boost {
+    namespace spirit {
+        ///////////////////////////////////////////////////////////////////////////
+        // Enablers
+        ///////////////////////////////////////////////////////////////////////////
+        template<typename CharEncoding>
+        struct use_directive<
+                karma::domain, tag::char_code < tag::upper, CharEncoding> > // enables upper
+        : mpl::true_ {
+    };
+
+    template<typename CharEncoding>
+    struct use_directive<
+            karma::domain, tag::char_code < tag::lower, CharEncoding> > // enables lower
+    : mpl::true_ {
+};
+
+///////////////////////////////////////////////////////////////////////////
+template<typename CharEncoding>
+struct is_modifier_directive<karma::domain, tag::char_code < tag::upper, CharEncoding> >
+: mpl::true_ {
+};
+
+template<typename CharEncoding>
+struct is_modifier_directive<karma::domain, tag::char_code < tag::lower, CharEncoding> >
+: mpl::true_ {
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Don't add tag::upper or tag::lower if there is already one of those in
+// the modifier list
+template<typename Current, typename CharEncoding>
+struct compound_modifier<
+        Current, tag::char_code < tag::upper, CharEncoding>
+, typename enable_if<
+        has_modifier < Current, tag::char_code < tag::lower, CharEncoding> >
+>::type
+>
+: Current
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharEncoding>
-    struct use_directive<
-        karma::domain, tag::char_code<tag::upper, CharEncoding> > // enables upper
-      : mpl::true_ {};
+compound_modifier()
+        : Current() {}
 
-    template <typename CharEncoding>
-    struct use_directive<
-        karma::domain, tag::char_code<tag::lower, CharEncoding> > // enables lower
-      : mpl::true_ {};
+compound_modifier(Current
+const& current,
+tag::char_code <tag::upper, CharEncoding> const&)
+:
+Current(current) {}
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharEncoding>
-    struct is_modifier_directive<karma::domain
-        , tag::char_code<tag::upper, CharEncoding> >
-      : mpl::true_ {};
+template<typename Current, typename CharEncoding>
+struct compound_modifier<
+        Current, tag::char_code < tag::lower, CharEncoding>
+, typename enable_if<
+        has_modifier < Current, tag::char_code < tag::upper, CharEncoding> >
+>::type
+>
+: Current
+{
+compound_modifier()
+        : Current() {}
 
-    template <typename CharEncoding>
-    struct is_modifier_directive<karma::domain
-        , tag::char_code<tag::lower, CharEncoding> >
-      : mpl::true_ {};
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Don't add tag::upper or tag::lower if there is already one of those in
-    // the modifier list
-    template <typename Current, typename CharEncoding>
-    struct compound_modifier<
-            Current
-          , tag::char_code<tag::upper, CharEncoding>
-          , typename enable_if<
-                has_modifier<Current, tag::char_code<tag::lower, CharEncoding> > 
-            >::type
-          >
-      : Current
-    {
-        compound_modifier()
-          : Current() {}
-
-        compound_modifier(Current const& current, 
-                tag::char_code<tag::upper, CharEncoding> const&)
-          : Current(current) {}
-    };
-
-    template <typename Current, typename CharEncoding>
-    struct compound_modifier<
-            Current
-          , tag::char_code<tag::lower, CharEncoding>
-          , typename enable_if<
-                has_modifier<Current, tag::char_code<tag::upper, CharEncoding> > 
-            >::type
-          >
-      : Current
-    {
-        compound_modifier()
-          : Current() {}
-
-        compound_modifier(Current const& current, 
-                tag::char_code<tag::lower, CharEncoding> const&)
-          : Current(current) {}
-    };
+compound_modifier(Current
+const& current,
+tag::char_code <tag::lower, CharEncoding> const&)
+:
+Current(current) {}
+};
 }}
 
 #endif

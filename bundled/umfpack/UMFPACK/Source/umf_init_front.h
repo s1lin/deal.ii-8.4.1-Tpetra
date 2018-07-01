@@ -5,7 +5,7 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_init_front
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );

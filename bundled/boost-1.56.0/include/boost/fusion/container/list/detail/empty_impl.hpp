@@ -11,29 +11,28 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/fusion/container/list/nil.hpp>
 
-namespace boost { namespace fusion
-{
-    struct cons_tag;
+namespace boost {
+    namespace fusion {
+        struct cons_tag;
 
-    struct nil_;
+        struct nil_;
 
-    template <typename Car, typename Cdr>
-    struct cons;
+        template<typename Car, typename Cdr>
+        struct cons;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct empty_impl;
+        namespace extension {
+            template<typename Tag>
+            struct empty_impl;
 
-        template <>
-        struct empty_impl<cons_tag>
-        {
-            template <typename Sequence>
-            struct apply
-                : boost::is_convertible<Sequence, nil_>
-            {};
-        };
+            template<>
+            struct empty_impl<cons_tag> {
+                template<typename Sequence>
+                struct apply
+                        : boost::is_convertible<Sequence, nil_> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

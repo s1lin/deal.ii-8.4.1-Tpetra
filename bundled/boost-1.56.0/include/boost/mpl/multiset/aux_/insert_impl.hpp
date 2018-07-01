@@ -18,17 +18,18 @@
 #include <boost/mpl/multiset/aux_/tag.hpp>
 #include <boost/mpl/insert_fwd.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct insert_impl< aux::multiset_tag >
-{
-    template< typename Set, typename Key, typename unused_ > struct apply
-    {
-        typedef ms_item<Key,Set> type;
-    };
-};
+        template<>
+        struct insert_impl<aux::multiset_tag> {
+            template<typename Set, typename Key, typename unused_>
+            struct apply {
+                typedef ms_item <Key, Set> type;
+            };
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_MULTISET_AUX_INSERT_IMPL_HPP_INCLUDED

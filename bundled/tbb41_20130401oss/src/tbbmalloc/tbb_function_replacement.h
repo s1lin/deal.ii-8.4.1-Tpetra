@@ -30,6 +30,7 @@
 #define __TBB_function_replacement_H
 
 #include <stddef.h> //for ptrdiff_t
+
 typedef enum {
     FRR_OK,     /* Succeeded in replacing the function */
     FRR_NODLL,  /* The requested DLL was not found */
@@ -50,8 +51,11 @@ typedef void (*FUNCPTR)();
 #define ReplaceFunction ReplaceFunctionW
 #endif //UNICODE
 
-FRR_TYPE ReplaceFunctionA(const char *dllName, const char *funcName, FUNCPTR newFunc, const char ** opcodes, FUNCPTR* origFunc=NULL);
-FRR_TYPE ReplaceFunctionW(const wchar_t *dllName, const char *funcName, FUNCPTR newFunc, const char ** opcodes, FUNCPTR* origFunc=NULL);
+FRR_TYPE ReplaceFunctionA(const char *dllName, const char *funcName, FUNCPTR newFunc, const char **opcodes,
+                          FUNCPTR *origFunc = NULL);
+
+FRR_TYPE ReplaceFunctionW(const wchar_t *dllName, const char *funcName, FUNCPTR newFunc, const char **opcodes,
+                          FUNCPTR *origFunc = NULL);
 
 // Utilities to convert between ADDRESS and LPVOID
 union Int2Ptr {
@@ -60,6 +64,7 @@ union Int2Ptr {
 };
 
 inline UINT_PTR Ptr2Addrint(LPVOID ptr);
+
 inline LPVOID Addrint2Ptr(UINT_PTR ptr);
 
 // Use this value as the maximum size the trampoline region
@@ -77,7 +82,7 @@ const unsigned SIZE_OF_ADDRESS = 8;
 // The max distance covered in 32 bits: 2^31 - 1 - C
 // where C should not be smaller than the size of a probe.
 // The latter is important to correctly handle "backward" jumps.
-const __int64 MAX_DISTANCE = (((__int64)1 << 31) - 1) - MAX_PROBE_SIZE;
+const __int64 MAX_DISTANCE = (((__int64) 1 << 31) - 1) - MAX_PROBE_SIZE;
 
 // The maximum number of distinct buffers in memory
 const ptrdiff_t MAX_NUM_BUFFERS = 256;

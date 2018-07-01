@@ -5,14 +5,14 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_kernel
-(
-    const Int Ap [ ],
-    const Int Ai [ ],
-    const double Ax [ ],
+        (
+                const Int Ap[],
+                const Int Ai[],
+                const double Ax[],
 #ifdef COMPLEX
-    const double Az [ ],
+        const double Az [ ],
 #endif
-    NumericType *Numeric,
-    WorkType *Work,
-    SymbolicType *Symbolic
-) ;
+                NumericType *Numeric,
+                WorkType *Work,
+                SymbolicType *Symbolic
+);

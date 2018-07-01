@@ -14,43 +14,43 @@
 
 
 #include <exception>
-#include <boost/assert.hpp>
 #include <string>
 
 #define BOOST_ARCHIVE_SOURCE
+
 #include <boost/archive/xml_archive_exception.hpp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
-BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
-xml_archive_exception::xml_archive_exception(
-        exception_code c, 
-        const char * e1,
-        const char * e2
-    ) : 
-        archive_exception(other_exception, e1, e2)
-    {
-        switch(c){
-        case xml_archive_parsing_error:
-            archive_exception::append(0, "unrecognized XML syntax");
-            break;
-        case xml_archive_tag_mismatch:
-            archive_exception::append(0, "XML start/end tag mismatch");
-            if(NULL != e1){
-                archive_exception::append(0, " - ");
-                archive_exception::append(0, e1);
-            }    
-            break;
-        case xml_archive_tag_name_error:
-            archive_exception::append(0, "Invalid XML tag name");
-            break;
-        default:
-            BOOST_ASSERT(false);
-            archive_exception::append(0, "programming error");
-            break;
+        BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
+
+        xml_archive_exception::xml_archive_exception(
+                exception_code c,
+                const char *e1,
+                const char *e2
+        ) :
+                archive_exception(other_exception, e1, e2) {
+            switch (c) {
+                case xml_archive_parsing_error:
+                    archive_exception::append(0, "unrecognized XML syntax");
+                    break;
+                case xml_archive_tag_mismatch:
+                    archive_exception::append(0, "XML start/end tag mismatch");
+                    if (NULL != e1) {
+                        archive_exception::append(0, " - ");
+                        archive_exception::append(0, e1);
+                    }
+                    break;
+                case xml_archive_tag_name_error:
+                    archive_exception::append(0, "Invalid XML tag name");
+                    break;
+                default:
+                    BOOST_ASSERT(false);
+                    archive_exception::append(0, "programming error");
+                    break;
+            }
         }
-    }
 
-} // archive
+    } // archive
 } // boost

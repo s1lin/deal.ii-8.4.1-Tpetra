@@ -42,7 +42,9 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include <winresrc.h>
+
 #define ENDL "\r\n"
+
 #include "tbb/tbb_version.h"
 
 #define TBBMALLOC_VERNUMBERS TBB_VERSION_MAJOR, TBB_VERSION_MINOR, __TBB_VERSION_YMD
@@ -73,45 +75,50 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION TBBMALLOC_VERNUMBERS
- PRODUCTVERSION TBB_VERNUMBERS
- FILEFLAGSMASK 0x17L
+FILEVERSION TBBMALLOC_VERNUMBERS
+PRODUCTVERSION TBB_VERNUMBERS
+FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
- FILEFLAGS 0x1L
+FILEFLAGS 0x1L
 #else
- FILEFLAGS 0x0L
+FILEFLAGS 0x0L
 #endif
- FILEOS 0x40004L
- FILETYPE 0x2L
- FILESUBTYPE 0x0L
+FILEOS 0x40004L
+FILETYPE 0x2L
+FILESUBTYPE 0x0L
 BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "000004b0"
-        BEGIN
-            VALUE "CompanyName", "Intel Corporation\0"
-            VALUE "FileDescription", "Scalable Allocator library\0"
-            VALUE "FileVersion", TBBMALLOC_VERSION "\0"
+        BLOCK
+"StringFileInfo"
+BEGIN
+        BLOCK
+"000004b0"
+BEGIN
+        VALUE
+"CompanyName", "Intel Corporation\0"
+VALUE "FileDescription", "Scalable Allocator library\0"
+VALUE "FileVersion",
+TBBMALLOC_VERSION "\0"
 //what is it?            VALUE "InternalName", "tbbmalloc\0"
-            VALUE "LegalCopyright", "Copyright 2005-2013 Intel Corporation.  All Rights Reserved.\0"
-            VALUE "LegalTrademarks", "\0"
+VALUE "LegalCopyright", "Copyright 2005-2013 Intel Corporation.  All Rights Reserved.\0"
+VALUE "LegalTrademarks", "\0"
 #ifndef TBB_USE_DEBUG
-            VALUE "OriginalFilename", "tbbmalloc.dll\0"
+VALUE "OriginalFilename", "tbbmalloc.dll\0"
 #else
-            VALUE "OriginalFilename", "tbbmalloc_debug.dll\0"
+VALUE "OriginalFilename", "tbbmalloc_debug.dll\0"
 #endif
-            VALUE "ProductName", "Intel(R) Threading Building Blocks for Windows\0"
-            VALUE "ProductVersion", TBB_VERSION "\0"
-            VALUE "Comments", TBB_VERSION_STRINGS "\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "SpecialBuild", "\0"
-        END
-    END
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x0, 1200
-    END
+VALUE "ProductName", "Intel(R) Threading Building Blocks for Windows\0"
+VALUE "ProductVersion", TBB_VERSION "\0"
+VALUE "Comments", TBB_VERSION_STRINGS "\0"
+VALUE "PrivateBuild", "\0"
+VALUE "SpecialBuild", "\0"
 END
+        END
+BLOCK "VarFileInfo"
+BEGIN
+        VALUE
+"Translation", 0x0, 1200
+END
+        END
 
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_RANGE_RUN
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_RANGE_RUN
+
 #include <boost/spirit/home/classic/utility/impl/chset/range_run.hpp>
+
 #endif

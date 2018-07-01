@@ -91,7 +91,7 @@ extern "C" {
  */
 
 #define SUITESPARSE_DATE "May 31, 2007"
-#define SUITESPARSE_VER_CODE(main,sub) ((main) * 1000 + (sub))
+#define SUITESPARSE_VER_CODE(main, sub) ((main) * 1000 + (sub))
 #define SUITESPARSE_MAIN_VERSION 3
 #define SUITESPARSE_SUB_VERSION 0
 #define SUITESPARSE_SUBSUB_VERSION 0

@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<inductance_dimension,si::system>    inductance;
-    
-BOOST_UNITS_STATIC_CONSTANT(henry,inductance);  
-BOOST_UNITS_STATIC_CONSTANT(henrys,inductance); 
+            typedef unit <inductance_dimension, si::system> inductance;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(henry, inductance
+            );
+            BOOST_UNITS_STATIC_CONSTANT(henrys, inductance
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

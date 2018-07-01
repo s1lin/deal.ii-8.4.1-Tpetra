@@ -12,7 +12,9 @@
 #include <boost/config.hpp>
 
 #if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
+
 #include <type_traits>
+
 #else
 #include <cstddef>
 #endif

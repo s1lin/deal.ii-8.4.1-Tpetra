@@ -15,30 +15,27 @@
 #pragma once
 #endif
 
-namespace boost
-{
-namespace detail
-{
-namespace winapi
-{
+namespace boost {
+    namespace detail {
+        namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::QueryPerformanceCounter;
-    using ::QueryPerformanceFrequency;
+            using ::QueryPerformanceCounter;
+            using ::QueryPerformanceFrequency;
 #else
-extern "C" { 
-    __declspec(dllimport) BOOL_ WINAPI
-        QueryPerformanceCounter(
-            LARGE_INTEGER_ *lpPerformanceCount
-        );
+            extern "C" {
+            __declspec(dllimport) BOOL_ WINAPI
+            QueryPerformanceCounter(
+                    LARGE_INTEGER_ * lpPerformanceCount
+            ) ;
 
-    __declspec(dllimport) BOOL_ WINAPI
-        QueryPerformanceFrequency(
-            LARGE_INTEGER_ *lpFrequency
-        );
-}
+            __declspec(dllimport) BOOL_ WINAPI
+            QueryPerformanceFrequency(
+                    LARGE_INTEGER_ * lpFrequency
+            ) ;
+            }
 #endif
-}
-}
+        }
+    }
 }
 
 #endif // BOOST_DETAIL_WINAPI_TIMERS_HPP

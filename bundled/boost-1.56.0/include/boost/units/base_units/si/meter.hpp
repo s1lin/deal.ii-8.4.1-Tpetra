@@ -20,19 +20,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace si {
+        namespace si {
 
-struct meter_base_unit : public base_unit<meter_base_unit, length_dimension, -9>
-{
-    static std::string name()   { return("meter"); }
-    static std::string symbol() { return("m"); }
-};
+            struct meter_base_unit : public base_unit<meter_base_unit, length_dimension, -9> {
+                static std::string name() { return ("meter"); }
 
-} // namespace si
+                static std::string symbol() { return ("m"); }
+            };
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

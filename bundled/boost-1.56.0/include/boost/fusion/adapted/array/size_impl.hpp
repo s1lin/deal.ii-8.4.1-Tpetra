@@ -12,19 +12,21 @@
 #include <boost/type_traits/rank.hpp>
 #include <boost/type_traits/extent.hpp>
 
-namespace boost { namespace fusion { namespace extension
-{
-    template<typename>
-    struct size_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct size_impl;
 
-    template<>
-    struct size_impl<po_array_tag>
-    {
-        template<typename Seq>
-        struct apply
-          : extent<Seq,rank<Seq>::value-1>
-        {};
-    };
-}}}
+            template<>
+            struct size_impl<po_array_tag> {
+                template<typename Seq>
+                struct apply
+                        : extent<Seq, rank<Seq>::value - 1> {
+                };
+            };
+        }
+    }
+}
 
 #endif

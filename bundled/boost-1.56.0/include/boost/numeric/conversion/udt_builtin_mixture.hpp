@@ -12,16 +12,17 @@
 
 #include "boost/numeric/conversion/detail/udt_builtin_mixture.hpp"
 
-namespace boost { namespace numeric
-{
+namespace boost {
+    namespace numeric {
 
-template<class T, class S>
-struct udt_builtin_mixture
-  : convdetail::get_udt_builtin_mixture<  BOOST_DEDUCED_TYPENAME remove_cv<T>::type
-                                         ,BOOST_DEDUCED_TYPENAME remove_cv<S>::type
-                                       >::type {} ;
+        template<class T, class S>
+        struct udt_builtin_mixture
+                : convdetail::get_udt_builtin_mixture<BOOST_DEDUCED_TYPENAME remove_cv<T>::type, BOOST_DEDUCED_TYPENAME remove_cv<S>::type
+                >::type {
+        };
 
-} } // namespace boost::numeric
+    }
+} // namespace boost::numeric
 
 #endif
 

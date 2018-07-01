@@ -6,18 +6,30 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
 # define BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
 #
+
+
 # include <boost/preprocessor/config/config.hpp>
+
 #
+
 # /* BOOST_PP_BOOL */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_BOOL(x) BOOST_PP_BOOL_I(x)
 # else
@@ -25,8 +37,10 @@
 #    define BOOST_PP_BOOL_OO(par) BOOST_PP_BOOL_I ## par
 # endif
 #
+
 # define BOOST_PP_BOOL_I(x) BOOST_PP_BOOL_ ## x
 #
+
 # define BOOST_PP_BOOL_0 0
 # define BOOST_PP_BOOL_1 1
 # define BOOST_PP_BOOL_2 1
@@ -285,4 +299,5 @@
 # define BOOST_PP_BOOL_255 1
 # define BOOST_PP_BOOL_256 1
 #
+
 # endif

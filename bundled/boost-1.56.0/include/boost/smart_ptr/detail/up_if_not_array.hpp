@@ -13,7 +13,7 @@
 
 namespace boost {
     namespace detail {
-        template<class T> 
+        template<class T>
         struct up_if_not_array {
             typedef std::unique_ptr<T> type;
         };

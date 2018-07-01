@@ -17,14 +17,11 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/concepts.hpp>
 
-namespace boost
-{
-    namespace adaptors
-    {
-        struct copied
-        {
+namespace boost {
+    namespace adaptors {
+        struct copied {
             copied(std::size_t t_, std::size_t u_)
-                : t(t_), u(u_) {}
+                    : t(t_), u(u_) {}
 
             std::size_t t;
             std::size_t u;
@@ -32,15 +29,15 @@ namespace boost
 
         template<class CopyableRandomAccessRange>
         inline CopyableRandomAccessRange
-        operator|(const CopyableRandomAccessRange& r, const copied& f)
-        {
+        operator|(const CopyableRandomAccessRange &r, const copied &f) {
             BOOST_RANGE_CONCEPT_ASSERT((
-                RandomAccessRangeConcept<const CopyableRandomAccessRange>));
+                                               RandomAccessRangeConcept<const CopyableRandomAccessRange>));
 
-            iterator_range<
-                BOOST_DEDUCED_TYPENAME range_iterator<
+            iterator_range <
+            BOOST_DEDUCED_TYPENAME
+            range_iterator<
                     const CopyableRandomAccessRange
-                >::type
+            >::type
             > temp(adaptors::slice(r, f.t, f.u));
 
             return CopyableRandomAccessRange(temp.begin(), temp.end());
@@ -48,18 +45,18 @@ namespace boost
 
         template<class CopyableRandomAccessRange>
         inline CopyableRandomAccessRange
-        copy(const CopyableRandomAccessRange& rng, std::size_t t, std::size_t u)
-        {
+        copy(const CopyableRandomAccessRange &rng, std::size_t t, std::size_t u) {
             BOOST_RANGE_CONCEPT_ASSERT((
-                RandomAccessRangeConcept<const CopyableRandomAccessRange>));
+                                               RandomAccessRangeConcept<const CopyableRandomAccessRange>));
 
-            iterator_range<
-                BOOST_DEDUCED_TYPENAME range_iterator<
+            iterator_range <
+            BOOST_DEDUCED_TYPENAME
+            range_iterator<
                     const CopyableRandomAccessRange
-                >::type
+            >::type
             > temp(adaptors::slice(rng, t, u));
 
-            return CopyableRandomAccessRange( temp.begin(), temp.end() );
+            return CopyableRandomAccessRange(temp.begin(), temp.end());
         }
     } // 'adaptors'
 

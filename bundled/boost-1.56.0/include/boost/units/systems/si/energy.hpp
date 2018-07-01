@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<energy_dimension,si::system>    energy;
-    
-BOOST_UNITS_STATIC_CONSTANT(joule,energy);  
-BOOST_UNITS_STATIC_CONSTANT(joules,energy); 
+            typedef unit <energy_dimension, si::system> energy;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(joule, energy
+            );
+            BOOST_UNITS_STATIC_CONSTANT(joules, energy
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

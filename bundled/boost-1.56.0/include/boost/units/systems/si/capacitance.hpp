@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<capacitance_dimension,si::system>    capacitance;
-    
-BOOST_UNITS_STATIC_CONSTANT(farad,capacitance);
-BOOST_UNITS_STATIC_CONSTANT(farads,capacitance);
+            typedef unit <capacitance_dimension, si::system> capacitance;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(farad, capacitance
+            );
+            BOOST_UNITS_STATIC_CONSTANT(farads, capacitance
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

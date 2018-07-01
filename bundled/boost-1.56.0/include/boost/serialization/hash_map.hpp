@@ -18,6 +18,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+
 #ifdef BOOST_HAS_HASH
 #include BOOST_HASH_MAP_HEADER
 

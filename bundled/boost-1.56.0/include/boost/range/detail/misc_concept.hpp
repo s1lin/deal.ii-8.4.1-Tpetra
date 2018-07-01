@@ -10,20 +10,19 @@
 
 #include <boost/concept_check.hpp>
 
-namespace boost
-{
-    namespace range_detail
-    {
+namespace boost {
+    namespace range_detail {
         template<typename T1, typename T2>
-        class SameTypeConcept
-        {
+        class SameTypeConcept {
         public:
             BOOST_CONCEPT_USAGE(SameTypeConcept)
-            {
-                same_type(a,b);
-            }
+                    {
+                            same_type(a, b);
+                    }
         private:
-            template<typename T> void same_type(T,T) {}
+            template<typename T>
+            void same_type(T, T) {}
+
             T1 a;
             T2 b;
         };

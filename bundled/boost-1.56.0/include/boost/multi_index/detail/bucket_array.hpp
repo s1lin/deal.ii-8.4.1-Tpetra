@@ -26,16 +26,18 @@
 #include <limits.h>
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+
 #include <boost/archive/archive_exception.hpp>
 #include <boost/serialization/access.hpp>
-#include <boost/throw_exception.hpp> 
+#include <boost/throw_exception.hpp>
+
 #endif
 
-namespace boost{
+namespace boost {
 
-namespace multi_index{
+    namespace multi_index {
 
-namespace detail{
+        namespace detail {
 
 /* bucket structure for use by hashed indices */
 
@@ -47,17 +49,17 @@ namespace detail{
 (50331653ul)(100663319ul)(201326611ul)(402653189ul)(805306457ul)          \
 (1610612741ul)(3221225473ul)
 
-#if ((((ULONG_MAX>>16)>>16)>>16)>>15)==0 /* unsigned long less than 64 bits */
+#if ((((ULONG_MAX >> 16) >> 16) >> 16) >> 15) == 0 /* unsigned long less than 64 bits */
 #define BOOST_MULTI_INDEX_BA_SIZES                                         \
 BOOST_MULTI_INDEX_BA_SIZES_32BIT                                           \
 (4294967291ul)
 #else
-  /* obtained with aid from
-   *   http://javaboutique.internet.com/prime_numb/
-   *   http://www.rsok.com/~jrm/next_ten_primes.html
-   * and verified with
-   *   http://www.alpertron.com.ar/ECM.HTM
-   */
+            /* obtained with aid from
+             *   http://javaboutique.internet.com/prime_numb/
+             *   http://www.rsok.com/~jrm/next_ten_primes.html
+             * and verified with
+             *   http://www.alpertron.com.ar/ECM.HTM
+             */
 
 #define BOOST_MULTI_INDEX_BA_SIZES                                         \
 BOOST_MULTI_INDEX_BA_SIZES_32BIT                                           \
@@ -73,137 +75,129 @@ BOOST_MULTI_INDEX_BA_SIZES_32BIT                                           \
 (13835058055282163729ul)(18446744073709551557ul)
 #endif
 
-template<bool _=true> /* templatized to have in-header static var defs */
-class bucket_array_base:private noncopyable
-{
-protected:
-  static const std::size_t sizes[];
+            template<bool _ = true> /* templatized to have in-header static var defs */
+            class bucket_array_base : private noncopyable {
+            protected:
+                static const std::size_t sizes[];
 
-  static std::size_t size_index(std::size_t n)
-  {
-    const std::size_t *bound=std::lower_bound(sizes,sizes+sizes_length,n);
-    if(bound==sizes+sizes_length)--bound;
-    return bound-sizes;
-  }
+                static std::size_t size_index(std::size_t n) {
+                    const std::size_t *bound = std::lower_bound(sizes, sizes + sizes_length, n);
+                    if (bound == sizes + sizes_length)--bound;
+                    return bound - sizes;
+                }
 
-#define BOOST_MULTI_INDEX_BA_POSITION_CASE(z,n,_)                    \
+#define BOOST_MULTI_INDEX_BA_POSITION_CASE(z, n, _)                    \
   case n:return hash%BOOST_PP_SEQ_ELEM(n,BOOST_MULTI_INDEX_BA_SIZES);
 
-  static std::size_t position(std::size_t hash,std::size_t size_index_)
-  {
-    /* Accelerate hash%sizes[size_index_] by replacing with a switch on
-     * hash%Ci expressions, each Ci a compile-time constant, which the
-     * compiler can implement without using integer division.
-     */
+                static std::size_t position(std::size_t hash, std::size_t size_index_) {
+                    /* Accelerate hash%sizes[size_index_] by replacing with a switch on
+                     * hash%Ci expressions, each Ci a compile-time constant, which the
+                     * compiler can implement without using integer division.
+                     */
 
-    switch(size_index_){
-      default: /* never used */
-      BOOST_PP_REPEAT(
-        BOOST_PP_SEQ_SIZE(BOOST_MULTI_INDEX_BA_SIZES),
-        BOOST_MULTI_INDEX_BA_POSITION_CASE,~)
-    }
-  }
+                    switch (size_index_) {
+                        default: /* never used */
+                            BOOST_PP_REPEAT(
+                                    BOOST_PP_SEQ_SIZE(BOOST_MULTI_INDEX_BA_SIZES),
+                                    BOOST_MULTI_INDEX_BA_POSITION_CASE, ~)
+                    }
+                }
 
-private:
-  static const std::size_t sizes_length;
-};
+            private:
+                static const std::size_t sizes_length;
+            };
 
-template<bool _>
-const std::size_t bucket_array_base<_>::sizes[]={
-  BOOST_PP_SEQ_ENUM(BOOST_MULTI_INDEX_BA_SIZES)
-};
+            template<bool _>
+            const std::size_t bucket_array_base<_>::sizes[] = {
+                    BOOST_PP_SEQ_ENUM(BOOST_MULTI_INDEX_BA_SIZES)
+            };
 
-template<bool _>
-const std::size_t bucket_array_base<_>::sizes_length=
-  sizeof(bucket_array_base<_>::sizes)/
-  sizeof(bucket_array_base<_>::sizes[0]);
+            template<bool _>
+            const std::size_t bucket_array_base<_>::sizes_length =
+                    sizeof(bucket_array_base<_>::sizes) /
+                    sizeof(bucket_array_base<_>::sizes[0]);
 
 #undef BOOST_MULTI_INDEX_BA_POSITION_CASE
 #undef BOOST_MULTI_INDEX_BA_SIZES
 #undef BOOST_MULTI_INDEX_BA_SIZES_32BIT
 
-template<typename Allocator>
-class bucket_array:bucket_array_base<>
-{
-  typedef bucket_array_base<>                        super;
-  typedef hashed_index_base_node_impl<
-    typename boost::detail::allocator::rebind_to<
-      Allocator,
-      char
-    >::type
-  >                                                  base_node_impl_type;
+            template<typename Allocator>
+            class bucket_array : bucket_array_base<> {
+                typedef bucket_array_base<> super;
+                typedef hashed_index_base_node_impl<
+                        typename boost::detail::allocator::rebind_to<
+                                Allocator,
+                                char
+                        >::type
+                > base_node_impl_type;
 
-public:
-  typedef typename base_node_impl_type::base_pointer base_pointer;
-  typedef typename base_node_impl_type::pointer      pointer;
+            public:
+                typedef typename base_node_impl_type::base_pointer base_pointer;
+                typedef typename base_node_impl_type::pointer pointer;
 
-  bucket_array(const Allocator& al,pointer end_,std::size_t size_):
-    size_index_(super::size_index(size_)),
-    spc(al,super::sizes[size_index_]+1)
-  {
-    clear(end_);
-  }
+                bucket_array(const Allocator &al, pointer end_, std::size_t size_) :
+                        size_index_(super::size_index(size_)),
+                        spc(al, super::sizes[size_index_] + 1) {
+                    clear(end_);
+                }
 
-  std::size_t size()const
-  {
-    return super::sizes[size_index_];
-  }
+                std::size_t size() const {
+                    return super::sizes[size_index_];
+                }
 
-  std::size_t position(std::size_t hash)const
-  {
-    return super::position(hash,size_index_);
-  }
+                std::size_t position(std::size_t hash) const {
+                    return super::position(hash, size_index_);
+                }
 
-  base_pointer begin()const{return buckets();}
-  base_pointer end()const{return buckets()+size();}
-  base_pointer at(std::size_t n)const{return buckets()+n;}
+                base_pointer begin() const { return buckets(); }
 
-  void clear(pointer end_)
-  {
-    for(base_pointer x=begin(),y=end();x!=y;++x)x->prior()=pointer(0);
-    end()->prior()=end_->prior()=end_;
-    end_->next()=end();
- }
+                base_pointer end() const { return buckets() + size(); }
 
-  void swap(bucket_array& x)
-  {
-    std::swap(size_index_,x.size_index_);
-    spc.swap(x.spc);
-  }
+                base_pointer at(std::size_t n) const { return buckets() + n; }
 
-private:
-  std::size_t                               size_index_;
-  auto_space<base_node_impl_type,Allocator> spc;
+                void clear(pointer end_) {
+                    for (base_pointer x = begin(), y = end(); x != y; ++x)x->prior() = pointer(0);
+                    end()->prior() = end_->prior() = end_;
+                    end_->next() = end();
+                }
 
-  base_pointer buckets()const
-  {
-    return spc.data();
-  }
+                void swap(bucket_array &x) {
+                    std::swap(size_index_, x.size_index_);
+                    spc.swap(x.spc);
+                }
+
+            private:
+                std::size_t size_index_;
+                auto_space <base_node_impl_type, Allocator> spc;
+
+                base_pointer buckets() const {
+                    return spc.data();
+                }
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
-  friend class boost::serialization::access;
-  
-  /* bucket_arrays do not emit any kind of serialization info. They are
-   * fed to Boost.Serialization as hashed index iterators need to track
-   * them during serialization.
-   */
 
-  template<class Archive>
-  void serialize(Archive&,const unsigned int)
-  {
-  }
+                friend class boost::serialization::access;
+
+                /* bucket_arrays do not emit any kind of serialization info. They are
+                 * fed to Boost.Serialization as hashed index iterators need to track
+                 * them during serialization.
+                 */
+
+                template<class Archive>
+                void serialize(Archive &, const unsigned int) {
+                }
+
 #endif
-};
+            };
 
-template<typename Allocator>
-void swap(bucket_array<Allocator>& x,bucket_array<Allocator>& y)
-{
-  x.swap(y);
-}
+            template<typename Allocator>
+            void swap(bucket_array<Allocator> &x, bucket_array<Allocator> &y) {
+                x.swap(y);
+            }
 
-} /* namespace multi_index::detail */
+        } /* namespace multi_index::detail */
 
-} /* namespace multi_index */
+    } /* namespace multi_index */
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
 /* bucket_arrays never get constructed directly by Boost.Serialization,
@@ -213,26 +207,25 @@ void swap(bucket_array<Allocator>& x,bucket_array<Allocator>& y)
  */
 
 #if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-namespace serialization{
+    namespace serialization{
 #else
-namespace multi_index{
-namespace detail{
+    namespace multi_index {
+        namespace detail {
 #endif
 
-template<class Archive,typename Allocator>
-inline void load_construct_data(
-  Archive&,boost::multi_index::detail::bucket_array<Allocator>*,
-  const unsigned int)
-{
-  throw_exception(
-    archive::archive_exception(archive::archive_exception::other_exception));
-}
+            template<class Archive, typename Allocator>
+            inline void load_construct_data(
+                    Archive &, boost::multi_index::detail::bucket_array<Allocator> *,
+                    const unsigned int) {
+                throw_exception(
+                        archive::archive_exception(archive::archive_exception::other_exception));
+            }
 
 #if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-} /* namespace serialization */
+            } /* namespace serialization */
 #else
-} /* namespace multi_index::detail */
-} /* namespace multi_index */
+        } /* namespace multi_index::detail */
+    } /* namespace multi_index */
 #endif
 
 #endif

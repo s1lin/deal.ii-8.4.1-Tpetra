@@ -15,31 +15,31 @@
 ## ---------------------------------------------------------------------
 
 INCLUDE_DIRECTORIES(
-  ${BOOST_BUNDLED_INCLUDE_DIRS}
-  ${DEAL_II_INCLUDE_DIRS}
-  )
+        ${BOOST_BUNDLED_INCLUDE_DIRS}
+        ${DEAL_II_INCLUDE_DIRS}
+)
 
-IF(DEAL_II_USE_MT_POSIX)
-  SET(src_boost_thread
-    pthread/once.cpp
-    pthread/thread.cpp
-    )
-ELSE()
-  SET(src_boost_thread
-    win32/thread.cpp
-    win32/tss_dll.cpp
-    win32/tss_pe.cpp
-    )
-ENDIF()
+IF (DEAL_II_USE_MT_POSIX)
+    SET(src_boost_thread
+            pthread/once.cpp
+            pthread/thread.cpp
+            )
+ELSE ()
+    SET(src_boost_thread
+            win32/thread.cpp
+            win32/tss_dll.cpp
+            win32/tss_pe.cpp
+            )
+ENDIF ()
 
 DEAL_II_ADD_LIBRARY(obj_boost_thread OBJECT ${src_boost_thread})
 DEAL_II_ADD_DEFINITIONS(obj_boost_thread
-  "BOOST_THREAD_BUILD_LIB" "BOOST_ALL_NO_LIB"
-  )
+        "BOOST_THREAD_BUILD_LIB" "BOOST_ALL_NO_LIB"
+        )
 
-IF(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  DEAL_II_ADD_DEFINITIONS(obj_boost_thread "BOOST_HAS_WINTHREADS")
-ELSE()
-  DEAL_II_ADD_DEFINITIONS(obj_boost_thread "BOOST_THREAD_POSIX")
-ENDIF()
+IF (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    DEAL_II_ADD_DEFINITIONS(obj_boost_thread "BOOST_HAS_WINTHREADS")
+ELSE ()
+    DEAL_II_ADD_DEFINITIONS(obj_boost_thread "BOOST_THREAD_POSIX")
+ENDIF ()
 

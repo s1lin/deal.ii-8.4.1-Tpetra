@@ -46,7 +46,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_DMC_NAME "Digital Mars"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_DMC,BOOST_COMP_DMC_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_DMC,
+BOOST_COMP_DMC_NAME)
 
 #ifdef BOOST_COMP_DMC_EMULATED
 #include <boost/predef/detail/test.h>

@@ -27,10 +27,11 @@
 
 // but forward to the "official" is_abstract
 namespace boost {
-namespace serialization {
-    template<class T>
-    struct is_abstract : boost::is_abstract< T > {} ;
-} // namespace serialization
+    namespace serialization {
+        template<class T>
+        struct is_abstract : boost::is_abstract<T> {
+        };
+    } // namespace serialization
 } // namespace boost
 
 #else

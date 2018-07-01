@@ -12,34 +12,32 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <tuple>
 
-namespace boost { namespace fusion
-{
-    struct std_tuple_tag;
+namespace boost {
+    namespace fusion {
+        struct std_tuple_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct end_impl;
+        namespace extension {
+            template<typename T>
+            struct end_impl;
 
-        template <>
-        struct end_impl<std_tuple_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename remove_const<Sequence>::type seq_type;
-                static int const size = std::tuple_size<seq_type>::value;
-                typedef std_tuple_iterator<Sequence, size> type;
+            template<>
+            struct end_impl<std_tuple_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename remove_const<Sequence>::type seq_type;
+                    static int const size = std::tuple_size<seq_type>::value;
+                    typedef std_tuple_iterator <Sequence, size> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& v)
-                {
-                    return type(v);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& v)
+                    {
+                        return type(v);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

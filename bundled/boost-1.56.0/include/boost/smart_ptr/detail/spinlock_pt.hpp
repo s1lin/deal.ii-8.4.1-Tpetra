@@ -17,61 +17,53 @@
 
 #include <pthread.h>
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class spinlock
-{
-public:
+        class spinlock {
+        public:
 
-    pthread_mutex_t v_;
+            pthread_mutex_t v_;
 
-public:
+        public:
 
-    bool try_lock()
-    {
-        return pthread_mutex_trylock( &v_ ) == 0;
-    }
+            bool try_lock() {
+                return pthread_mutex_trylock(&v_) == 0;
+            }
 
-    void lock()
-    {
-        pthread_mutex_lock( &v_ );
-    }
+            void lock() {
+                pthread_mutex_lock(&v_);
+            }
 
-    void unlock()
-    {
-        pthread_mutex_unlock( &v_ );
-    }
+            void unlock() {
+                pthread_mutex_unlock(&v_);
+            }
 
-public:
+        public:
 
-    class scoped_lock
-    {
-    private:
+            class scoped_lock {
+            private:
 
-        spinlock & sp_;
+                spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+                scoped_lock(scoped_lock const &);
 
-    public:
+                scoped_lock &operator=(scoped_lock const &);
 
-        explicit scoped_lock( spinlock & sp ): sp_( sp )
-        {
-            sp.lock();
-        }
+            public:
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
-};
+                explicit scoped_lock(spinlock &sp) : sp_(sp) {
+                    sp.lock();
+                }
 
-} // namespace detail
+                ~scoped_lock() {
+                    sp_.unlock();
+                }
+            };
+        };
+
+    } // namespace detail
 } // namespace boost
 
 #define BOOST_DETAIL_SPINLOCK_INIT { PTHREAD_MUTEX_INITIALIZER }

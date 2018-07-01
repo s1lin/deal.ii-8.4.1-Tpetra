@@ -18,24 +18,23 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
-template <typename T> 
-struct is_fundamental_impl
-    : public ::boost::type_traits::ice_or< 
-          ::boost::is_arithmetic<T>::value
-        , ::boost::is_void<T>::value
-        >
-{ 
-};
+        template<typename T>
+        struct is_fundamental_impl
+                : public ::boost::type_traits::ice_or<
+                        ::boost::is_arithmetic<T>::value, ::boost::is_void<T>::value
+                > {
+        };
 
-} // namespace detail
+    } // namespace detail
 
 //* is a type T a fundamental type described in the standard (3.9.1)
 #if defined( __CODEGEARC__ )
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_fundamental,T,__is_fundamental(T))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_fundamental,T,__is_fundamental(T))
 #else
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_fundamental,T,::boost::detail::is_fundamental_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_fundamental, T, ::boost::detail::is_fundamental_impl<T>::value
+    )
 #endif
 
 } // namespace boost

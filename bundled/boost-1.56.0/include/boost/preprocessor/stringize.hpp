@@ -6,18 +6,30 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_STRINGIZE_HPP
 # define BOOST_PREPROCESSOR_STRINGIZE_HPP
 #
+
+
 # include <boost/preprocessor/config/config.hpp>
+
 #
+
 # /* BOOST_PP_STRINGIZE */
+
 #
+
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
 #    define BOOST_PP_STRINGIZE(text) BOOST_PP_STRINGIZE_A((text))
 #    define BOOST_PP_STRINGIZE_A(arg) BOOST_PP_STRINGIZE_I arg
@@ -28,6 +40,8 @@
 #    define BOOST_PP_STRINGIZE(text) BOOST_PP_STRINGIZE_I(text)
 # endif
 #
+
 # define BOOST_PP_STRINGIZE_I(text) #text
 #
+
 # endif

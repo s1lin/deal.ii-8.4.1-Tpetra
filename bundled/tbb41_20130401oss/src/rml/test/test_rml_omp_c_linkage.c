@@ -29,6 +29,6 @@
 void Cplusplus();
 
 int main() {
-    Cplusplus();      
+    Cplusplus();
     return 0;
 } 

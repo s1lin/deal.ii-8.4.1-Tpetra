@@ -58,16 +58,15 @@ namespace boost {
 
             \note This function provides the strong exception-safety guarantee
         */
-        template< typename SequenceSequenceT, typename Range1T, typename Range2T >
-        inline SequenceSequenceT& find_all(
-            SequenceSequenceT& Result,
-            Range1T& Input,
-            const Range2T& Search)
-        {
+        template<typename SequenceSequenceT, typename Range1T, typename Range2T>
+        inline SequenceSequenceT &find_all(
+                SequenceSequenceT &Result,
+                Range1T &Input,
+                const Range2T &Search) {
             return ::boost::algorithm::iter_find(
-                Result,
-                Input,
-                ::boost::algorithm::first_finder(Search) );        
+                    Result,
+                    Input,
+                    ::boost::algorithm::first_finder(Search));
         }
 
         //! Find all algorithm ( case insensitive ) 
@@ -93,17 +92,16 @@ namespace boost {
 
             \note This function provides the strong exception-safety guarantee
         */
-        template< typename SequenceSequenceT, typename Range1T, typename Range2T >
-        inline SequenceSequenceT& ifind_all(
-            SequenceSequenceT& Result,
-            Range1T& Input,
-            const Range2T& Search,
-            const std::locale& Loc=std::locale() )
-        {
+        template<typename SequenceSequenceT, typename Range1T, typename Range2T>
+        inline SequenceSequenceT &ifind_all(
+                SequenceSequenceT &Result,
+                Range1T &Input,
+                const Range2T &Search,
+                const std::locale &Loc = std::locale()) {
             return ::boost::algorithm::iter_find(
-                Result,
-                Input,
-                ::boost::algorithm::first_finder(Search, is_iequal(Loc) ) );        
+                    Result,
+                    Input,
+                    ::boost::algorithm::first_finder(Search, is_iequal(Loc)));
         }
 
 
@@ -136,17 +134,16 @@ namespace boost {
 
             \note This function provides the strong exception-safety guarantee
         */
-        template< typename SequenceSequenceT, typename RangeT, typename PredicateT >
-        inline SequenceSequenceT& split(
-            SequenceSequenceT& Result,
-            RangeT& Input,
-            PredicateT Pred,
-            token_compress_mode_type eCompress=token_compress_off )
-        {
+        template<typename SequenceSequenceT, typename RangeT, typename PredicateT>
+        inline SequenceSequenceT &split(
+                SequenceSequenceT &Result,
+                RangeT &Input,
+                PredicateT Pred,
+                token_compress_mode_type eCompress = token_compress_off) {
             return ::boost::algorithm::iter_split(
-                Result,
-                Input,
-                ::boost::algorithm::token_finder( Pred, eCompress ) );         
+                    Result,
+                    Input,
+                    ::boost::algorithm::token_finder(Pred, eCompress));
         }
 
     } // namespace algorithm
@@ -154,7 +151,7 @@ namespace boost {
     // pull names to the boost namespace
     using algorithm::find_all;
     using algorithm::ifind_all;
-    using algorithm::split;    
+    using algorithm::split;
 
 } // namespace boost
 

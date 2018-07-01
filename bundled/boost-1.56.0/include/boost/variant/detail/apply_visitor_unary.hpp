@@ -52,13 +52,12 @@ namespace boost {
 
 #endif // EDG-based compilers workaround
 
-template <typename Visitor, typename Visitable>
-inline
+    template<typename Visitor, typename Visitable>
+    inline
     BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(Visitor)
-apply_visitor(Visitor& visitor, Visitable& visitable)
-{
-    return visitable.apply_visitor(visitor);
-}
+    apply_visitor(Visitor &visitor, Visitable &visitable) {
+        return visitable.apply_visitor(visitor);
+    }
 
 #undef BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE
 
@@ -66,13 +65,13 @@ apply_visitor(Visitor& visitor, Visitable& visitable)
 // const-visitor version:
 //
 
-template <typename Visitor, typename Visitable>
-inline
+    template<typename Visitor, typename Visitable>
+    inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor(const Visitor& visitor, Visitable& visitable)
-{
-    return visitable.apply_visitor(visitor);
-}
+
+    apply_visitor(const Visitor &visitor, Visitable &visitable) {
+        return visitable.apply_visitor(visitor);
+    }
 
 } // namespace boost
 

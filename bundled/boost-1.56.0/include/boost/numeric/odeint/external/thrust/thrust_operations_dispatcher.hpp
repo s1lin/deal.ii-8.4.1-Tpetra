@@ -26,22 +26,20 @@
 
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
 // specialization for thrust host_vector
-template< class T , class A >
-struct operations_dispatcher< thrust::host_vector< T , A > >
-{
-    typedef thrust_operations operations_type;
-};
+            template<class T, class A>
+            struct operations_dispatcher<thrust::host_vector < T, A> > {
+            typedef thrust_operations operations_type;
+        };
 
 // specialization for thrust device_vector
-template< class T , class A >
-struct operations_dispatcher< thrust::device_vector< T , A > >
-{
-    typedef thrust_operations operations_type;
-};
+        template<class T, class A>
+        struct operations_dispatcher<thrust::device_vector < T, A> > {
+        typedef thrust_operations operations_type;
+    };
 
 } // namespace odeint
 } // namespace numeric

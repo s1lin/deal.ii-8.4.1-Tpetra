@@ -19,15 +19,15 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Check that a type is a dimensionless unit.
-template<class T>
-struct is_dimensionless_unit :
-    public is_unit_of_dimension<T,dimensionless_type>
-{ };
+        template<class T>
+        struct is_dimensionless_unit :
+                public is_unit_of_dimension<T, dimensionless_type> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

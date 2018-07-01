@@ -9,31 +9,31 @@
 
 namespace std {
 #if !(defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 740)
-  using ::wctrans_t;
+    using ::wctrans_t;
 #endif
-  using ::wctype_t;
-  using ::wint_t;
-  using ::iswalnum;
-  using ::iswctype;
-  using ::iswlower;
-  using ::iswspace;
+    using ::wctype_t;
+    using ::wint_t;
+    using ::iswalnum;
+    using ::iswctype;
+    using ::iswlower;
+    using ::iswspace;
 #if !(defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 740)
-  using ::towctrans;
+    using ::towctrans;
 #endif
 #if !(defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 740)
-  using ::wctrans;
+    using ::wctrans;
 #endif
-  using ::iswalpha;
-  using ::iswdigit;
-  using ::iswprint;
-  using ::iswupper;
-  using ::towlower;
-  using ::wctype;
-  using ::iswcntrl;
-  using ::iswgraph;
-  using ::iswpunct;
-  using ::iswxdigit;
-  using ::towupper;
+    using ::iswalpha;
+    using ::iswdigit;
+    using ::iswprint;
+    using ::iswupper;
+    using ::towlower;
+    using ::wctype;
+    using ::iswcntrl;
+    using ::iswgraph;
+    using ::iswpunct;
+    using ::iswxdigit;
+    using ::towupper;
 }
 
 #endif // CWCTYPE_HEADER

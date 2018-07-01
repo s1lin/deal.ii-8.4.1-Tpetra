@@ -23,8 +23,7 @@
 # pragma warn -8026     // Functions with excep. spec. are not expanded inline
 #endif
 
-namespace boost
-{
+namespace boost {
 
 // The standard library that comes with Borland C++ 5.5.1, 5.6.4
 // defines std::exception and its members as having C calling
@@ -36,15 +35,13 @@ namespace boost
 # pragma option push -pc
 #endif
 
-class bad_weak_ptr: public std::exception
-{
-public:
+    class bad_weak_ptr : public std::exception {
+    public:
 
-    virtual char const * what() const throw()
-    {
-        return "tr1::bad_weak_ptr";
-    }
-};
+        virtual char const *what() const throw() {
+            return "tr1::bad_weak_ptr";
+        }
+    };
 
 #if defined(__BORLANDC__) && __BORLANDC__ <= 0x564
 # pragma option pop

@@ -21,123 +21,114 @@
 #include <boost/noncopyable.hpp>
 #include <cstddef>
 
-namespace boost{
+namespace boost {
 
-namespace multi_index{
+    namespace multi_index {
 
-namespace detail{
+        namespace detail {
 
 /* pointer structure for use by random access indices */
 
-template<typename Allocator>
-class random_access_index_ptr_array:private noncopyable
-{
-  typedef random_access_index_node_impl<
-    typename boost::detail::allocator::rebind_to<
-      Allocator,
-      char
-    >::type
-  >                                                     node_impl_type;
+            template<typename Allocator>
+            class random_access_index_ptr_array : private noncopyable {
+                typedef random_access_index_node_impl<
+                        typename boost::detail::allocator::rebind_to<
+                                Allocator,
+                                char
+                        >::type
+                > node_impl_type;
 
-public:
-  typedef typename node_impl_type::pointer              value_type;
-  typedef typename boost::detail::allocator::rebind_to<
-    Allocator,value_type
-  >::type::pointer                                      pointer;
+            public:
+                typedef typename node_impl_type::pointer value_type;
+                typedef typename boost::detail::allocator::rebind_to<
+                        Allocator, value_type
+                >::type::pointer pointer;
 
-  random_access_index_ptr_array(
-    const Allocator& al,value_type end_,std::size_t sz):
-    size_(sz),
-    capacity_(sz),
-    spc(al,capacity_+1)
-  {
-    *end()=end_;
-    end_->up()=end();
-  }
+                random_access_index_ptr_array(
+                        const Allocator &al, value_type end_, std::size_t sz) :
+                        size_(sz),
+                        capacity_(sz),
+                        spc(al, capacity_ + 1) {
+                    *end() = end_;
+                    end_->up() = end();
+                }
 
-  std::size_t size()const{return size_;}
-  std::size_t capacity()const{return capacity_;}
+                std::size_t size() const { return size_; }
 
-  void room_for_one()
-  {
-    if(size_==capacity_){
-      reserve(capacity_<=10?15:capacity_+capacity_/2);
-    }
-  }
+                std::size_t capacity() const { return capacity_; }
 
-  void reserve(std::size_t c)
-  {
-    if(c>capacity_)set_capacity(c);
-  }
+                void room_for_one() {
+                    if (size_ == capacity_) {
+                        reserve(capacity_ <= 10 ? 15 : capacity_ + capacity_ / 2);
+                    }
+                }
 
-  void shrink_to_fit()
-  {
-    if(capacity_>size_)set_capacity(size_);
-  }
+                void reserve(std::size_t c) {
+                    if (c > capacity_)set_capacity(c);
+                }
 
-  pointer begin()const{return ptrs();}
-  pointer end()const{return ptrs()+size_;}
-  pointer at(std::size_t n)const{return ptrs()+n;}
+                void shrink_to_fit() {
+                    if (capacity_ > size_)set_capacity(size_);
+                }
 
-  void push_back(value_type x)
-  {
-    *(end()+1)=*end();
-    (*(end()+1))->up()=end()+1;
-    *end()=x;
-    (*end())->up()=end();
-    ++size_;
-  }
+                pointer begin() const { return ptrs(); }
 
-  void erase(value_type x)
-  {
-    node_impl_type::extract(x->up(),end()+1);
-    --size_;
-  }
+                pointer end() const { return ptrs() + size_; }
 
-  void clear()
-  {
-    *begin()=*end();
-    (*begin())->up()=begin();
-    size_=0;
-  }
+                pointer at(std::size_t n) const { return ptrs() + n; }
 
-  void swap(random_access_index_ptr_array& x)
-  {
-    std::swap(size_,x.size_);
-    std::swap(capacity_,x.capacity_);
-    spc.swap(x.spc);
-  }
+                void push_back(value_type x) {
+                    *(end() + 1) = *end();
+                    (*(end() + 1))->up() = end() + 1;
+                    *end() = x;
+                    (*end())->up() = end();
+                    ++size_;
+                }
 
-private:
-  std::size_t                      size_;
-  std::size_t                      capacity_;
-  auto_space<value_type,Allocator> spc;
+                void erase(value_type x) {
+                    node_impl_type::extract(x->up(), end() + 1);
+                    --size_;
+                }
 
-  pointer ptrs()const
-  {
-    return spc.data();
-  }
+                void clear() {
+                    *begin() = *end();
+                    (*begin())->up() = begin();
+                    size_ = 0;
+                }
 
-  void set_capacity(std::size_t c)
-  {
-    auto_space<value_type,Allocator> spc1(spc.get_allocator(),c+1);
-    node_impl_type::transfer(begin(),end()+1,spc1.data());
-    spc.swap(spc1);
-    capacity_=c;
-  }
-};
+                void swap(random_access_index_ptr_array &x) {
+                    std::swap(size_, x.size_);
+                    std::swap(capacity_, x.capacity_);
+                    spc.swap(x.spc);
+                }
 
-template<typename Allocator>
-void swap(
-  random_access_index_ptr_array<Allocator>& x,
-  random_access_index_ptr_array<Allocator>& y)
-{
-  x.swap(y);
-}
+            private:
+                std::size_t size_;
+                std::size_t capacity_;
+                auto_space <value_type, Allocator> spc;
 
-} /* namespace multi_index::detail */
+                pointer ptrs() const {
+                    return spc.data();
+                }
 
-} /* namespace multi_index */
+                void set_capacity(std::size_t c) {
+                    auto_space <value_type, Allocator> spc1(spc.get_allocator(), c + 1);
+                    node_impl_type::transfer(begin(), end() + 1, spc1.data());
+                    spc.swap(spc1);
+                    capacity_ = c;
+                }
+            };
+
+            template<typename Allocator>
+            void swap(
+                    random_access_index_ptr_array<Allocator> &x,
+                    random_access_index_ptr_array<Allocator> &y) {
+                x.swap(y);
+            }
+
+        } /* namespace multi_index::detail */
+
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

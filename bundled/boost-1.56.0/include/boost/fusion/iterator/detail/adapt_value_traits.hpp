@@ -10,19 +10,20 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    struct adapt_value_traits
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef typename
-                result_of::value_of<typename Iterator::first_type>::type
-            type;
-        };
-    };
-}}}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            struct adapt_value_traits {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename
+                    result_of::value_of<typename Iterator::first_type>::type
+                            type;
+                };
+            };
+        }
+    }
+}
 
 #endif
 

@@ -25,30 +25,30 @@
 #  pragma warning (disable: 4512) // assignment operator could not be generated.
 #endif
 
-namespace boost { namespace fusion
-{
-    struct single_view_iterator_tag;
-    struct random_access_traversal_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_iterator_tag;
+        struct random_access_traversal_tag;
 
-    template <typename SingleView, typename Pos>
-    struct single_view_iterator
-        : iterator_base<single_view_iterator<SingleView, Pos> >
-    {
-        typedef single_view_iterator_tag fusion_tag;
-        typedef random_access_traversal_tag category;
-        typedef typename SingleView::value_type value_type;
-        typedef Pos position;
-        typedef SingleView single_view_type;
+        template<typename SingleView, typename Pos>
+        struct single_view_iterator
+                : iterator_base<single_view_iterator<SingleView, Pos> > {
+            typedef single_view_iterator_tag fusion_tag;
+            typedef random_access_traversal_tag category;
+            typedef typename SingleView::value_type value_type;
+            typedef Pos position;
+            typedef SingleView single_view_type;
 
-        BOOST_FUSION_GPU_ENABLED explicit single_view_iterator(single_view_type& in_view)
-            : view(in_view) {}
+            BOOST_FUSION_GPU_ENABLED explicit single_view_iterator(single_view_type &in_view)
+                    : view(in_view) {}
 
-        SingleView& view;
+            SingleView &view;
 
-    private:
-        single_view_iterator& operator=(single_view_iterator const&);
-    };
-}}
+        private:
+            single_view_iterator &operator=(single_view_iterator const &);
+        };
+    }
+}
 
 #if defined (BOOST_MSVC)
 #  pragma warning(pop)

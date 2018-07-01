@@ -6,18 +6,29 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 # define BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 #
+
+
 # include <boost/preprocessor/control/iif.hpp>
+
 #
+
 # /* BOOST_PP_AUTO_REC */
+
 #
+
 # define BOOST_PP_AUTO_REC(pred, n) BOOST_PP_NODE_ENTRY_ ## n(pred)
 #
+
 # define BOOST_PP_NODE_ENTRY_256(p) BOOST_PP_NODE_128(p)(p)(p)(p)(p)(p)(p)(p)
 # define BOOST_PP_NODE_ENTRY_128(p) BOOST_PP_NODE_64(p)(p)(p)(p)(p)(p)(p)
 # define BOOST_PP_NODE_ENTRY_64(p) BOOST_PP_NODE_32(p)(p)(p)(p)(p)(p)
@@ -27,6 +38,7 @@
 # define BOOST_PP_NODE_ENTRY_4(p) BOOST_PP_NODE_2(p)(p)
 # define BOOST_PP_NODE_ENTRY_2(p) BOOST_PP_NODE_1(p)
 #
+
 # define BOOST_PP_NODE_128(p) BOOST_PP_IIF(p##(128), BOOST_PP_NODE_64, BOOST_PP_NODE_192)
 #    define BOOST_PP_NODE_64(p) BOOST_PP_IIF(p##(64), BOOST_PP_NODE_32, BOOST_PP_NODE_96)
 #        define BOOST_PP_NODE_32(p) BOOST_PP_IIF(p##(32), BOOST_PP_NODE_16, BOOST_PP_NODE_48)
@@ -283,4 +295,5 @@
 #                            define BOOST_PP_NODE_253(p) BOOST_PP_IIF(p##(253), 253, 254)
 #                            define BOOST_PP_NODE_255(p) BOOST_PP_IIF(p##(255), 255, 256)
 #
+
 # endif

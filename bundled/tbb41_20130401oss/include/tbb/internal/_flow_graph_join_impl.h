@@ -42,56 +42,63 @@ namespace internal {
 
     struct forwarding_base {
         forwarding_base(task *rt) : my_root_task(rt), current_tag(NO_TAG) {}
+
         virtual ~forwarding_base() {}
+
         // decrement_port_count may create a forwarding task.  If we cannot handle the task
         // ourselves, ask decrement_port_count to deal with it.
-        virtual task * decrement_port_count(bool handle_task) = 0;
+        virtual task *decrement_port_count(bool handle_task) = 0;
+
         virtual void increment_port_count() = 0;
-        virtual task * increment_tag_count(tag_value /*t*/, bool /*handle_task*/) {return NULL;}
+
+        virtual task *increment_tag_count(tag_value /*t*/, bool /*handle_task*/) { return NULL; }
+
         // moved here so input ports can queue tasks
-        task* my_root_task;
+        task *my_root_task;
         tag_value current_tag; // so ports can refer to FE's desired items
     };
 
-    template< int N >
+    template<int N>
     struct join_helper {
 
-        template< typename TupleType, typename PortType >
+        template<typename TupleType, typename PortType>
         static inline void set_join_node_pointer(TupleType &my_input, PortType *port) {
-            tbb::flow::get<N-1>( my_input ).set_join_node_pointer(port);
-            join_helper<N-1>::set_join_node_pointer( my_input, port );
-        }
-        template< typename TupleType >
-        static inline void consume_reservations( TupleType &my_input ) {
-            tbb::flow::get<N-1>( my_input ).consume();
-            join_helper<N-1>::consume_reservations( my_input );
+            tbb::flow::get<N - 1>(my_input).set_join_node_pointer(port);
+            join_helper<N - 1>::set_join_node_pointer(my_input, port);
         }
 
-        template< typename TupleType >
-        static inline void release_my_reservation( TupleType &my_input ) {
-            tbb::flow::get<N-1>( my_input ).release();
+        template<typename TupleType>
+        static inline void consume_reservations(TupleType &my_input) {
+            tbb::flow::get<N - 1>(my_input).consume();
+            join_helper<N - 1>::consume_reservations(my_input);
         }
 
-        template <typename TupleType>
-        static inline void release_reservations( TupleType &my_input) {
-            join_helper<N-1>::release_reservations(my_input);
+        template<typename TupleType>
+        static inline void release_my_reservation(TupleType &my_input) {
+            tbb::flow::get<N - 1>(my_input).release();
+        }
+
+        template<typename TupleType>
+        static inline void release_reservations(TupleType &my_input) {
+            join_helper<N - 1>::release_reservations(my_input);
             release_my_reservation(my_input);
         }
 
-        template< typename InputTuple, typename OutputTuple >
-        static inline bool reserve( InputTuple &my_input, OutputTuple &out) {
-            if ( !tbb::flow::get<N-1>( my_input ).reserve( tbb::flow::get<N-1>( out ) ) ) return false;
-            if ( !join_helper<N-1>::reserve( my_input, out ) ) {
-                release_my_reservation( my_input );
+        template<typename InputTuple, typename OutputTuple>
+        static inline bool reserve(InputTuple &my_input, OutputTuple &out) {
+            if (!tbb::flow::get<N - 1>(my_input).reserve(tbb::flow::get<N - 1>(out))) return false;
+            if (!join_helper<N - 1>::reserve(my_input, out)) {
+                release_my_reservation(my_input);
                 return false;
             }
             return true;
         }
 
         template<typename InputTuple, typename OutputTuple>
-        static inline bool get_my_item( InputTuple &my_input, OutputTuple &out) {
-            bool res = tbb::flow::get<N-1>(my_input).get_item(tbb::flow::get<N-1>(out) ); // may fail
-            return join_helper<N-1>::get_my_item(my_input, out) && res;       // do get on other inputs before returning
+        static inline bool get_my_item(InputTuple &my_input, OutputTuple &out) {
+            bool res = tbb::flow::get<N - 1>(my_input).get_item(tbb::flow::get<N - 1>(out)); // may fail
+            return join_helper<N - 1>::get_my_item(my_input, out) &&
+                   res;       // do get on other inputs before returning
         }
 
         template<typename InputTuple, typename OutputTuple>
@@ -101,69 +108,72 @@ namespace internal {
 
         template<typename InputTuple>
         static inline void reset_my_port(InputTuple &my_input) {
-            join_helper<N-1>::reset_my_port(my_input);
-            tbb::flow::get<N-1>(my_input).reset_port();
+            join_helper<N - 1>::reset_my_port(my_input);
+            tbb::flow::get<N - 1>(my_input).reset_port();
         }
 
         template<typename InputTuple>
-        static inline void reset_ports(InputTuple& my_input) {
+        static inline void reset_ports(InputTuple &my_input) {
             reset_my_port(my_input);
         }
 
         template<typename InputTuple, typename TagFuncTuple>
         static inline void set_tag_func(InputTuple &my_input, TagFuncTuple &my_tag_funcs) {
-            tbb::flow::get<N-1>(my_input).set_my_original_tag_func(tbb::flow::get<N-1>(my_tag_funcs));
-            tbb::flow::get<N-1>(my_input).set_my_tag_func(tbb::flow::get<N-1>(my_input).my_original_func()->clone());
-            tbb::flow::get<N-1>(my_tag_funcs) = NULL;
-            join_helper<N-1>::set_tag_func(my_input, my_tag_funcs);
+            tbb::flow::get<N - 1>(my_input).set_my_original_tag_func(tbb::flow::get<N - 1>(my_tag_funcs));
+            tbb::flow::get<N - 1>(my_input).set_my_tag_func(
+                    tbb::flow::get<N - 1>(my_input).my_original_func()->clone());
+            tbb::flow::get<N - 1>(my_tag_funcs) = NULL;
+            join_helper<N - 1>::set_tag_func(my_input, my_tag_funcs);
         }
 
-        template< typename TagFuncTuple1, typename TagFuncTuple2>
+        template<typename TagFuncTuple1, typename TagFuncTuple2>
         static inline void copy_tag_functors(TagFuncTuple1 &my_inputs, TagFuncTuple2 &other_inputs) {
-            if(tbb::flow::get<N-1>(other_inputs).my_original_func()) {
-                tbb::flow::get<N-1>(my_inputs).set_my_tag_func(tbb::flow::get<N-1>(other_inputs).my_original_func()->clone());
-                tbb::flow::get<N-1>(my_inputs).set_my_original_tag_func(tbb::flow::get<N-1>(other_inputs).my_original_func()->clone());
+            if (tbb::flow::get<N - 1>(other_inputs).my_original_func()) {
+                tbb::flow::get<N - 1>(my_inputs).set_my_tag_func(
+                        tbb::flow::get<N - 1>(other_inputs).my_original_func()->clone());
+                tbb::flow::get<N - 1>(my_inputs).set_my_original_tag_func(
+                        tbb::flow::get<N - 1>(other_inputs).my_original_func()->clone());
             }
-            join_helper<N-1>::copy_tag_functors(my_inputs, other_inputs);
+            join_helper<N - 1>::copy_tag_functors(my_inputs, other_inputs);
         }
 
         template<typename InputTuple>
         static inline void reset_inputs(InputTuple &my_input) {
-            join_helper<N-1>::reset_inputs(my_input);
-            tbb::flow::get<N-1>(my_input).reinitialize_port();
+            join_helper<N - 1>::reset_inputs(my_input);
+            tbb::flow::get<N - 1>(my_input).reinitialize_port();
         }
     };
 
-    template< >
+    template<>
     struct join_helper<1> {
 
-        template< typename TupleType, typename PortType >
+        template<typename TupleType, typename PortType>
         static inline void set_join_node_pointer(TupleType &my_input, PortType *port) {
-            tbb::flow::get<0>( my_input ).set_join_node_pointer(port);
-        }
-
-        template< typename TupleType >
-        static inline void consume_reservations( TupleType &my_input ) {
-            tbb::flow::get<0>( my_input ).consume();
-        }
-
-        template< typename TupleType >
-        static inline void release_my_reservation( TupleType &my_input ) {
-            tbb::flow::get<0>( my_input ).release();
+            tbb::flow::get<0>(my_input).set_join_node_pointer(port);
         }
 
         template<typename TupleType>
-        static inline void release_reservations( TupleType &my_input) {
+        static inline void consume_reservations(TupleType &my_input) {
+            tbb::flow::get<0>(my_input).consume();
+        }
+
+        template<typename TupleType>
+        static inline void release_my_reservation(TupleType &my_input) {
+            tbb::flow::get<0>(my_input).release();
+        }
+
+        template<typename TupleType>
+        static inline void release_reservations(TupleType &my_input) {
             release_my_reservation(my_input);
         }
 
-        template< typename InputTuple, typename OutputTuple >
-        static inline bool reserve( InputTuple &my_input, OutputTuple &out) {
-            return tbb::flow::get<0>( my_input ).reserve( tbb::flow::get<0>( out ) );
+        template<typename InputTuple, typename OutputTuple>
+        static inline bool reserve(InputTuple &my_input, OutputTuple &out) {
+            return tbb::flow::get<0>(my_input).reserve(tbb::flow::get<0>(out));
         }
 
         template<typename InputTuple, typename OutputTuple>
-        static inline bool get_my_item( InputTuple &my_input, OutputTuple &out) {
+        static inline bool get_my_item(InputTuple &my_input, OutputTuple &out) {
             return tbb::flow::get<0>(my_input).get_item(tbb::flow::get<0>(out));
         }
 
@@ -178,7 +188,7 @@ namespace internal {
         }
 
         template<typename InputTuple>
-        static inline void reset_ports(InputTuple& my_input) {
+        static inline void reset_ports(InputTuple &my_input) {
             reset_my_port(my_input);
         }
 
@@ -189,13 +199,16 @@ namespace internal {
             tbb::flow::get<0>(my_tag_funcs) = NULL;
         }
 
-        template< typename TagFuncTuple1, typename TagFuncTuple2>
+        template<typename TagFuncTuple1, typename TagFuncTuple2>
         static inline void copy_tag_functors(TagFuncTuple1 &my_inputs, TagFuncTuple2 &other_inputs) {
-            if(tbb::flow::get<0>(other_inputs).my_original_func()) {
-                tbb::flow::get<0>(my_inputs).set_my_tag_func(tbb::flow::get<0>(other_inputs).my_original_func()->clone());
-                tbb::flow::get<0>(my_inputs).set_my_original_tag_func(tbb::flow::get<0>(other_inputs).my_original_func()->clone());
+            if (tbb::flow::get<0>(other_inputs).my_original_func()) {
+                tbb::flow::get<0>(my_inputs).set_my_tag_func(
+                        tbb::flow::get<0>(other_inputs).my_original_func()->clone());
+                tbb::flow::get<0>(my_inputs).set_my_original_tag_func(
+                        tbb::flow::get<0>(other_inputs).my_original_func()->clone());
             }
         }
+
         template<typename InputTuple>
         static inline void reset_inputs(InputTuple &my_input) {
             tbb::flow::get<0>(my_input).reinitialize_port();
@@ -203,15 +216,19 @@ namespace internal {
     };
 
     //! The two-phase join port
-    template< typename T >
+    template<typename T>
     class reserving_port : public receiver<T> {
     public:
         typedef T input_type;
-        typedef sender<T> predecessor_type;
+        typedef sender <T> predecessor_type;
     private:
         // ----------- Aggregator ------------
-        enum op_type { reg_pred, rem_pred, res_item, rel_res, con_res };
-        enum op_stat {WAIT=0, SUCCEEDED, FAILED};
+        enum op_type {
+            reg_pred, rem_pred, res_item, rel_res, con_res
+        };
+        enum op_stat {
+            WAIT = 0, SUCCEEDED, FAILED
+        };
         typedef reserving_port<T> my_class;
 
         class reserving_port_operation : public aggregated_operation<reserving_port_operation> {
@@ -221,70 +238,80 @@ namespace internal {
                 T *my_arg;
                 predecessor_type *my_pred;
             };
-            reserving_port_operation(const T& e, op_type t) :
-                type(char(t)), my_arg(const_cast<T*>(&e)) {}
-            reserving_port_operation(const predecessor_type &s, op_type t) : type(char(t)), 
-                my_pred(const_cast<predecessor_type *>(&s)) {}
+
+            reserving_port_operation(const T &e, op_type t) :
+                    type(char(t)), my_arg(const_cast<T *>(&e)) {}
+
+            reserving_port_operation(const predecessor_type &s, op_type t) : type(char(t)),
+                                                                             my_pred(const_cast<predecessor_type *>(&s)) {}
+
             reserving_port_operation(op_type t) : type(char(t)) {}
         };
 
         typedef internal::aggregating_functor<my_class, reserving_port_operation> my_handler;
-        friend class internal::aggregating_functor<my_class, reserving_port_operation>;
-        aggregator<my_handler, reserving_port_operation> my_aggregator;
 
-        void handle_operations(reserving_port_operation* op_list) {
+        friend class internal::aggregating_functor<my_class, reserving_port_operation>;
+
+        aggregator <my_handler, reserving_port_operation> my_aggregator;
+
+        void handle_operations(reserving_port_operation *op_list) {
             reserving_port_operation *current;
             bool no_predecessors;
-            while(op_list) {
+            while (op_list) {
                 current = op_list;
                 op_list = op_list->next;
-                switch(current->type) {
-                case reg_pred:
-                    no_predecessors = my_predecessors.empty();
-                    my_predecessors.add(*(current->my_pred));
-                    if ( no_predecessors ) {
-                        (void) my_join->decrement_port_count(true); // may try to forward
-                    }
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case rem_pred:
-                    my_predecessors.remove(*(current->my_pred));
-                    if(my_predecessors.empty()) my_join->increment_port_count();
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case res_item:
-                    if ( reserved ) {
-                        __TBB_store_with_release(current->status, FAILED);
-                    }
-                    else if ( my_predecessors.try_reserve( *(current->my_arg) ) ) {
-                        reserved = true;
-                        __TBB_store_with_release(current->status, SUCCEEDED);
-                    } else {
-                        if ( my_predecessors.empty() ) {
-                            my_join->increment_port_count();
+                switch (current->type) {
+                    case reg_pred:
+                        no_predecessors = my_predecessors.empty();
+                        my_predecessors.add(*(current->my_pred));
+                        if (no_predecessors) {
+                            (void) my_join->decrement_port_count(true); // may try to forward
                         }
-                        __TBB_store_with_release(current->status, FAILED);
-                    }
-                    break;
-                case rel_res:
-                    reserved = false;
-                    my_predecessors.try_release( );
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case con_res:
-                    reserved = false;
-                    my_predecessors.try_consume( );
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
+                    case rem_pred:
+                        my_predecessors.remove(*(current->my_pred));
+                        if (my_predecessors.empty()) my_join->increment_port_count();
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
+                    case res_item:
+                        if (reserved) {
+                            __TBB_store_with_release(current->status, FAILED);
+                        } else if (my_predecessors.try_reserve(*(current->my_arg))) {
+                            reserved = true;
+                            __TBB_store_with_release(current->status, SUCCEEDED);
+                        } else {
+                            if (my_predecessors.empty()) {
+                                my_join->increment_port_count();
+                            }
+                            __TBB_store_with_release(current->status, FAILED);
+                        }
+                        break;
+                    case rel_res:
+                        reserved = false;
+                        my_predecessors.try_release();
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
+                    case con_res:
+                        reserved = false;
+                        my_predecessors.try_consume();
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
                 }
             }
         }
 
     protected:
-        template< typename R, typename B > friend class run_and_put_task;
-        template<typename X, typename Y> friend class internal::broadcast_cache;
-        template<typename X, typename Y> friend class internal::round_robin_cache;
-        task *try_put_task( const T & ) {
+        template<typename R, typename B> friend
+        class run_and_put_task;
+
+        template<typename X, typename Y> friend
+        class internal::broadcast_cache;
+
+        template<typename X, typename Y> friend
+        class internal::round_robin_cache;
+
+        task *try_put_task(const T &) {
             return NULL;
         }
 
@@ -293,15 +320,15 @@ namespace internal {
         //! Constructor
         reserving_port() : reserved(false) {
             my_join = NULL;
-            my_predecessors.set_owner( this );
+            my_predecessors.set_owner(this);
             my_aggregator.initialize_handler(my_handler(this));
         }
 
         // copy constructor
-        reserving_port(const reserving_port& /* other */) : receiver<T>() {
+        reserving_port(const reserving_port & /* other */) : receiver<T>() {
             reserved = false;
             my_join = NULL;
-            my_predecessors.set_owner( this );
+            my_predecessors.set_owner(this);
             my_aggregator.initialize_handler(my_handler(this));
         }
 
@@ -310,34 +337,34 @@ namespace internal {
         }
 
         //! Add a predecessor
-        bool register_predecessor( sender<T> &src ) {
+        bool register_predecessor(sender <T> &src) {
             reserving_port_operation op_data(src, reg_pred);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
         }
 
         //! Remove a predecessor
-        bool remove_predecessor( sender<T> &src ) {
+        bool remove_predecessor(sender <T> &src) {
             reserving_port_operation op_data(src, rem_pred);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
         }
 
         //! Reserve an item from the port
-        bool reserve( T &v ) {
+        bool reserve(T &v) {
             reserving_port_operation op_data(v, res_item);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
         }
 
         //! Release the port
-        void release( ) {
+        void release() {
             reserving_port_operation op_data(rel_res);
             my_aggregator.execute(&op_data);
         }
 
         //! Complete use of the port
-        void consume( ) {
+        void consume() {
             reserving_port_operation op_data(con_res);
             my_aggregator.execute(&op_data);
         }
@@ -355,7 +382,7 @@ namespace internal {
 
     private:
         forwarding_base *my_join;
-        reservable_predecessor_cache< T, null_mutex > my_predecessors;
+        reservable_predecessor_cache <T, null_mutex> my_predecessors;
         bool reserved;
     };
 
@@ -364,13 +391,17 @@ namespace internal {
     class queueing_port : public receiver<T>, public item_buffer<T> {
     public:
         typedef T input_type;
-        typedef sender<T> predecessor_type;
+        typedef sender <T> predecessor_type;
         typedef queueing_port<T> my_node_type;
 
-    // ----------- Aggregator ------------
+        // ----------- Aggregator ------------
     private:
-        enum op_type { get__item, res_port, try__put_task };
-        enum op_stat {WAIT=0, SUCCEEDED, FAILED};
+        enum op_type {
+            get__item, res_port, try__put_task
+        };
+        enum op_stat {
+            WAIT = 0, SUCCEEDED, FAILED
+        };
         typedef queueing_port<T> my_class;
 
         class queueing_port_operation : public aggregated_operation<queueing_port_operation> {
@@ -378,35 +409,34 @@ namespace internal {
             char type;
             T my_val;
             T *my_arg;
-            task * bypass_t;
+            task *bypass_t;
+
             // constructor for value parameter
-            queueing_port_operation(const T& e, op_type t) :
-                type(char(t)), my_val(e)
-                , bypass_t(NULL)
-            {}
+            queueing_port_operation(const T &e, op_type t) :
+                    type(char(t)), my_val(e), bypass_t(NULL) {}
+
             // constructor for pointer parameter
-            queueing_port_operation(const T* p, op_type t) :
-                type(char(t)), my_arg(const_cast<T*>(p))
-                , bypass_t(NULL)
-            {}
+            queueing_port_operation(const T *p, op_type t) :
+                    type(char(t)), my_arg(const_cast<T *>(p)), bypass_t(NULL) {}
+
             // constructor with no parameter
-            queueing_port_operation(op_type t) : type(char(t))
-                , bypass_t(NULL)
-            {}
+            queueing_port_operation(op_type t) : type(char(t)), bypass_t(NULL) {}
         };
 
         typedef internal::aggregating_functor<my_class, queueing_port_operation> my_handler;
-        friend class internal::aggregating_functor<my_class, queueing_port_operation>;
-        aggregator<my_handler, queueing_port_operation> my_aggregator;
 
-        void handle_operations(queueing_port_operation* op_list) {
+        friend class internal::aggregating_functor<my_class, queueing_port_operation>;
+
+        aggregator <my_handler, queueing_port_operation> my_aggregator;
+
+        void handle_operations(queueing_port_operation *op_list) {
             queueing_port_operation *current;
             bool was_empty;
-            while(op_list) {
+            while (op_list) {
                 current = op_list;
                 op_list = op_list->next;
-                switch(current->type) {
-                case try__put_task: {
+                switch (current->type) {
+                    case try__put_task: {
                         task *rtask = NULL;
                         was_empty = this->buffer_empty();
                         this->push_back(current->my_val);
@@ -416,38 +446,44 @@ namespace internal {
                         current->bypass_t = rtask;
                         __TBB_store_with_release(current->status, SUCCEEDED);
                     }
-                    break;
-                case get__item:
-                    if(!this->buffer_empty()) {
-                        this->fetch_front(*(current->my_arg));
+                        break;
+                    case get__item:
+                        if (!this->buffer_empty()) {
+                            this->fetch_front(*(current->my_arg));
+                            __TBB_store_with_release(current->status, SUCCEEDED);
+                        } else {
+                            __TBB_store_with_release(current->status, FAILED);
+                        }
+                        break;
+                    case res_port:
+                        __TBB_ASSERT(this->item_valid(this->my_head), "No item to reset");
+                        this->invalidate_front();
+                        ++(this->my_head);
+                        if (this->item_valid(this->my_head)) {
+                            (void) my_join->decrement_port_count(true);
+                        }
                         __TBB_store_with_release(current->status, SUCCEEDED);
-                    }
-                    else {
-                        __TBB_store_with_release(current->status, FAILED);
-                    }
-                    break;
-                case res_port:
-                    __TBB_ASSERT(this->item_valid(this->my_head), "No item to reset");
-                    this->invalidate_front(); ++(this->my_head);
-                    if(this->item_valid(this->my_head)) {
-                        (void)my_join->decrement_port_count(true);
-                    }
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
+                        break;
                 }
             }
         }
-    // ------------ End Aggregator ---------------
+        // ------------ End Aggregator ---------------
 
     protected:
-        template< typename R, typename B > friend class run_and_put_task;
-        template<typename X, typename Y> friend class internal::broadcast_cache;
-        template<typename X, typename Y> friend class internal::round_robin_cache;
+        template<typename R, typename B> friend
+        class run_and_put_task;
+
+        template<typename X, typename Y> friend
+        class internal::broadcast_cache;
+
+        template<typename X, typename Y> friend
+        class internal::round_robin_cache;
+
         /*override*/task *try_put_task(const T &v) {
             queueing_port_operation op_data(v, try__put_task);
             my_aggregator.execute(&op_data);
             __TBB_ASSERT(op_data.status == SUCCEEDED || !op_data.bypass_t, "inconsistent return from aggregator");
-            if(!op_data.bypass_t) return SUCCESSFULLY_ENQUEUED;
+            if (!op_data.bypass_t) return SUCCESSFULLY_ENQUEUED;
             return op_data.bypass_t;
         }
 
@@ -460,7 +496,7 @@ namespace internal {
         }
 
         //! copy constructor
-        queueing_port(const queueing_port& /* other */) : receiver<T>(), item_buffer<T>() {
+        queueing_port(const queueing_port & /* other */) : receiver<T>(), item_buffer<T>() {
             my_join = NULL;
             my_aggregator.initialize_handler(my_handler(this));
         }
@@ -470,7 +506,7 @@ namespace internal {
             my_join = join;
         }
 
-        bool get_item( T &v ) {
+        bool get_item(T &v) {
             queueing_port_operation op_data(&v, get__item);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
@@ -500,19 +536,23 @@ namespace internal {
 
 #include "_flow_graph_tagged_buffer_impl.h"
 
-    template< typename T >
-    class tag_matching_port : public receiver<T>, public tagged_buffer< tag_value, T, NO_TAG > {
+    template<typename T>
+    class tag_matching_port : public receiver<T>, public tagged_buffer<tag_value, T, NO_TAG> {
     public:
         typedef T input_type;
-        typedef sender<T> predecessor_type;
+        typedef sender <T> predecessor_type;
         typedef tag_matching_port<T> my_node_type;  // for forwarding, if needed
-        typedef function_body<input_type, tag_value> my_tag_func_type;
-        typedef tagged_buffer<tag_value,T,NO_TAG> my_buffer_type;
+        typedef function_body <input_type, tag_value> my_tag_func_type;
+        typedef tagged_buffer<tag_value, T, NO_TAG> my_buffer_type;
     private:
 // ----------- Aggregator ------------
     private:
-        enum op_type { try__put, get__item, res_port };
-        enum op_stat {WAIT=0, SUCCEEDED, FAILED};
+        enum op_type {
+            try__put, get__item, res_port
+        };
+        enum op_stat {
+            WAIT = 0, SUCCEEDED, FAILED
+        };
         typedef tag_matching_port<T> my_class;
 
         class tag_matching_port_operation : public aggregated_operation<tag_matching_port_operation> {
@@ -521,61 +561,72 @@ namespace internal {
             T my_val;
             T *my_arg;
             tag_value my_tag_value;
+
             // constructor for value parameter
-            tag_matching_port_operation(const T& e, op_type t) :
-                type(char(t)), my_val(e) {}
+            tag_matching_port_operation(const T &e, op_type t) :
+                    type(char(t)), my_val(e) {}
+
             // constructor for pointer parameter
-            tag_matching_port_operation(const T* p, op_type t) :
-                type(char(t)), my_arg(const_cast<T*>(p)) {}
+            tag_matching_port_operation(const T *p, op_type t) :
+                    type(char(t)), my_arg(const_cast<T *>(p)) {}
+
             // constructor with no parameter
             tag_matching_port_operation(op_type t) : type(char(t)) {}
         };
 
         typedef internal::aggregating_functor<my_class, tag_matching_port_operation> my_handler;
-        friend class internal::aggregating_functor<my_class, tag_matching_port_operation>;
-        aggregator<my_handler, tag_matching_port_operation> my_aggregator;
 
-        void handle_operations(tag_matching_port_operation* op_list) {
+        friend class internal::aggregating_functor<my_class, tag_matching_port_operation>;
+
+        aggregator <my_handler, tag_matching_port_operation> my_aggregator;
+
+        void handle_operations(tag_matching_port_operation *op_list) {
             tag_matching_port_operation *current;
-            while(op_list) {
+            while (op_list) {
                 current = op_list;
                 op_list = op_list->next;
-                switch(current->type) {
-                case try__put: {
+                switch (current->type) {
+                    case try__put: {
                         bool was_inserted = this->tagged_insert(current->my_tag_value, current->my_val);
                         // return failure if a duplicate insertion occurs
                         __TBB_store_with_release(current->status, was_inserted ? SUCCEEDED : FAILED);
                     }
-                    break;
-                case get__item:
-                    // use current_tag from FE for item
-                    if(!this->tagged_find(my_join->current_tag, *(current->my_arg))) {
-                        __TBB_ASSERT(false, "Failed to find item corresponding to current_tag.");
-                    }
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case res_port:
-                    // use current_tag from FE for item
-                    this->tagged_delete(my_join->current_tag);
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
+                        break;
+                    case get__item:
+                        // use current_tag from FE for item
+                        if (!this->tagged_find(my_join->current_tag, *(current->my_arg))) {
+                            __TBB_ASSERT(false, "Failed to find item corresponding to current_tag.");
+                        }
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
+                    case res_port:
+                        // use current_tag from FE for item
+                        this->tagged_delete(my_join->current_tag);
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
                 }
             }
         }
 // ------------ End Aggregator ---------------
     protected:
-        template< typename R, typename B > friend class run_and_put_task;
-        template<typename X, typename Y> friend class internal::broadcast_cache;
-        template<typename X, typename Y> friend class internal::round_robin_cache;
-        /*override*/task *try_put_task(const T& v) {
+        template<typename R, typename B> friend
+        class run_and_put_task;
+
+        template<typename X, typename Y> friend
+        class internal::broadcast_cache;
+
+        template<typename X, typename Y> friend
+        class internal::round_robin_cache;
+
+        /*override*/task *try_put_task(const T &v) {
             tag_matching_port_operation op_data(v, try__put);
             op_data.my_tag_value = (*my_tag_func)(v);
             task *rtask = NULL;
             my_aggregator.execute(&op_data);
-            if(op_data.status == SUCCEEDED) {
+            if (op_data.status == SUCCEEDED) {
                 rtask = my_join->increment_tag_count(op_data.my_tag_value, false);  // may spawn
                 // rtask has to reflect the return status of the try_put
-                if(!rtask) rtask = SUCCESSFULLY_ENQUEUED;
+                if (!rtask) rtask = SUCCESSFULLY_ENQUEUED;
             }
             return rtask;
         }
@@ -590,7 +641,7 @@ namespace internal {
         }
 
         // copy constructor
-        tag_matching_port(const tag_matching_port& /*other*/) : receiver<T>(), tagged_buffer<tag_value,T, NO_TAG>() {
+        tag_matching_port(const tag_matching_port & /*other*/) : receiver<T>(), tagged_buffer<tag_value, T, NO_TAG>() {
             my_join = NULL;
             // setting the tag methods is done in the copy-constructor for the front-end.
             my_tag_func = NULL;
@@ -615,7 +666,7 @@ namespace internal {
             my_tag_func = f;
         }
 
-        bool get_item( T &v ) {
+        bool get_item(T &v) {
             tag_matching_port_operation op_data(&v, get__item);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
@@ -630,6 +681,7 @@ namespace internal {
         }
 
         my_tag_func_type *my_func() { return my_tag_func; }
+
         my_tag_func_type *my_original_func() { return my_original_tag_func; }
 
         void reinitialize_port() {
@@ -671,24 +723,24 @@ namespace internal {
             join_helper<N>::set_join_node_pointer(my_inputs, this);
         }
 
-        join_node_FE(const join_node_FE& other) : forwarding_base(other.my_root_task), my_node(NULL) {
+        join_node_FE(const join_node_FE &other) : forwarding_base(other.my_root_task), my_node(NULL) {
             ports_with_no_inputs = N;
             join_helper<N>::set_join_node_pointer(my_inputs, this);
         }
 
         void set_my_node(my_node_type *new_my_node) { my_node = new_my_node; }
 
-       void increment_port_count() {
+        void increment_port_count() {
             ++ports_with_no_inputs;
         }
 
         // if all input_ports have predecessors, spawn forward to try and consume tuples
-        task * decrement_port_count(bool handle_task) {
-            if(ports_with_no_inputs.fetch_and_decrement() == 1) {
-                task *rtask = new ( task::allocate_additional_child_of( *(this->my_root_task) ) )
-                    forward_task_bypass
-                    <my_node_type>(*my_node);
-                if(!handle_task) return rtask;
+        task *decrement_port_count(bool handle_task) {
+            if (ports_with_no_inputs.fetch_and_decrement() == 1) {
+                task *rtask = new(task::allocate_additional_child_of(*(this->my_root_task)))
+                        forward_task_bypass
+                                <my_node_type>(*my_node);
+                if (!handle_task) return rtask;
                 task::enqueue(*rtask);
             }
             return NULL;
@@ -711,20 +763,21 @@ namespace internal {
         }
 
         bool try_to_make_tuple(output_type &out) {
-            if(ports_with_no_inputs) return false;
+            if (ports_with_no_inputs) return false;
             return join_helper<N>::reserve(my_inputs, out);
         }
 
         void tuple_accepted() {
             join_helper<N>::consume_reservations(my_inputs);
         }
+
         void tuple_rejected() {
             join_helper<N>::release_reservations(my_inputs);
         }
 
         input_type my_inputs;
         my_node_type *my_node;
-        atomic<size_t> ports_with_no_inputs;
+        atomic <size_t> ports_with_no_inputs;
     };
 
     template<typename InputTuple, typename OutputTuple>
@@ -740,7 +793,7 @@ namespace internal {
             join_helper<N>::set_join_node_pointer(my_inputs, this);
         }
 
-        join_node_FE(const join_node_FE& other) : forwarding_base(other.my_root_task), my_node(NULL) {
+        join_node_FE(const join_node_FE &other) : forwarding_base(other.my_root_task), my_node(NULL) {
             ports_with_no_items = N;
             join_helper<N>::set_join_node_pointer(my_inputs, this);
         }
@@ -753,14 +806,13 @@ namespace internal {
         }
 
         // if all input_ports have items, spawn forward to try and consume tuples
-        task * decrement_port_count(bool handle_task)
-        {
-            if(ports_with_no_items.fetch_and_decrement() == 1) {
-                task *rtask = new ( task::allocate_additional_child_of( *(this->my_root_task) ) )
-                    forward_task_bypass
-                    <my_node_type>(*my_node);
-                if(!handle_task) return rtask;
-                task::enqueue( *rtask);
+        task *decrement_port_count(bool handle_task) {
+            if (ports_with_no_items.fetch_and_decrement() == 1) {
+                task *rtask = new(task::allocate_additional_child_of(*(this->my_root_task)))
+                        forward_task_bypass
+                                <my_node_type>(*my_node);
+                if (!handle_task) return rtask;
+                task::enqueue(*rtask);
             }
             return NULL;
         }
@@ -783,7 +835,7 @@ namespace internal {
         }
 
         bool try_to_make_tuple(output_type &out) {
-            if(ports_with_no_items) return false;
+            if (ports_with_no_items) return false;
             return join_helper<N>::get_items(my_inputs, out);
         }
 
@@ -791,34 +843,40 @@ namespace internal {
             reset_port_count();
             join_helper<N>::reset_ports(my_inputs);
         }
+
         void tuple_rejected() {
             // nothing to do.
         }
 
         input_type my_inputs;
         my_node_type *my_node;
-        atomic<size_t> ports_with_no_items;
+        atomic <size_t> ports_with_no_items;
     };
 
     // tag_matching join input port.
     template<typename InputTuple, typename OutputTuple>
     class join_node_FE<tag_matching, InputTuple, OutputTuple> : public forwarding_base,
-             //     buffer of tag value counts                       buffer of output items
-             public tagged_buffer<tag_value, size_t, NO_TAG>, public item_buffer<OutputTuple> {
+            //     buffer of tag value counts                       buffer of output items
+                                                                public tagged_buffer<tag_value, size_t, NO_TAG>,
+                                                                public item_buffer<OutputTuple> {
     public:
         static const int N = tbb::flow::tuple_size<OutputTuple>::value;
         typedef OutputTuple output_type;
         typedef InputTuple input_type;
         typedef tagged_buffer<tag_value, size_t, NO_TAG> my_tag_buffer;
-        typedef item_buffer<output_type> output_buffer_type;
+        typedef item_buffer <output_type> output_buffer_type;
         typedef join_node_base<tag_matching, InputTuple, OutputTuple> my_node_type; // for forwarding
 
 // ----------- Aggregator ------------
         // the aggregator is only needed to serialize the access to the hash table.
         // and the output_buffer_type base class
     private:
-        enum op_type { res_count, inc_count, may_succeed, try_make };
-        enum op_stat {WAIT=0, SUCCEEDED, FAILED};
+        enum op_type {
+            res_count, inc_count, may_succeed, try_make
+        };
+        enum op_stat {
+            WAIT = 0, SUCCEEDED, FAILED
+        };
         typedef join_node_FE<tag_matching, InputTuple, OutputTuple> my_class;
 
         class tag_matching_FE_operation : public aggregated_operation<tag_matching_FE_operation> {
@@ -826,39 +884,45 @@ namespace internal {
             char type;
             union {
                 tag_value my_val;
-                output_type* my_output;
+                output_type *my_output;
             };
             task *bypass_t;
             bool enqueue_task;
+
             // constructor for value parameter
-            tag_matching_FE_operation(const tag_value& e , bool q_task , op_type t) : type(char(t)), my_val(e),
-                 bypass_t(NULL), enqueue_task(q_task) {}
+            tag_matching_FE_operation(const tag_value &e, bool q_task, op_type t) : type(char(t)), my_val(e),
+                                                                                    bypass_t(NULL),
+                                                                                    enqueue_task(q_task) {}
+
             tag_matching_FE_operation(output_type *p, op_type t) : type(char(t)), my_output(p), bypass_t(NULL),
-                 enqueue_task(true) {}
+                                                                   enqueue_task(true) {}
+
             // constructor with no parameter
             tag_matching_FE_operation(op_type t) : type(char(t)), bypass_t(NULL), enqueue_task(true) {}
         };
 
         typedef internal::aggregating_functor<my_class, tag_matching_FE_operation> my_handler;
+
         friend class internal::aggregating_functor<my_class, tag_matching_FE_operation>;
-        aggregator<my_handler, tag_matching_FE_operation> my_aggregator;
+
+        aggregator <my_handler, tag_matching_FE_operation> my_aggregator;
 
         // called from aggregator, so serialized
         // construct as many output objects as possible.
         // returns a task pointer if the a task would have been enqueued but we asked that
         // it be returned.  Otherwise returns NULL.
-        task * fill_output_buffer(bool should_enqueue, bool handle_task) {
+        task *fill_output_buffer(bool should_enqueue, bool handle_task) {
             output_type l_out;
             task *rtask = NULL;
             bool do_fwd = should_enqueue && this->buffer_empty();
-            while(find_value_tag(this->current_tag,N)) {  // while there are completed items
+            while (find_value_tag(this->current_tag, N)) {  // while there are completed items
                 this->tagged_delete(this->current_tag);   // remove the tag
-                if(join_helper<N>::get_items(my_inputs, l_out)) {  //  <== call back
+                if (join_helper<N>::get_items(my_inputs, l_out)) {  //  <== call back
                     this->push_back(l_out);
-                    if(do_fwd) {  // we enqueue if receiving an item from predecessor, not if successor asks for item
-                        rtask = new ( task::allocate_additional_child_of( *(this->my_root_task) ) )
-                            forward_task_bypass<my_node_type>(*my_node);
-                        if(handle_task) {
+                    if (do_fwd) {  // we enqueue if receiving an item from predecessor, not if successor asks for item
+                        rtask = new(task::allocate_additional_child_of(*(this->my_root_task)))
+                                forward_task_bypass<my_node_type>(*my_node);
+                        if (handle_task) {
                             task::enqueue(*rtask);
                             rtask = NULL;
                         }
@@ -866,61 +930,59 @@ namespace internal {
                     }
                     // retire the input values
                     join_helper<N>::reset_ports(my_inputs);  //  <== call back
-                    this->current_tag = NO_TAG;    
-                }
-                else {
+                    this->current_tag = NO_TAG;
+                } else {
                     __TBB_ASSERT(false, "should have had something to push");
                 }
             }
             return rtask;
         }
 
-        void handle_operations(tag_matching_FE_operation* op_list) {
+        void handle_operations(tag_matching_FE_operation *op_list) {
             tag_matching_FE_operation *current;
-            while(op_list) {
+            while (op_list) {
                 current = op_list;
                 op_list = op_list->next;
-                switch(current->type) {
-                case res_count:  // called from BE
+                switch (current->type) {
+                    case res_count:  // called from BE
                     {
                         output_type l_out;
                         this->pop_front(l_out);  // don't care about returned value.
                         // buffer as many tuples as we can make
-                        (void)fill_output_buffer(true, true);
+                        (void) fill_output_buffer(true, true);
                         __TBB_store_with_release(current->status, SUCCEEDED);
                     }
-                    break;
-                case inc_count: {  // called from input ports
+                        break;
+                    case inc_count: {  // called from input ports
                         size_t *p = 0;
                         tag_value t = current->my_val;
                         bool do_enqueue = current->enqueue_task;
-                        if(!(this->tagged_find_ref(t,p))) {
+                        if (!(this->tagged_find_ref(t, p))) {
                             this->tagged_insert(t, 0);
-                            if(!(this->tagged_find_ref(t,p))) {
+                            if (!(this->tagged_find_ref(t, p))) {
                                 __TBB_ASSERT(false, "should find tag after inserting it");
                             }
                         }
-                        if(++(*p) == size_t(N)) {
+                        if (++(*p) == size_t(N)) {
                             task *rtask = fill_output_buffer(true, do_enqueue);
                             __TBB_ASSERT(!rtask || !do_enqueue, "task should not be returned");
                             current->bypass_t = rtask;
                         }
                     }
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case may_succeed:  // called from BE
-                    (void)fill_output_buffer(false, /*handle_task*/true);  // handle_task not used
-                    __TBB_store_with_release(current->status, this->buffer_empty() ? FAILED : SUCCEEDED);
-                    break;
-                case try_make:  // called from BE
-                    if(this->buffer_empty()) {
-                        __TBB_store_with_release(current->status, FAILED);
-                    }
-                    else {
-                        this->fetch_front(*(current->my_output));
                         __TBB_store_with_release(current->status, SUCCEEDED);
-                    }
-                    break;
+                        break;
+                    case may_succeed:  // called from BE
+                        (void) fill_output_buffer(false, /*handle_task*/true);  // handle_task not used
+                        __TBB_store_with_release(current->status, this->buffer_empty() ? FAILED : SUCCEEDED);
+                        break;
+                    case try_make:  // called from BE
+                        if (this->buffer_empty()) {
+                            __TBB_store_with_release(current->status, FAILED);
+                        } else {
+                            this->fetch_front(*(current->my_output));
+                            __TBB_store_with_release(current->status, SUCCEEDED);
+                        }
+                        break;
                 }
             }
         }
@@ -934,8 +996,8 @@ namespace internal {
             my_aggregator.initialize_handler(my_handler(this));
         }
 
-        join_node_FE(const join_node_FE& other) : forwarding_base(other.my_root_task), my_tag_buffer(),
-        output_buffer_type() {
+        join_node_FE(const join_node_FE &other) : forwarding_base(other.my_root_task), my_tag_buffer(),
+                                                  output_buffer_type() {
             my_node = NULL;
             join_helper<N>::set_join_node_pointer(my_inputs, this);
             join_helper<N>::copy_tag_functors(my_inputs, const_cast<input_type &>(other.my_inputs));
@@ -959,7 +1021,10 @@ namespace internal {
             return op_data.bypass_t;
         }
 
-        /*override*/ task *decrement_port_count(bool /*handle_task*/) { __TBB_ASSERT(false, NULL); return NULL; }
+        /*override*/ task *decrement_port_count(bool /*handle_task*/) {
+            __TBB_ASSERT(false, NULL);
+            return NULL;
+        }
 
         void increment_port_count() { __TBB_ASSERT(false, NULL); }  // should never be called
 
@@ -987,7 +1052,7 @@ namespace internal {
         // cannot lock while calling back to input_ports.  current_tag will only be set
         // and reset under the aggregator, so it will remain consistent.
         bool try_to_make_tuple(output_type &out) {
-            tag_matching_FE_operation op_data(&out,try_make);
+            tag_matching_FE_operation op_data(&out, try_make);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
         }
@@ -1013,7 +1078,7 @@ namespace internal {
     public:
         typedef OutputTuple output_type;
 
-        typedef receiver<output_type> successor_type;
+        typedef receiver <output_type> successor_type;
         typedef join_node_FE<JP, InputTuple, OutputTuple> input_ports_type;
         using input_ports_type::tuple_build_may_succeed;
         using input_ports_type::try_to_make_tuple;
@@ -1022,9 +1087,13 @@ namespace internal {
 
     private:
         // ----------- Aggregator ------------
-        enum op_type { reg_succ, rem_succ, try__get, do_fwrd, do_fwrd_bypass };
-        enum op_stat {WAIT=0, SUCCEEDED, FAILED};
-        typedef join_node_base<JP,InputTuple,OutputTuple> my_class;
+        enum op_type {
+            reg_succ, rem_succ, try__get, do_fwrd, do_fwrd_bypass
+        };
+        enum op_stat {
+            WAIT = 0, SUCCEEDED, FAILED
+        };
+        typedef join_node_base<JP, InputTuple, OutputTuple> my_class;
 
         class join_node_base_operation : public aggregated_operation<join_node_base_operation> {
         public:
@@ -1034,74 +1103,78 @@ namespace internal {
                 successor_type *my_succ;
             };
             task *bypass_t;
-            join_node_base_operation(const output_type& e, op_type t) : type(char(t)), 
-                my_arg(const_cast<output_type*>(&e)), bypass_t(NULL) {}
-            join_node_base_operation(const successor_type &s, op_type t) : type(char(t)), 
-                my_succ(const_cast<successor_type *>(&s)), bypass_t(NULL) {}
+
+            join_node_base_operation(const output_type &e, op_type t) : type(char(t)),
+                                                                        my_arg(const_cast<output_type *>(&e)),
+                                                                        bypass_t(NULL) {}
+
+            join_node_base_operation(const successor_type &s, op_type t) : type(char(t)),
+                                                                           my_succ(const_cast<successor_type *>(&s)),
+                                                                           bypass_t(NULL) {}
+
             join_node_base_operation(op_type t) : type(char(t)), bypass_t(NULL) {}
         };
 
         typedef internal::aggregating_functor<my_class, join_node_base_operation> my_handler;
-        friend class internal::aggregating_functor<my_class, join_node_base_operation>;
-        bool forwarder_busy;
-        aggregator<my_handler, join_node_base_operation> my_aggregator;
 
-        void handle_operations(join_node_base_operation* op_list) {
+        friend class internal::aggregating_functor<my_class, join_node_base_operation>;
+
+        bool forwarder_busy;
+        aggregator <my_handler, join_node_base_operation> my_aggregator;
+
+        void handle_operations(join_node_base_operation *op_list) {
             join_node_base_operation *current;
-            while(op_list) {
+            while (op_list) {
                 current = op_list;
                 op_list = op_list->next;
-                switch(current->type) {
-                case reg_succ:
-                    my_successors.register_successor(*(current->my_succ));
-                    if(tuple_build_may_succeed() && !forwarder_busy) {
-                        task *rtask = new ( task::allocate_additional_child_of(*(this->my_root_task)) )
-                                forward_task_bypass
-                                <join_node_base<JP,InputTuple,OutputTuple> >(*this);
-                        task::enqueue(*rtask);
-                        forwarder_busy = true;
-                    }
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case rem_succ:
-                    my_successors.remove_successor(*(current->my_succ));
-                    __TBB_store_with_release(current->status, SUCCEEDED);
-                    break;
-                case try__get:
-                    if(tuple_build_may_succeed()) {
-                        if(try_to_make_tuple(*(current->my_arg))) {
-                            tuple_accepted();
-                            __TBB_store_with_release(current->status, SUCCEEDED);
+                switch (current->type) {
+                    case reg_succ:
+                        my_successors.register_successor(*(current->my_succ));
+                        if (tuple_build_may_succeed() && !forwarder_busy) {
+                            task *rtask = new(task::allocate_additional_child_of(*(this->my_root_task)))
+                                    forward_task_bypass
+                                            <join_node_base<JP, InputTuple, OutputTuple> >(*this);
+                            task::enqueue(*rtask);
+                            forwarder_busy = true;
                         }
-                        else __TBB_store_with_release(current->status, FAILED);
-                    }
-                    else __TBB_store_with_release(current->status, FAILED);
-                    break;
-                case do_fwrd_bypass: {
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
+                    case rem_succ:
+                        my_successors.remove_successor(*(current->my_succ));
+                        __TBB_store_with_release(current->status, SUCCEEDED);
+                        break;
+                    case try__get:
+                        if (tuple_build_may_succeed()) {
+                            if (try_to_make_tuple(*(current->my_arg))) {
+                                tuple_accepted();
+                                __TBB_store_with_release(current->status, SUCCEEDED);
+                            } else __TBB_store_with_release(current->status, FAILED);
+                        } else __TBB_store_with_release(current->status, FAILED);
+                        break;
+                    case do_fwrd_bypass: {
                         bool build_succeeded;
                         task *last_task = NULL;
                         output_type out;
-                        if(tuple_build_may_succeed()) {
+                        if (tuple_build_may_succeed()) {
                             do {
                                 build_succeeded = try_to_make_tuple(out);
-                                if(build_succeeded) {
+                                if (build_succeeded) {
                                     task *new_task = my_successors.try_put_task(out);
                                     last_task = combine_tasks(last_task, new_task);
-                                    if(new_task) {
+                                    if (new_task) {
                                         tuple_accepted();
-                                    }
-                                    else {
+                                    } else {
                                         tuple_rejected();
                                         build_succeeded = false;
                                     }
                                 }
-                            } while(build_succeeded);
+                            } while (build_succeeded);
                         }
                         current->bypass_t = last_task;
                         __TBB_store_with_release(current->status, SUCCEEDED);
                         forwarder_busy = false;
                     }
-                    break;
+                        break;
                 }
             }
         }
@@ -1113,9 +1186,9 @@ namespace internal {
             my_aggregator.initialize_handler(my_handler(this));
         }
 
-        join_node_base(const join_node_base& other) :
-            graph_node(other.my_graph), input_ports_type(other),
-            sender<OutputTuple>(), forwarder_busy(false), my_successors() {
+        join_node_base(const join_node_base &other) :
+                graph_node(other.my_graph), input_ports_type(other),
+                sender<OutputTuple>(), forwarder_busy(false), my_successors() {
             my_successors.set_owner(this);
             input_ports_type::set_my_node(this);
             my_aggregator.initialize_handler(my_handler(this));
@@ -1134,13 +1207,13 @@ namespace internal {
             return op_data.status == SUCCEEDED;
         }
 
-        bool remove_successor( successor_type &r) {
+        bool remove_successor(successor_type &r) {
             join_node_base_operation op_data(r, rem_succ);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
         }
 
-        bool try_get( output_type &v) {
+        bool try_get(output_type &v) {
             join_node_base_operation op_data(v, try__get);
             my_aggregator.execute(&op_data);
             return op_data.status == SUCCEEDED;
@@ -1153,9 +1226,10 @@ namespace internal {
         }
 
     private:
-        broadcast_cache<output_type, null_rw_mutex> my_successors;
+        broadcast_cache <output_type, null_rw_mutex> my_successors;
 
-        friend class forward_task_bypass< join_node_base<JP, InputTuple, OutputTuple> >;
+        friend class forward_task_bypass<join_node_base<JP, InputTuple, OutputTuple> >;
+
         task *forward_task() {
             join_node_base_operation op_data(do_fwrd_bypass);
             my_aggregator.execute(&op_data);
@@ -1167,7 +1241,7 @@ namespace internal {
     // join base class type generator
     template<int N, template<class> class PT, typename OutputTuple, graph_buffer_policy JP>
     struct join_base {
-        typedef typename internal::join_node_base<JP, typename wrap_tuple_elements<N,PT,OutputTuple>::type, OutputTuple> type;
+        typedef typename internal::join_node_base<JP, typename wrap_tuple_elements<N, PT, OutputTuple>::type, OutputTuple> type;
     };
 
     //! unfolded_join_node : passes input_ports_type to join_node_base.  We build the input port type
@@ -1175,14 +1249,15 @@ namespace internal {
     //  and should match the graph_buffer_policy.
 
     template<int N, template<class> class PT, typename OutputTuple, graph_buffer_policy JP>
-    class unfolded_join_node : public join_base<N,PT,OutputTuple,JP>::type {
+    class unfolded_join_node : public join_base<N, PT, OutputTuple, JP>::type {
     public:
         typedef typename wrap_tuple_elements<N, PT, OutputTuple>::type input_ports_type;
         typedef OutputTuple output_type;
     private:
-        typedef join_node_base<JP, input_ports_type, output_type > base_type;
+        typedef join_node_base<JP, input_ports_type, output_type> base_type;
     public:
         unfolded_join_node(graph &g) : base_type(g) {}
+
         unfolded_join_node(const unfolded_join_node &other) : base_type(other) {}
     };
 
@@ -1190,31 +1265,34 @@ namespace internal {
     // differ.
 
     template<typename OutputTuple>
-    class unfolded_join_node<2,tag_matching_port,OutputTuple,tag_matching> : public 
-            join_base<2,tag_matching_port,OutputTuple,tag_matching>::type {
+    class unfolded_join_node<2, tag_matching_port, OutputTuple, tag_matching>
+            : public join_base<2, tag_matching_port, OutputTuple, tag_matching>::type {
         typedef typename tbb::flow::tuple_element<0, OutputTuple>::type T0;
         typedef typename tbb::flow::tuple_element<1, OutputTuple>::type T1;
     public:
-        typedef typename wrap_tuple_elements<2,tag_matching_port,OutputTuple>::type input_ports_type;
+        typedef typename wrap_tuple_elements<2, tag_matching_port, OutputTuple>::type input_ports_type;
         typedef OutputTuple output_type;
     private:
-        typedef join_node_base<tag_matching, input_ports_type, output_type > base_type;
+        typedef join_node_base<tag_matching, input_ports_type, output_type> base_type;
         typedef typename internal::function_body<T0, tag_value> *f0_p;
         typedef typename internal::function_body<T1, tag_value> *f1_p;
-        typedef typename tbb::flow::tuple< f0_p, f1_p > func_initializer_type;
+        typedef typename tbb::flow::tuple<f0_p, f1_p> func_initializer_type;
     public:
         template<typename B0, typename B1>
         unfolded_join_node(graph &g, B0 b0, B1 b1) : base_type(g,
-                func_initializer_type(
-                    new internal::function_body_leaf<T0, tag_value, B0>(b0),
-                    new internal::function_body_leaf<T1, tag_value, B1>(b1)
-                    ) ) {}
+                                                               func_initializer_type(
+                                                                       new internal::function_body_leaf<T0, tag_value, B0>(
+                                                                               b0),
+                                                                       new internal::function_body_leaf<T1, tag_value, B1>(
+                                                                               b1)
+                                                               )) {}
+
         unfolded_join_node(const unfolded_join_node &other) : base_type(other) {}
     };
 
     template<typename OutputTuple>
-    class unfolded_join_node<3,tag_matching_port,OutputTuple,tag_matching> : public
-            join_base<3,tag_matching_port,OutputTuple,tag_matching>::type {
+    class unfolded_join_node<3, tag_matching_port, OutputTuple, tag_matching>
+            : public join_base<3, tag_matching_port, OutputTuple, tag_matching>::type {
         typedef typename tbb::flow::tuple_element<0, OutputTuple>::type T0;
         typedef typename tbb::flow::tuple_element<1, OutputTuple>::type T1;
         typedef typename tbb::flow::tuple_element<2, OutputTuple>::type T2;
@@ -1222,25 +1300,29 @@ namespace internal {
         typedef typename wrap_tuple_elements<3, tag_matching_port, OutputTuple>::type input_ports_type;
         typedef OutputTuple output_type;
     private:
-        typedef join_node_base<tag_matching, input_ports_type, output_type > base_type;
+        typedef join_node_base<tag_matching, input_ports_type, output_type> base_type;
         typedef typename internal::function_body<T0, tag_value> *f0_p;
         typedef typename internal::function_body<T1, tag_value> *f1_p;
         typedef typename internal::function_body<T2, tag_value> *f2_p;
-        typedef typename tbb::flow::tuple< f0_p, f1_p, f2_p > func_initializer_type;
+        typedef typename tbb::flow::tuple<f0_p, f1_p, f2_p> func_initializer_type;
     public:
         template<typename B0, typename B1, typename B2>
         unfolded_join_node(graph &g, B0 b0, B1 b1, B2 b2) : base_type(g,
-                func_initializer_type(
-                    new internal::function_body_leaf<T0, tag_value, B0>(b0),
-                    new internal::function_body_leaf<T1, tag_value, B1>(b1),
-                    new internal::function_body_leaf<T2, tag_value, B2>(b2)
-                    ) ) {}
+                                                                      func_initializer_type(
+                                                                              new internal::function_body_leaf<T0, tag_value, B0>(
+                                                                                      b0),
+                                                                              new internal::function_body_leaf<T1, tag_value, B1>(
+                                                                                      b1),
+                                                                              new internal::function_body_leaf<T2, tag_value, B2>(
+                                                                                      b2)
+                                                                      )) {}
+
         unfolded_join_node(const unfolded_join_node &other) : base_type(other) {}
     };
 
     template<typename OutputTuple>
-    class unfolded_join_node<4,tag_matching_port,OutputTuple,tag_matching> : public 
-            join_base<4,tag_matching_port,OutputTuple,tag_matching>::type {
+    class unfolded_join_node<4, tag_matching_port, OutputTuple, tag_matching>
+            : public join_base<4, tag_matching_port, OutputTuple, tag_matching>::type {
         typedef typename tbb::flow::tuple_element<0, OutputTuple>::type T0;
         typedef typename tbb::flow::tuple_element<1, OutputTuple>::type T1;
         typedef typename tbb::flow::tuple_element<2, OutputTuple>::type T2;
@@ -1249,27 +1331,32 @@ namespace internal {
         typedef typename wrap_tuple_elements<4, tag_matching_port, OutputTuple>::type input_ports_type;
         typedef OutputTuple output_type;
     private:
-        typedef join_node_base<tag_matching, input_ports_type, output_type > base_type;
+        typedef join_node_base<tag_matching, input_ports_type, output_type> base_type;
         typedef typename internal::function_body<T0, tag_value> *f0_p;
         typedef typename internal::function_body<T1, tag_value> *f1_p;
         typedef typename internal::function_body<T2, tag_value> *f2_p;
         typedef typename internal::function_body<T3, tag_value> *f3_p;
-        typedef typename tbb::flow::tuple< f0_p, f1_p, f2_p, f3_p > func_initializer_type;
+        typedef typename tbb::flow::tuple<f0_p, f1_p, f2_p, f3_p> func_initializer_type;
     public:
         template<typename B0, typename B1, typename B2, typename B3>
         unfolded_join_node(graph &g, B0 b0, B1 b1, B2 b2, B3 b3) : base_type(g,
-                func_initializer_type(
-                    new internal::function_body_leaf<T0, tag_value, B0>(b0),
-                    new internal::function_body_leaf<T1, tag_value, B1>(b1),
-                    new internal::function_body_leaf<T2, tag_value, B2>(b2),
-                    new internal::function_body_leaf<T3, tag_value, B3>(b3)
-                    ) ) {}
+                                                                             func_initializer_type(
+                                                                                     new internal::function_body_leaf<T0, tag_value, B0>(
+                                                                                             b0),
+                                                                                     new internal::function_body_leaf<T1, tag_value, B1>(
+                                                                                             b1),
+                                                                                     new internal::function_body_leaf<T2, tag_value, B2>(
+                                                                                             b2),
+                                                                                     new internal::function_body_leaf<T3, tag_value, B3>(
+                                                                                             b3)
+                                                                             )) {}
+
         unfolded_join_node(const unfolded_join_node &other) : base_type(other) {}
     };
 
     template<typename OutputTuple>
-    class unfolded_join_node<5,tag_matching_port,OutputTuple,tag_matching> : public
-            join_base<5,tag_matching_port,OutputTuple,tag_matching>::type {
+    class unfolded_join_node<5, tag_matching_port, OutputTuple, tag_matching>
+            : public join_base<5, tag_matching_port, OutputTuple, tag_matching>::type {
         typedef typename tbb::flow::tuple_element<0, OutputTuple>::type T0;
         typedef typename tbb::flow::tuple_element<1, OutputTuple>::type T1;
         typedef typename tbb::flow::tuple_element<2, OutputTuple>::type T2;
@@ -1279,23 +1366,29 @@ namespace internal {
         typedef typename wrap_tuple_elements<5, tag_matching_port, OutputTuple>::type input_ports_type;
         typedef OutputTuple output_type;
     private:
-        typedef join_node_base<tag_matching, input_ports_type, output_type > base_type;
+        typedef join_node_base<tag_matching, input_ports_type, output_type> base_type;
         typedef typename internal::function_body<T0, tag_value> *f0_p;
         typedef typename internal::function_body<T1, tag_value> *f1_p;
         typedef typename internal::function_body<T2, tag_value> *f2_p;
         typedef typename internal::function_body<T3, tag_value> *f3_p;
         typedef typename internal::function_body<T4, tag_value> *f4_p;
-        typedef typename tbb::flow::tuple< f0_p, f1_p, f2_p, f3_p, f4_p > func_initializer_type;
+        typedef typename tbb::flow::tuple<f0_p, f1_p, f2_p, f3_p, f4_p> func_initializer_type;
     public:
         template<typename B0, typename B1, typename B2, typename B3, typename B4>
         unfolded_join_node(graph &g, B0 b0, B1 b1, B2 b2, B3 b3, B4 b4) : base_type(g,
-                func_initializer_type(
-                    new internal::function_body_leaf<T0, tag_value, B0>(b0),
-                    new internal::function_body_leaf<T1, tag_value, B1>(b1),
-                    new internal::function_body_leaf<T2, tag_value, B2>(b2),
-                    new internal::function_body_leaf<T3, tag_value, B3>(b3),
-                    new internal::function_body_leaf<T4, tag_value, B4>(b4)
-                    ) ) {}
+                                                                                    func_initializer_type(
+                                                                                            new internal::function_body_leaf<T0, tag_value, B0>(
+                                                                                                    b0),
+                                                                                            new internal::function_body_leaf<T1, tag_value, B1>(
+                                                                                                    b1),
+                                                                                            new internal::function_body_leaf<T2, tag_value, B2>(
+                                                                                                    b2),
+                                                                                            new internal::function_body_leaf<T3, tag_value, B3>(
+                                                                                                    b3),
+                                                                                            new internal::function_body_leaf<T4, tag_value, B4>(
+                                                                                                    b4)
+                                                                                    )) {}
+
         unfolded_join_node(const unfolded_join_node &other) : base_type(other) {}
     };
 
@@ -1520,6 +1613,6 @@ namespace internal {
         return tbb::flow::get<N>(jn.input_ports());
     }
 
-} 
+}
 #endif // __TBB__flow_graph_join_impl_H
 

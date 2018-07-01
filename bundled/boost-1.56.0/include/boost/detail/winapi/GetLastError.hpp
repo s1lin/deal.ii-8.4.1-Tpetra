@@ -16,16 +16,18 @@
 #endif
 
 namespace boost {
-namespace detail {
-namespace winapi {
+    namespace detail {
+        namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetLastError;
+            using ::GetLastError;
 #else
-    extern "C" __declspec(dllimport) DWORD_ WINAPI
-        GetLastError();
+            extern "C" __declspec(dllimport) DWORD_ WINAPI
+
+            GetLastError();
+
 #endif
-}
-}
+        }
+    }
 }
 
 #endif // BOOST_DETAIL_WINAPI_GETLASTERROR_HPP

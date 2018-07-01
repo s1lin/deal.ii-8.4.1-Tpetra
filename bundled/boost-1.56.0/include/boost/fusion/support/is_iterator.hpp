@@ -10,12 +10,14 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-namespace boost { namespace fusion
-{
-    struct iterator_root;
+namespace boost {
+    namespace fusion {
+        struct iterator_root;
 
-    template <typename T>
-    struct is_fusion_iterator : is_base_of<iterator_root, T> {};
-}}
+        template<typename T>
+        struct is_fusion_iterator : is_base_of<iterator_root, T> {
+        };
+    }
+}
 
 #endif

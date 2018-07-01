@@ -19,109 +19,106 @@
 #include <boost/fusion/view/flatten_view/flatten_view_iterator.hpp>
 
 
-namespace boost { namespace fusion
-{
-    struct forward_traversal_tag;
-    struct flatten_view_tag;
-    
-    template <typename Sequence>
-    struct flatten_view
-      : sequence_base<flatten_view<Sequence> >
-    {
-        typedef flatten_view_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::true_ is_view;
-        typedef forward_traversal_tag category;
-        
-        typedef Sequence sequence_type;
-        typedef typename result_of::begin<Sequence>::type first_type;
-        typedef typename result_of::end<Sequence>::type last_type;
-        
-        explicit flatten_view(Sequence& seq)
-          : seq(seq)
-        {}
-        
-        first_type first() const { return fusion::begin(seq); }
-        last_type last() const { return fusion::end(seq); }
-        
-        typename mpl::if_<traits::is_view<Sequence>, Sequence, Sequence&>::type seq;
-    };
-}}
+namespace boost {
+    namespace fusion {
+        struct forward_traversal_tag;
+        struct flatten_view_tag;
 
-namespace boost { namespace fusion { namespace extension
-{
-    template<>
-    struct begin_impl<flatten_view_tag>
-    {
         template<typename Sequence>
-        struct apply
-        {
-            typedef typename Sequence::first_type first_type;
-            
-            typedef typename
+        struct flatten_view
+                : sequence_base<flatten_view<Sequence> > {
+            typedef flatten_view_tag fusion_tag;
+            typedef fusion_sequence_tag tag; // this gets picked up by MPL
+            typedef mpl::true_ is_view;
+            typedef forward_traversal_tag category;
+
+            typedef Sequence sequence_type;
+            typedef typename result_of::begin<Sequence>::type first_type;
+            typedef typename result_of::end<Sequence>::type last_type;
+
+            explicit flatten_view(Sequence &seq)
+                    : seq(seq) {}
+
+            first_type first() const { return fusion::begin(seq); }
+
+            last_type last() const { return fusion::end(seq); }
+
+            typename mpl::if_<traits::is_view < Sequence>, Sequence, Sequence&>
+            ::type seq;
+        };
+    }
+}
+
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<>
+            struct begin_impl<flatten_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::first_type first_type;
+
+                    typedef typename
                     result_of::begin<
-                        mpl::single_view<
-                            typename Sequence::sequence_type> >::type
-            root_iterator;
-            
-            typedef
-                detail::seek_descent<root_iterator, first_type>
-            seek_descent;
-            
-            typedef typename seek_descent::type type;
+                            mpl::single_view <
+                            typename Sequence::sequence_type> >
+                    ::type
+                            root_iterator;
 
-            static inline
-            type call(Sequence& seq)
-            {
-                return seek_descent::apply(root_iterator(), seq.first());
-            }
-        };
-    };
-    
-    template<>
-    struct end_impl<flatten_view_tag>
-    {
-        template<typename Sequence>
-        struct apply
-        {
-            typedef typename Sequence::last_type last_type;
-            
-            typedef typename
+                    typedef
+                    detail::seek_descent <root_iterator, first_type>
+                            seek_descent;
+
+                    typedef typename seek_descent::type type;
+
+                    static inline
+                    type call(Sequence &seq) {
+                        return seek_descent::apply(root_iterator(), seq.first());
+                    }
+                };
+            };
+
+            template<>
+            struct end_impl<flatten_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::last_type last_type;
+
+                    typedef typename
                     result_of::end<
-                        mpl::single_view<
-                            typename Sequence::sequence_type> >::type
-            type;
+                            mpl::single_view <
+                            typename Sequence::sequence_type> >
+                    ::type
+                            type;
 
-            static inline
-            type call(Sequence&)
-            {
-                return type();
-            }
-        };
-    };
+                    static inline
+                    type call(Sequence &) {
+                        return type();
+                    }
+                };
+            };
 
-    template<>
-    struct size_impl<flatten_view_tag>
-    {
-        template <typename Sequence>
-        struct apply
-          : result_of::distance
-            <
-                typename result_of::begin<Sequence>::type
-              , typename result_of::end<Sequence>::type
-            >
-        {};
-    };
+            template<>
+            struct size_impl<flatten_view_tag> {
+                template<typename Sequence>
+                struct apply
+                        : result_of::distance
+                                  <
+                                          typename result_of::begin<Sequence>::type, typename result_of::end<Sequence>::type
+                                  > {
+                };
+            };
 
-    template<>
-    struct empty_impl<flatten_view_tag>
-    {
-        template <typename Sequence>
-        struct apply
-          : result_of::empty<typename Sequence::sequence_type>
-        {};
-    };
-}}}
+            template<>
+            struct empty_impl<flatten_view_tag> {
+                template<typename Sequence>
+                struct apply
+                        : result_of::empty<typename Sequence::sequence_type> {
+                };
+            };
+        }
+    }
+}
 
 
 #endif

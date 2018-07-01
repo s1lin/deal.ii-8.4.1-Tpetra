@@ -54,8 +54,10 @@
 // no namespace issues from this.
 //
 #if !defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_LONG_LONG)                                              \
-   && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+ && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+
 # include <limits.h>
+
 # if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #   define BOOST_HAS_LONG_LONG
 # else
@@ -81,7 +83,7 @@
 // If cv-qualified specializations are not allowed, then neither are cv-void ones:
 //
 #  if defined(BOOST_NO_CV_SPECIALIZATIONS) \
-      && !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
+ && !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
 #     define BOOST_NO_CV_VOID_SPECIALIZATIONS
 #  endif
 
@@ -90,7 +92,7 @@
 // constants either!
 //
 #  if defined(BOOST_NO_LIMITS) \
-      && !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
+ && !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
 #     define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #     define BOOST_NO_MS_INT64_NUMERIC_LIMITS
 #     define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
@@ -117,7 +119,7 @@
 // VC6 subset of member templates:
 //
 #  if !defined(BOOST_NO_MEMBER_TEMPLATES) \
-       && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
+ && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 #     define BOOST_MSVC6_MEMBER_TEMPLATES
 #  endif
 
@@ -125,7 +127,7 @@
 // Without partial specialization, can't test for partial specialisation bugs:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-      && !defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)
+ && !defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)
 #     define BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
 #  endif
 
@@ -133,7 +135,7 @@
 // Without partial specialization, we can't have array-type partial specialisations:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-      && !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
+ && !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 #     define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
 #  endif
 
@@ -141,7 +143,7 @@
 // Without partial specialization, std::iterator_traits can't work:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-      && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+ && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
 #     define BOOST_NO_STD_ITERATOR_TRAITS
 #  endif
 
@@ -150,7 +152,7 @@
 // specialization with default args won't work either:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-      && !defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
+ && !defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
 #     define BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS
 #  endif
 
@@ -159,8 +161,8 @@
 // in the standard library either:
 //
 #  if defined(BOOST_NO_MEMBER_TEMPLATES) \
-      && !defined(BOOST_MSVC6_MEMBER_TEMPLATES) \
-      && !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+ && !defined(BOOST_MSVC6_MEMBER_TEMPLATES) \
+ && !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 #     define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #  endif
 
@@ -169,8 +171,8 @@
 // std::allocator template either:
 //
 #  if defined(BOOST_NO_MEMBER_TEMPLATES) \
-      && !defined(BOOST_MSVC6_MEMBER_TEMPLATES) \
-      && !defined(BOOST_NO_STD_ALLOCATOR)
+ && !defined(BOOST_MSVC6_MEMBER_TEMPLATES) \
+ && !defined(BOOST_NO_STD_ALLOCATOR)
 #     define BOOST_NO_STD_ALLOCATOR
 #  endif
 
@@ -236,7 +238,7 @@
 // thread API enabled:
 //
 #if defined(BOOST_DISABLE_WIN32) && defined(_WIN32) \
-   && !defined(BOOST_DISABLE_THREADS) && !defined(BOOST_HAS_PTHREADS)
+ && !defined(BOOST_DISABLE_THREADS) && !defined(BOOST_HAS_PTHREADS)
 #  define BOOST_DISABLE_THREADS
 #endif
 
@@ -247,8 +249,8 @@
 // from here then add to the appropriate compiler section):
 //
 #if (defined(__MT__) || defined(_MT) || defined(_REENTRANT) \
-    || defined(_PTHREADS) || defined(__APPLE__) || defined(__DragonFly__)) \
-    && !defined(BOOST_HAS_THREADS)
+ || defined(_PTHREADS) || defined(__APPLE__) || defined(__DragonFly__)) \
+ && !defined(BOOST_HAS_THREADS)
 #  define BOOST_HAS_THREADS
 #endif
 
@@ -263,8 +265,8 @@
 // Turn threading support off if we don't recognise the threading API:
 //
 #if defined(BOOST_HAS_THREADS) && !defined(BOOST_HAS_PTHREADS)\
-      && !defined(BOOST_HAS_WINTHREADS) && !defined(BOOST_HAS_BETHREADS)\
-      && !defined(BOOST_HAS_MPTASKS)
+ && !defined(BOOST_HAS_WINTHREADS) && !defined(BOOST_HAS_BETHREADS)\
+ && !defined(BOOST_HAS_MPTASKS)
 #  undef BOOST_HAS_THREADS
 #endif
 
@@ -350,7 +352,7 @@
 
 # if defined(BOOST_NO_STDC_NAMESPACE) && defined(__cplusplus)
 #   include <cstddef>
-    namespace std { using ::ptrdiff_t; using ::size_t; }
+namespace std { using ::ptrdiff_t; using ::size_t; }
 # endif
 
 //  Workaround for the unfortunate min/max macros defined by some platform headers
@@ -479,13 +481,13 @@ namespace std {
 // (with -pedantic -ansi) unless it's use is prefixed by __extension__
 //
 #if defined(BOOST_HAS_LONG_LONG) && defined(__cplusplus)
-namespace boost{
+namespace boost {
 #  ifdef __GNUC__
-   __extension__ typedef long long long_long_type;
-   __extension__ typedef unsigned long long ulong_long_type;
+    __extension__ typedef long long long_long_type;
+    __extension__ typedef unsigned long long ulong_long_type;
 #  else
-   typedef long long long_long_type;
-   typedef unsigned long long ulong_long_type;
+    typedef long long long_long_type;
+    typedef unsigned long long ulong_long_type;
 #  endif
 }
 #endif
@@ -541,9 +543,9 @@ namespace std{ using ::type_info; }
 // is that macro expansion of macro arguments does not
 // occur in BOOST_DO_JOIN2 but does in BOOST_DO_JOIN.
 //
-#define BOOST_JOIN( X, Y ) BOOST_DO_JOIN( X, Y )
-#define BOOST_DO_JOIN( X, Y ) BOOST_DO_JOIN2(X,Y)
-#define BOOST_DO_JOIN2( X, Y ) X##Y
+#define BOOST_JOIN(X, Y) BOOST_DO_JOIN( X, Y )
+#define BOOST_DO_JOIN(X, Y) BOOST_DO_JOIN2(X,Y)
+#define BOOST_DO_JOIN2(X, Y) X##Y
 
 //
 // Set some default values for compiler/library/platform names.
@@ -557,7 +559,7 @@ namespace std{ using ::type_info; }
 #  endif
 #  ifndef BOOST_PLATFORM
 #     if defined(unix) || defined(__unix) || defined(_XOPEN_SOURCE) \
-         || defined(_POSIX_SOURCE)
+ || defined(_POSIX_SOURCE)
 #        define BOOST_PLATFORM "Generic Unix"
 #     else
 #        define BOOST_PLATFORM "Unknown"
@@ -577,7 +579,7 @@ namespace std{ using ::type_info; }
 #  if defined(_MSC_VER)
 #    define BOOST_FORCEINLINE __forceinline
 #  elif defined(__GNUC__) && __GNUC__ > 3
-     // Clang also defines __GNUC__ (as 4)
+// Clang also defines __GNUC__ (as 4)
 #    define BOOST_FORCEINLINE inline __attribute__ ((__always_inline__))
 #  else
 #    define BOOST_FORCEINLINE inline
@@ -590,10 +592,10 @@ namespace std{ using ::type_info; }
 #  if defined(_MSC_VER)
 #    define BOOST_NOINLINE __declspec(noinline)
 #  elif defined(__GNUC__) && __GNUC__ > 3
-     // Clang also defines __GNUC__ (as 4)
+// Clang also defines __GNUC__ (as 4)
 #    if defined(__CUDACC__)
-       // nvcc doesn't always parse __noinline__, 
-       // see: https://svn.boost.org/trac/boost/ticket/9392
+// nvcc doesn't always parse __noinline__,
+// see: https://svn.boost.org/trac/boost/ticket/9392
 #      define BOOST_NOINLINE __attribute__ ((noinline))
 #    else
 #      define BOOST_NOINLINE __attribute__ ((__noinline__))

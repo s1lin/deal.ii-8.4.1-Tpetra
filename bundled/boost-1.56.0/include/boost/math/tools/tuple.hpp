@@ -5,27 +5,30 @@
 
 #ifndef BOOST_MATH_TUPLE_HPP_INCLUDED
 #  define BOOST_MATH_TUPLE_HPP_INCLUDED
+
 #  include <boost/config.hpp>
 
 #ifndef BOOST_NO_CXX11_HDR_TUPLE
 
 #include <tuple>
 
-namespace boost{ namespace math{
+namespace boost {
+    namespace math {
 
-using ::std::tuple;
+        using ::std::tuple;
 
 // [6.1.3.2] Tuple creation functions
-using ::std::ignore;
-using ::std::make_tuple;
-using ::std::tie;
-using ::std::get;
+        using ::std::ignore;
+        using ::std::make_tuple;
+        using ::std::tie;
+        using ::std::get;
 
 // [6.1.3.3] Tuple helper classes
-using ::std::tuple_size;
-using ::std::tuple_element;
+        using ::std::tuple_size;
+        using ::std::tuple_element;
 
-}}
+    }
+}
 
 #elif (defined(__BORLANDC__) && (__BORLANDC__ <= 0x600)) || defined(__IBMCPP__)
 

@@ -21,38 +21,40 @@
 #include <boost/numeric/odeint/config.hpp>
 
 
-#if BOOST_NUMERIC_ODEINT_CXX11 
-    #include <functional>
+#if BOOST_NUMERIC_ODEINT_CXX11
+#include <functional>
 #else
 #define BOOST_BIND_NO_PLACEHOLDERS
+
 #include <boost/bind.hpp>
+
 #endif
 
 namespace boost {
-namespace numeric {
-namespace odeint {
-namespace detail {
+    namespace numeric {
+        namespace odeint {
+            namespace detail {
 
-#if BOOST_NUMERIC_ODEINT_CXX11 
+#if BOOST_NUMERIC_ODEINT_CXX11
 
-using ::std::bind;
-using namespace ::std::placeholders;
+                using ::std::bind;
+                using namespace ::std::placeholders;
 
 
 #else
 
-using ::boost::bind;
-boost::arg<1> _1;
-boost::arg<2> _2;
+                using ::boost::bind;
+                boost::arg<1> _1;
+                boost::arg<2> _2;
 // using ::boost::bind;
 // using ::_1;
 // using ::_2;
 
 #endif
 
-}
-}
-}
+            }
+        }
+    }
 }
 
 

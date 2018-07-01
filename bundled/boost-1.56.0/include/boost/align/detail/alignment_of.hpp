@@ -19,7 +19,7 @@ namespace boost {
             struct alignment_of {
                 enum {
                     value = detail::min_size<sizeof(T),
-                        sizeof(detail::padded<T>) - sizeof(T)>::value
+                            sizeof(detail::padded<T>) - sizeof(T)>::value
                 };
             };
         }

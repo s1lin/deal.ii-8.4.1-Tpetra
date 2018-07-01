@@ -11,12 +11,11 @@
 
 namespace boost {
 
-template<typename T>
-struct simple_point
-{
-  T x;
-  T y;
-};
+    template<typename T>
+    struct simple_point {
+        T x;
+        T y;
+    };
 
 } // end namespace boost
 

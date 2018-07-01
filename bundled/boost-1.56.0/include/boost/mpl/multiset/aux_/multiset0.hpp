@@ -17,18 +17,21 @@
 #include <boost/mpl/multiset/aux_/tag.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< int dummy_ = 0 >
-struct multiset0
-{
-    typedef aux::multiset_tag tag;
+        template<int dummy_ = 0>
+        struct multiset0 {
+            typedef aux::multiset_tag tag;
 
-    typedef int_<1> count_;
-    static char (& key_count(...) )[count_::value];
-    static char (& ref_key_count(...) )[count_::value];
-};
+            typedef int_<1> count_;
 
-}}
+            static char (&key_count(...))[count_::value];
+
+            static char (&ref_key_count(...))[count_::value];
+        };
+
+    }
+}
 
 #endif // BOOST_MPL_MULTISET_AUX_MULTISET0_HPP_INCLUDED

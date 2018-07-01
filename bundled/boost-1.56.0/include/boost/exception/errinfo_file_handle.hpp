@@ -9,12 +9,14 @@
 #include <stdio.h>
 
 namespace
-boost
-    {
-    template <class> class weak_ptr;
-    template <class Tag,class T> class error_info;
+boost {
+    template<class>
+    class weak_ptr;
 
-    typedef error_info<struct errinfo_file_handle_,weak_ptr<FILE> > errinfo_file_handle;
-    }
+    template<class Tag, class T>
+    class error_info;
+
+    typedef error_info<struct errinfo_file_handle_, weak_ptr<FILE> > errinfo_file_handle;
+}
 
 #endif

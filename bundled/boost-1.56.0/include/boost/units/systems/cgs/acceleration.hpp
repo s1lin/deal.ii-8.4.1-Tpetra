@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<acceleration_dimension,cgs::system>     acceleration;
+            typedef unit <acceleration_dimension, cgs::system> acceleration;
 
-BOOST_UNITS_STATIC_CONSTANT(gal,acceleration);  
-BOOST_UNITS_STATIC_CONSTANT(gals,acceleration); 
-                                                    
-} // namespace cgs
+            BOOST_UNITS_STATIC_CONSTANT(gal, acceleration
+            );
+            BOOST_UNITS_STATIC_CONSTANT(gals, acceleration
+            );
 
-} // namespace units
+        } // namespace cgs
+
+    } // namespace units
 
 } // namespace boost
 

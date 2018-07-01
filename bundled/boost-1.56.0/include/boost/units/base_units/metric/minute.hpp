@@ -18,20 +18,22 @@
 #include <boost/units/base_units/si/second.hpp>
 
 namespace boost {
-namespace units {
-namespace metric {
+    namespace units {
+        namespace metric {
 
-typedef scaled_base_unit<boost::units::si::second_base_unit, scale<60, static_rational<1> > > minute_base_unit;
+            typedef scaled_base_unit <boost::units::si::second_base_unit, scale<60, static_rational < 1>> >
+            minute_base_unit;
 
-}
+        }
 
-template<>
-struct base_unit_info<metric::minute_base_unit> {
-    static const char* name()   { return("minute"); }
-    static const char* symbol() { return("min"); }
-};
+        template<>
+        struct base_unit_info<metric::minute_base_unit> {
+            static const char *name() { return ("minute"); }
 
-}
+            static const char *symbol() { return ("min"); }
+        };
+
+    }
 }
 
 #endif // BOOST_UNIT_SYSTEMS_METRIC_MINUTE_HPP_INCLUDED

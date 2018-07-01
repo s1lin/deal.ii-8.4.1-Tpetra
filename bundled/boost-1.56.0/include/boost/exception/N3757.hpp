@@ -5,7 +5,7 @@
 
 #ifndef UUID_9011016A11A711E3B46CD9FA6088709B
 #define UUID_9011016A11A711E3B46CD9FA6088709B
-#if (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#if (__GNUC__ * 100 + __GNUC_MINOR__ > 301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
 #endif
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
@@ -16,29 +16,26 @@
 #include <boost/exception/get_error_info.hpp>
 
 namespace
-boost
-    {
+boost {
     //Here we're using the boost::error_info machinery to store the info in the exception
     //object. Within the context of N3757, this is strictly an implementation detail.
 
-    template <class Tag>
+    template<class Tag>
     inline
     void
     exception::
-    set( typename Tag::type const & v )
-        {
-        exception_detail::set_info(*this,error_info<Tag,typename Tag::type>(v));
-        }
+    set(typename Tag::type const &v) {
+        exception_detail::set_info(*this, error_info<Tag, typename Tag::type>(v));
+    }
 
-    template <class Tag>
+    template<class Tag>
     inline
     typename Tag::type const *
     exception::
-    get() const
-        {
-        return get_error_info<error_info<Tag,typename Tag::type> >(*this);
-        }
+    get() const {
+        return get_error_info < error_info < Tag, typename Tag::type > > (*this);
     }
+}
 
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma warning(pop)

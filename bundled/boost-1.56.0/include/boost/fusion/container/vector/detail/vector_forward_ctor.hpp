@@ -13,6 +13,7 @@
 #define BOOST_PP_FILENAME_1 \
     <boost/fusion/container/vector/detail/vector_forward_ctor.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_VECTOR_SIZE)
+
 #include BOOST_PP_ITERATE()
 
 #undef FUSION_FORWARD_CTOR_FORWARD

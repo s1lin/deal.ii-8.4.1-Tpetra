@@ -48,7 +48,7 @@
 
 #else
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait, name) \
   template<class BOOST_TTI_DETAIL_TP_PMEMF,class BOOST_TTI_DETAIL_TP_C> \
   struct BOOST_PP_CAT(trait,_detail_types) \
     { \
@@ -67,7 +67,7 @@
 
 #endif
 
-#define BOOST_TTI_DETAIL_TRAIT_CTMF_INVOKE(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_CTMF_INVOKE(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_ctmf_invoke) : \
@@ -80,27 +80,27 @@
     }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_CTMF_INVOKE(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_call_types) : \
-	boost::mpl::eval_if \
-		< \
- 		boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
- 		BOOST_PP_CAT(trait,_detail_ctmf_invoke) \
- 			< \
- 			BOOST_TTI_DETAIL_TP_T, \
- 			BOOST_TTI_DETAIL_TP_R, \
- 			BOOST_TTI_DETAIL_TP_FS, \
- 			BOOST_TTI_DETAIL_TP_TAG \
- 			>, \
- 		boost::mpl::false_ \
-		> \
+    boost::mpl::eval_if \
+        < \
+        boost::is_class<BOOST_TTI_DETAIL_TP_T>, \
+        BOOST_PP_CAT(trait,_detail_ctmf_invoke) \
+            < \
+            BOOST_TTI_DETAIL_TP_T, \
+            BOOST_TTI_DETAIL_TP_R, \
+            BOOST_TTI_DETAIL_TP_FS, \
+            BOOST_TTI_DETAIL_TP_TAG \
+            >, \
+        boost::mpl::false_ \
+        > \
     { \
     }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_CHECK_HAS_COMP_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_CHECK_HAS_COMP_MEMBER_FUNCTION(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T> \
   struct BOOST_PP_CAT(trait,_detail_check_comp) : \
@@ -110,7 +110,7 @@
     }; \
 /**/
 
-#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_CHECK_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \

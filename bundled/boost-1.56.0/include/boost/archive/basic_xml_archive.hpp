@@ -21,44 +21,52 @@
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
 // constant strings used in xml i/o
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_OBJECT_ID();
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_OBJECT_REFERENCE();
+        BOOST_ARCHIVE_XML_OBJECT_ID();
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_CLASS_ID();
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_CLASS_ID_REFERENCE();
+        BOOST_ARCHIVE_XML_OBJECT_REFERENCE();
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_CLASS_NAME();
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_TRACKING();
+        BOOST_ARCHIVE_XML_CLASS_ID();
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_VERSION();
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
 
-extern 
-BOOST_ARCHIVE_DECL(const char *)
-BOOST_ARCHIVE_XML_SIGNATURE();
+        BOOST_ARCHIVE_XML_CLASS_ID_REFERENCE();
 
-}// namespace archive
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
+
+        BOOST_ARCHIVE_XML_CLASS_NAME();
+
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
+
+        BOOST_ARCHIVE_XML_TRACKING();
+
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
+
+        BOOST_ARCHIVE_XML_VERSION();
+
+        extern
+        BOOST_ARCHIVE_DECL(const char *)
+
+        BOOST_ARCHIVE_XML_SIGNATURE();
+
+    }// namespace archive
 }// namespace boost
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas

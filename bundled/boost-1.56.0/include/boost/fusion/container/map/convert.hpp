@@ -10,39 +10,43 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/map/map.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename It, bool is_assoc>
-    struct pair_from
-    {
-        typedef typename result_of::value_of<It>::type type;
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename It, bool is_assoc>
+            struct pair_from {
+                typedef typename result_of::value_of<It>::type type;
 
-        BOOST_FUSION_GPU_ENABLED
-        static inline type call(It const& it)
-        {
-            return *it;
+                BOOST_FUSION_GPU_ENABLED
+                static inline type
+                call(It const& it)
+                {
+                    return *it;
+                }
+            };
+
+            template<typename It>
+            struct pair_from<It, true> {
+                typedef typename result_of::key_of<It>::type key_type;
+                typedef typename result_of::value_of_data<It>::type data_type;
+                typedef typename fusion::pair<key_type, data_type> type;
+
+                BOOST_FUSION_GPU_ENABLED
+                static inline type
+                call(It const& it)
+                {
+                    return type(deref_data(it));
+                }
+            };
         }
-    };
-
-    template <typename It>
-    struct pair_from<It, true>
-    {
-        typedef typename result_of::key_of<It>::type key_type;
-        typedef typename result_of::value_of_data<It>::type data_type;
-        typedef typename fusion::pair<key_type, data_type> type;
-
-        BOOST_FUSION_GPU_ENABLED
-        static inline type call(It const& it)
-        {
-            return type(deref_data(it));
-        }
-    };
-}}}
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Without variadics, we will use the PP version
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined(BOOST_FUSION_HAS_VARIADIC_MAP)
+
 # include <boost/fusion/container/map/detail/cpp03/convert.hpp>
 
 #else

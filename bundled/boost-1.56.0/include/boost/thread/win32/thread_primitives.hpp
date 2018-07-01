@@ -159,29 +159,31 @@ namespace boost
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-    namespace detail
-    {
-        namespace win32
-        {
-            typedef unsigned __int64 ticks_type;
-            namespace detail { typedef int (__stdcall *farproc_t)(); typedef ticks_type (__stdcall *gettickcount64_t)(); }
+namespace boost {
+    namespace detail {
+        namespace win32 {
+            typedef unsigned __int64
+            ticks_type;
+            namespace detail {
+                typedef int (__stdcall *farproc_t)();
+
+                typedef ticks_type (__stdcall *gettickcount64_t)();
+            }
             extern "C"
             {
-                   __declspec(dllimport) detail::farproc_t __stdcall GetProcAddress(void *, const char *);
+            __declspec(dllimport) detail::farproc_t __stdcall GetProcAddress(void *, const char *);
 #if !defined(BOOST_NO_ANSI_APIS)
-                   __declspec(dllimport) void * __stdcall GetModuleHandleA(const char *);
+            __declspec(dllimport) void *__stdcall GetModuleHandleA(const char *);
 #else
-                   __declspec(dllimport) void * __stdcall GetModuleHandleW(const wchar_t *);
+            __declspec(dllimport) void * __stdcall GetModuleHandleW(const wchar_t *);
 #endif
-                int __stdcall GetTickCount();
-                long _InterlockedCompareExchange(long volatile *, long, long);
+            int __stdcall GetTickCount();
+            long _InterlockedCompareExchange(long volatile *, long, long);
 #pragma intrinsic(_InterlockedCompareExchange)
             }
+
             // Borrowed from https://stackoverflow.com/questions/8211820/userland-interrupt-timer-access-such-as-via-kequeryinterrupttime-or-similar
-            inline ticks_type __stdcall GetTickCount64emulation()
-            {
+            inline ticks_type __stdcall GetTickCount64emulation() {
                 static volatile long count = 0xFFFFFFFF;
                 unsigned long previous_count, current_tick32, previous_count_zone, current_tick32_zone;
                 ticks_type current_tick64;
@@ -189,8 +191,7 @@ namespace boost
                 previous_count = (unsigned long) _InterlockedCompareExchange(&count, 0, 0);
                 current_tick32 = GetTickCount();
 
-                if(previous_count == 0xFFFFFFFF)
-                {
+                if (previous_count == 0xFFFFFFFF) {
                     // count has never been written
                     unsigned long initial_count;
                     initial_count = current_tick32 >> 28;
@@ -205,8 +206,7 @@ namespace boost
                 previous_count_zone = previous_count & 15;
                 current_tick32_zone = current_tick32 >> 28;
 
-                if(current_tick32_zone == previous_count_zone)
-                {
+                if (current_tick32_zone == previous_count_zone) {
                     // The top four bits of the 32-bit tick count haven't changed since count was last written.
                     current_tick64 = previous_count;
                     current_tick64 <<= 28;
@@ -214,8 +214,8 @@ namespace boost
                     return current_tick64;
                 }
 
-                if(current_tick32_zone == previous_count_zone + 1 || (current_tick32_zone == 0 && previous_count_zone == 15))
-                {
+                if (current_tick32_zone == previous_count_zone + 1 ||
+                    (current_tick32_zone == 0 && previous_count_zone == 15)) {
                     // The top four bits of the 32-bit tick count have been incremented since count was last written.
                     _InterlockedCompareExchange(&count, previous_count + 1, previous_count);
                     current_tick64 = previous_count + 1;
@@ -225,162 +225,153 @@ namespace boost
                 }
 
                 // Oops, we weren't called often enough, we're stuck
-                return 0xFFFFFFFF;     
+                return 0xFFFFFFFF;
             }
-            inline detail::gettickcount64_t GetTickCount64()
-            {
+
+            inline detail::gettickcount64_t GetTickCount64() {
                 static detail::gettickcount64_t gettickcount64impl;
-                if(gettickcount64impl)
+                if (gettickcount64impl)
                     return gettickcount64impl;
-                detail::farproc_t addr=GetProcAddress(
+                detail::farproc_t addr = GetProcAddress(
 #if !defined(BOOST_NO_ANSI_APIS)
-                    GetModuleHandleA("KERNEL32.DLL"),
+                        GetModuleHandleA("KERNEL32.DLL"),
 #else
-                    GetModuleHandleW(L"KERNEL32.DLL"),
+                        GetModuleHandleW(L"KERNEL32.DLL"),
 #endif
-                    "GetTickCount64");
-                if(addr)
-                    gettickcount64impl=(detail::gettickcount64_t) addr;
+                        "GetTickCount64");
+                if (addr)
+                    gettickcount64impl = (detail::gettickcount64_t) addr;
                 else
-                    gettickcount64impl=&GetTickCount64emulation;
+                    gettickcount64impl = &GetTickCount64emulation;
                 return gettickcount64impl;
             }
 
-                       enum event_type
-            {
-                auto_reset_event=false,
-                manual_reset_event=true
+            enum event_type {
+                auto_reset_event = false,
+                manual_reset_event = true
             };
 
-            enum initial_event_state
-            {
-                event_initially_reset=false,
-                event_initially_set=true
+            enum initial_event_state {
+                event_initially_reset = false,
+                event_initially_set = true
             };
 
-            inline handle create_anonymous_event(event_type type,initial_event_state state)
-            {
+            inline handle create_anonymous_event(event_type type, initial_event_state state) {
 #if !defined(BOOST_NO_ANSI_APIS)
-                handle const res=win32::CreateEventA(0,type,state,0);
+                handle const res = win32::CreateEventA(0, type, state, 0);
 #else
                 handle const res=win32::CreateEventW(0,type,state,0);
 #endif
-                if(!res)
-                {
+                if (!res) {
                     boost::throw_exception(thread_resource_error());
                 }
                 return res;
             }
 
-            inline handle create_anonymous_semaphore(long initial_count,long max_count)
-            {
+            inline handle create_anonymous_semaphore(long initial_count, long max_count) {
 #if !defined(BOOST_NO_ANSI_APIS)
-                handle const res=CreateSemaphoreA(0,initial_count,max_count,0);
+                handle const res = CreateSemaphoreA(0, initial_count, max_count, 0);
 #else
                 handle const res=CreateSemaphoreW(0,initial_count,max_count,0);
 #endif
-                if(!res)
-                {
+                if (!res) {
                     boost::throw_exception(thread_resource_error());
                 }
                 return res;
             }
-            inline handle create_anonymous_semaphore_nothrow(long initial_count,long max_count)
-            {
+
+            inline handle create_anonymous_semaphore_nothrow(long initial_count, long max_count) {
 #if !defined(BOOST_NO_ANSI_APIS)
-                handle const res=CreateSemaphoreA(0,initial_count,max_count,0);
+                handle const res = CreateSemaphoreA(0, initial_count, max_count, 0);
 #else
                 handle const res=CreateSemaphoreW(0,initial_count,max_count,0);
 #endif
                 return res;
             }
 
-            inline handle duplicate_handle(handle source)
-            {
-                handle const current_process=GetCurrentProcess();
-                long const same_access_flag=2;
-                handle new_handle=0;
-                bool const success=DuplicateHandle(current_process,source,current_process,&new_handle,0,false,same_access_flag)!=0;
-                if(!success)
-                {
+            inline handle duplicate_handle(handle source) {
+                handle const current_process = GetCurrentProcess();
+                long const same_access_flag = 2;
+                handle new_handle = 0;
+                bool const success = DuplicateHandle(current_process, source, current_process, &new_handle, 0, false,
+                                                     same_access_flag) != 0;
+                if (!success) {
                     boost::throw_exception(thread_resource_error());
                 }
                 return new_handle;
             }
 
-            inline void release_semaphore(handle semaphore,long count)
-            {
-                BOOST_VERIFY(ReleaseSemaphore(semaphore,count,0)!=0);
+            inline void release_semaphore(handle semaphore, long count) {
+                BOOST_VERIFY(ReleaseSemaphore(semaphore, count, 0) != 0);
             }
 
             class BOOST_THREAD_DECL handle_manager
-            {
-            private:
-                handle handle_to_manage;
-                handle_manager(handle_manager&);
-                handle_manager& operator=(handle_manager&);
-
-                void cleanup()
-                {
-                    if(handle_to_manage && handle_to_manage!=invalid_handle_value)
                     {
-                        BOOST_VERIFY(CloseHandle(handle_to_manage));
-                    }
-                }
+                            private:
+                            handle handle_to_manage;
+                            handle_manager(handle_manager&);
+                            handle_manager& operator=(handle_manager&);
 
-            public:
-                explicit handle_manager(handle handle_to_manage_):
-                    handle_to_manage(handle_to_manage_)
-                {}
-                handle_manager():
-                    handle_to_manage(0)
-                {}
+                            void cleanup()
+                            {
+                                if (handle_to_manage && handle_to_manage != invalid_handle_value) {
+                                    BOOST_VERIFY(CloseHandle(handle_to_manage));
+                                }
+                            }
 
-                handle_manager& operator=(handle new_handle)
-                {
-                    cleanup();
-                    handle_to_manage=new_handle;
-                    return *this;
-                }
+                            public:
+                            explicit handle_manager(handle handle_to_manage_):
+                            handle_to_manage(handle_to_manage_)
+                            {}
+                            handle_manager():
+                            handle_to_manage(0)
+                            {}
 
-                operator handle() const
-                {
-                    return handle_to_manage;
-                }
+                            handle_manager& operator=(handle new_handle)
+                            {
+                                cleanup();
+                                handle_to_manage = new_handle;
+                                return *this;
+                            }
 
-                handle duplicate() const
-                {
-                    return duplicate_handle(handle_to_manage);
-                }
+                            operator handle() const
+                            {
+                                return handle_to_manage;
+                            }
 
-                void swap(handle_manager& other)
-                {
-                    std::swap(handle_to_manage,other.handle_to_manage);
-                }
+                            handle duplicate() const
+                            {
+                                return duplicate_handle(handle_to_manage);
+                            }
 
-                handle release()
-                {
-                    handle const res=handle_to_manage;
-                    handle_to_manage=0;
-                    return res;
-                }
+                            void swap(handle_manager& other)
+                            {
+                                std::swap(handle_to_manage, other.handle_to_manage);
+                            }
 
-                bool operator!() const
-                {
-                    return !handle_to_manage;
-                }
+                            handle release()
+                            {
+                                handle const res = handle_to_manage;
+                                handle_to_manage = 0;
+                                return res;
+                            }
 
-                ~handle_manager()
-                {
-                    cleanup();
-                }
-            };
+                            bool operator!() const
+                            {
+                                return !handle_to_manage;
+                            }
+
+                            ~handle_manager()
+                            {
+                                cleanup();
+                            }
+                    };
 
         }
     }
 }
 
-#if defined(BOOST_MSVC) && (_MSC_VER>=1400)  && !defined(UNDER_CE)
+#if defined(BOOST_MSVC) && (_MSC_VER >= 1400) && !defined(UNDER_CE)
 
 namespace boost
 {
@@ -474,44 +465,33 @@ namespace boost
 
 #ifndef BOOST_THREAD_BTS_DEFINED
 
-namespace boost
-{
-    namespace detail
-    {
-        namespace win32
-        {
-            inline bool interlocked_bit_test_and_set(long* x,long bit)
-            {
-                long const value=1<<bit;
-                long old=*x;
-                do
-                {
-                    long const current=BOOST_INTERLOCKED_COMPARE_EXCHANGE(x,old|value,old);
-                    if(current==old)
-                    {
+namespace boost {
+    namespace detail {
+        namespace win32 {
+            inline bool interlocked_bit_test_and_set(long *x, long bit) {
+                long const value = 1 << bit;
+                long old = *x;
+                do {
+                    long const current = BOOST_INTERLOCKED_COMPARE_EXCHANGE(x, old | value, old);
+                    if (current == old) {
                         break;
                     }
-                    old=current;
-                }
-                while(true);
-                return (old&value)!=0;
+                    old = current;
+                } while (true);
+                return (old & value) != 0;
             }
 
-            inline bool interlocked_bit_test_and_reset(long* x,long bit)
-            {
-                long const value=1<<bit;
-                long old=*x;
-                do
-                {
-                    long const current=BOOST_INTERLOCKED_COMPARE_EXCHANGE(x,old&~value,old);
-                    if(current==old)
-                    {
+            inline bool interlocked_bit_test_and_reset(long *x, long bit) {
+                long const value = 1 << bit;
+                long old = *x;
+                do {
+                    long const current = BOOST_INTERLOCKED_COMPARE_EXCHANGE(x, old & ~value, old);
+                    if (current == old) {
                         break;
                     }
-                    old=current;
-                }
-                while(true);
-                return (old&value)!=0;
+                    old = current;
+                } while (true);
+                return (old & value) != 0;
             }
         }
     }

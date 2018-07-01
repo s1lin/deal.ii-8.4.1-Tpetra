@@ -16,21 +16,18 @@
 #include "umf_internal.h"
 
 GLOBAL void UMFPACK_defaults
-(
-    double Control [UMFPACK_CONTROL]
-)
-{
-    Int i ;
+        (
+                double Control[UMFPACK_CONTROL]
+        ) {
+    Int i;
 
-    if (!Control)
-    {
-	/* silently return if no Control array */
-	return ;
+    if (!Control) {
+        /* silently return if no Control array */
+        return;
     }
 
-    for (i = 0 ; i < UMFPACK_CONTROL ; i++)
-    {
-	Control [i] = 0 ;
+    for (i = 0; i < UMFPACK_CONTROL; i++) {
+        Control[i] = 0;
     }
 
     /* ---------------------------------------------------------------------- */
@@ -38,26 +35,26 @@ GLOBAL void UMFPACK_defaults
     /* ---------------------------------------------------------------------- */
 
     /* used in UMFPACK_report_* routines: */
-    Control [UMFPACK_PRL] = UMFPACK_DEFAULT_PRL ;
+    Control[UMFPACK_PRL] = UMFPACK_DEFAULT_PRL;
 
     /* used in UMFPACK_*symbolic: */
-    Control [UMFPACK_DENSE_ROW] = UMFPACK_DEFAULT_DENSE_ROW ;
-    Control [UMFPACK_DENSE_COL] = UMFPACK_DEFAULT_DENSE_COL ;
-    Control [UMFPACK_AMD_DENSE] = UMFPACK_DEFAULT_AMD_DENSE ;
-    Control [UMFPACK_STRATEGY] = UMFPACK_DEFAULT_STRATEGY ;
-    Control [UMFPACK_2BY2_TOLERANCE] = UMFPACK_DEFAULT_2BY2_TOLERANCE ;
-    Control [UMFPACK_AGGRESSIVE] = UMFPACK_DEFAULT_AGGRESSIVE ;
+    Control[UMFPACK_DENSE_ROW] = UMFPACK_DEFAULT_DENSE_ROW;
+    Control[UMFPACK_DENSE_COL] = UMFPACK_DEFAULT_DENSE_COL;
+    Control[UMFPACK_AMD_DENSE] = UMFPACK_DEFAULT_AMD_DENSE;
+    Control[UMFPACK_STRATEGY] = UMFPACK_DEFAULT_STRATEGY;
+    Control[UMFPACK_2BY2_TOLERANCE] = UMFPACK_DEFAULT_2BY2_TOLERANCE;
+    Control[UMFPACK_AGGRESSIVE] = UMFPACK_DEFAULT_AGGRESSIVE;
 
     /* used in UMFPACK_numeric: */
-    Control [UMFPACK_PIVOT_TOLERANCE] = UMFPACK_DEFAULT_PIVOT_TOLERANCE ;
-    Control [UMFPACK_SYM_PIVOT_TOLERANCE] = UMFPACK_DEFAULT_SYM_PIVOT_TOLERANCE;
-    Control [UMFPACK_BLOCK_SIZE] = UMFPACK_DEFAULT_BLOCK_SIZE ;
-    Control [UMFPACK_ALLOC_INIT] = UMFPACK_DEFAULT_ALLOC_INIT ;
-    Control [UMFPACK_FRONT_ALLOC_INIT] = UMFPACK_DEFAULT_FRONT_ALLOC_INIT ;
-    Control [UMFPACK_SCALE] = UMFPACK_DEFAULT_SCALE ;
+    Control[UMFPACK_PIVOT_TOLERANCE] = UMFPACK_DEFAULT_PIVOT_TOLERANCE;
+    Control[UMFPACK_SYM_PIVOT_TOLERANCE] = UMFPACK_DEFAULT_SYM_PIVOT_TOLERANCE;
+    Control[UMFPACK_BLOCK_SIZE] = UMFPACK_DEFAULT_BLOCK_SIZE;
+    Control[UMFPACK_ALLOC_INIT] = UMFPACK_DEFAULT_ALLOC_INIT;
+    Control[UMFPACK_FRONT_ALLOC_INIT] = UMFPACK_DEFAULT_FRONT_ALLOC_INIT;
+    Control[UMFPACK_SCALE] = UMFPACK_DEFAULT_SCALE;
 
     /* used in UMFPACK_*solve: */
-    Control [UMFPACK_IRSTEP] = UMFPACK_DEFAULT_IRSTEP ;
+    Control[UMFPACK_IRSTEP] = UMFPACK_DEFAULT_IRSTEP;
 
     /* ---------------------------------------------------------------------- */
     /* compile-time settings: cannot be modified at run-time */
@@ -68,19 +65,19 @@ GLOBAL void UMFPACK_defaults
     Control [UMFPACK_COMPILED_WITH_BLAS] = 0 ;
 #else
     /* use externally-provided BLAS (dgemm, dger, dgemv, zgemm, zgeru, zgemv) */
-    Control [UMFPACK_COMPILED_WITH_BLAS] = 1 ;
+    Control[UMFPACK_COMPILED_WITH_BLAS] = 1;
 #endif
 
 #ifdef MATLAB_MEX_FILE
-    /* compiled as a MATLAB mexFunction */ 
+    /* compiled as a MATLAB mexFunction */
     Control [UMFPACK_COMPILED_FOR_MATLAB] = 1 ;
 #else
 #ifdef MATHWORKS
-    /* compiled for internal use in MATLAB */ 
+    /* compiled for internal use in MATLAB */
     Control [UMFPACK_COMPILED_FOR_MATLAB] = 2 ;
 #else
     /* use ANSI C malloc, free, realloc, and printf */
-    Control [UMFPACK_COMPILED_FOR_MATLAB] = 0 ;
+    Control[UMFPACK_COMPILED_FOR_MATLAB] = 0;
 #endif
 #endif
 
@@ -109,6 +106,6 @@ GLOBAL void UMFPACK_defaults
     Control [UMFPACK_COMPILED_IN_DEBUG_MODE] = 1 ;
 #else
     /* UMFPACK is compiled in normal (non-debug) mode */
-    Control [UMFPACK_COMPILED_IN_DEBUG_MODE] = 0 ;
+    Control[UMFPACK_COMPILED_IN_DEBUG_MODE] = 0;
 #endif
 }

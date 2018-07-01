@@ -46,7 +46,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_EDG_NAME "EDG C++ Frontend"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_EDG,BOOST_COMP_EDG_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_EDG,
+BOOST_COMP_EDG_NAME)
 
 #ifdef BOOST_COMP_EDG_EMULATED
 #include <boost/predef/detail/test.h>

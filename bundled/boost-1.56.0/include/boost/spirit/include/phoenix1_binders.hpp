@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_BINDERS
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_BINDERS
+
 #include <boost/spirit/home/classic/phoenix/binders.hpp>
+
 #endif

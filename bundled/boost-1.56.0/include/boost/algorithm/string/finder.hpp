@@ -35,7 +35,7 @@ namespace boost {
     namespace algorithm {
 
 //  Finder generators ------------------------------------------//
-        
+
         //! "First" finder 
         /*!
             Construct the \c first_finder. The finder searches for the first
@@ -48,33 +48,31 @@ namespace boost {
         */
         template<typename RangeT>
         inline detail::first_finderF<
-            BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
-            is_equal>
-        first_finder( const RangeT& Search )
-        {
-            return 
-                detail::first_finderF<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<RangeT>::type,
-                        is_equal>( ::boost::as_literal(Search), is_equal() ) ;
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
+                is_equal>
+        first_finder(const RangeT &Search) {
+            return
+                    detail::first_finderF <
+                    BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type,
+                    is_equal > (::boost::as_literal(Search), is_equal());
         }
 
         //! "First" finder
         /*!
             \overload
         */
-        template<typename RangeT,typename PredicateT>
+        template<typename RangeT, typename PredicateT>
         inline detail::first_finderF<
-            BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
-            PredicateT>
-        first_finder( 
-            const RangeT& Search, PredicateT Comp )
-        {
-            return 
-                detail::first_finderF<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<RangeT>::type,
-                    PredicateT>( ::boost::as_literal(Search), Comp );
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
+                PredicateT>
+        first_finder(
+                const RangeT &Search, PredicateT Comp) {
+            return
+                    detail::first_finderF <
+                    BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type,
+                    PredicateT > (::boost::as_literal(Search), Comp);
         }
 
         //! "Last" finder
@@ -89,15 +87,14 @@ namespace boost {
         */
         template<typename RangeT>
         inline detail::last_finderF<
-            BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
-            is_equal>
-        last_finder( const RangeT& Search )
-        {
-            return 
-                detail::last_finderF<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<RangeT>::type,
-                    is_equal>( ::boost::as_literal(Search), is_equal() );
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
+                is_equal>
+        last_finder(const RangeT &Search) {
+            return
+                    detail::last_finderF <
+                    BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type,
+                    is_equal > (::boost::as_literal(Search), is_equal());
         }
         //! "Last" finder
         /*!
@@ -105,15 +102,14 @@ namespace boost {
         */
         template<typename RangeT, typename PredicateT>
         inline detail::last_finderF<
-            BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
-            PredicateT>
-        last_finder( const RangeT& Search, PredicateT Comp )
-        {
-            return 
-                detail::last_finderF<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<RangeT>::type,
-                    PredicateT>( ::boost::as_literal(Search), Comp ) ;
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
+                PredicateT>
+        last_finder(const RangeT &Search, PredicateT Comp) {
+            return
+                    detail::last_finderF <
+                    BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type,
+                    PredicateT > (::boost::as_literal(Search), Comp);
         }
 
         //! "Nth" finder
@@ -129,17 +125,16 @@ namespace boost {
         */
         template<typename RangeT>
         inline detail::nth_finderF<
-            BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
-            is_equal>
-        nth_finder( 
-            const RangeT& Search, 
-            int Nth)
-        {
-            return 
-                detail::nth_finderF<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<RangeT>::type,
-                    is_equal>( ::boost::as_literal(Search), Nth, is_equal() ) ;
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
+                is_equal>
+        nth_finder(
+                const RangeT &Search,
+                int Nth) {
+            return
+                    detail::nth_finderF <
+                    BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type,
+                    is_equal > (::boost::as_literal(Search), Nth, is_equal());
         }
         //! "Nth" finder
         /*!
@@ -147,18 +142,17 @@ namespace boost {
         */
         template<typename RangeT, typename PredicateT>
         inline detail::nth_finderF<
-            BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
-            PredicateT>
-        nth_finder( 
-            const RangeT& Search, 
-            int Nth, 
-            PredicateT Comp )
-        {
-            return 
-                detail::nth_finderF<
-                    BOOST_STRING_TYPENAME 
-                        range_const_iterator<RangeT>::type,
-                    PredicateT>( ::boost::as_literal(Search), Nth, Comp );
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type,
+                PredicateT>
+        nth_finder(
+                const RangeT &Search,
+                int Nth,
+                PredicateT Comp) {
+            return
+                    detail::nth_finderF <
+                    BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type,
+                    PredicateT > (::boost::as_literal(Search), Nth, Comp);
         }
 
         //! "Head" finder
@@ -173,11 +167,10 @@ namespace boost {
             \return An instance of the \c head_finder object
         */
         inline detail::head_finderF
-        head_finder( int N )
-        {
+        head_finder(int N) {
             return detail::head_finderF(N);
         }
-        
+
         //! "Tail" finder
         /*!
             Construct the \c tail_finder. The finder returns a tail of a given
@@ -190,8 +183,7 @@ namespace boost {
             \return An instance of the \c tail_finder object
         */
         inline detail::tail_finderF
-        tail_finder( int N )
-        {
+        tail_finder(int N) {
             return detail::tail_finderF(N);
         }
 
@@ -213,13 +205,12 @@ namespace boost {
             \param eCompress Compress flag
             \return An instance of the \c token_finder object
         */
-        template< typename PredicateT >
-        inline detail::token_finderF<PredicateT>
-        token_finder( 
-            PredicateT Pred, 
-            token_compress_mode_type eCompress=token_compress_off )
-        {
-            return detail::token_finderF<PredicateT>( Pred, eCompress );
+        template<typename PredicateT>
+        inline detail::token_finderF <PredicateT>
+        token_finder(
+                PredicateT Pred,
+                token_compress_mode_type eCompress = token_compress_off) {
+            return detail::token_finderF<PredicateT>(Pred, eCompress);
         }
 
         //! "Range" finder
@@ -233,24 +224,22 @@ namespace boost {
             \param Range The range.
             \return An instance of the \c range_finger object
         */
-        template< typename ForwardIteratorT >
-        inline detail::range_finderF<ForwardIteratorT>
+        template<typename ForwardIteratorT>
+        inline detail::range_finderF <ForwardIteratorT>
         range_finder(
-            ForwardIteratorT Begin,
-            ForwardIteratorT End )
-        {
-            return detail::range_finderF<ForwardIteratorT>( Begin, End );
+                ForwardIteratorT Begin,
+                ForwardIteratorT End) {
+            return detail::range_finderF<ForwardIteratorT>(Begin, End);
         }
 
         //! "Range" finder
         /*!       
             \overload
         */
-        template< typename ForwardIteratorT >
-        inline detail::range_finderF<ForwardIteratorT>
-        range_finder( iterator_range<ForwardIteratorT> Range )
-        {
-            return detail::range_finderF<ForwardIteratorT>( Range );
+        template<typename ForwardIteratorT>
+        inline detail::range_finderF <ForwardIteratorT>
+        range_finder(iterator_range <ForwardIteratorT> Range) {
+            return detail::range_finderF<ForwardIteratorT>(Range);
         }
 
     } // namespace algorithm

@@ -23,31 +23,37 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
-template <typename T>
-struct has_trivial_move_ctor_impl
-{
+        template<typename T>
+        struct has_trivial_move_ctor_impl {
 #ifdef BOOST_HAS_TRIVIAL_MOVE_CONSTRUCTOR
-   BOOST_STATIC_CONSTANT(bool, value = (BOOST_HAS_TRIVIAL_MOVE_CONSTRUCTOR(T)));
+            BOOST_STATIC_CONSTANT(bool, value = (BOOST_HAS_TRIVIAL_MOVE_CONSTRUCTOR(T)));
 #else
-   BOOST_STATIC_CONSTANT(bool, value =
-           (::boost::type_traits::ice_and<
-              ::boost::is_pod<T>::value,
-              ::boost::type_traits::ice_not< ::boost::is_volatile<T>::value >::value
-           >::value));
+
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::type_traits::ice_and<
+                    ::boost::is_pod<T>::value,
+                    ::boost::type_traits::ice_not<::boost::is_volatile<T>::value>::value
+            >::value));
+
 #endif
-};
+        };
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_trivial_move_constructor,T,::boost::detail::has_trivial_move_ctor_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_trivial_move_constructor, T, ::boost::detail::has_trivial_move_ctor_impl<T>::value
+    )
 
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,void,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,
+    void,false)
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,void const volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,void volatile,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,
+    void const,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,
+    void const volatile,false)
+    BOOST_TT_AUX_BOOL_TRAIT_SPEC1(has_trivial_move_constructor,
+    void volatile,false)
 #endif
 
 } // namespace boost

@@ -17,7 +17,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif       
+#endif
 
 //------------------Templated stream support----------------------------------//
 
@@ -35,7 +35,7 @@
 #ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS
 # if defined(BOOST_IOSTREAMS_NO_STREAM_TEMPLATES) || \
      defined (BOOST_NO_STD_WSTREAMBUF) && \
-     ( !defined(__MSL_CPP__) || defined(_MSL_NO_WCHART_CPP_SUPPORT) ) \
+     (!defined(__MSL_CPP__) || defined(_MSL_NO_WCHART_CPP_SUPPORT)) \
      /**/
 #  define BOOST_IOSTREAMS_NO_WIDE_STREAMS
 # endif
@@ -46,7 +46,7 @@
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
 # if defined(BOOST_NO_STD_LOCALE) || \
      defined(__CYGWIN__) && \
-     ( !defined(__MSL_CPP__) || defined(_MSL_NO_WCHART_CPP_SUPPORT) ) \
+     (!defined(__MSL_CPP__) || defined(_MSL_NO_WCHART_CPP_SUPPORT)) \
      /**/
 #  define BOOST_IOSTREAMS_NO_LOCALE
 # endif

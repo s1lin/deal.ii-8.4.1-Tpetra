@@ -21,23 +21,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Check that a type is a unit in a specified system. 
-template<class T,class System>
-struct is_unit_of_system :
-    public mpl::false_
-{ };
-    
-template<class Dim,class System>
-struct is_unit_of_system< unit<Dim,System>,System > :
-    public mpl::true_
-{ };
-    
-template<class Dim,class System>
-struct is_unit_of_system< absolute<unit<Dim,System> >,System > :
-    public mpl::true_
-{ };
+        template<class T, class System>
+        struct is_unit_of_system :
+                public mpl::false_ {
+        };
+
+        template<class Dim, class System>
+        struct is_unit_of_system<unit < Dim, System>,System > :
+        public mpl::true_ {
+    };
+
+    template<class Dim, class System>
+    struct is_unit_of_system<absolute < unit < Dim, System> >,System > :
+    public mpl::true_ {
+};
 
 } // namespace units
 

@@ -30,42 +30,40 @@ namespace boost {
 
             // a tolower functor
             template<typename CharT>
-            struct to_lowerF : public std::unary_function<CharT, CharT>
-            {
+            struct to_lowerF : public std::unary_function<CharT, CharT> {
                 // Constructor
-                to_lowerF( const std::locale& Loc ) : m_Loc( &Loc ) {}
+                to_lowerF(const std::locale &Loc) : m_Loc(&Loc) {}
 
                 // Operation
-                CharT operator ()( CharT Ch ) const
-                {
-                    #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
-                        return std::tolower( static_cast<typename boost::make_unsigned <CharT>::type> ( Ch ));
-                    #else
-                        return std::tolower<CharT>( Ch, *m_Loc );
-                    #endif
+                CharT operator()(CharT Ch) const {
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
+                    return std::tolower( static_cast<typename boost::make_unsigned <CharT>::type> ( Ch ));
+#else
+                    return std::tolower<CharT>(Ch, *m_Loc);
+#endif
                 }
+
             private:
-                const std::locale* m_Loc;
+                const std::locale *m_Loc;
             };
 
             // a toupper functor
             template<typename CharT>
-            struct to_upperF : public std::unary_function<CharT, CharT>
-            {
+            struct to_upperF : public std::unary_function<CharT, CharT> {
                 // Constructor
-                to_upperF( const std::locale& Loc ) : m_Loc( &Loc ) {}
+                to_upperF(const std::locale &Loc) : m_Loc(&Loc) {}
 
                 // Operation
-                CharT operator ()( CharT Ch ) const
-                {
-                    #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
-                        return std::toupper( static_cast<typename boost::make_unsigned <CharT>::type> ( Ch ));
-                    #else
-                        return std::toupper<CharT>( Ch, *m_Loc );
-                    #endif
+                CharT operator()(CharT Ch) const {
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
+                    return std::toupper( static_cast<typename boost::make_unsigned <CharT>::type> ( Ch ));
+#else
+                    return std::toupper<CharT>(Ch, *m_Loc);
+#endif
                 }
+
             private:
-                const std::locale* m_Loc;
+                const std::locale *m_Loc;
             };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
@@ -77,42 +75,39 @@ namespace boost {
             // Transform a range
             template<typename OutputIteratorT, typename RangeT, typename FunctorT>
             OutputIteratorT transform_range_copy(
-                OutputIteratorT Output,
-                const RangeT& Input,
-                FunctorT Functor)
-            {
-                return std::transform( 
-                    ::boost::begin(Input), 
-                    ::boost::end(Input), 
-                    Output,
-                    Functor);
+                    OutputIteratorT Output,
+                    const RangeT &Input,
+                    FunctorT Functor) {
+                return std::transform(
+                        ::boost::begin(Input),
+                        ::boost::end(Input),
+                        Output,
+                        Functor);
             }
 
             // Transform a range (in-place)
             template<typename RangeT, typename FunctorT>
             void transform_range(
-                const RangeT& Input,
-                FunctorT Functor)
-            {
-                std::transform( 
-                    ::boost::begin(Input), 
-                    ::boost::end(Input), 
-                    ::boost::begin(Input),
-                    Functor);
+                    const RangeT &Input,
+                    FunctorT Functor) {
+                std::transform(
+                        ::boost::begin(Input),
+                        ::boost::end(Input),
+                        ::boost::begin(Input),
+                        Functor);
             }
 
             template<typename SequenceT, typename RangeT, typename FunctorT>
-            inline SequenceT transform_range_copy( 
-                const RangeT& Input, 
-                FunctorT Functor)
-            {
+            inline SequenceT transform_range_copy(
+                    const RangeT &Input,
+                    FunctorT Functor) {
                 return SequenceT(
-                    ::boost::make_transform_iterator(
-                        ::boost::begin(Input),
-                        Functor),
-                    ::boost::make_transform_iterator(
-                        ::boost::end(Input), 
-                        Functor));
+                        ::boost::make_transform_iterator(
+                                ::boost::begin(Input),
+                                Functor),
+                        ::boost::make_transform_iterator(
+                                ::boost::end(Input),
+                                Functor));
             }
 
         } // namespace detail

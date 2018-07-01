@@ -15,7 +15,9 @@
 // (do not rely on this header being included since users can short-circuit this header 
 //  if they know whose std lib they are using.)
 #ifdef __cplusplus
+
 #  include <cstddef>
+
 #else
 #  include <stddef.h>
 #endif

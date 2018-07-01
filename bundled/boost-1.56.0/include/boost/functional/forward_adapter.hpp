@@ -28,140 +28,149 @@
 #   endif
 
 
-namespace boost 
-{
-    template< typename Function, int Arity_Or_MinArity = -1, int MaxArity = -1 >
+namespace boost {
+    template<typename Function, int Arity_Or_MinArity = -1, int MaxArity = -1>
     class forward_adapter;
 
     //----- ---- --- -- - -  -   -
 
-    namespace detail
-    {
-        template< class MostDerived, typename Function, typename FunctionConst, 
-            int Arity, int MinArity >
+    namespace detail {
+        template<class MostDerived, typename Function, typename FunctionConst,
+                int Arity, int MinArity>
         struct forward_adapter_impl;
 
-        struct forward_adapter_result
-        {
-            template< typename Sig > struct apply;
+        struct forward_adapter_result {
+            template<typename Sig>
+            struct apply;
 
             // Utility metafunction for qualification adjustment on arguments
-            template< typename T > struct q          { typedef T const t; };
-            template< typename T > struct q<T const> { typedef T const t; };
-            template< typename T > struct q<T &>     { typedef T       t; };
+            template<typename T>
+            struct q {
+                typedef T const t;
+            };
+            template<typename T>
+            struct q<T const> {
+                typedef T const t;
+            };
+            template<typename T>
+            struct q<T &> {
+                typedef T t;
+            };
 
             // Utility metafunction to choose target function qualification
-            template< typename T > struct c
-            { typedef typename T::target_function_t t; };
-            template< typename T > struct c<T&      >
-            { typedef typename T::target_function_t t; };
-            template< typename T > struct c<T const >
-            { typedef typename T::target_function_const_t t; };
-            template< typename T > struct c<T const&>
-            { typedef typename T::target_function_const_t t; };
+            template<typename T>
+            struct c {
+                typedef typename T::target_function_t t;
+            };
+            template<typename T>
+            struct c<T &> {
+                typedef typename T::target_function_t t;
+            };
+            template<typename T>
+            struct c<T const> {
+                typedef typename T::target_function_const_t t;
+            };
+            template<typename T>
+            struct c<T const &> {
+                typedef typename T::target_function_const_t t;
+            };
         };
     }
 
-#   define BOOST_TMP_MACRO(f,fn,fc) \
+#   define BOOST_TMP_MACRO(f, fn, fc) \
         boost::detail::forward_adapter_impl< \
             forward_adapter<f,Arity_Or_MinArity,MaxArity>, fn, fc, \
             (MaxArity!=-1? MaxArity :Arity_Or_MinArity!=-1? Arity_Or_MinArity \
                 :BOOST_FUNCTIONAL_FORWARD_ADAPTER_MAX_ARITY), \
             (Arity_Or_MinArity!=-1? Arity_Or_MinArity : 0) >
 
-    template< typename Function, int Arity_Or_MinArity, int MaxArity >
+    template<typename Function, int Arity_Or_MinArity, int MaxArity>
     class forward_adapter
-        : public BOOST_TMP_MACRO(Function,Function,Function const)
-        , private Function
-    {
-      public:
-        forward_adapter(Function const& f = Function()) 
-          : Function(f) 
-        { }
+            : public BOOST_TMP_MACRO(Function, Function, Function const), private Function {
+    public:
+        forward_adapter(Function const &f = Function())
+                : Function(f) {}
 
-        typedef Function        target_function_t;
-        typedef Function const  target_function_const_t;
+        typedef Function target_function_t;
+        typedef Function const target_function_const_t;
 
-        Function       & target_function()       { return *this; }
-        Function const & target_function() const { return *this; }
+        Function &target_function() { return *this; }
 
-        template< typename Sig > struct result
-            : detail::forward_adapter_result::template apply<Sig>
-        { };
+        Function const &target_function() const { return *this; }
 
-        using BOOST_TMP_MACRO(Function,Function, Function const)::operator();
+        template<typename Sig>
+        struct result
+                : detail::forward_adapter_result::template apply<Sig> {
+        };
+
+        using BOOST_TMP_MACRO(Function, Function, Function const)::operator();
     };
-    template< typename Function, int Arity_Or_MinArity, int MaxArity >
-    class forward_adapter< Function const, Arity_Or_MinArity, MaxArity >
-        : public BOOST_TMP_MACRO(Function const, Function const, Function const)
-        , private Function
-    {
-      public:
-        forward_adapter(Function const& f = Function())
-          : Function(f) 
-        { }
+
+    template<typename Function, int Arity_Or_MinArity, int MaxArity>
+    class forward_adapter<Function const, Arity_Or_MinArity, MaxArity>
+            : public BOOST_TMP_MACRO(Function const, Function const, Function const), private Function {
+    public:
+        forward_adapter(Function const &f = Function())
+                : Function(f) {}
 
         typedef Function const target_function_t;
         typedef Function const target_function_const_t;
 
-        Function const & target_function() const { return *this; }
+        Function const &target_function() const { return *this; }
 
-        template< typename Sig > struct result
-            : detail::forward_adapter_result::template apply<Sig>
-        { };
+        template<typename Sig>
+        struct result
+                : detail::forward_adapter_result::template apply<Sig> {
+        };
 
-        using BOOST_TMP_MACRO(Function const,Function const, Function const)
-            ::operator();
+        using BOOST_TMP_MACRO(Function const, Function const, Function const)
+        ::operator();
     };
-    template< typename Function, int Arity_Or_MinArity, int MaxArity >
-    class forward_adapter< Function &, Arity_Or_MinArity, MaxArity >
-        : public BOOST_TMP_MACRO(Function&, Function, Function)
-    {
-        Function& ref_function;
-      public:
-        forward_adapter(Function& f)
-          : ref_function(f) 
-        { }
+
+    template<typename Function, int Arity_Or_MinArity, int MaxArity>
+    class forward_adapter<Function &, Arity_Or_MinArity, MaxArity>
+            : public BOOST_TMP_MACRO(Function &, Function, Function) {
+        Function &ref_function;
+    public:
+        forward_adapter(Function &f)
+                : ref_function(f) {}
 
         typedef Function target_function_t;
         typedef Function target_function_const_t;
 
-        Function & target_function() const { return this->ref_function; }
+        Function &target_function() const { return this->ref_function; }
 
-        template< typename Sig > struct result
-            : detail::forward_adapter_result::template apply<Sig>
-        { };
+        template<typename Sig>
+        struct result
+                : detail::forward_adapter_result::template apply<Sig> {
+        };
 
-        using BOOST_TMP_MACRO(Function&, Function, Function)::operator();
-    }; 
+        using BOOST_TMP_MACRO(Function &, Function, Function)::operator();
+    };
 
-    #undef BOOST_TMP_MACRO
+#undef BOOST_TMP_MACRO
 
-    namespace detail
-    {
-        template< class Self >
-        struct forward_adapter_result::apply< Self() >
-            : boost::result_of< BOOST_DEDUCED_TYPENAME c<Self>::t() >
-        { };
+    namespace detail {
+        template<class Self>
+        struct forward_adapter_result::apply<Self()>
+                : boost::result_of<BOOST_DEDUCED_TYPENAME c<Self>::t()> {
+        };
 
-        template< class MD, class F, class FC >
-        struct forward_adapter_impl<MD,F,FC,0,0>
-        {
-            inline typename boost::result_of< FC() >::type
-            operator()() const
-            {
-                return static_cast<MD const*>(this)->target_function()();
+        template<class MD, class F, class FC>
+        struct forward_adapter_impl<MD, F, FC, 0, 0> {
+            inline typename boost::result_of<FC()>::type
+            operator()() const {
+                return static_cast<MD const *>(this)->target_function()();
             }
 
-            inline typename boost::result_of< F() >::type
-            operator()()
-            {
-                return static_cast<MD*>(this)->target_function()();
+            inline typename boost::result_of<F()>::type
+            operator()() {
+                return static_cast<MD *>(this)->target_function()();
             }
 
-        // closing brace gets generated by preprocessing code, below
+            // closing brace gets generated by preprocessing code, below
 
-#       define BOOST_TMP_MACRO(tpl_params,arg_types,params,args)              \
+#       define BOOST_TMP_MACRO(tpl_params, arg_types, params, args)              \
             template< tpl_params >                                             \
             inline typename boost::result_of< FC(arg_types) >::type            \
             operator()(params) const                                           \
@@ -199,6 +208,7 @@ namespace boost
 
 #       define  BOOST_PP_FILENAME_1 <boost/functional/forward_adapter.hpp>
 #       define  BOOST_PP_ITERATION_LIMITS (0,limit1)
+
 #       include BOOST_PP_ITERATE()
 
 #       undef N
@@ -213,25 +223,25 @@ namespace boost
     } // namespace detail
 
     template<class F, int A0, int A1>
-    struct result_of<boost::forward_adapter<F,A0,A1> const ()>
-        : boost::detail::forward_adapter_result::template apply<
-            boost::forward_adapter<F,A0,A1> const () >
-    { };
+    struct result_of<boost::forward_adapter<F, A0, A1> const()>
+            : boost::detail::forward_adapter_result::template apply<
+                    boost::forward_adapter<F, A0, A1> const()> {
+    };
     template<class F, int A0, int A1>
-    struct result_of<boost::forward_adapter<F,A0,A1>()>
-        : boost::detail::forward_adapter_result::template apply<
-            boost::forward_adapter<F,A0,A1>() >
-    { };
+    struct result_of<boost::forward_adapter<F, A0, A1>()>
+            : boost::detail::forward_adapter_result::template apply<
+                    boost::forward_adapter<F, A0, A1>()> {
+    };
     template<class F, int A0, int A1>
-    struct result_of<boost::forward_adapter<F,A0,A1> const& ()>
-        : boost::detail::forward_adapter_result::template apply<
-            boost::forward_adapter<F,A0,A1> const () >
-    { };
+    struct result_of<boost::forward_adapter<F, A0, A1> const &()>
+            : boost::detail::forward_adapter_result::template apply<
+                    boost::forward_adapter<F, A0, A1> const()> {
+    };
     template<class F, int A0, int A1>
-    struct result_of<boost::forward_adapter<F,A0,A1>& ()>
-        : boost::detail::forward_adapter_result::template apply<
-            boost::forward_adapter<F,A0,A1>() >
-    { };
+    struct result_of<boost::forward_adapter<F, A0, A1> &()>
+            : boost::detail::forward_adapter_result::template apply<
+                    boost::forward_adapter<F, A0, A1>()> {
+    };
 }
 
 #       define BOOST_FUNCTIONAL_FORWARD_ADAPTER_HPP_INCLUDED
@@ -311,29 +321,29 @@ namespace boost
 #           define N 16
 #         endif
 
-        };
+};
 
-        template< class Self, BOOST_PP_ENUM_PARAMS(N,typename T) >
-        struct forward_adapter_result::apply< Self(BOOST_PP_ENUM_PARAMS(N,T)) >
-            : boost::result_of< 
-                BOOST_DEDUCED_TYPENAME c<Self>::t(BOOST_PP_ENUM_BINARY_PARAMS(N, 
-                      typename q<T,>::t& BOOST_PP_INTERCEPT)) >
-        { };
+template< class Self, BOOST_PP_ENUM_PARAMS(N,typename T) >
+struct forward_adapter_result::apply< Self(BOOST_PP_ENUM_PARAMS(N,T)) >
+    : boost::result_of<
+        BOOST_DEDUCED_TYPENAME c<Self>::t(BOOST_PP_ENUM_BINARY_PARAMS(N,
+              typename q<T,>::t& BOOST_PP_INTERCEPT)) >
+{ };
 
-        template< class MD, class F, class FC >
-        struct forward_adapter_impl<MD,F,FC,BOOST_PP_DEC(N),N>
-        {
-            template< BOOST_PP_ENUM_PARAMS(N,typename T) >
-            inline typename boost::result_of< F(
-                BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)) >::type
-            operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT));
-        };
+template< class MD, class F, class FC >
+struct forward_adapter_impl<MD,F,FC,BOOST_PP_DEC(N),N>
+{
+    template< BOOST_PP_ENUM_PARAMS(N,typename T) >
+    inline typename boost::result_of< F(
+        BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)) >::type
+    operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT));
+};
 
-        template< class MD, class F, class FC, int MinArity >
-        struct forward_adapter_impl<MD,F,FC,N,MinArity>
-            : forward_adapter_impl<MD,F,FC,BOOST_PP_DEC(N),MinArity>
-        {
-            using forward_adapter_impl<MD,F,FC,BOOST_PP_DEC(N),MinArity>::operator();
+template< class MD, class F, class FC, int MinArity >
+struct forward_adapter_impl<MD,F,FC,N,MinArity>
+    : forward_adapter_impl<MD,F,FC,BOOST_PP_DEC(N),MinArity>
+{
+    using forward_adapter_impl<MD,F,FC,BOOST_PP_DEC(N),MinArity>::operator();
 
 #       endif
 
@@ -422,28 +432,28 @@ namespace boost
 #         define PT15 T15 const &
 #       endif
 
-#       if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1400)) 
-            template< BOOST_PP_ENUM_PARAMS(N,typename T) >
-            inline typename boost::result_of<  FC(BOOST_PP_ENUM_PARAMS(N,PT)) 
-                >::type
-            operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a)) const
-            {
-                return static_cast<MD const* const>(this)
-                    ->target_function()(BOOST_PP_ENUM_PARAMS(N,a));
-            }
-            template< BOOST_PP_ENUM_PARAMS(N,typename T) >
-            inline typename boost::result_of<  F(BOOST_PP_ENUM_PARAMS(N,PT))
-                >::type
-            operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a))
-            {
-                return static_cast<MD* const>(this)
-                    ->target_function()(BOOST_PP_ENUM_PARAMS(N,a));
-            }
+#       if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1400))
+    template< BOOST_PP_ENUM_PARAMS(N,typename T) >
+    inline typename boost::result_of<  FC(BOOST_PP_ENUM_PARAMS(N,PT))
+        >::type
+    operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a)) const
+    {
+        return static_cast<MD const* const>(this)
+            ->target_function()(BOOST_PP_ENUM_PARAMS(N,a));
+    }
+    template< BOOST_PP_ENUM_PARAMS(N,typename T) >
+    inline typename boost::result_of<  F(BOOST_PP_ENUM_PARAMS(N,PT))
+        >::type
+    operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a))
+    {
+        return static_cast<MD* const>(this)
+            ->target_function()(BOOST_PP_ENUM_PARAMS(N,a));
+    }
 #       else
-        BOOST_TMP_MACRO(BOOST_PP_ENUM_PARAMS(N,typename T),
-            BOOST_PP_ENUM_PARAMS(N,PT), BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a),
-            BOOST_PP_ENUM_PARAMS(N,a) )
-        // ...generates uglier code but is faster - it caches ENUM_*
+BOOST_TMP_MACRO(BOOST_PP_ENUM_PARAMS(N,typename T),
+    BOOST_PP_ENUM_PARAMS(N,PT), BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a),
+    BOOST_PP_ENUM_PARAMS(N,a) )
+// ...generates uglier code but is faster - it caches ENUM_*
 #       endif
 
 #       undef PT0

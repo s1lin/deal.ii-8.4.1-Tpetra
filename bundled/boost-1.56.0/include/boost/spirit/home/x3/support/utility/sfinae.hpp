@@ -12,18 +12,19 @@
 #pragma once
 #endif
 
-namespace boost { namespace spirit { namespace x3
-{
-    template <typename Expr, typename T = void>
-    struct disable_if_substitution_failure
-    {
-        typedef T type;
-    };
-    template <typename Expr, typename T>
-    struct lazy_disable_if_substitution_failure
-    {
-        typedef typename T::type type;
-    };
-}}}
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            template<typename Expr, typename T = void>
+            struct disable_if_substitution_failure {
+                typedef T type;
+            };
+            template<typename Expr, typename T>
+            struct lazy_disable_if_substitution_failure {
+                typedef typename T::type type;
+            };
+        }
+    }
+}
 
 #endif

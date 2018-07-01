@@ -15,10 +15,14 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-struct map_tag;
+            struct map_tag;
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_MAP_AUX_TAG_HPP_INCLUDED

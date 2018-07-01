@@ -56,6 +56,7 @@
 #  include <boost/smart_ptr/detail/spinlock_pt.hpp>
 
 #elif !defined(BOOST_HAS_THREADS)
+
 #  include <boost/smart_ptr/detail/spinlock_nt.hpp>
 
 #else

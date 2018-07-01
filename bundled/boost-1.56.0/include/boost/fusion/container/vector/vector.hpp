@@ -54,7 +54,9 @@
 #endif
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/vector/detail/preprocessed/vector.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/vvector" FUSION_MAX_VECTOR_SIZE_STR ".hpp")
@@ -125,7 +127,7 @@ namespace boost { namespace fusion
         //      typename detail::call_param<T0>::type _0
         //    , typename detail::call_param<T1>::type _1)
         //    : vec(_0, _1) {}
-        #include <boost/fusion/container/vector/detail/vector_forward_ctor.hpp>
+#include <boost/fusion/container/vector/detail/vector_forward_ctor.hpp>
 
         template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, typename U)>
         BOOST_FUSION_GPU_ENABLED

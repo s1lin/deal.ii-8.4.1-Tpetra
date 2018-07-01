@@ -19,28 +19,28 @@
 #include <boost/mpl/aux_/transform_iter.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(F)
-    >
-struct transform_view
-{
- private:
-    typedef typename lambda<F>::type f_;
-    typedef typename begin<Sequence>::type first_;
-    typedef typename end<Sequence>::type last_;
- 
- public:
-    struct tag;
-    typedef transform_view type;
-    typedef aux::transform_iter< first_,last_,f_ > begin;
-    typedef aux::transform_iter< last_,last_,f_ > end;
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence), typename BOOST_MPL_AUX_NA_PARAM(F)
+        >
+        struct transform_view {
+        private:
+            typedef typename lambda<F>::type f_;
+            typedef typename begin<Sequence>::type first_;
+            typedef typename end<Sequence>::type last_;
 
-BOOST_MPL_AUX_NA_SPEC(2, transform_view)
+        public:
+            struct tag;
+            typedef transform_view type;
+            typedef aux::transform_iter <first_, last_, f_> begin;
+            typedef aux::transform_iter <last_, last_, f_> end;
+        };
 
-}}
+        BOOST_MPL_AUX_NA_SPEC(2, transform_view)
+
+    }
+}
 
 #endif // BOOST_MPL_TRANSFORM_VIEW_HPP_INCLUDED

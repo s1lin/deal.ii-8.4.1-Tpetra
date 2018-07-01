@@ -9,18 +9,19 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 
 namespace boost {
-namespace parameter {
-namespace aux {
+    namespace parameter {
+        namespace aux {
 
-struct maybe_base {};
+            struct maybe_base {
+            };
 
-template <class T>
-struct is_maybe
-  : is_base_and_derived<maybe_base, T>
-{};
+            template<class T>
+            struct is_maybe
+                    : is_base_and_derived<maybe_base, T> {
+            };
 
-} // namespace aux
-} // namespace parameter
+        } // namespace aux
+    } // namespace parameter
 } // namespace boost
 
 #endif // BOOST_PARAMETER_IS_MAYBE_050329_HPP

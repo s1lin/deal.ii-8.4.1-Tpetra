@@ -31,10 +31,9 @@
 
 #include <stdlib.h>
 
-void *ErrnoPreservingMalloc(size_t bytes)
-{
+void *ErrnoPreservingMalloc(size_t bytes) {
     int prevErrno = errno;
-    void *ret = malloc( bytes );
+    void *ret = malloc(bytes);
     if (!ret)
         errno = prevErrno;
     return ret;
@@ -43,12 +42,13 @@ void *ErrnoPreservingMalloc(size_t bytes)
 #if __linux__ || __APPLE__ || __sun || __FreeBSD__
 
 #if __sun && !defined(_XPG4_2)
- // To have void* as mmap's 1st argument
- #define _XPG4_2 1
- #define XPG4_WAS_DEFINED 1
+// To have void* as mmap's 1st argument
+#define _XPG4_2 1
+#define XPG4_WAS_DEFINED 1
 #endif
 
 #include <sys/mman.h>
+
 #if __linux__
 /* __TBB_MAP_HUGETLB is MAP_HUGETLB from system header linux/mman.h.
    The header do not included here, as on some Linux flavors inclusion of
@@ -61,28 +61,27 @@ void *ErrnoPreservingMalloc(size_t bytes)
 #endif
 
 #if XPG4_WAS_DEFINED
- #undef _XPG4_2
- #undef XPG4_WAS_DEFINED
+#undef _XPG4_2
+#undef XPG4_WAS_DEFINED
 #endif
 
 #define MEMORY_MAPPING_USES_MALLOC 0
-void* MapMemory (size_t bytes, bool hugePages)
-{
-    void* result = 0;
+
+void *MapMemory(size_t bytes, bool hugePages) {
+    void *result = 0;
     int prevErrno = errno;
 #ifndef MAP_ANONYMOUS
-// Mac OS* X defines MAP_ANON, which is deprecated in Linux.
+    // Mac OS* X defines MAP_ANON, which is deprecated in Linux.
 #define MAP_ANONYMOUS MAP_ANON
 #endif /* MAP_ANONYMOUS */
-    int addFlags = hugePages? __TBB_MAP_HUGETLB : 0;
-    result = mmap(NULL, bytes, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|addFlags, -1, 0);
-    if (result==MAP_FAILED)
+    int addFlags = hugePages ? __TBB_MAP_HUGETLB : 0;
+    result = mmap(NULL, bytes, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | addFlags, -1, 0);
+    if (result == MAP_FAILED)
         errno = prevErrno;
-    return result==MAP_FAILED? 0: result;
+    return result == MAP_FAILED ? 0 : result;
 }
 
-int UnmapMemory(void *area, size_t bytes)
-{
+int UnmapMemory(void *area, size_t bytes) {
     int prevErrno = errno;
     int ret = munmap(area, bytes);
     if (-1 == ret)

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_FOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_FOR
+
 #include <boost/spirit/home/classic/dynamic/for.hpp>
+
 #endif

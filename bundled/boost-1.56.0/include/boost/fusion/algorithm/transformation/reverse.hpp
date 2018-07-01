@@ -12,30 +12,30 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct reverse
-        {
-            typedef reverse_view<Sequence> type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence>
+            struct reverse {
+                typedef reverse_view <Sequence> type;
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline 
-    typename
-        enable_if<
-            traits::is_sequence<Sequence>
-          , reverse_view<Sequence const>
-        >::type
-    reverse(Sequence const& view)
-    {
-        return reverse_view<Sequence const>(view);
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline
+        typename
+                enable_if<
+                traits::is_sequence < Sequence>
+        , reverse_view<Sequence const>
+        >
+
+        ::type
+        reverse(Sequence const &view) {
+            return reverse_view<Sequence const>(view);
+        }
     }
-}}
+}
 
 #endif
 

@@ -5,10 +5,10 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_apply_order
-(
-    Int Front [ ],
-    const Int Order [ ],
-    Int Temp [ ],
-    Int n_col,
-    Int nfr
-) ;
+        (
+                Int Front[],
+                const Int Order[],
+                Int Temp[],
+                Int n_col,
+                Int nfr
+        );

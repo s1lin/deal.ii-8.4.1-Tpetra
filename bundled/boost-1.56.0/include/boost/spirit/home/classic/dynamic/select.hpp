@@ -41,9 +41,12 @@
 //  [Otherwise, it complains: 'boost_static_assert_test_42' redefined]
 //
 ///////////////////////////////////////////////////////////////////////////////
-BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT <= PHOENIX_LIMIT);
-BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT > 0);
-BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT <= 15);
+BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT
+<= PHOENIX_LIMIT);
+BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT
+> 0);
+BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT
+<= 15);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -64,9 +67,10 @@ BOOST_STATIC_ASSERT(BOOST_SPIRIT_SELECT_LIMIT <= 15);
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -83,105 +87,105 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //  all.
 //
 ///////////////////////////////////////////////////////////////////////////////
-struct select_default_no_fail {};
-struct select_default_fail {};
+        struct select_default_no_fail {
+        };
+        struct select_default_fail {
+        };
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}}  // namespace BOOST_SPIRIT_CLASSIC_NS
+    }
+}  // namespace BOOST_SPIRIT_CLASSIC_NS
 
 ///////////////////////////////////////////////////////////////////////////////
 #include <boost/spirit/home/classic/dynamic/impl/select.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
-
-///////////////////////////////////////////////////////////////////////////////
-template <typename TupleT, typename BehaviourT, typename T>
-struct select_parser
-:   public parser<select_parser<TupleT, BehaviourT, T> >
-{
-    typedef select_parser<TupleT, BehaviourT, T> self_t;
-
-    select_parser(TupleT const &t_)
-    :   t(t_)
-    {}
-    
-    template <typename ScannerT>
-    struct result
-    {
-        typedef typename match_result<ScannerT, T>::type type;
-    };
-
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        typedef typename parser_result<self_t, ScannerT>::type result_t;
-        
-        if (!scan.at_end()) {
-            return impl::parse_tuple_element<
-                TupleT::length, result_t, TupleT, BehaviourT>::do_(t, scan);
-        }
-        return impl::select_match_gen<result_t, BehaviourT>::do_(scan);
-    }
-        
-    TupleT const t;
-};
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
-template <typename BehaviourT, typename T = int>
-struct select_parser_gen {
+        template<typename TupleT, typename BehaviourT, typename T>
+        struct select_parser
+                : public parser<select_parser<TupleT, BehaviourT, T> > {
+            typedef select_parser<TupleT, BehaviourT, T> self_t;
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  This generates different select_parser_gen::operator()() functions with 
-    //  an increasing number of parser parameters:
-    //
-    //      template <typename ParserT0, ...>
-    //      select_parser<
-    //          ::phoenix::tuple<
-    //              typename impl::as_embedded_parser<ParserT0>::type,
-    //              ...
-    //          >,
-    //          BehaviourT,
-    //          T
-    //      >
-    //      operator()(ParserT0 const &p0, ...) const
-    //      {
-    //          typedef impl::as_embedded_parser<ParserT0> parser_t0;
-    //          ...
-    //
-    //          typedef ::phoenix::tuple< 
-    //                  parser_t0::type,
-    //                  ...
-    //              > tuple_t; 
-    //          typedef select_parser<tuple_t, BehaviourT, T> result_t;
-    //
-    //          return result_t(tuple_t(
-    //                  parser_t0::convert(p0),
-    //                  ...
-    //              ));
-    //      }
-    //
-    //  The number of generated functions depends on the maximum tuple member 
-    //  limit defined by the PHOENIX_LIMIT pp constant. 
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #define BOOST_SPIRIT_SELECT_EMBEDDED(z, N, _)                           \
+            select_parser(TupleT const &t_)
+                    : t(t_) {}
+
+            template<typename ScannerT>
+            struct result {
+                typedef typename match_result<ScannerT, T>::type type;
+            };
+
+            template<typename ScannerT>
+            typename parser_result<self_t, ScannerT>::type
+            parse(ScannerT const &scan) const {
+                typedef typename parser_result<self_t, ScannerT>::type result_t;
+
+                if (!scan.at_end()) {
+                    return impl::parse_tuple_element<
+                            TupleT::length, result_t, TupleT, BehaviourT>::do_(t, scan);
+                }
+                return impl::select_match_gen<result_t, BehaviourT>::do_(scan);
+            }
+
+            TupleT const t;
+        };
+
+///////////////////////////////////////////////////////////////////////////////
+        template<typename BehaviourT, typename T = int>
+        struct select_parser_gen {
+
+            ///////////////////////////////////////////////////////////////////////////
+            //
+            //  This generates different select_parser_gen::operator()() functions with
+            //  an increasing number of parser parameters:
+            //
+            //      template <typename ParserT0, ...>
+            //      select_parser<
+            //          ::phoenix::tuple<
+            //              typename impl::as_embedded_parser<ParserT0>::type,
+            //              ...
+            //          >,
+            //          BehaviourT,
+            //          T
+            //      >
+            //      operator()(ParserT0 const &p0, ...) const
+            //      {
+            //          typedef impl::as_embedded_parser<ParserT0> parser_t0;
+            //          ...
+            //
+            //          typedef ::phoenix::tuple<
+            //                  parser_t0::type,
+            //                  ...
+            //              > tuple_t;
+            //          typedef select_parser<tuple_t, BehaviourT, T> result_t;
+            //
+            //          return result_t(tuple_t(
+            //                  parser_t0::convert(p0),
+            //                  ...
+            //              ));
+            //      }
+            //
+            //  The number of generated functions depends on the maximum tuple member
+            //  limit defined by the PHOENIX_LIMIT pp constant.
+            //
+            ///////////////////////////////////////////////////////////////////////////
+#define BOOST_SPIRIT_SELECT_EMBEDDED(z, N, _)                           \
         typename impl::as_embedded_parser<BOOST_PP_CAT(ParserT, N)>::type   \
         /**/
-    #define BOOST_SPIRIT_SELECT_EMBEDDED_TYPEDEF(z, N, _)                   \
+#define BOOST_SPIRIT_SELECT_EMBEDDED_TYPEDEF(z, N, _)                   \
         typedef impl::as_embedded_parser<BOOST_PP_CAT(ParserT, N)>          \
             BOOST_PP_CAT(parser_t, N);                                      \
         /**/
-    #define BOOST_SPIRIT_SELECT_CONVERT(z, N, _)                            \
+#define BOOST_SPIRIT_SELECT_CONVERT(z, N, _)                            \
         BOOST_PP_CAT(parser_t, N)::convert(BOOST_PP_CAT(p, N))              \
         /**/
-        
-    #define BOOST_SPIRIT_SELECT_PARSER(z, N, _)                             \
+
+#define BOOST_SPIRIT_SELECT_PARSER(z, N, _)                             \
         template <                                                          \
             BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_INC(N), typename ParserT)    \
         >                                                                   \
@@ -213,33 +217,34 @@ struct select_parser_gen {
                 ));                                                         \
         }                                                                   \
         /**/
-        
-    BOOST_PP_REPEAT(BOOST_SPIRIT_SELECT_LIMIT_A, 
-        BOOST_SPIRIT_SELECT_PARSER, _)
-        
-    #undef BOOST_SPIRIT_SELECT_PARSER
-    #undef BOOST_SPIRIT_SELECT_CONVERT
-    #undef BOOST_SPIRIT_SELECT_EMBEDDED_TYPEDEF
-    #undef BOOST_SPIRIT_SELECT_EMBEDDED
-    ///////////////////////////////////////////////////////////////////////////
-};
+
+            BOOST_PP_REPEAT(BOOST_SPIRIT_SELECT_LIMIT_A,
+            BOOST_SPIRIT_SELECT_PARSER, _)
+
+#undef BOOST_SPIRIT_SELECT_PARSER
+#undef BOOST_SPIRIT_SELECT_CONVERT
+#undef BOOST_SPIRIT_SELECT_EMBEDDED_TYPEDEF
+#undef BOOST_SPIRIT_SELECT_EMBEDDED
+            ///////////////////////////////////////////////////////////////////////////
+        };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Predefined parser generator helper objects
 //
 ///////////////////////////////////////////////////////////////////////////////
-select_parser_gen<select_default_no_fail> const select_p = 
-    select_parser_gen<select_default_no_fail>();
+        select_parser_gen<select_default_no_fail> const select_p =
+                select_parser_gen<select_default_no_fail>();
 
-select_parser_gen<select_default_fail> const select_fail_p = 
-    select_parser_gen<select_default_fail>();
+        select_parser_gen<select_default_fail> const select_fail_p =
+                select_parser_gen<select_default_fail>();
 
 #undef BOOST_SPIRIT_SELECT_LIMIT_A
 
 ///////////////////////////////////////////////////////////////////////////////
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}}  // namespace BOOST_SPIRIT_CLASSIC_NS
+    }
+}  // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif // BOOST_SPIRIT_SELECT_HPP

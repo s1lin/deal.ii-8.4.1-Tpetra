@@ -11,37 +11,35 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct nview_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct at_impl;
 
-        template<>
-        struct at_impl<nview_tag>
-        {
-            template<typename Sequence, typename N>
-            struct apply
-            {
-                typedef typename Sequence::sequence_type sequence_type;
-                typedef typename Sequence::index_type index_type;
+            template<>
+            struct at_impl<nview_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename Sequence::sequence_type sequence_type;
+                    typedef typename Sequence::index_type index_type;
 
-                typedef typename result_of::at<index_type, N>::type index;
-                typedef typename result_of::at<sequence_type, index>::type type;
+                    typedef typename result_of::at<index_type, N>::type index;
+                    typedef typename result_of::at<sequence_type, index>::type type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type 
-                call(Sequence& seq)
-                {
-                    return fusion::at<index>(seq.seq);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return fusion::at<index>(seq.seq);
+                    }
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif

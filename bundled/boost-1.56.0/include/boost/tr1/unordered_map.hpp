@@ -5,6 +5,7 @@
 
 #ifndef BOOST_TR1_UNORDERED_MAP_HPP_INCLUDED
 #  define BOOST_TR1_UNORDERED_MAP_HPP_INCLUDED
+
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_UNORDERED_MAP
@@ -20,13 +21,15 @@
 
 #include <boost/unordered_map.hpp>
 
-namespace std{ namespace tr1{
+namespace std {
+    namespace tr1 {
 
-   using ::boost::unordered_map;
-   using ::boost::unordered_multimap;
-   using ::boost::swap;
+        using ::boost::unordered_map;
+        using ::boost::unordered_multimap;
+        using ::boost::swap;
 
-} } // namespaces
+    }
+} // namespaces
 
 #endif
 

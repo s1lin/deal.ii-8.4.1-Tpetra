@@ -8,7 +8,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_UNITS_STATIC_RATIONAL_HPP 
+#ifndef BOOST_UNITS_STATIC_RATIONAL_HPP
 #define BOOST_UNITS_STATIC_RATIONAL_HPP
 
 #include <boost/math/common_factor_ct.hpp>
@@ -29,22 +29,22 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace detail {
+        namespace detail {
 
-struct static_rational_tag {};
+            struct static_rational_tag {
+            };
 
-}
+        }
 
-typedef long   integer_type;
+        typedef long integer_type;
 
 /// Compile time absolute value.
-template<integer_type Value>
-struct static_abs
-{
-    BOOST_STATIC_CONSTANT(integer_type,value = Value < 0 ? -Value : Value);
-};
+        template<integer_type Value>
+        struct static_abs {
+            BOOST_STATIC_CONSTANT(integer_type, value = Value < 0 ? -Value : Value);
+        };
 
 // Compile time rational number.
 /** 
@@ -67,97 +67,99 @@ values.
 */
 #ifdef __BORLANDC__
 
-template<integer_type X>
-struct make_integral_c {
-    typedef boost::mpl::integral_c<integer_type, X> type;
-};
+        template<integer_type X>
+        struct make_integral_c {
+            typedef boost::mpl::integral_c<integer_type, X> type;
+        };
 
-template<integer_type N,integer_type D = 1>
-class static_rational
-{
-    public:
+        template<integer_type N,integer_type D = 1>
+        class static_rational
+        {
+            public:
 
-        typedef static_rational this_type;
+                typedef static_rational this_type;
 
-        typedef boost::mpl::integral_c<integer_type, N> N_type;
-        typedef boost::mpl::integral_c<integer_type, D> D_type;
+                typedef boost::mpl::integral_c<integer_type, N> N_type;
+                typedef boost::mpl::integral_c<integer_type, D> D_type;
 
-        typedef typename make_integral_c<
-            (::boost::math::static_gcd<
-                ::boost::units::static_abs<N>::value,
-                ::boost::units::static_abs<D>::value
-            >::value)>::type gcd_type;
-        typedef typename boost::mpl::eval_if<
-            boost::mpl::less<
-                D_type,
-                boost::mpl::integral_c<integer_type, 0>
-            >,
-            boost::mpl::negate<gcd_type>,
-            gcd_type
-        >::type den_type;
-        
-    public: 
-        // for mpl arithmetic support
-        typedef detail::static_rational_tag tag;
-        
-        BOOST_STATIC_CONSTANT(integer_type, Numerator =
-            (::boost::mpl::divides<N_type, den_type>::value));
-        BOOST_STATIC_CONSTANT(integer_type, Denominator =
-            (::boost::mpl::divides<D_type, den_type>::value));
-        
-        /// INTERNAL ONLY
-        typedef static_rational<N,D>    this_type;
-        
-        /// static_rational<N,D> reduced by GCD
-        typedef static_rational<
-            (::boost::mpl::divides<N_type, den_type>::value),
-            (::boost::mpl::divides<D_type, den_type>::value)
-        >  type;
-                                 
-        static integer_type numerator()      { return Numerator; }
-        static integer_type denominator()    { return Denominator; }
-        
-        // INTERNAL ONLY
-        static_rational() { }
-        //~static_rational() { }
-};
+                typedef typename make_integral_c<
+                    (::boost::math::static_gcd<
+                        ::boost::units::static_abs<N>::value,
+                        ::boost::units::static_abs<D>::value
+                    >::value)>::type gcd_type;
+                typedef typename boost::mpl::eval_if<
+                    boost::mpl::less<
+                        D_type,
+                        boost::mpl::integral_c<integer_type, 0>
+                    >,
+                    boost::mpl::negate<gcd_type>,
+                    gcd_type
+                >::type den_type;
+
+            public:
+                // for mpl arithmetic support
+                typedef detail::static_rational_tag tag;
+
+                BOOST_STATIC_CONSTANT(integer_type, Numerator =
+                    (::boost::mpl::divides<N_type, den_type>::value));
+                BOOST_STATIC_CONSTANT(integer_type, Denominator =
+                    (::boost::mpl::divides<D_type, den_type>::value));
+
+                /// INTERNAL ONLY
+                typedef static_rational<N,D>    this_type;
+
+                /// static_rational<N,D> reduced by GCD
+                typedef static_rational<
+                    (::boost::mpl::divides<N_type, den_type>::value),
+                    (::boost::mpl::divides<D_type, den_type>::value)
+                >  type;
+
+                static integer_type numerator()      { return Numerator; }
+                static integer_type denominator()    { return Denominator; }
+
+                // INTERNAL ONLY
+                static_rational() { }
+                //~static_rational() { }
+        };
 #else
-template<integer_type N,integer_type D = 1>
-class static_rational
-{
-    private:
 
-        static const integer_type   nabs = static_abs<N>::value,
-                                    dabs = static_abs<D>::value;
-        
-        /// greatest common divisor of N and D
-        // need cast to signed because static_gcd returns unsigned long
-        static const integer_type   den = 
-            static_cast<integer_type>(boost::math::static_gcd<nabs,dabs>::value) * ((D < 0) ? -1 : 1);
-        
-    public: 
-        // for mpl arithmetic support
-        typedef detail::static_rational_tag tag;
-        
-        static const integer_type   Numerator = N/den,
-            Denominator = D/den;
-        
-        /// INTERNAL ONLY
-        typedef static_rational<N,D>    this_type;
-        
-        /// static_rational<N,D> reduced by GCD
-        typedef static_rational<Numerator,Denominator>  type;
-                                 
-        static integer_type numerator()      { return Numerator; }
-        static integer_type denominator()    { return Denominator; }
-        
-        // INTERNAL ONLY
-        static_rational() { }
-        //~static_rational() { }   
-};
+        template<integer_type N, integer_type D = 1>
+        class static_rational {
+        private:
+
+            static const integer_type nabs = static_abs<N>::value,
+                    dabs = static_abs<D>::value;
+
+            /// greatest common divisor of N and D
+            // need cast to signed because static_gcd returns unsigned long
+            static const integer_type den =
+                    static_cast<integer_type>(boost::math::static_gcd<nabs, dabs>::value) * ((D < 0) ? -1 : 1);
+
+        public:
+            // for mpl arithmetic support
+            typedef detail::static_rational_tag tag;
+
+            static const integer_type Numerator = N / den,
+                    Denominator = D / den;
+
+            /// INTERNAL ONLY
+            typedef static_rational<N, D> this_type;
+
+            /// static_rational<N,D> reduced by GCD
+            typedef static_rational<Numerator, Denominator> type;
+
+            static integer_type numerator() { return Numerator; }
+
+            static integer_type denominator() { return Denominator; }
+
+            // INTERNAL ONLY
+            static_rational() {}
+            //~static_rational() { }
+        };
+
 #endif
 
-}
+    }
 
 }
 
@@ -171,176 +173,169 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::units::static_rational, (long)(long))
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 // prohibit zero denominator
-template<integer_type N> class static_rational<N,0>;
+        template<integer_type N>
+        class static_rational<N, 0>;
 
 /// get decimal value of @c static_rational
-template<class T,integer_type N,integer_type D>
-inline typename divide_typeof_helper<T,T>::type 
-value(const static_rational<N,D>&)
-{
-    return T(N)/T(D);
-}
+        template<class T, integer_type N, integer_type D>
+        inline typename divide_typeof_helper<T, T>::type
+        value(const static_rational<N, D> &) {
+            return T(N) / T(D);
+        }
 
-} // namespace units
+    } // namespace units
 
 #ifndef BOOST_UNITS_DOXYGEN
 
-namespace mpl {
+    namespace mpl {
 
 #ifdef __BORLANDC__
 
-template<>
-struct plus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            ::boost::mpl::plus<
-                boost::mpl::times<typename T0::N_type, typename T1::D_type>,
-                boost::mpl::times<typename T1::N_type, typename T0::D_type>
-            >::value,
-            ::boost::mpl::times<typename T0::D_type, typename T1::D_type>::value
-        >::type type;
-    };
-};
+        template<>
+        struct plus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
+        {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                    ::boost::mpl::plus<
+                        boost::mpl::times<typename T0::N_type, typename T1::D_type>,
+                        boost::mpl::times<typename T1::N_type, typename T0::D_type>
+                    >::value,
+                    ::boost::mpl::times<typename T0::D_type, typename T1::D_type>::value
+                >::type type;
+            };
+        };
 
-template<>
-struct minus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            ::boost::mpl::minus<
-                boost::mpl::times<typename T0::N_type, typename T1::D_type>,
-                boost::mpl::times<typename T1::N_type, typename T0::D_type>
-            >::value,
-            ::boost::mpl::times<typename T0::D_type, typename T1::D_type>::value
-        >::type type;
-    };
-};
+        template<>
+        struct minus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
+        {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                    ::boost::mpl::minus<
+                        boost::mpl::times<typename T0::N_type, typename T1::D_type>,
+                        boost::mpl::times<typename T1::N_type, typename T0::D_type>
+                    >::value,
+                    ::boost::mpl::times<typename T0::D_type, typename T1::D_type>::value
+                >::type type;
+            };
+        };
 
-template<>
-struct times_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            ::boost::mpl::times<typename T0::N_type, typename T1::N_type>::value,
-            ::boost::mpl::times<typename T0::D_type, typename T1::D_type>::value
-        >::type type;
-    };
-};
+        template<>
+        struct times_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
+        {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                    ::boost::mpl::times<typename T0::N_type, typename T1::N_type>::value,
+                    ::boost::mpl::times<typename T0::D_type, typename T1::D_type>::value
+                >::type type;
+            };
+        };
 
-template<>
-struct divides_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            ::boost::mpl::times<typename T0::N_type, typename T1::D_type>::value,
-            ::boost::mpl::times<typename T0::D_type, typename T1::N_type>::value
-        >::type type;
-    };
-};
+        template<>
+        struct divides_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
+        {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                    ::boost::mpl::times<typename T0::N_type, typename T1::D_type>::value,
+                    ::boost::mpl::times<typename T0::D_type, typename T1::N_type>::value
+                >::type type;
+            };
+        };
 
-template<>
-struct negate_impl<boost::units::detail::static_rational_tag>
-{
-    template<class T0>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            ::boost::mpl::negate<typename T0::N_type>::value,
-            ::boost::mpl::identity<T0>::type::Denominator
-        >::type type;
-    };
-};
+        template<>
+        struct negate_impl<boost::units::detail::static_rational_tag>
+        {
+            template<class T0>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                    ::boost::mpl::negate<typename T0::N_type>::value,
+                    ::boost::mpl::identity<T0>::type::Denominator
+                >::type type;
+            };
+        };
 
-template<>
-struct less_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        typedef mpl::bool_<((mpl::minus<T0, T1>::type::Numerator) < 0)> type;
-    };
-};
+        template<>
+        struct less_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
+        {
+            template<class T0, class T1>
+            struct apply
+            {
+                typedef mpl::bool_<((mpl::minus<T0, T1>::type::Numerator) < 0)> type;
+            };
+        };
 
 #else
 
-template<>
-struct plus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            T0::Numerator*T1::Denominator+T1::Numerator*T0::Denominator,
-            T0::Denominator*T1::Denominator
-        >::type type;
-    };
-};
+        template<>
+        struct plus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                        T0::Numerator * T1::Denominator + T1::Numerator * T0::Denominator,
+                        T0::Denominator * T1::Denominator
+                >::type type;
+            };
+        };
 
-template<>
-struct minus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            T0::Numerator*T1::Denominator-T1::Numerator*T0::Denominator,
-            T0::Denominator*T1::Denominator
-        >::type type;
-    };
-};
+        template<>
+        struct minus_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                        T0::Numerator * T1::Denominator - T1::Numerator * T0::Denominator,
+                        T0::Denominator * T1::Denominator
+                >::type type;
+            };
+        };
 
-template<>
-struct times_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            T0::Numerator*T1::Numerator,
-            T0::Denominator*T1::Denominator
-        >::type type;
-    };
-};
+        template<>
+        struct times_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                        T0::Numerator * T1::Numerator,
+                        T0::Denominator * T1::Denominator
+                >::type type;
+            };
+        };
 
-template<>
-struct divides_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply {
-        typedef typename boost::units::static_rational<
-            T0::Numerator*T1::Denominator,
-            T0::Denominator*T1::Numerator
-        >::type type;
-    };
-};
+        template<>
+        struct divides_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::static_rational<
+                        T0::Numerator * T1::Denominator,
+                        T0::Denominator * T1::Numerator
+                >::type type;
+            };
+        };
 
-template<>
-struct negate_impl<boost::units::detail::static_rational_tag>
-{
-    template<class T0>
-    struct apply {
-        typedef typename boost::units::static_rational<-T0::Numerator,T0::Denominator>::type type;
-    };
-};
+        template<>
+        struct negate_impl<boost::units::detail::static_rational_tag> {
+            template<class T0>
+            struct apply {
+                typedef typename boost::units::static_rational<-T0::Numerator, T0::Denominator>::type type;
+            };
+        };
 
-template<>
-struct less_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        typedef mpl::bool_<((mpl::minus<T0, T1>::type::Numerator) < 0)> type;
-    };
-};
+        template<>
+        struct less_impl<boost::units::detail::static_rational_tag, boost::units::detail::static_rational_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef mpl::bool_<((mpl::minus<T0, T1>::type::Numerator) < 0)> type;
+            };
+        };
 
 #endif
 
 
-}
+    }
 
 #endif
 

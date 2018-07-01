@@ -41,7 +41,7 @@ namespace boost {
     namespace algorithm {
 
 //  collection_traits template class -----------------------------------------//
-        
+
         //! collection_traits class
         /*!
             Collection traits provide uniform access to different types of 
@@ -70,44 +70,49 @@ namespace boost {
             Container traits have somewhat limited functionality on compilers not
             supporting partial template specialization and partial template ordering.
         */
-        template< typename T >
-        struct collection_traits
-        {
+        template<typename T>
+        struct collection_traits {
         private:
-            typedef BOOST_STRING_TYPENAME ::boost::mpl::eval_if< 
-                    ::boost::algorithm::detail::is_pair<T>, 
-                        detail::pair_container_traits_selector<T>,
-                        BOOST_STRING_TYPENAME ::boost::mpl::eval_if< 
-                        ::boost::is_array<T>, 
-                            detail::array_container_traits_selector<T>,
-                            BOOST_STRING_TYPENAME ::boost::mpl::eval_if<
+            typedef BOOST_STRING_TYPENAME::boost::mpl::eval_if<
+                    ::boost::algorithm::detail::is_pair<T>,
+                    detail::pair_container_traits_selector<T>,
+                    BOOST_STRING_TYPENAME::boost::mpl::eval_if<
+                            ::boost::is_array<T>,
+                            detail::array_container_traits_selector < T>,
+                    BOOST_STRING_TYPENAME::boost::mpl::eval_if<
                             ::boost::is_pointer<T>,
-                                detail::pointer_container_traits_selector<T>,
-                                detail::default_container_traits_selector<T>
-                            >
-                        > 
-                >::type container_helper_type;
+                            detail::pointer_container_traits_selector < T>,
+                    detail::default_container_traits_selector<T>
+            >
+            >
+            >::type container_helper_type;
         public:
             //! Function type       
-            typedef container_helper_type function_type;        
+            typedef container_helper_type function_type;
             //! Value type
-            typedef BOOST_STRING_TYPENAME 
-                container_helper_type::value_type value_type;
+            typedef BOOST_STRING_TYPENAME
+                    container_helper_type
+            ::value_type value_type;
             //! Size type
-            typedef BOOST_STRING_TYPENAME 
-                container_helper_type::size_type size_type;
+            typedef BOOST_STRING_TYPENAME
+                    container_helper_type
+            ::size_type size_type;
             //! Iterator type
-            typedef BOOST_STRING_TYPENAME 
-                container_helper_type::iterator iterator;
+            typedef BOOST_STRING_TYPENAME
+                    container_helper_type
+            ::iterator iterator;
             //! Const iterator type
-            typedef BOOST_STRING_TYPENAME 
-                container_helper_type::const_iterator const_iterator;
+            typedef BOOST_STRING_TYPENAME
+                    container_helper_type
+            ::const_iterator const_iterator;
             //! Result iterator type ( iterator of const_iterator, depending on the constness of the container )
-            typedef BOOST_STRING_TYPENAME 
-                container_helper_type::result_iterator result_iterator;
+            typedef BOOST_STRING_TYPENAME
+                    container_helper_type
+            ::result_iterator result_iterator;
             //! Difference type
-            typedef BOOST_STRING_TYPENAME 
-                container_helper_type::difference_type difference_type;
+            typedef BOOST_STRING_TYPENAME
+                    container_helper_type
+            ::difference_type difference_type;
 
         }; // 'collection_traits'
 
@@ -117,40 +122,44 @@ namespace boost {
         /*!
             Extract the type of elements contained in a container
         */
-        template< typename C >
-        struct value_type_of
-        {
-            typedef BOOST_STRING_TYPENAME collection_traits<C>::value_type type;
+        template<typename C>
+        struct value_type_of {
+            typedef BOOST_STRING_TYPENAME collection_traits
+            <C>::value_type
+            type;
         };
-        
+
         //! Container difference trait
         /*!
             Extract the container's difference type
         */
-        template< typename C >
-        struct difference_type_of
-        {
-            typedef BOOST_STRING_TYPENAME collection_traits<C>::difference_type type;
+        template<typename C>
+        struct difference_type_of {
+            typedef BOOST_STRING_TYPENAME collection_traits
+            <C>::difference_type
+            type;
         };
 
         //! Container iterator trait
         /*!
             Extract the container's iterator type
         */
-        template< typename C >
-        struct iterator_of
-        {
-            typedef BOOST_STRING_TYPENAME collection_traits<C>::iterator type;
+        template<typename C>
+        struct iterator_of {
+            typedef BOOST_STRING_TYPENAME collection_traits
+            <C>::iterator
+            type;
         };
 
         //! Container const_iterator trait
         /*!
             Extract the container's const_iterator type
         */
-        template< typename C >
-        struct const_iterator_of
-        {
-            typedef BOOST_STRING_TYPENAME collection_traits<C>::const_iterator type;
+        template<typename C>
+        struct const_iterator_of {
+            typedef BOOST_STRING_TYPENAME collection_traits
+            <C>::const_iterator
+            type;
         };
 
 
@@ -159,10 +168,11 @@ namespace boost {
             Extract the container's result_iterator type. This type maps to \c C::iterator
             for mutable container and \c C::const_iterator for const containers.
         */
-        template< typename C >
-        struct result_iterator_of
-        {
-            typedef BOOST_STRING_TYPENAME collection_traits<C>::result_iterator type;
+        template<typename C>
+        struct result_iterator_of {
+            typedef BOOST_STRING_TYPENAME collection_traits
+            <C>::result_iterator
+            type;
         };
 
 //  collection_traits related functions -----------------------------------------//
@@ -171,21 +181,20 @@ namespace boost {
         /*!
             Get the size of the container. Uses collection_traits.
         */
-        template< typename C >
+        template<typename C>
         inline BOOST_STRING_TYPENAME collection_traits<C>::size_type
-        size( const C& c )
-        {
-            return collection_traits<C>::function_type::size( c ); 
+
+        size(const C &c) {
+            return collection_traits<C>::function_type::size(c);
         }
 
         //! Free-standing empty() function
         /*!
             Check whether the container is empty. Uses container traits.
         */
-        template< typename C >
-        inline bool empty( const C& c )
-        {
-            return collection_traits<C>::function_type::empty( c );
+        template<typename C>
+        inline bool empty(const C &c) {
+            return collection_traits<C>::function_type::empty(c);
         }
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -194,73 +203,75 @@ namespace boost {
         /*!
             Get the begin iterator of the container. Uses collection_traits.
         */
-        template< typename C >
+        template<typename C>
         inline BOOST_STRING_TYPENAME collection_traits<C>::iterator
-        begin( C& c )
-        {
-            return collection_traits<C>::function_type::begin( c ); 
-        }
+        begin( C
+        & c ) {
+        return
+        collection_traits<C>::function_type::begin( c );
+    }
 
-        //! Free-standing begin() function
-        /*!
-            \overload
-        */
-        template< typename C >
-        inline BOOST_STRING_TYPENAME collection_traits<C>::const_iterator
-        begin( const C& c )
-        {
-            return collection_traits<C>::function_type::begin( c ); 
-        }
+    //! Free-standing begin() function
+    /*!
+        \overload
+    */
+    template<typename C>
+    inline BOOST_STRING_TYPENAME collection_traits<C>::const_iterator
 
-        //! Free-standing end() function
-        /*!
-            Get the begin iterator of the container. Uses collection_traits.
-        */
-        template< typename C >
-        inline BOOST_STRING_TYPENAME collection_traits<C>::iterator
-        end( C& c )
-        {
-            return collection_traits<C>::function_type::end( c );
-        }
+    begin(const C &c) {
+        return collection_traits<C>::function_type::begin(c);
+    }
 
-        //! Free-standing end() function
-        /*!
-            \overload           
-        */
-        template< typename C >
-        inline BOOST_STRING_TYPENAME collection_traits<C>::const_iterator
-        end( const C& c )
-        {
-            return collection_traits<C>::function_type::end( c );
-        }
+    //! Free-standing end() function
+    /*!
+        Get the begin iterator of the container. Uses collection_traits.
+    */
+    template<typename C>
+    inline BOOST_STRING_TYPENAME collection_traits<C>::iterator
+    end( C
+    & c ) {
+    return
+    collection_traits<C>::function_type::end( c );
+}
+
+//! Free-standing end() function
+/*!
+    \overload
+*/
+template<typename C>
+inline BOOST_STRING_TYPENAME collection_traits<C>::const_iterator
+
+end(const C &c) {
+    return collection_traits<C>::function_type::end(c);
+}
 
 #else // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-        //! Free-standing begin() function
-        /*!
-            \overload
-        */
-        template< typename C >
-        inline BOOST_STRING_TYPENAME collection_traits<C>::result_iterator
-        begin( C& c )
-        {
-            return collection_traits<C>::function_type::begin( c );
-        }
+//! Free-standing begin() function
+/*!
+    \overload
+*/
+template< typename C >
+inline BOOST_STRING_TYPENAME collection_traits<C>::result_iterator
+begin( C& c )
+{
+    return collection_traits<C>::function_type::begin( c );
+}
 
-        //! Free-standing end() function
-        /*!
-            \overload
-        */
-        template< typename C >
-        inline BOOST_STRING_TYPENAME collection_traits<C>::result_iterator
-        end( C& c )
-        {
-            return collection_traits<C>::function_type::end( c );
-        }
+//! Free-standing end() function
+/*!
+    \overload
+*/
+template< typename C >
+inline BOOST_STRING_TYPENAME collection_traits<C>::result_iterator
+end( C& c )
+{
+    return collection_traits<C>::function_type::end( c );
+}
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-    } // namespace algorithm
+} // namespace algorithm
 } // namespace boost
 
 #endif // BOOST_STRING_COLLECTION_TRAITS_HPP

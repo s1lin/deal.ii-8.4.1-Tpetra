@@ -18,7 +18,7 @@
 
 #  if defined(_MSC_VER) && _MSC_VER <= 1300
 #     if _MSC_VER > 100
-         // only set this in non-strict mode:
+// only set this in non-strict mode:
 #        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
 #  endif

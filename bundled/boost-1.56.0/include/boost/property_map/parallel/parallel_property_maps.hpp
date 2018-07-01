@@ -44,35 +44,51 @@ namespace boost {
  * property maps via the same syntax used to create external
  * sequential property maps.
  */
-template<typename RandomAccessIterator, typename ProcessGroup,
-         typename GlobalMap, typename StorageMap, 
-         typename ValueType, typename Reference>
-class iterator_property_map
-        <RandomAccessIterator, 
-         local_property_map<ProcessGroup, GlobalMap, StorageMap>,
-         ValueType, Reference>
-  : public parallel::distributed_property_map
-             <ProcessGroup, 
-              GlobalMap, 
-              iterator_property_map<RandomAccessIterator, StorageMap,
-                                    ValueType, Reference> >
-{
-  typedef iterator_property_map<RandomAccessIterator, StorageMap, 
-                                ValueType, Reference> local_iterator_map;
+    template<typename RandomAccessIterator, typename ProcessGroup,
+            typename GlobalMap, typename StorageMap,
+            typename ValueType, typename Reference>
+    class iterator_property_map
+            <RandomAccessIterator,
+                    local_property_map < ProcessGroup, GlobalMap, StorageMap>
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
-                                             local_iterator_map> inherited;
+    ,
+    ValueType, Reference>
+    : public parallel::distributed_property_map
+    <ProcessGroup,
+    GlobalMap,
+    iterator_property_map<RandomAccessIterator, StorageMap,
+            ValueType, Reference>> {
+    typedef iterator_property_map<RandomAccessIterator, StorageMap,
+            ValueType, Reference> local_iterator_map;
 
-  typedef local_property_map<ProcessGroup, GlobalMap, StorageMap>
-    index_map_type;
-  typedef iterator_property_map self_type;
+    typedef parallel::distributed_property_map <ProcessGroup, GlobalMap,
+    local_iterator_map> inherited;
 
-public:
-  iterator_property_map() { }
+    typedef local_property_map <ProcessGroup, GlobalMap, StorageMap>
+            index_map_type;
+    typedef iterator_property_map self_type;
 
-  iterator_property_map(RandomAccessIterator cc, const index_map_type& id)
-    : inherited(id.process_group(), id.global(), 
-                local_iterator_map(cc, id.base())) { }
+    public:
+
+    iterator_property_map() {}
+
+    iterator_property_map(RandomAccessIterator
+    cc,
+    const index_map_type &id
+    )
+    :
+    inherited(id
+    .
+
+    process_group(), id
+
+    .
+
+    global(),
+            local_iterator_map(cc, id.base())
+
+    ) {
+}
 };
 
 /** Distributed iterator property map.
@@ -87,57 +103,73 @@ public:
  * sequential property maps.
  */
 template<typename RandomAccessIterator, typename ProcessGroup,
-         typename GlobalMap, typename StorageMap, 
-         typename ValueType, typename Reference>
+        typename GlobalMap, typename StorageMap,
+        typename ValueType, typename Reference>
 class iterator_property_map<
-        RandomAccessIterator, 
-        parallel::distributed_property_map<ProcessGroup,GlobalMap,StorageMap>,
-        ValueType, Reference
-      >
-  : public parallel::distributed_property_map
-             <ProcessGroup, 
-              GlobalMap,
-              iterator_property_map<RandomAccessIterator, StorageMap,
-                                    ValueType, Reference> >
+        RandomAccessIterator,
+        parallel::distributed_property_map < ProcessGroup, GlobalMap, StorageMap>
+
+,
+ValueType, Reference
+>
+: public parallel::distributed_property_map
+<ProcessGroup,
+GlobalMap,
+iterator_property_map<RandomAccessIterator, StorageMap,
+        ValueType, Reference>>
 {
-  typedef iterator_property_map<RandomAccessIterator, StorageMap,
-                                ValueType, Reference> local_iterator_map;
+typedef iterator_property_map<RandomAccessIterator, StorageMap,
+        ValueType, Reference> local_iterator_map;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
-                                             local_iterator_map> inherited;
+typedef parallel::distributed_property_map <ProcessGroup, GlobalMap,
+local_iterator_map> inherited;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap, 
-                                             StorageMap>
-    index_map_type;
+typedef parallel::distributed_property_map <ProcessGroup, GlobalMap,
+StorageMap>
+        index_map_type;
 
 public:
-  iterator_property_map() { }
 
-  iterator_property_map(RandomAccessIterator cc, const index_map_type& id)
-    : inherited(id.process_group(), id.global(),
-                local_iterator_map(cc, id.base())) { }
+iterator_property_map() {}
+
+iterator_property_map(RandomAccessIterator
+cc,
+const index_map_type &id
+)
+:
+inherited(id
+.
+
+process_group(), id
+
+.
+
+global(),
+        local_iterator_map(cc, id.base())
+
+) {
+}
 };
 
 namespace parallel {
 // Generate an iterator property map with a specific kind of ghost
 // cells
-template<typename RandomAccessIterator, typename ProcessGroup,
-         typename GlobalMap, typename StorageMap>
-distributed_property_map<ProcessGroup, 
-                         GlobalMap,
-                         iterator_property_map<RandomAccessIterator, 
-                                               StorageMap> >
-make_iterator_property_map(RandomAccessIterator cc,
-                           local_property_map<ProcessGroup, GlobalMap, 
-                                              StorageMap> index_map)
-{
-  typedef distributed_property_map<
-            ProcessGroup, GlobalMap,
-            iterator_property_map<RandomAccessIterator, StorageMap> >
-    result_type;
-  return result_type(index_map.process_group(), index_map.global(),
-                     make_iterator_property_map(cc, index_map.base()));
-}
+    template<typename RandomAccessIterator, typename ProcessGroup,
+            typename GlobalMap, typename StorageMap>
+    distributed_property_map <ProcessGroup,
+    GlobalMap,
+    iterator_property_map<RandomAccessIterator,
+            StorageMap>>
+    make_iterator_property_map(RandomAccessIterator cc,
+                               local_property_map <ProcessGroup, GlobalMap,
+                               StorageMap> index_map) {
+        typedef distributed_property_map <
+        ProcessGroup, GlobalMap,
+        iterator_property_map<RandomAccessIterator, StorageMap>>
+                result_type;
+        return result_type(index_map.process_group(), index_map.global(),
+                           make_iterator_property_map(cc, index_map.base()));
+    }
 
 } // end namespace parallel
 
@@ -153,33 +185,50 @@ make_iterator_property_map(RandomAccessIterator cc,
  * sequential property maps.
  */
 template<typename RandomAccessIterator, typename ProcessGroup,
-         typename GlobalMap, typename StorageMap, typename ValueType,
-         typename Reference>
+        typename GlobalMap, typename StorageMap, typename ValueType,
+        typename Reference>
 class safe_iterator_property_map
-        <RandomAccessIterator, 
-         local_property_map<ProcessGroup, GlobalMap, StorageMap>,
-         ValueType, Reference>
-  : public parallel::distributed_property_map
-             <ProcessGroup, 
-              GlobalMap,
-              safe_iterator_property_map<RandomAccessIterator, StorageMap,
-                                         ValueType, Reference> >
+        <RandomAccessIterator,
+                local_property_map < ProcessGroup, GlobalMap, StorageMap>
+
+,
+ValueType, Reference>
+: public parallel::distributed_property_map
+        <ProcessGroup,
+                GlobalMap,
+                safe_iterator_property_map<RandomAccessIterator, StorageMap,
+                        ValueType, Reference> >
 {
-  typedef safe_iterator_property_map<RandomAccessIterator, StorageMap, 
-                                     ValueType, Reference> local_iterator_map;
+typedef safe_iterator_property_map<RandomAccessIterator, StorageMap,
+        ValueType, Reference> local_iterator_map;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
-                                             local_iterator_map> inherited;
+typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
+        local_iterator_map> inherited;
 
-  typedef local_property_map<ProcessGroup, GlobalMap, StorageMap> index_map_type;
+typedef local_property_map <ProcessGroup, GlobalMap, StorageMap> index_map_type;
 
 public:
-  safe_iterator_property_map() { }
 
-  safe_iterator_property_map(RandomAccessIterator cc, std::size_t n, 
-                             const index_map_type& id)
-    : inherited(id.process_group(), id.global(),
-                local_iterator_map(cc, n, id.base())) { }
+safe_iterator_property_map() {}
+
+safe_iterator_property_map(RandomAccessIterator
+cc,
+std::size_t n,
+const index_map_type &id
+)
+:
+inherited(id
+.
+
+process_group(), id
+
+.
+
+global(),
+        local_iterator_map(cc, n, id.base())
+
+) {
+}
 };
 
 /** Distributed safe iterator property map.
@@ -194,36 +243,35 @@ public:
  * sequential property maps.
  */
 template<typename RandomAccessIterator, typename ProcessGroup,
-         typename GlobalMap, typename StorageMap, 
-         typename ValueType, typename Reference>
+        typename GlobalMap, typename StorageMap,
+        typename ValueType, typename Reference>
 class safe_iterator_property_map<
-        RandomAccessIterator, 
-        parallel::distributed_property_map<ProcessGroup,GlobalMap,StorageMap>,
+        RandomAccessIterator,
+        parallel::distributed_property_map<ProcessGroup, GlobalMap, StorageMap>,
         ValueType, Reference>
-  : public parallel::distributed_property_map
-             <ProcessGroup, 
-              GlobalMap,
-              safe_iterator_property_map<RandomAccessIterator, StorageMap,
-                                         ValueType, Reference> >
-{
-  typedef safe_iterator_property_map<RandomAccessIterator, StorageMap,
-                                     ValueType, Reference> local_iterator_map;
+        : public parallel::distributed_property_map
+                <ProcessGroup,
+                        GlobalMap,
+                        safe_iterator_property_map<RandomAccessIterator, StorageMap,
+                                ValueType, Reference> > {
+    typedef safe_iterator_property_map<RandomAccessIterator, StorageMap,
+            ValueType, Reference> local_iterator_map;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
-                                             local_iterator_map> inherited;
+    typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
+            local_iterator_map> inherited;
 
-  typedef parallel::distributed_property_map<ProcessGroup, GlobalMap, 
-                                             StorageMap>
-    index_map_type;
+    typedef parallel::distributed_property_map<ProcessGroup, GlobalMap,
+            StorageMap>
+            index_map_type;
 
 public:
-  safe_iterator_property_map() { }
+    safe_iterator_property_map() {}
 
-  safe_iterator_property_map(RandomAccessIterator cc, std::size_t n, 
-                             const index_map_type& id)
-    : inherited(id.process_group(), id.global(), 
-                local_iterator_map(cc, n, id.base())) { }
-};                                            
+    safe_iterator_property_map(RandomAccessIterator cc, std::size_t n,
+                               const index_map_type &id)
+            : inherited(id.process_group(), id.global(),
+                        local_iterator_map(cc, n, id.base())) {}
+};
 
 }
 

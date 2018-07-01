@@ -6,13 +6,18 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PP_VALUE
 #    error BOOST_PP_ERROR:  BOOST_PP_VALUE is not defined
 # endif
 #
+
 # undef BOOST_PP_SLOT_TEMP_1
 # undef BOOST_PP_SLOT_TEMP_2
 # undef BOOST_PP_SLOT_TEMP_3
@@ -24,6 +29,7 @@
 # undef BOOST_PP_SLOT_TEMP_9
 # undef BOOST_PP_SLOT_TEMP_10
 #
+
 # if (BOOST_PP_VALUE) / 1000000000UL == 0
 #    define BOOST_PP_SLOT_TEMP_10 0
 # elif (BOOST_PP_VALUE) / 1000000000UL == 1
@@ -46,6 +52,7 @@
 #    define BOOST_PP_SLOT_TEMP_10 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_10(BOOST_PP_VALUE) / 100000000UL == 0
 #    define BOOST_PP_SLOT_TEMP_9 0
 # elif BOOST_PP_SLOT_OFFSET_10(BOOST_PP_VALUE) / 100000000UL == 1
@@ -68,6 +75,7 @@
 #    define BOOST_PP_SLOT_TEMP_9 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_9(BOOST_PP_VALUE) / 10000000UL == 0
 #    define BOOST_PP_SLOT_TEMP_8 0
 # elif BOOST_PP_SLOT_OFFSET_9(BOOST_PP_VALUE) / 10000000UL == 1
@@ -90,6 +98,7 @@
 #    define BOOST_PP_SLOT_TEMP_8 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_8(BOOST_PP_VALUE) / 1000000UL == 0
 #    define BOOST_PP_SLOT_TEMP_7 0
 # elif BOOST_PP_SLOT_OFFSET_8(BOOST_PP_VALUE) / 1000000UL == 1
@@ -112,6 +121,7 @@
 #    define BOOST_PP_SLOT_TEMP_7 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_7(BOOST_PP_VALUE) / 100000UL == 0
 #    define BOOST_PP_SLOT_TEMP_6 0
 # elif BOOST_PP_SLOT_OFFSET_7(BOOST_PP_VALUE) / 100000UL == 1
@@ -134,6 +144,7 @@
 #    define BOOST_PP_SLOT_TEMP_6 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_6(BOOST_PP_VALUE) / 10000UL == 0
 #    define BOOST_PP_SLOT_TEMP_5 0
 # elif BOOST_PP_SLOT_OFFSET_6(BOOST_PP_VALUE) / 10000UL == 1
@@ -156,6 +167,7 @@
 #    define BOOST_PP_SLOT_TEMP_5 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_5(BOOST_PP_VALUE) / 1000UL == 0
 #    define BOOST_PP_SLOT_TEMP_4 0
 # elif BOOST_PP_SLOT_OFFSET_5(BOOST_PP_VALUE) / 1000UL == 1
@@ -178,6 +190,7 @@
 #    define BOOST_PP_SLOT_TEMP_4 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_4(BOOST_PP_VALUE) / 100UL == 0
 #    define BOOST_PP_SLOT_TEMP_3 0
 # elif BOOST_PP_SLOT_OFFSET_4(BOOST_PP_VALUE) / 100UL == 1
@@ -200,6 +213,7 @@
 #    define BOOST_PP_SLOT_TEMP_3 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_3(BOOST_PP_VALUE) / 10UL == 0
 #    define BOOST_PP_SLOT_TEMP_2 0
 # elif BOOST_PP_SLOT_OFFSET_3(BOOST_PP_VALUE) / 10UL == 1
@@ -222,6 +236,7 @@
 #    define BOOST_PP_SLOT_TEMP_2 9
 # endif
 #
+
 # if BOOST_PP_SLOT_OFFSET_2(BOOST_PP_VALUE) == 0
 #    define BOOST_PP_SLOT_TEMP_1 0
 # elif BOOST_PP_SLOT_OFFSET_2(BOOST_PP_VALUE) == 1
@@ -244,4 +259,5 @@
 #    define BOOST_PP_SLOT_TEMP_1 9
 # endif
 #
+
 # undef BOOST_PP_VALUE

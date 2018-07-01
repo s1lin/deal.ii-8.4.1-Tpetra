@@ -5,11 +5,11 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_fsize
-(
-    Int nn,
-    Int MaxFsize [ ],
-    Int Fnrows [ ],
-    Int Fncols [ ],
-    Int Parent [ ],
-    Int Npiv [ ]
-) ;
+        (
+                Int nn,
+                Int MaxFsize[],
+                Int Fnrows[],
+                Int Fncols[],
+                Int Parent[],
+                Int Npiv[]
+        );

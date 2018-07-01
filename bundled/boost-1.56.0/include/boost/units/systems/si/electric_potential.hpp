@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<electric_potential_dimension,si::system>    electric_potential;
-    
-BOOST_UNITS_STATIC_CONSTANT(volt,electric_potential);   
-BOOST_UNITS_STATIC_CONSTANT(volts,electric_potential);  
+            typedef unit <electric_potential_dimension, si::system> electric_potential;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(volt, electric_potential
+            );
+            BOOST_UNITS_STATIC_CONSTANT(volts, electric_potential
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

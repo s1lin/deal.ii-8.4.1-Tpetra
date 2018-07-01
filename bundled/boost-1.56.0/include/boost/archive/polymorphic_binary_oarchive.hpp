@@ -20,23 +20,23 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/detail/polymorphic_oarchive_route.hpp>
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
-typedef detail::polymorphic_oarchive_route<
-    binary_oarchive_impl<
-        binary_oarchive, 
-        std::ostream::char_type, 
-        std::ostream::traits_type
-    >
- > polymorphic_binary_oarchive;
+        typedef detail::polymorphic_oarchive_route <
+        binary_oarchive_impl<
+                binary_oarchive,
+                std::ostream::char_type,
+                std::ostream::traits_type
+        >
+        > polymorphic_binary_oarchive;
 
-} // namespace archive
+    } // namespace archive
 } // namespace boost
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(
-    boost::archive::polymorphic_binary_oarchive
+        boost::archive::polymorphic_binary_oarchive
 )
 
 #endif // BOOST_ARCHIVE_POLYMORPHIC_BINARY_OARCHIVE_HPP

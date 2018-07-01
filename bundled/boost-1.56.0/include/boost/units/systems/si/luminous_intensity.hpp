@@ -15,18 +15,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<luminous_intensity_dimension,si::system>      luminous_intensity;
-    
-BOOST_UNITS_STATIC_CONSTANT(candela,luminous_intensity); 
-BOOST_UNITS_STATIC_CONSTANT(candelas,luminous_intensity);    
+            typedef unit <luminous_intensity_dimension, si::system> luminous_intensity;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(candela, luminous_intensity
+            );
+            BOOST_UNITS_STATIC_CONSTANT(candelas, luminous_intensity
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

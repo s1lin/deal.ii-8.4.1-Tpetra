@@ -68,6 +68,7 @@
 /* from stdio.h:  printf.  Not included if NPRINT is defined at compile time.
  * fopen and fscanf are used when debugging. */
 #include <stdio.h>
+
 #endif
 
 /* from limits.h:  INT_MAX and LONG_MAX */
@@ -122,11 +123,11 @@
 #define UNFLIP(i) ((i < EMPTY) ? FLIP (i) : (i))
 
 /* for integer MAX/MIN, or for doubles when we don't care how NaN's behave: */
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 /* logical expression of p implies q: */
-#define IMPLIES(p,q) (!(p) || (q))
+#define IMPLIES(p, q) (!(p) || (q))
 
 /* Note that the IBM RS 6000 xlc predefines TRUE and FALSE in <types.h>. */
 /* The Compaq Alpha also predefines TRUE and FALSE. */
@@ -226,64 +227,64 @@
 /* ------------------------------------------------------------------------- */
 
 GLOBAL size_t AMD_aat
-(
-    Int n,
-    const Int Ap [ ],
-    const Int Ai [ ],
-    Int Len [ ],
-    Int Tp [ ],
-    double Info [ ]
-) ;
+        (
+                Int n,
+                const Int Ap[],
+                const Int Ai[],
+                Int Len[],
+                Int Tp[],
+                double Info[]
+        );
 
 GLOBAL void AMD_1
-(
-    Int n,
-    const Int Ap [ ],
-    const Int Ai [ ],
-    Int P [ ],
-    Int Pinv [ ],
-    Int Len [ ],
-    Int slen,
-    Int S [ ],
-    double Control [ ],
-    double Info [ ]
-) ;
+        (
+                Int n,
+                const Int Ap[],
+                const Int Ai[],
+                Int P[],
+                Int Pinv[],
+                Int Len[],
+                Int slen,
+                Int S[],
+                double Control[],
+                double Info[]
+        );
 
 GLOBAL void AMD_postorder
-(
-    Int nn,
-    Int Parent [ ],
-    Int Npiv [ ],
-    Int Fsize [ ],
-    Int Order [ ],
-    Int Child [ ],
-    Int Sibling [ ],
-    Int Stack [ ]
-) ;
+        (
+                Int nn,
+                Int Parent[],
+                Int Npiv[],
+                Int Fsize[],
+                Int Order[],
+                Int Child[],
+                Int Sibling[],
+                Int Stack[]
+        );
 
 GLOBAL Int AMD_post_tree
-(
-    Int root,
-    Int k,
-    Int Child [ ],
-    const Int Sibling [ ],
-    Int Order [ ],
-    Int Stack [ ]
+        (
+                Int root,
+                Int k,
+                Int Child[],
+                const Int Sibling[],
+                Int Order[],
+                Int Stack[]
 #ifndef NDEBUG
-    , Int nn
+        , Int nn
 #endif
-) ;
+);
 
 GLOBAL void AMD_preprocess
-(
-    Int n,
-    const Int Ap [ ],
-    const Int Ai [ ],
-    Int Rp [ ],
-    Int Ri [ ],
-    Int W [ ],
-    Int Flag [ ]
-) ;
+        (
+                Int n,
+                const Int Ap[],
+                const Int Ai[],
+                Int Rp[],
+                Int Ri[],
+                Int W[],
+                Int Flag[]
+        );
 
 /* ------------------------------------------------------------------------- */
 /* debugging definitions */

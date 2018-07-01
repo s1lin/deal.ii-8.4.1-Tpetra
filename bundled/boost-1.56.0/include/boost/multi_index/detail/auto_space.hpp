@@ -20,11 +20,11 @@
 #include <boost/noncopyable.hpp>
 #include <memory>
 
-namespace boost{
+namespace boost {
 
-namespace multi_index{
+    namespace multi_index {
 
-namespace detail{
+        namespace detail {
 
 /* auto_space provides uninitialized space suitably to store
  * a given number of elements of a given type.
@@ -42,49 +42,44 @@ namespace detail{
  *     http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#199
  */
 
-template<typename T,typename Allocator=std::allocator<T> >
-struct auto_space:private noncopyable
-{
-  typedef typename boost::detail::allocator::rebind_to<
-    Allocator,T
-  >::type::pointer pointer;
+            template<typename T, typename Allocator=std::allocator<T> >
+            struct auto_space : private noncopyable {
+                typedef typename boost::detail::allocator::rebind_to<
+                        Allocator, T
+                >::type::pointer pointer;
 
-  explicit auto_space(const Allocator& al=Allocator(),std::size_t n=1):
-  al_(al),n_(n),data_(n_?al_.allocate(n_):pointer(0))
-  {}
+                explicit auto_space(const Allocator &al = Allocator(), std::size_t n = 1) :
+                        al_(al), n_(n), data_(n_ ? al_.allocate(n_) : pointer(0)) {}
 
-  ~auto_space()
-  {
-    if(n_)al_.deallocate(data_,n_);
-  }
+                ~auto_space() {
+                    if (n_)al_.deallocate(data_, n_);
+                }
 
-  Allocator get_allocator()const{return al_;}
+                Allocator get_allocator() const { return al_; }
 
-  pointer data()const{return data_;}
+                pointer data() const { return data_; }
 
-  void swap(auto_space& x)
-  {
-    if(al_!=x.al_)adl_swap(al_,x.al_);
-    std::swap(n_,x.n_);
-    std::swap(data_,x.data_);
-  }
-    
-private:
-  typename boost::detail::allocator::rebind_to<
-    Allocator,T>::type                          al_;
-  std::size_t                                   n_;
-  pointer                                       data_;
-};
+                void swap(auto_space &x) {
+                    if (al_ != x.al_)adl_swap(al_, x.al_);
+                    std::swap(n_, x.n_);
+                    std::swap(data_, x.data_);
+                }
 
-template<typename T,typename Allocator>
-void swap(auto_space<T,Allocator>& x,auto_space<T,Allocator>& y)
-{
-  x.swap(y);
-}
+            private:
+                typename boost::detail::allocator::rebind_to<
+                        Allocator, T>::type al_;
+                std::size_t n_;
+                pointer data_;
+            };
 
-} /* namespace multi_index::detail */
+            template<typename T, typename Allocator>
+            void swap(auto_space<T, Allocator> &x, auto_space<T, Allocator> &y) {
+                x.swap(y);
+            }
 
-} /* namespace multi_index */
+        } /* namespace multi_index::detail */
+
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

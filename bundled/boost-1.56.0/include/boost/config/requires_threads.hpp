@@ -8,7 +8,9 @@
 #define BOOST_CONFIG_REQUIRES_THREADS_HPP
 
 #ifndef BOOST_CONFIG_HPP
+
 #  include <boost/config.hpp>
+
 #endif
 
 #if defined(BOOST_DISABLE_THREADS)

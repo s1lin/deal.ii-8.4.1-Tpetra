@@ -21,47 +21,49 @@
 #include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/quote.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename Pred>
-        struct find_if
-          : mpl::if_<
-                traits::is_segmented<Sequence>
-              , detail::result_of_segmented_find_if<Sequence, Pred>
-              , detail::result_of_find_if<
-                    Sequence,
-                    mpl::bind1<
-                        typename mpl::lambda<Pred>::type
-                      , mpl::bind1<mpl::quote1<value_of>, mpl::_1>
-                    >
-                >
-            >::type
-        {};
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename Pred>
+            struct find_if
+                    : mpl::if_<
+                            traits::is_segmented < Sequence>,
+                      detail::result_of_segmented_find_if<Sequence, Pred>,
+                      detail::result_of_find_if<
+                              Sequence,
+                              mpl::bind1 <
+                              typename mpl::lambda<Pred>::type, mpl::bind1 < mpl::quote1 < value_of>,
+                      mpl::_1>
+            >
+            >
+            >::type {
+        };
     }
 
-    template <typename Pred, typename Sequence>
+    template<typename Pred, typename Sequence>
     BOOST_FUSION_GPU_ENABLED
-    inline typename 
-        lazy_disable_if<
-            is_const<Sequence>
-          , result_of::find_if<Sequence, Pred>
-        >::type
-    find_if(Sequence& seq)
-    {
+    inline typename
+            lazy_disable_if<
+            is_const < Sequence>
+    , result_of::find_if<Sequence, Pred>
+    >
+
+    ::type
+    find_if(Sequence &seq) {
         typedef typename result_of::find_if<Sequence, Pred>::filter filter;
         return filter::call(seq);
     }
 
-    template <typename Pred, typename Sequence>
+    template<typename Pred, typename Sequence>
     BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::find_if<Sequence const, Pred>::type const
-    find_if(Sequence const& seq)
-    {
-        typedef typename result_of::find_if<Sequence const, Pred>::filter filter;
-        return filter::call(seq);
-    }
+    inline typename result_of::find_if<Sequence const, Pred>::type
+    const
+    find_if(Sequence
+    const& seq) {
+    typedef typename result_of::find_if<Sequence const, Pred>::filter filter;
+    return
+    filter::call(seq);
+}
 }}
 
 #endif

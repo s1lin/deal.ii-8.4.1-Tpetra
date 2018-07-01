@@ -27,28 +27,27 @@
 #       define BOOST_FUNCTIONAL_VALUE_FACTORY_MAX_ARITY 3
 #     endif
 
-namespace boost
-{
-    template< typename T >
+namespace boost {
+    template<typename T>
     class value_factory;
 
     //----- ---- --- -- - -  -   -
 
-    template< typename T >
-    class value_factory
-    {
-      public:
+    template<typename T>
+    class value_factory {
+    public:
         typedef T result_type;
 
-        value_factory()
-        { }
+        value_factory() {}
 
 #     define BOOST_PP_FILENAME_1 <boost/functional/value_factory.hpp>
 #     define BOOST_PP_ITERATION_LIMITS (0,BOOST_FUNCTIONAL_VALUE_FACTORY_MAX_ARITY)
+
 #     include BOOST_PP_ITERATE()
     };
 
-    template< typename T > class value_factory<T&>;
+    template<typename T>
+    class value_factory<T &>;
     // forbidden, would create a dangling reference
 }
 #     define BOOST_FUNCTIONAL_VALUE_FACTORY_HPP_INCLUDED
@@ -56,12 +55,12 @@ namespace boost
 
 #     define N BOOST_PP_ITERATION()
 #     if N > 0
-    template< BOOST_PP_ENUM_PARAMS(N, typename T) >
+template< BOOST_PP_ENUM_PARAMS(N, typename T) >
 #     endif
-    inline result_type operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& a)) const
-    {
-        return result_type(BOOST_PP_ENUM_PARAMS(N,a));
-    }
+inline result_type operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& a)) const
+{
+    return result_type(BOOST_PP_ENUM_PARAMS(N,a));
+}
 #     undef N
 
 #   endif // defined(BOOST_PP_IS_ITERATING)

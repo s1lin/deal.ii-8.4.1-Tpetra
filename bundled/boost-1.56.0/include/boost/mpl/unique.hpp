@@ -27,54 +27,46 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_spec.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-namespace aux {
+        namespace aux {
 
-template< typename Predicate, typename Operation >
-struct unique_op
-{
-    template< typename Pair, typename T > struct apply
-    {
-        typedef typename Pair::first seq_;
-        typedef typename Pair::second prior_;
-        typedef typename eval_if<
-              and_< is_not_na<prior_>, apply2<Predicate,prior_,T> >
-            , identity<seq_>
-            , apply2<Operation,seq_,T>
-            >::type new_seq_;
+            template<typename Predicate, typename Operation>
+            struct unique_op {
+                template<typename Pair, typename T>
+                struct apply {
+                    typedef typename Pair::first seq_;
+                    typedef typename Pair::second prior_;
+                    typedef typename eval_if<
+                            and_ < is_not_na < prior_>, apply2 <Predicate, prior_, T> >
+                    , identity <seq_>
+                    , apply2 <Operation, seq_, T>
+                    >::type new_seq_;
 
-        typedef pair<new_seq_,T> type;
+                    typedef pair <new_seq_, T> type;
+                };
+            };
+
+            template<
+                    typename Sequence, typename Predicate, typename Inserter
+            >
+            struct unique_impl
+                    : first<typename fold<
+                            Sequence, pair < typename Inserter::state, na>,
+                            protect < aux::unique_op<Predicate, typename Inserter::operation> >
+            >::type > {
+        };
+
+        template<
+                typename Sequence, typename Predicate, typename Inserter
+        >
+        struct reverse_unique_impl
+                : first<typename reverse_fold<
+                        Sequence, pair < typename Inserter::state, na>,
+                        protect < aux::unique_op<Predicate, typename Inserter::operation> >
+        >::type > {
     };
-};
-
-template<
-      typename Sequence
-    , typename Predicate
-    , typename Inserter
-    >
-struct unique_impl
-    : first< typename fold<
-          Sequence
-        , pair< typename Inserter::state,na >
-        , protect< aux::unique_op<Predicate,typename Inserter::operation> >
-        >::type >
-{
-};
-
-template<
-      typename Sequence
-    , typename Predicate
-    , typename Inserter
-    >
-struct reverse_unique_impl
-    : first< typename reverse_fold<
-          Sequence
-        , pair< typename Inserter::state,na >
-        , protect< aux::unique_op<Predicate,typename Inserter::operation> >
-        >::type >
-{
-};
 
 } // namespace aux
 

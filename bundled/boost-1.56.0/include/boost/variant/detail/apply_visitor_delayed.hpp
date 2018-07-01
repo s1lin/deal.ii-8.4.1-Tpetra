@@ -35,53 +35,52 @@ namespace boost {
 //   effect (i.e., returned function object would have dead reference).
 //
 
-template <typename Visitor>
-class apply_visitor_delayed_t
-{
-public: // visitor typedefs
+    template<typename Visitor>
+    class apply_visitor_delayed_t {
+    public: // visitor typedefs
 
-    typedef typename Visitor::result_type
-        result_type;
+        typedef typename Visitor::result_type
+                result_type;
 
-private: // representation
+    private: // representation
 
-    Visitor& visitor_;
+        Visitor &visitor_;
 
-public: // structors
+    public: // structors
 
-    explicit apply_visitor_delayed_t(Visitor& visitor) BOOST_NOEXCEPT
-      : visitor_(visitor)
-    {
-    }
+        explicit apply_visitor_delayed_t(Visitor &visitor)
 
-public: // unary visitor interface
+        BOOST_NOEXCEPT
+                : visitor_(visitor) {
+        }
 
-    template <typename Visitable>
+    public: // unary visitor interface
+
+        template<typename Visitable>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(Visitable& visitable) const
-    {
-        return apply_visitor(visitor_, visitable);
-    }
 
-public: // binary visitor interface
+        operator()(Visitable &visitable) const {
+            return apply_visitor(visitor_, visitable);
+        }
 
-    template <typename Visitable1, typename Visitable2>
+    public: // binary visitor interface
+
+        template<typename Visitable1, typename Visitable2>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(Visitable1& visitable1, Visitable2& visitable2) const
-    {
-        return apply_visitor(visitor_, visitable1, visitable2);
+
+        operator()(Visitable1 &visitable1, Visitable2 &visitable2) const {
+            return apply_visitor(visitor_, visitable1, visitable2);
+        }
+
+    private:
+        apply_visitor_delayed_t &operator=(const apply_visitor_delayed_t &);
+
+    };
+
+    template<typename Visitor>
+    inline apply_visitor_delayed_t<Visitor> apply_visitor(Visitor &visitor) {
+        return apply_visitor_delayed_t<Visitor>(visitor);
     }
-
-private:
-    apply_visitor_delayed_t& operator=(const apply_visitor_delayed_t&);
-
-};
-
-template <typename Visitor>
-inline apply_visitor_delayed_t<Visitor> apply_visitor(Visitor& visitor)
-{
-    return apply_visitor_delayed_t<Visitor>(visitor);
-}
 
 } // namespace boost
 

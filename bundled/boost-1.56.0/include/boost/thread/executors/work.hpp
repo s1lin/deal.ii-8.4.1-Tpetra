@@ -10,12 +10,10 @@
 
 #include <boost/thread/detail/nullary_function.hpp>
 
-namespace boost
-{
-  namespace executors
-  {
-    typedef detail::nullary_function<void()> work;
-  }
+namespace boost {
+    namespace executors {
+        typedef detail::nullary_function<void()> work;
+    }
 } // namespace boost
 
 #endif //  BOOST_THREAD_EXECUTORS_WORK_HPP

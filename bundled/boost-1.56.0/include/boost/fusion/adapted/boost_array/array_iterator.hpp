@@ -18,95 +18,95 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/fusion/iterator/iterator_facade.hpp>
 
-namespace boost { namespace fusion
-{
-    struct random_access_traversal_tag;
+namespace boost {
+    namespace fusion {
+        struct random_access_traversal_tag;
 
-    template <typename Array, int Pos>
-    struct array_iterator
-        : iterator_facade<array_iterator<Array, Pos>, random_access_traversal_tag>
-    {
-        BOOST_MPL_ASSERT_RELATION(Pos, >=, 0);
-        BOOST_MPL_ASSERT_RELATION(Pos, <=, static_cast<int>(Array::static_size));
+        template<typename Array, int Pos>
+        struct array_iterator
+                : iterator_facade<array_iterator<Array, Pos>, random_access_traversal_tag> {
+            BOOST_MPL_ASSERT_RELATION(Pos,
+            >=, 0);
+            BOOST_MPL_ASSERT_RELATION(Pos,
+            <=, static_cast
+            <int>(Array::static_size)
+            );
 
-        typedef mpl::int_<Pos> index;
-        typedef Array array_type;
+            typedef mpl::int_ <Pos> index;
+            typedef Array array_type;
 
-        BOOST_FUSION_GPU_ENABLED
-        array_iterator(Array& a)
-            : array(a) {}
+            BOOST_FUSION_GPU_ENABLED
+            array_iterator(Array &a)
+                    : array(a) {}
 
-        Array& array;
+            Array &array;
 
-        template <typename Iterator>
-        struct value_of
-        {
-            typedef typename Iterator::array_type array_type;
-            typedef typename array_type::value_type type;
-        };
+            template<typename Iterator>
+            struct value_of {
+                typedef typename Iterator::array_type array_type;
+                typedef typename array_type::value_type type;
+            };
 
-        template <typename Iterator>
-        struct deref
-        {
-            typedef typename Iterator::array_type array_type;
-            typedef typename 
+            template<typename Iterator>
+            struct deref {
+                typedef typename Iterator::array_type array_type;
+                typedef typename
                 mpl::if_<
-                    is_const<array_type>
-                  , typename array_type::const_reference
-                  , typename array_type::reference
-                >::type 
-            type;
+                        is_const < array_type>
+                , typename array_type::const_reference
+                , typename array_type::reference
+                >::type
+                        type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type
-            call(Iterator const & it)
-            {
-                return it.array[Iterator::index::value];
-            }
-        };
+                BOOST_FUSION_GPU_ENABLED
+                static type
+                call(Iterator const & it)
+                {
+                    return it.array[Iterator::index::value];
+                }
+            };
 
-        template <typename Iterator, typename N>
-        struct advance
-        {
-            typedef typename Iterator::index index;
-            typedef typename Iterator::array_type array_type;
-            typedef array_iterator<array_type, index::value + N::value> type;
+            template<typename Iterator, typename N>
+            struct advance {
+                typedef typename Iterator::index index;
+                typedef typename Iterator::array_type array_type;
+                typedef array_iterator<array_type, index::value + N::value> type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type
-            call(Iterator const& i)
-            {
-                return type(i.array);
-            }
-        };
+                BOOST_FUSION_GPU_ENABLED
+                static type
+                call(Iterator const& i)
+                {
+                    return type(i.array);
+                }
+            };
 
-        template <typename Iterator>
-        struct next : advance<Iterator, mpl::int_<1> > {};
+            template<typename Iterator>
+            struct next : advance<Iterator, mpl::int_ < 1> > {};
 
-        template <typename Iterator>
-        struct prior : advance<Iterator, mpl::int_<-1> > {};
+            template<typename Iterator>
+            struct prior : advance<Iterator, mpl::int_ < -1> > {};
 
-        template <typename I1, typename I2>
-        struct distance : mpl::minus<typename I2::index, typename I1::index>
-        {
-            typedef typename
+            template<typename I1, typename I2>
+            struct distance : mpl::minus<typename I2::index, typename I1::index> {
+                typedef typename
                 mpl::minus<
-                    typename I2::index, typename I1::index
-                >::type 
-            type;
+                        typename I2::index, typename I1::index
+                >::type
+                        type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type
-            call(I1 const&, I2 const&)
-            {
-                return type();
-            }
+                BOOST_FUSION_GPU_ENABLED
+                static type
+                call(I1 const&, I2 const&)
+                {
+                    return type();
+                }
+            };
+
+        private:
+
+            array_iterator<Array, Pos> &operator=(array_iterator<Array, Pos> const &);
         };
-
-    private:
-
-        array_iterator<Array, Pos>& operator=(array_iterator<Array, Pos> const&);
-    };
-}}
+    }
+}
 
 #endif

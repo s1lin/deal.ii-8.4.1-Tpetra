@@ -19,17 +19,17 @@
 
 namespace boost {
 
-template<typename Topology,
-         typename Graph, typename PositionMap>
-void
-random_graph_layout
- (const Graph& g, PositionMap position_map,
-  const Topology& topology)
-{
-  BGL_FORALL_VERTICES_T(v, g, Graph) {
-    put(position_map, v, topology.random_point());
-  }
-}
+    template<typename Topology,
+            typename Graph, typename PositionMap>
+    void
+    random_graph_layout
+            (const Graph &g, PositionMap position_map,
+             const Topology &topology) {
+        BGL_FORALL_VERTICES_T(v, g, Graph)
+        {
+            put(position_map, v, topology.random_point());
+        }
+    }
 
 } // end namespace boost
 

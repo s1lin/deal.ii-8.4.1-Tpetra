@@ -9,84 +9,84 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_get_symbolic
-(
-    int *n_row,
-    int *n_col,
-    int *n1,
-    int *nz,
-    int *nfr,
-    int *nchains,
-    int P [ ],
-    int Q [ ],
-    int Front_npivcol [ ],
-    int Front_parent [ ],
-    int Front_1strow [ ],
-    int Front_leftmostdesc [ ],
-    int Chain_start [ ],
-    int Chain_maxrows [ ],
-    int Chain_maxcols [ ],
-    void *Symbolic
-) ;
+        (
+                int *n_row,
+                int *n_col,
+                int *n1,
+                int *nz,
+                int *nfr,
+                int *nchains,
+                int P[],
+                int Q[],
+                int Front_npivcol[],
+                int Front_parent[],
+                int Front_1strow[],
+                int Front_leftmostdesc[],
+                int Chain_start[],
+                int Chain_maxrows[],
+                int Chain_maxcols[],
+                void *Symbolic
+        );
 
 UF_long umfpack_dl_get_symbolic
-(
-    UF_long *n_row,
-    UF_long *n_col,
-    UF_long *n1,
-    UF_long *nz,
-    UF_long *nfr,
-    UF_long *nchains,
-    UF_long P [ ],
-    UF_long Q [ ],
-    UF_long Front_npivcol [ ],
-    UF_long Front_parent [ ],
-    UF_long Front_1strow [ ],
-    UF_long Front_leftmostdesc [ ],
-    UF_long Chain_start [ ],
-    UF_long Chain_maxrows [ ],
-    UF_long Chain_maxcols [ ],
-    void *Symbolic
-) ;
+        (
+                UF_long *n_row,
+                UF_long *n_col,
+                UF_long *n1,
+                UF_long *nz,
+                UF_long *nfr,
+                UF_long *nchains,
+                UF_long P[],
+                UF_long Q[],
+                UF_long Front_npivcol[],
+                UF_long Front_parent[],
+                UF_long Front_1strow[],
+                UF_long Front_leftmostdesc[],
+                UF_long Chain_start[],
+                UF_long Chain_maxrows[],
+                UF_long Chain_maxcols[],
+                void *Symbolic
+        );
 
 int umfpack_zi_get_symbolic
-(
-    int *n_row,
-    int *n_col,
-    int *n1,
-    int *nz,
-    int *nfr,
-    int *nchains,
-    int P [ ],
-    int Q [ ],
-    int Front_npivcol [ ],
-    int Front_parent [ ],
-    int Front_1strow [ ],
-    int Front_leftmostdesc [ ],
-    int Chain_start [ ],
-    int Chain_maxrows [ ],
-    int Chain_maxcols [ ],
-    void *Symbolic
-) ;
+        (
+                int *n_row,
+                int *n_col,
+                int *n1,
+                int *nz,
+                int *nfr,
+                int *nchains,
+                int P[],
+                int Q[],
+                int Front_npivcol[],
+                int Front_parent[],
+                int Front_1strow[],
+                int Front_leftmostdesc[],
+                int Chain_start[],
+                int Chain_maxrows[],
+                int Chain_maxcols[],
+                void *Symbolic
+        );
 
 UF_long umfpack_zl_get_symbolic
-(
-    UF_long *n_row,
-    UF_long *n_col,
-    UF_long *n1,
-    UF_long *nz,
-    UF_long *nfr,
-    UF_long *nchains,
-    UF_long P [ ],
-    UF_long Q [ ],
-    UF_long Front_npivcol [ ],
-    UF_long Front_parent [ ],
-    UF_long Front_1strow [ ],
-    UF_long Front_leftmostdesc [ ],
-    UF_long Chain_start [ ],
-    UF_long Chain_maxrows [ ],
-    UF_long Chain_maxcols [ ],
-    void *Symbolic
-) ;
+        (
+                UF_long *n_row,
+                UF_long *n_col,
+                UF_long *n1,
+                UF_long *nz,
+                UF_long *nfr,
+                UF_long *nchains,
+                UF_long P[],
+                UF_long Q[],
+                UF_long Front_npivcol[],
+                UF_long Front_parent[],
+                UF_long Front_1strow[],
+                UF_long Front_leftmostdesc[],
+                UF_long Chain_start[],
+                UF_long Chain_maxrows[],
+                UF_long Chain_maxcols[],
+                void *Symbolic
+        );
 
 /*
 

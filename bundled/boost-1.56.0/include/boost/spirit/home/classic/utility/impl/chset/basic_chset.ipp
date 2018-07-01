@@ -15,120 +15,137 @@
 #include <boost/spirit/home/classic/utility/impl/chset/basic_chset.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  basic_chset: character set implementation
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename CharT>
-inline basic_chset<CharT>::basic_chset() {}
+        template<typename CharT>
+        inline basic_chset<CharT>::basic_chset() {}
 
 //////////////////////////////////
-template <typename CharT>
-inline basic_chset<CharT>::basic_chset(basic_chset const& arg_)
-: rr(arg_.rr) {}
+        template<typename CharT>
+        inline basic_chset<CharT>::basic_chset(basic_chset const &arg_)
+                : rr(arg_.rr) {}
 
 //////////////////////////////////
-template <typename CharT>
-inline bool
-basic_chset<CharT>::test(CharT v) const
-{ return rr.test(v); }
+        template<typename CharT>
+        inline bool
+        basic_chset<CharT>::test(CharT v) const { return rr.test(v); }
 
 //////////////////////////////////
-template <typename CharT>
-inline void
-basic_chset<CharT>::set(CharT from, CharT to)
-{ rr.set(utility::impl::range<CharT>(from, to)); }
+        template<typename CharT>
+        inline void
+        basic_chset<CharT>::set(CharT from, CharT to) { rr.set(utility::impl::range<CharT>(from, to)); }
 
 //////////////////////////////////
-template <typename CharT>
-inline void
-basic_chset<CharT>::set(CharT c)
-{ rr.set(utility::impl::range<CharT>(c, c)); }
+        template<typename CharT>
+        inline void
+        basic_chset<CharT>::set(CharT c) { rr.set(utility::impl::range<CharT>(c, c)); }
 
 //////////////////////////////////
-template <typename CharT>
-inline void
-basic_chset<CharT>::clear(CharT from, CharT to)
-{ rr.clear(utility::impl::range<CharT>(from, to)); }
+        template<typename CharT>
+        inline void
+        basic_chset<CharT>::clear(CharT from, CharT to) { rr.clear(utility::impl::range<CharT>(from, to)); }
 
 //////////////////////////////////
-template <typename CharT>
-inline void
-basic_chset<CharT>::clear()
-{ rr.clear(); }
+        template<typename CharT>
+        inline void
+        basic_chset<CharT>::clear() { rr.clear(); }
 
 /////////////////////////////////
-template <typename CharT>
-inline void
-basic_chset<CharT>::inverse()
-{
+        template<typename CharT>
+        inline void
+        basic_chset<CharT>::inverse() {
+            basic_chset inv;
+            inv.set(
+                    (std::numeric_limits<CharT>::min) (),
+                    (std::numeric_limits<CharT>::max) ()
+            );
+            inv -= *this;
+            swap(inv);
+        }
+
+/////////////////////////////////
+        template<typename CharT>
+        inline void
+        basic_chset<CharT>::swap(basic_chset &x) { rr.swap(x.rr); }
+
+/////////////////////////////////
+        template<typename CharT>
+        inline basic_chset <CharT> &
+                basic_chset<CharT>::operator|=(basic_chset < CharT >
+        const& x) {
+        typedef typename utility::impl::range_run<CharT>::const_iterator const_iterator;
+        for (
+        const_iterator iter = x.rr.begin();
+        iter != x.rr.
+
+        end();
+
+        ++iter)
+        rr.
+        set(*iter);
+        return *this;
+    }
+
+/////////////////////////////////
+    template<typename CharT>
+    inline basic_chset <CharT> &
+            basic_chset<CharT>::operator&=(basic_chset < CharT >
+    const& x) {
     basic_chset inv;
-    inv.set(
-        (std::numeric_limits<CharT>::min)(),
-        (std::numeric_limits<CharT>::max)()
+    inv.
+
+    set(
+    (std::numeric_limits<CharT>::min)(),
+    (std::numeric_limits<CharT>::max)()
+
     );
-    inv -= *this;
-    swap(inv);
-}
-
-/////////////////////////////////
-template <typename CharT>
-inline void
-basic_chset<CharT>::swap(basic_chset& x)
-{ rr.swap(x.rr); }
-
-/////////////////////////////////
-template <typename CharT>
-inline basic_chset<CharT>&
-basic_chset<CharT>::operator|=(basic_chset<CharT> const& x)
-{
-    typedef typename utility::impl::range_run<CharT>::const_iterator const_iterator;
-    for (const_iterator iter = x.rr.begin(); iter != x.rr.end(); ++iter)
-        rr.set(*iter);
+    inv -=
+    x;
+    *this -=
+    inv;
     return *this;
 }
 
 /////////////////////////////////
-template <typename CharT>
-inline basic_chset<CharT>&
-basic_chset<CharT>::operator&=(basic_chset<CharT> const& x)
+template<typename CharT>
+inline basic_chset <CharT> &
+        basic_chset<CharT>::operator-=(basic_chset < CharT >
+const& x)
 {
-    basic_chset inv;
-    inv.set(
-        (std::numeric_limits<CharT>::min)(),
-        (std::numeric_limits<CharT>::max)()
-    );
-    inv -= x;
-    *this -= inv;
-    return *this;
+typedef typename utility::impl::range_run<CharT>::const_iterator const_iterator;
+for (
+const_iterator iter = x.rr.begin();
+iter != x.rr.
+
+end();
+
+++iter)
+rr.
+clear(*iter);
+return *this;
 }
 
 /////////////////////////////////
-template <typename CharT>
-inline basic_chset<CharT>&
-basic_chset<CharT>::operator-=(basic_chset<CharT> const& x)
+template<typename CharT>
+inline basic_chset <CharT> &
+        basic_chset<CharT>::operator^=(basic_chset < CharT >
+const& x)
 {
-    typedef typename utility::impl::range_run<CharT>::const_iterator const_iterator;
-    for (const_iterator iter = x.rr.begin(); iter != x.rr.end(); ++iter)
-        rr.clear(*iter);
-    return *this;
-}
-
-/////////////////////////////////
-template <typename CharT>
-inline basic_chset<CharT>&
-basic_chset<CharT>::operator^=(basic_chset<CharT> const& x)
-{
-    basic_chset bma = x;
-    bma -= *this;
-    *this -= x;
-    *this |= bma;
-    return *this;
+basic_chset bma = x;
+bma -= *this;
+*this -=
+x;
+*this |=
+bma;
+return *this;
 }
 
 #if (CHAR_BIT == 8)

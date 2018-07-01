@@ -31,125 +31,115 @@
 #include <cassert>
 
 namespace boost {
-namespace container {
-namespace container_detail {
+    namespace container {
+        namespace container_detail {
 
 //!Pooled memory allocator using single segregated storage. Includes
 //!a reference count but the class does not delete itself, this is
 //!responsibility of user classes. Node size (NodeSize) and the number of
 //!nodes allocated per block (NodesPerBlock) are known at compile time
-template< std::size_t NodeSize, std::size_t NodesPerBlock >
-class private_node_pool
-   //Inherit from the implementation to avoid template bloat
-   :  public boost::container::container_detail::
-         private_node_pool_impl<fake_segment_manager>
-{
-   typedef boost::container::container_detail::
-      private_node_pool_impl<fake_segment_manager>   base_t;
-   //Non-copyable
-   private_node_pool(const private_node_pool &);
-   private_node_pool &operator=(const private_node_pool &);
+            template<std::size_t NodeSize, std::size_t NodesPerBlock>
+            class private_node_pool
+                //Inherit from the implementation to avoid template bloat
+                    : public boost::container::container_detail::
+                    private_node_pool_impl<fake_segment_manager> {
+                typedef boost::container::container_detail::
+                private_node_pool_impl<fake_segment_manager> base_t;
 
-   public:
-   typedef typename base_t::multiallocation_chain multiallocation_chain;
-   static const std::size_t nodes_per_block = NodesPerBlock;
+                //Non-copyable
+                private_node_pool(const private_node_pool &);
 
-   //!Constructor from a segment manager. Never throws
-   private_node_pool()
-      :  base_t(0, NodeSize, NodesPerBlock)
-   {}
+                private_node_pool &operator=(const private_node_pool &);
 
-};
+            public:
+                typedef typename base_t::multiallocation_chain multiallocation_chain;
+                static const std::size_t nodes_per_block = NodesPerBlock;
 
-template< std::size_t NodeSize
-        , std::size_t NodesPerBlock
-        >
-class shared_node_pool
-   : public private_node_pool<NodeSize, NodesPerBlock>
-{
-   private:
-   typedef private_node_pool<NodeSize, NodesPerBlock> private_node_allocator_t;
+                //!Constructor from a segment manager. Never throws
+                private_node_pool()
+                        : base_t(0, NodeSize, NodesPerBlock) {}
 
-   public:
-   typedef typename private_node_allocator_t::free_nodes_t  free_nodes_t;
-   typedef typename private_node_allocator_t::multiallocation_chain multiallocation_chain;
+            };
 
-   //!Constructor from a segment manager. Never throws
-   shared_node_pool()
-   : private_node_allocator_t(){}
+            template<std::size_t NodeSize, std::size_t NodesPerBlock
+            >
+            class shared_node_pool
+                    : public private_node_pool<NodeSize, NodesPerBlock> {
+            private:
+                typedef private_node_pool<NodeSize, NodesPerBlock> private_node_allocator_t;
 
-   //!Destructor. Deallocates all allocated blocks. Never throws
-   ~shared_node_pool()
-   {}
+            public:
+                typedef typename private_node_allocator_t::free_nodes_t free_nodes_t;
+                typedef typename private_node_allocator_t::multiallocation_chain multiallocation_chain;
 
-   //!Allocates array of count elements. Can throw std::bad_alloc
-   void *allocate_node()
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      return private_node_allocator_t::allocate_node();
-   }
+                //!Constructor from a segment manager. Never throws
+                shared_node_pool()
+                        : private_node_allocator_t() {}
 
-   //!Deallocates an array pointed by ptr. Never throws
-   void deallocate_node(void *ptr)
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      private_node_allocator_t::deallocate_node(ptr);
-   }
+                //!Destructor. Deallocates all allocated blocks. Never throws
+                ~shared_node_pool() {}
 
-   //!Allocates a singly linked list of n nodes ending in null pointer.
-   //!can throw std::bad_alloc
-   void allocate_nodes(const std::size_t n, multiallocation_chain &chain)
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      return private_node_allocator_t::allocate_nodes(n, chain);
-   }
+                //!Allocates array of count elements. Can throw std::bad_alloc
+                void *allocate_node() {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    return private_node_allocator_t::allocate_node();
+                }
 
-   void deallocate_nodes(multiallocation_chain &chain)
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      private_node_allocator_t::deallocate_nodes(chain);
-   }
+                //!Deallocates an array pointed by ptr. Never throws
+                void deallocate_node(void *ptr) {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    private_node_allocator_t::deallocate_node(ptr);
+                }
 
-   //!Deallocates all the free blocks of memory. Never throws
-   void deallocate_free_blocks()
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      private_node_allocator_t::deallocate_free_blocks();
-   }
+                //!Allocates a singly linked list of n nodes ending in null pointer.
+                //!can throw std::bad_alloc
+                void allocate_nodes(const std::size_t n, multiallocation_chain &chain) {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    return private_node_allocator_t::allocate_nodes(n, chain);
+                }
 
-   //!Deallocates all blocks. Never throws
-   void purge_blocks()
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      private_node_allocator_t::purge_blocks();
-   }
+                void deallocate_nodes(multiallocation_chain &chain) {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    private_node_allocator_t::deallocate_nodes(chain);
+                }
 
-   std::size_t num_free_nodes()
-   {
-      //-----------------------
-      scoped_lock<default_mutex> guard(mutex_);
-      //-----------------------
-      return private_node_allocator_t::num_free_nodes();
-   }
+                //!Deallocates all the free blocks of memory. Never throws
+                void deallocate_free_blocks() {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    private_node_allocator_t::deallocate_free_blocks();
+                }
 
-   private:
-   default_mutex mutex_;
-};
+                //!Deallocates all blocks. Never throws
+                void purge_blocks() {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    private_node_allocator_t::purge_blocks();
+                }
 
-}  //namespace container_detail {
-}  //namespace container {
+                std::size_t num_free_nodes() {
+                    //-----------------------
+                    scoped_lock <default_mutex> guard(mutex_);
+                    //-----------------------
+                    return private_node_allocator_t::num_free_nodes();
+                }
+
+            private:
+                default_mutex mutex_;
+            };
+
+        }  //namespace container_detail {
+    }  //namespace container {
 }  //namespace boost {
 
 #include <boost/container/detail/config_end.hpp>

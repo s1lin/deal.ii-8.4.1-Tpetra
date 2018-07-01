@@ -15,27 +15,27 @@
 /// \brief Returns a unique type for every unit.
 
 namespace boost {
-namespace units {
+    namespace units {
 
 #ifdef BOOST_UNITS_DOXYGEN
 
-/// Returns a unique type for every unit.
-template<class Unit>
-struct reduce_unit {
-    typedef detail::unspecified type;
-};
+        /// Returns a unique type for every unit.
+        template<class Unit>
+        struct reduce_unit {
+            typedef detail::unspecified type;
+        };
 
 #else
 
 // default implementation: return Unit unchanged.
-template<class Unit>
-struct reduce_unit {
-    typedef Unit type;
-};
+        template<class Unit>
+        struct reduce_unit {
+            typedef Unit type;
+        };
 
 #endif
 
-}
+    }
 }
 
 #endif

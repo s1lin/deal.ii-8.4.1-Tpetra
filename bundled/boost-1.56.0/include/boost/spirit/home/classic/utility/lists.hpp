@@ -19,9 +19,10 @@
 #include <boost/spirit/home/classic/utility/impl/lists.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -95,33 +96,31 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //              >> *( ch_p(',') >> (*(anychar_p - ch_p(',')))[f] ).
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <
-    typename ItemT, typename DelimT, typename EndT, typename CategoryT
->
-struct list_parser :
-    public parser<list_parser<ItemT, DelimT, EndT, CategoryT> > {
+        template<
+                typename ItemT, typename DelimT, typename EndT, typename CategoryT
+        >
+        struct list_parser :
+                public parser<list_parser<ItemT, DelimT, EndT, CategoryT> > {
 
-    typedef list_parser<ItemT, DelimT, EndT, CategoryT> self_t;
-    typedef CategoryT parser_category_t;
+            typedef list_parser<ItemT, DelimT, EndT, CategoryT> self_t;
+            typedef CategoryT parser_category_t;
 
-    list_parser(ItemT const &item_, DelimT const &delim_,
-        EndT const& end_ = no_list_endtoken())
-    : item(item_), delim(delim_), end(end_)
-    {}
+            list_parser(ItemT const &item_, DelimT const &delim_,
+                        EndT const &end_ = no_list_endtoken())
+                    : item(item_), delim(delim_), end(end_) {}
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        return impl::list_parser_type<CategoryT>
-            ::parse(scan, *this, item, delim, end);
-    }
+            template<typename ScannerT>
+            typename parser_result<self_t, ScannerT>::type
+            parse(ScannerT const &scan) const {
+                return impl::list_parser_type<CategoryT>
+                ::parse(scan, *this, item, delim, end);
+            }
 
-private:
-    typename as_parser<ItemT>::type::embed_t item;
-    typename as_parser<DelimT>::type::embed_t delim;
-    typename as_parser<EndT>::type::embed_t end;
-};
+        private:
+            typename as_parser<ItemT>::type::embed_t item;
+            typename as_parser<DelimT>::type::embed_t delim;
+            typename as_parser<EndT>::type::embed_t end;
+        };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -163,18 +162,19 @@ private:
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename CharT = char>
-struct list_parser_gen :
-    public list_parser<kleene_star<anychar_parser>, chlit<CharT> >
-{
-    typedef list_parser_gen<CharT> self_t;
+        template<typename CharT = char>
+        struct list_parser_gen :
+                public list_parser<kleene_star < anychar_parser>, chlit<CharT> > {
+        typedef list_parser_gen<CharT> self_t;
 
 // construct the list_parser_gen object as an list parser for comma separated
 // lists without item formatting.
-    list_parser_gen()
-    : list_parser<kleene_star<anychar_parser>, chlit<CharT> >
-        (*anychar_p, chlit<CharT>(','))
-    {}
+        list_parser_gen()
+                : list_parser<kleene_star < anychar_parser>, chlit<CharT>
+
+        >
+        (*anychar_p, chlit<CharT>(',')) {
+    }
 
 // The following generator functions should be used under normal circumstances.
 // (the operator()(...) functions)
@@ -188,41 +188,39 @@ struct list_parser_gen :
 
     template<typename DelimT>
     list_parser<
-        kleene_star<anychar_parser>,
-        typename as_parser<DelimT>::type,
-        no_list_endtoken,
-        unary_parser_category      // there is no action to re-attach
+            kleene_star<anychar_parser>,
+            typename as_parser<DelimT>::type,
+            no_list_endtoken,
+            unary_parser_category      // there is no action to re-attach
     >
-    operator()(DelimT const &delim_) const
-    {
-        typedef kleene_star<anychar_parser> item_t;
+    operator()(DelimT const &delim_) const {
+        typedef kleene_star <anychar_parser> item_t;
         typedef typename as_parser<DelimT>::type delim_t;
 
         typedef
-            list_parser<item_t, delim_t, no_list_endtoken, unary_parser_category>
-            return_t;
+        list_parser <item_t, delim_t, no_list_endtoken, unary_parser_category>
+                return_t;
 
         return return_t(*anychar_p, as_parser<DelimT>::convert(delim_));
     }
 
     template<typename ItemT, typename DelimT>
     list_parser<
-        typename as_parser<ItemT>::type,
-        typename as_parser<DelimT>::type,
-        no_list_endtoken,
-        typename as_parser<ItemT>::type::parser_category_t
+            typename as_parser<ItemT>::type,
+            typename as_parser<DelimT>::type,
+            no_list_endtoken,
+            typename as_parser<ItemT>::type::parser_category_t
     >
-    operator()(ItemT const &item_, DelimT const &delim_) const
-    {
+    operator()(ItemT const &item_, DelimT const &delim_) const {
         typedef typename as_parser<ItemT>::type item_t;
         typedef typename as_parser<DelimT>::type delim_t;
         typedef list_parser<item_t, delim_t, no_list_endtoken,
                 BOOST_DEDUCED_TYPENAME item_t::parser_category_t>
-            return_t;
+                return_t;
 
         return return_t(
-            as_parser<ItemT>::convert(item_),
-            as_parser<DelimT>::convert(delim_)
+                as_parser<ItemT>::convert(item_),
+                as_parser<DelimT>::convert(delim_)
         );
     }
 
@@ -233,26 +231,25 @@ struct list_parser_gen :
 
     template<typename ItemT, typename DelimT, typename EndT>
     list_parser<
-        typename as_parser<ItemT>::type,
-        typename as_parser<DelimT>::type,
-        typename as_parser<EndT>::type,
-        typename as_parser<ItemT>::type::parser_category_t
+            typename as_parser<ItemT>::type,
+            typename as_parser<DelimT>::type,
+            typename as_parser<EndT>::type,
+            typename as_parser<ItemT>::type::parser_category_t
     >
     operator()(
-        ItemT const &item_, DelimT const &delim_, EndT const &end_) const
-    {
+            ItemT const &item_, DelimT const &delim_, EndT const &end_) const {
         typedef typename as_parser<ItemT>::type item_t;
         typedef typename as_parser<DelimT>::type delim_t;
         typedef typename as_parser<EndT>::type end_t;
 
         typedef list_parser<item_t, delim_t, end_t,
                 BOOST_DEDUCED_TYPENAME item_t::parser_category_t>
-            return_t;
+                return_t;
 
         return return_t(
-            as_parser<ItemT>::convert(item_),
-            as_parser<DelimT>::convert(delim_),
-            as_parser<EndT>::convert(end_)
+                as_parser<ItemT>::convert(item_),
+                as_parser<DelimT>::convert(delim_),
+                as_parser<EndT>::convert(end_)
         );
     }
 
@@ -268,22 +265,21 @@ struct list_parser_gen :
 
     template<typename ItemT, typename DelimT>
     list_parser<
-        typename as_parser<ItemT>::type,
-        typename as_parser<DelimT>::type,
-        no_list_endtoken,
-        plain_parser_category        // inhibit action re-attachment
+            typename as_parser<ItemT>::type,
+            typename as_parser<DelimT>::type,
+            no_list_endtoken,
+            plain_parser_category        // inhibit action re-attachment
     >
-    direct(ItemT const &item_, DelimT const &delim_) const
-    {
+    direct(ItemT const &item_, DelimT const &delim_) const {
         typedef typename as_parser<ItemT>::type item_t;
         typedef typename as_parser<DelimT>::type delim_t;
-        typedef list_parser<item_t, delim_t, no_list_endtoken,
-                plain_parser_category>
-            return_t;
+        typedef list_parser <item_t, delim_t, no_list_endtoken,
+        plain_parser_category>
+                return_t;
 
         return return_t(
-            as_parser<ItemT>::convert(item_),
-            as_parser<DelimT>::convert(delim_)
+                as_parser<ItemT>::convert(item_),
+                as_parser<DelimT>::convert(delim_)
         );
     }
 
@@ -294,26 +290,25 @@ struct list_parser_gen :
 
     template<typename ItemT, typename DelimT, typename EndT>
     list_parser<
-        typename as_parser<ItemT>::type,
-        typename as_parser<DelimT>::type,
-        typename as_parser<EndT>::type,
-        plain_parser_category        // inhibit action re-attachment
+            typename as_parser<ItemT>::type,
+            typename as_parser<DelimT>::type,
+            typename as_parser<EndT>::type,
+            plain_parser_category        // inhibit action re-attachment
     >
     direct(
-        ItemT const &item_, DelimT const &delim_, EndT const &end_) const
-    {
+            ItemT const &item_, DelimT const &delim_, EndT const &end_) const {
         typedef typename as_parser<ItemT>::type item_t;
         typedef typename as_parser<DelimT>::type delim_t;
         typedef typename as_parser<EndT>::type end_t;
 
         typedef
-            list_parser<item_t, delim_t, end_t, plain_parser_category>
-            return_t;
+        list_parser <item_t, delim_t, end_t, plain_parser_category>
+                return_t;
 
         return return_t(
-            as_parser<ItemT>::convert(item_),
-            as_parser<DelimT>::convert(delim_),
-            as_parser<EndT>::convert(end_)
+                as_parser<ItemT>::convert(item_),
+                as_parser<DelimT>::convert(delim_),
+                as_parser<EndT>::convert(end_)
         );
     }
 };

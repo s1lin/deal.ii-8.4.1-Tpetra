@@ -16,7 +16,7 @@
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
 
-#define BOOST_VARIANT_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C) \
+#define BOOST_VARIANT_TT_AUX_BOOL_TRAIT_DEF1(trait, T, C) \
 template< typename T > struct trait \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \

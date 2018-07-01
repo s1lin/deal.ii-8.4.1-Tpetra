@@ -59,13 +59,13 @@
 
 #define __TBB_VERSION_DATETIME(N) #N ": BUILD_DATE\t\t" __TBB_DATETIME ENDL
 #ifndef TBB_USE_DEBUG
-    #define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\tundefined" ENDL
-#elif TBB_USE_DEBUG==0
-    #define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\t0" ENDL
-#elif TBB_USE_DEBUG==1
-    #define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\t1" ENDL
-#elif TBB_USE_DEBUG==2
-    #define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\t2" ENDL
+#define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\tundefined" ENDL
+#elif TBB_USE_DEBUG == 0
+#define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\t0" ENDL
+#elif TBB_USE_DEBUG == 1
+#define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\t1" ENDL
+#elif TBB_USE_DEBUG == 2
+#define __TBB_VERSION_USE_DEBUG(N) #N ": TBB_USE_DEBUG\t2" ENDL
 #else
     #error Unexpected value for TBB_USE_DEBUG
 #endif
@@ -77,36 +77,36 @@
  */
 
 #ifdef RC_INVOKED
-    #define __TBB_VERSION_USE_ASSERT(N)
+#define __TBB_VERSION_USE_ASSERT(N)
 #else // RC_INVOKED
 #ifndef TBB_USE_ASSERT
-    #define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\tundefined" ENDL
-#elif TBB_USE_ASSERT==0
-    #define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\t0" ENDL
-#elif TBB_USE_ASSERT==1
-    #define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\t1" ENDL
-#elif TBB_USE_ASSERT==2
-    #define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\t2" ENDL
+#define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\tundefined" ENDL
+#elif TBB_USE_ASSERT == 0
+#define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\t0" ENDL
+#elif TBB_USE_ASSERT == 1
+#define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\t1" ENDL
+#elif TBB_USE_ASSERT == 2
+#define __TBB_VERSION_USE_ASSERT(N) #N ": TBB_USE_ASSERT\t2" ENDL
 #else
     #error Unexpected value for TBB_USE_ASSERT
 #endif
 #endif // RC_INVOKED
 
 #ifndef __TBB_CPF_BUILD
-    #define __TBB_VERSION_TBB_PREVIEW_BINARY(N)
+#define __TBB_VERSION_TBB_PREVIEW_BINARY(N)
 #else
-    #define __TBB_VERSION_TBB_PREVIEW_BINARY(N) #N ": TBB_PREVIEW_BINARY\t1" ENDL
+#define __TBB_VERSION_TBB_PREVIEW_BINARY(N) #N ": TBB_PREVIEW_BINARY\t1" ENDL
 #endif
 
 #ifdef RC_INVOKED
-    #define __TBB_VERSION_DO_NOTIFY(N)
+#define __TBB_VERSION_DO_NOTIFY(N)
 #else
 #ifndef DO_ITT_NOTIFY
-    #define __TBB_VERSION_DO_NOTIFY(N) #N ": DO_ITT_NOTIFY\tundefined" ENDL
-#elif DO_ITT_NOTIFY==1
-    #define __TBB_VERSION_DO_NOTIFY(N) #N ": DO_ITT_NOTIFY\t1" ENDL
-#elif DO_ITT_NOTIFY==0
-    #define __TBB_VERSION_DO_NOTIFY(N)
+#define __TBB_VERSION_DO_NOTIFY(N) #N ": DO_ITT_NOTIFY\tundefined" ENDL
+#elif DO_ITT_NOTIFY == 1
+#define __TBB_VERSION_DO_NOTIFY(N) #N ": DO_ITT_NOTIFY\t1" ENDL
+#elif DO_ITT_NOTIFY == 0
+#define __TBB_VERSION_DO_NOTIFY(N)
 #else
     #error Unexpected value for DO_ITT_NOTIFY
 #endif

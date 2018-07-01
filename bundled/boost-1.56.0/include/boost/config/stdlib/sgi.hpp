@@ -10,7 +10,9 @@
 //  generic SGI STL:
 
 #if !defined(__STL_CONFIG_H)
+
 #  include <boost/config/no_tr1/utility.hpp>
+
 #  if !defined(__STL_CONFIG_H)
 #      error "This is not the SGI STL!"
 #  endif
@@ -30,24 +32,26 @@
      ((__GNUC_MINOR__ < 95) || (__GNUC_MINOR__ == 96)) && \
      !defined(__STL_USE_NEW_IOSTREAMS) || \
    defined(__APPLE_CC__)
-   // Note that we only set this for GNU C++ prior to 2.95 since the
-   // latest patches for that release do contain a minimal <sstream>
-   // If you are running a 2.95 release prior to 2.95.3 then this will need
-   // setting, but there is no way to detect that automatically (other
-   // than by running the configure script).
-   // Also, the unofficial GNU C++ 2.96 included in RedHat 7.1 doesn't
-   // have <sstream>.
+// Note that we only set this for GNU C++ prior to 2.95 since the
+// latest patches for that release do contain a minimal <sstream>
+// If you are running a 2.95 release prior to 2.95.3 then this will need
+// setting, but there is no way to detect that automatically (other
+// than by running the configure script).
+// Also, the unofficial GNU C++ 2.96 included in RedHat 7.1 doesn't
+// have <sstream>.
 #  define BOOST_NO_STRINGSTREAM
 #endif
 
 // Apple doesn't seem to reliably defined a *unix* macro
-#if !defined(CYGWIN) && (  defined(__unix__)  \
-                        || defined(__unix)    \
-                        || defined(unix)      \
-                        || defined(__APPLE__) \
-                        || defined(__APPLE)   \
-                        || defined(APPLE))
+#if !defined(CYGWIN) && (defined(__unix__)  \
+ || defined(__unix)    \
+ || defined(unix)      \
+ || defined(__APPLE__) \
+ || defined(__APPLE)   \
+ || defined(APPLE))
+
 #  include <unistd.h>
+
 #endif
 
 

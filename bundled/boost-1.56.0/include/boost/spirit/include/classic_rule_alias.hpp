@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_RULE_ALIAS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_RULE_ALIAS
+
 #include <boost/spirit/home/classic/dynamic/rule_alias.hpp>
+
 #endif

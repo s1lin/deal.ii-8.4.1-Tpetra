@@ -14,8 +14,7 @@
 #include <boost/spirit/home/classic/phoenix/tuples.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace phoenix
-{
+namespace phoenix {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -28,24 +27,24 @@ namespace phoenix
 
 ///////////////////////////////////////////////////////////////////////////////
 //  normal (non-tuple types are wrapped into a tuple)
-template <typename ResultT>
-struct make_tuple {
+    template<typename ResultT>
+    struct make_tuple {
 
-    typedef tuple<ResultT> type;
-};
+        typedef tuple <ResultT> type;
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //  nil_t is converted to an empty tuple type
-template <>
-struct make_tuple<nil_t> {
+    template<>
+    struct make_tuple<nil_t> {
 
-    typedef tuple<> type;
-};
+        typedef tuple<> type;
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //  tuple types are left alone without any refactoring
-template <
-      typename A, typename B, typename C
+    template<
+            typename A, typename B, typename C
 #if PHOENIX_LIMIT > 3
     , typename D, typename E, typename F
 #if PHOENIX_LIMIT > 6
@@ -58,8 +57,8 @@ template <
 #endif
 #endif
 #endif
->
-struct make_tuple<tuple<A, B, C
+    >
+    struct make_tuple<tuple < A, B, C
 #if PHOENIX_LIMIT > 3
     , D, E, F
 #if PHOENIX_LIMIT > 6
@@ -75,20 +74,20 @@ struct make_tuple<tuple<A, B, C
     > > {
 
 // the tuple parameter itself is the required tuple type
-    typedef tuple<A, B, C
+    typedef tuple <A, B, C
 #if PHOENIX_LIMIT > 3
-        , D, E, F
+    , D, E, F
 #if PHOENIX_LIMIT > 6
-        , G, H, I
+    , G, H, I
 #if PHOENIX_LIMIT > 9
-        , J, K, L
+    , J, K, L
 #if PHOENIX_LIMIT > 12
-        , M, N, O
+    , M, N, O
 #endif
 #endif
 #endif
 #endif
-        > type;
+    > type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,7 +98,7 @@ struct make_tuple<tuple<A, B, C
 //      concatenating a tuple with a given type
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename TupleT, typename AppendT>
+template<typename TupleT, typename AppendT>
 struct concat_tuple;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,13 +106,13 @@ struct concat_tuple;
 //  concat tuple <0 member> class
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename AppendT>
+template<typename AppendT>
 struct concat_tuple<tuple<>, AppendT> {
 
-    typedef tuple<AppendT> type;
+    typedef tuple <AppendT> type;
 };
 
-template <>
+template<>
 struct concat_tuple<tuple<>, nil_t> {
 
     typedef tuple<> type;
@@ -124,16 +123,16 @@ struct concat_tuple<tuple<>, nil_t> {
 //  concat tuple <1 member> class
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename A, typename AppendT>
-struct concat_tuple<tuple<A>, AppendT> {
+template<typename A, typename AppendT>
+struct concat_tuple<tuple < A>, AppendT> {
 
-    typedef tuple<A, AppendT> type;
+typedef tuple <A, AppendT> type;
 };
 
-template <typename A>
-struct concat_tuple<tuple<A>, nil_t> {
+template<typename A>
+struct concat_tuple<tuple < A>, nil_t> {
 
-    typedef tuple<A> type;
+typedef tuple <A> type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,16 +140,16 @@ struct concat_tuple<tuple<A>, nil_t> {
 //  concat tuple <2 member> class
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename A, typename B, typename AppendT>
-struct concat_tuple<tuple<A, B>, AppendT> {
+template<typename A, typename B, typename AppendT>
+struct concat_tuple<tuple < A, B>, AppendT> {
 
-    typedef tuple<A, B, AppendT> type;
+typedef tuple <A, B, AppendT> type;
 };
 
-template <typename A, typename B>
-struct concat_tuple<tuple<A, B>, nil_t> {
+template<typename A, typename B>
+struct concat_tuple<tuple < A, B>, nil_t> {
 
-    typedef tuple<A, B> type;
+typedef tuple <A, B> type;
 };
 
 #if PHOENIX_LIMIT > 3
@@ -454,32 +453,32 @@ struct concat_tuple<tuple<A, B, C, D, E, F, G, H, I, J, K, L, M, N>, nil_t> {
 //      concatenation of two given tuples.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename TupleT1, typename TupleT2, int N, typename AppendT>
+template<typename TupleT1, typename TupleT2, int N, typename AppendT>
 struct concat_tuple_element {
 
     typedef
-        typename concat_tuple_element<
-                typename concat_tuple<TupleT1, AppendT>::type, TupleT2, N+1,
-                typename tuple_element<N+1, TupleT2>::type
-            >::type
-        type;
+    typename concat_tuple_element<
+            typename concat_tuple<TupleT1, AppendT>::type, TupleT2, N + 1,
+            typename tuple_element<N + 1, TupleT2>::type
+    >::type
+            type;
 };
 
-template <typename TupleT1, typename TupleT2, int N>
+template<typename TupleT1, typename TupleT2, int N>
 struct concat_tuple_element<TupleT1, TupleT2, N, nil_t> {
 
     typedef TupleT1 type;
 };
 
-template <typename TupleT1, typename TupleT2>
+template<typename TupleT1, typename TupleT2>
 struct concat_tuples {
 
     typedef
-        typename concat_tuple_element<
-                TupleT1, TupleT2, 0,
-                typename tuple_element<0, TupleT2>::type
-            >::type
-        type;
+    typename concat_tuple_element<
+            TupleT1, TupleT2, 0,
+            typename tuple_element<0, TupleT2>::type
+    >::type
+            type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -493,124 +492,107 @@ struct concat_tuples {
 //      evaluating the actors.)
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename ActorT, typename TupleT>
+template<typename ActorT, typename TupleT>
 struct actor_result; // forward declaration
 
-namespace impl
-{
-    template <unsigned N>
-    struct convert_actors_ {};
+namespace impl {
+    template<unsigned N>
+    struct convert_actors_ {
+    };
 }
 
-template <typename TupleResultT, typename ActorTupleT>
+template<typename TupleResultT, typename ActorTupleT>
 TupleResultT
-convert_actors(ActorTupleT const& actor_tuple)
-{
+convert_actors(ActorTupleT const &actor_tuple) {
     BOOST_STATIC_ASSERT(ActorTupleT::length <= TupleResultT::length);
     BOOST_STATIC_CONSTANT(int, length = TupleResultT::length);
     return impl::convert_actors_<length>
-        ::template apply<TupleResultT, ActorTupleT>::do_(actor_tuple);
+    ::template apply<TupleResultT, ActorTupleT>::do_(actor_tuple);
 }
 
-namespace impl
-{
-    template <int N, typename TupleResultT, typename ActorTupleT>
-    struct convert_actor
-    {
+namespace impl {
+    template<int N, typename TupleResultT, typename ActorTupleT>
+    struct convert_actor {
         typedef typename tuple_element<N, TupleResultT>::type type;
 
-        template <bool C>
-        struct is_default_t {};
-        typedef is_default_t<true>  is_default;
+        template<bool C>
+        struct is_default_t {
+        };
+        typedef is_default_t<true> is_default;
         typedef is_default_t<false> is_not_default;
 
         static type
-        actor_element(ActorTupleT const& /*actor_tuple*/, is_default)
-        {
+        actor_element(ActorTupleT const & /*actor_tuple*/, is_default) {
             return type(); // default construct
         }
 
         static type
-        actor_element(ActorTupleT const& actor_tuple, is_not_default)
-        {
+        actor_element(ActorTupleT const &actor_tuple, is_not_default) {
             BOOST_STATIC_ASSERT(ActorTupleT::length <= TupleResultT::length);
             return actor_tuple[tuple_index<N>()](); // apply the actor
         }
 
         static type
-        do_(ActorTupleT const& actor_tuple)
-        {
+        do_(ActorTupleT const &actor_tuple) {
             return actor_element(
-                actor_tuple, is_default_t<(N >= ActorTupleT::length)>());
+                    actor_tuple, is_default_t<(N >= ActorTupleT::length)>());
         }
     };
 
     ///////////////////////////////////////
-    template <>
-    struct convert_actors_<1>
-    {
-        template <typename TupleResultT, typename ActorTupleT>
-        struct apply
-        {
+    template<>
+    struct convert_actors_<1> {
+        template<typename TupleResultT, typename ActorTupleT>
+        struct apply {
             static TupleResultT
-            do_(ActorTupleT const& actor_tuple)
-            {
+            do_(ActorTupleT const &actor_tuple) {
                 typedef impl::convert_actor<0, TupleResultT, ActorTupleT> converter0;
 
                 return TupleResultT(
-                    converter0::do_(actor_tuple)
+                        converter0::do_(actor_tuple)
                 );
             }
         };
     };
 
     ///////////////////////////////////////
-    template <>
-    struct convert_actors_<2>
-    {
-        template <typename TupleResultT, typename ActorTupleT>
-        struct apply
-        {
+    template<>
+    struct convert_actors_<2> {
+        template<typename TupleResultT, typename ActorTupleT>
+        struct apply {
             static TupleResultT
-            do_(ActorTupleT const& actor_tuple)
-            {
+            do_(ActorTupleT const &actor_tuple) {
                 typedef impl::convert_actor<0, TupleResultT, ActorTupleT> converter0;
                 typedef impl::convert_actor<1, TupleResultT, ActorTupleT> converter1;
 
                 using namespace tuple_index_names;
                 return TupleResultT(
-                        converter0::do_(actor_tuple)
-                    ,   converter1::do_(actor_tuple)
+                        converter0::do_(actor_tuple), converter1::do_(actor_tuple)
                 );
             }
         };
     };
 
     ///////////////////////////////////////
-    template <>
-    struct convert_actors_<3>
-    {
-        template <typename TupleResultT, typename ActorTupleT>
-        struct apply
-        {
+    template<>
+    struct convert_actors_<3> {
+        template<typename TupleResultT, typename ActorTupleT>
+        struct apply {
             static TupleResultT
-            do_(ActorTupleT const& actor_tuple)
-            {
+            do_(ActorTupleT const &actor_tuple) {
                 typedef impl::convert_actor<0, TupleResultT, ActorTupleT> converter0;
                 typedef impl::convert_actor<1, TupleResultT, ActorTupleT> converter1;
                 typedef impl::convert_actor<2, TupleResultT, ActorTupleT> converter2;
 
                 using namespace tuple_index_names;
                 return TupleResultT(
-                        converter0::do_(actor_tuple)
-                    ,   converter1::do_(actor_tuple)
-                    ,   converter2::do_(actor_tuple)
+                        converter0::do_(actor_tuple), converter1::do_(actor_tuple), converter2::do_(actor_tuple)
                 );
             }
         };
     };
 
-    #if PHOENIX_LIMIT > 3
+#if PHOENIX_LIMIT > 3
 
     /////////////////////////////////////
     template <>
@@ -696,7 +678,7 @@ namespace impl
         };
     };
 
-    #if PHOENIX_LIMIT > 6
+#if PHOENIX_LIMIT > 6
 
     /////////////////////////////////////
     template <>
@@ -800,7 +782,7 @@ namespace impl
         };
     };
 
-    #if PHOENIX_LIMIT > 9
+#if PHOENIX_LIMIT > 9
 
     /////////////////////////////////////
     template <>
@@ -922,7 +904,7 @@ namespace impl
         };
     };
 
-    #if PHOENIX_LIMIT > 12
+#if PHOENIX_LIMIT > 12
 
     /////////////////////////////////////
     template <>
@@ -1062,10 +1044,10 @@ namespace impl
         };
     };
 
-    #endif
-    #endif
-    #endif
-    #endif
+#endif
+#endif
+#endif
+#endif
 }   //  namespace impl
 
 

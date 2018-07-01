@@ -18,17 +18,18 @@
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/list/aux_/tag.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct empty_impl< aux::list_tag >
-{
-    template< typename List > struct apply
-        : not_<typename List::size>
-    {
-    };
-};
+        template<>
+        struct empty_impl<aux::list_tag> {
+            template<typename List>
+            struct apply
+                    : not_<typename List::size> {
+            };
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_LIST_AUX_EMPTY_HPP_INCLUDED

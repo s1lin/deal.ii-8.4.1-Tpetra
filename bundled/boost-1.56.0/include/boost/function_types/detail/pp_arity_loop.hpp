@@ -32,15 +32,15 @@
 #   define BOOST_FT_AL_PREPROCESSED \
         BOOST_FT_AL_FILE(BOOST_FT_al_path,BOOST_FT_FROM_ARITY,BOOST_FT_mfp)
 
-#   define BOOST_FT_AL_FILE(base_path,max_arity,mfp) \
+#   define BOOST_FT_AL_FILE(base_path, max_arity, mfp) \
         BOOST_FT_AL_FILE_I(base_path,max_arity,mfp)
-#   define BOOST_FT_AL_FILE_I(base_path,max_arity,mfp) \
+#   define BOOST_FT_AL_FILE_I(base_path, max_arity, mfp) \
         <base_path/arity ## max_arity ## _ ## mfp.hpp>
 
 #   if !defined(BOOST_FT_PREPROCESSING_MODE)
 
 #     if BOOST_FT_MAX_ARITY < 10
-#       define BOOST_FT_FROM_ARITY 0 
+#       define BOOST_FT_FROM_ARITY 0
 #     elif BOOST_FT_MAX_ARITY < 20
 #       define BOOST_FT_FROM_ARITY 10
 #     elif BOOST_FT_MAX_ARITY < 30

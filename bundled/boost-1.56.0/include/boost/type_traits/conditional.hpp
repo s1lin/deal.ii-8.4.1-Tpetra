@@ -14,10 +14,9 @@
 
 namespace boost {
 
-template <bool b, class T, class U>
-struct conditional : public mpl::if_c<b, T, U>
-{
-};
+    template<bool b, class T, class U>
+    struct conditional : public mpl::if_c<b, T, U> {
+    };
 
 } // namespace boost
 

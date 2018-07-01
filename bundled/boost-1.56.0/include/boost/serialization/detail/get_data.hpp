@@ -23,35 +23,31 @@
 #include <valarray>
 
 namespace boost {
-namespace serialization { 
-namespace detail {
+    namespace serialization {
+        namespace detail {
 
-template <class T, class Allocator>
-T* get_data(STD::vector<T,Allocator>& v)
-{
-  return v.empty() ? 0 : &(v[0]);
-}
+            template<class T, class Allocator>
+            T *get_data(STD::vector<T, Allocator> &v) {
+                return v.empty() ? 0 : &(v[0]);
+            }
 
-template <class T, class Allocator>
-T* get_data(STD::vector<T,Allocator> const & v)
-{
-  return get_data(const_cast<STD::vector<T,Allocator>&>(v));
-}
+            template<class T, class Allocator>
+            T *get_data(STD::vector<T, Allocator> const &v) {
+                return get_data(const_cast<STD::vector<T, Allocator> &>(v));
+            }
 
-template <class T>
-T* get_data(STD::valarray<T>& v)
-{
-  return v.size()==0 ? 0 : &(v[0]);
-}
+            template<class T>
+            T *get_data(STD::valarray<T> &v) {
+                return v.size() == 0 ? 0 : &(v[0]);
+            }
 
-template <class T>
-const T* get_data(STD::valarray<T> const& v)
-{
-  return get_data(const_cast<STD::valarray<T>&>(v));
-}
+            template<class T>
+            const T *get_data(STD::valarray<T> const &v) {
+                return get_data(const_cast<STD::valarray<T> &>(v));
+            }
 
-} // detail
-} // serialization
+        } // detail
+    } // serialization
 } // boost
 
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)

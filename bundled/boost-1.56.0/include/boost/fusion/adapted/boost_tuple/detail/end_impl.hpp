@@ -12,45 +12,42 @@
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_const.hpp>
 
-namespace boost { namespace tuples
-{
-    struct null_type;
-}}
-    
-namespace boost { namespace fusion
-{
-    struct boost_tuple_tag;
-
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
-
-        template <>
-        struct end_impl<boost_tuple_tag>
-        {
-            template <typename Sequence>
-            struct apply 
-            {
-                typedef 
-                    boost_tuple_iterator<
-                        typename mpl::if_<
-                            is_const<Sequence>
-                          , tuples::null_type const
-                          , tuples::null_type
-                        >::type
-                    > 
-                type;
-
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& seq)
-                {
-                    return type(seq);
-                }
-            };
-        };
+namespace boost {
+    namespace tuples {
+        struct null_type;
     }
-}}
+}
+
+namespace boost {
+    namespace fusion {
+        struct boost_tuple_tag;
+
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
+
+            template<>
+            struct end_impl<boost_tuple_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef
+                    boost_tuple_iterator<
+                            typename mpl::if_<
+                                    is_const < Sequence>, tuples::null_type const, tuples::null_type
+                    >::type
+                    >
+                    type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return type(seq);
+                    }
+                };
+            };
+        }
+    }
+}
 
 #endif

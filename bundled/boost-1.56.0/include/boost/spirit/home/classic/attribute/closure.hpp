@@ -47,128 +47,134 @@
 // ensure BOOST_SPIRIT_CLOSURE_LIMIT <= PHOENIX_LIMIT and SPIRIT_CLOSURE_LIMIT <= 15
 //
 ///////////////////////////////////////////////////////////////////////////////
-BOOST_STATIC_ASSERT(BOOST_SPIRIT_CLOSURE_LIMIT <= PHOENIX_LIMIT);
-BOOST_STATIC_ASSERT(BOOST_SPIRIT_CLOSURE_LIMIT <= 15);
+BOOST_STATIC_ASSERT(BOOST_SPIRIT_CLOSURE_LIMIT
+<= PHOENIX_LIMIT);
+BOOST_STATIC_ASSERT(BOOST_SPIRIT_CLOSURE_LIMIT
+<= 15);
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  closure_context class
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename ClosureT>
-    class closure_context : public parser_context_base
-    {
-    public:
+        ///////////////////////////////////////////////////////////////////////////
+        //
+        //  closure_context class
+        //
+        ///////////////////////////////////////////////////////////////////////////
+        template<typename ClosureT>
+        class closure_context : public parser_context_base {
+        public:
 
-        typedef typename ::phoenix::tuple_element<0,
-            typename ClosureT::tuple_t>::type attr_t;
-        typedef ClosureT base_t;
-        typedef closure_context_linker<closure_context<ClosureT> >
-        context_linker_t;
+            typedef typename ::phoenix::tuple_element<0,
+                    typename ClosureT::tuple_t>::type attr_t;
+            typedef ClosureT base_t;
+            typedef closure_context_linker <closure_context<ClosureT>>
+                    context_linker_t;
 
-        closure_context(ClosureT const& clos)
-        : frame(clos) {}
+            closure_context(ClosureT const &clos)
+                    : frame(clos) {}
 
-        ~closure_context() {}
+            ~closure_context() {}
 
-        template <typename ParserT, typename ScannerT>
-        void pre_parse(ParserT const&, ScannerT const&) {}
+            template<typename ParserT, typename ScannerT>
+            void pre_parse(ParserT const &, ScannerT const &) {}
 
-        template <typename ResultT, typename ParserT, typename ScannerT>
-        ResultT& post_parse(ResultT& hit, ParserT const&, ScannerT const&)
-        { hit.value(frame[::phoenix::tuple_index<0>()]); return hit; }
+            template<typename ResultT, typename ParserT, typename ScannerT>
+            ResultT &post_parse(ResultT &hit, ParserT const &, ScannerT const &) {
+                hit.value(frame[::phoenix::tuple_index<0>()]);
+                return hit;
+            }
 
-    private:
+        private:
 
-        ::phoenix::closure_frame<typename ClosureT::phoenix_closure_t> frame;
-    };
+            ::phoenix::closure_frame<typename ClosureT::phoenix_closure_t> frame;
+        };
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  init_closure_context class
-    //
-    //      The init_closure_context class is a special parser context type
-    //      which additionally initializes a closure contained in the derived
-    //      parser with values from a given tuple. Please note, that this
-    //      given tuple does not contain the required values directly, it
-    //      contains phoenix::actor objects. These actors have to be
-    //      dereferenced to gain the values to be used for initialization
-    //      (this is done by the help of the phoenix::convert_actors<>
-    //      template).
-    //
-    ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+        //
+        //  init_closure_context class
+        //
+        //      The init_closure_context class is a special parser context type
+        //      which additionally initializes a closure contained in the derived
+        //      parser with values from a given tuple. Please note, that this
+        //      given tuple does not contain the required values directly, it
+        //      contains phoenix::actor objects. These actors have to be
+        //      dereferenced to gain the values to be used for initialization
+        //      (this is done by the help of the phoenix::convert_actors<>
+        //      template).
+        //
+        ///////////////////////////////////////////////////////////////////////////
 
-    template <typename ClosureT>
-    class init_closure_context : public parser_context_base
-    {
-        typedef typename ClosureT::tuple_t      tuple_t;
-        typedef typename ClosureT::closure_t    closure_t;
+        template<typename ClosureT>
+        class init_closure_context : public parser_context_base {
+            typedef typename ClosureT::tuple_t tuple_t;
+            typedef typename ClosureT::closure_t closure_t;
 
-    public:
+        public:
 
-        init_closure_context(ClosureT const& clos)
-        : frame(clos.subject(), ::phoenix::convert_actors<tuple_t>(clos.init)) {}
+            init_closure_context(ClosureT const &clos)
+                    : frame(clos.subject(), ::phoenix::convert_actors<tuple_t>(clos.init)) {}
 
-        ~init_closure_context() {}
+            ~init_closure_context() {}
 
-        template <typename ParserT, typename ScannerT>
-        void pre_parse(ParserT const& /*p*/, ScannerT const&) {}
+            template<typename ParserT, typename ScannerT>
+            void pre_parse(ParserT const & /*p*/, ScannerT const &) {}
 
-        template <typename ResultT, typename ParserT, typename ScannerT>
-        ResultT& post_parse(ResultT& hit, ParserT const&, ScannerT const&)
-        { hit.value(frame[::phoenix::tuple_index<0>()]); return hit; }
+            template<typename ResultT, typename ParserT, typename ScannerT>
+            ResultT &post_parse(ResultT &hit, ParserT const &, ScannerT const &) {
+                hit.value(frame[::phoenix::tuple_index<0>()]);
+                return hit;
+            }
 
-    private:
+        private:
 
-        ::phoenix::closure_frame<closure_t> frame;
-    };
+            ::phoenix::closure_frame <closure_t> frame;
+        };
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  init_closure_parser class
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename ParserT, typename ActorTupleT>
-    struct init_closure_parser
-    : public unary<ParserT, parser<init_closure_parser<ParserT, ActorTupleT> > >
-    {
-        typedef init_closure_parser<ParserT, ActorTupleT>           self_t;
-        typedef unary<ParserT, parser<self_t> >                     base_t;
-        typedef typename ParserT::phoenix_closure_t                 closure_t;
-        typedef typename ParserT::tuple_t                           tuple_t;
-        typedef typename ::phoenix::tuple_element<0, tuple_t>::type   attr_t;
+        ///////////////////////////////////////////////////////////////////////////
+        //
+        //  init_closure_parser class
+        //
+        ///////////////////////////////////////////////////////////////////////////
+        template<typename ParserT, typename ActorTupleT>
+        struct init_closure_parser
+                : public unary<ParserT, parser < init_closure_parser<ParserT, ActorTupleT> > > {
+        typedef init_closure_parser<ParserT, ActorTupleT> self_t;
+        typedef unary <ParserT, parser<self_t>> base_t;
+        typedef typename ParserT::phoenix_closure_t closure_t;
+        typedef typename ParserT::tuple_t tuple_t;
+        typedef typename ::phoenix::tuple_element<0, tuple_t>::type attr_t;
 
-        template <typename ScannerT>
-        struct result
-        {
+        template<typename ScannerT>
+        struct result {
             typedef typename match_result<ScannerT, attr_t>::type type;
         };
 
-        init_closure_parser(ParserT const& p, ActorTupleT const& init_)
-        : base_t(p), init(init_) {}
+        init_closure_parser(ParserT
+        const& p,
+        ActorTupleT const &init_
+        )
+        :
 
-        template <typename ScannerT>
+        base_t (p), init(init_) {}
+
+        template<typename ScannerT>
         typename parser_result<self_t, ScannerT>::type
-        parse_main(ScannerT const& scan) const
-        {
+        parse_main(ScannerT const &scan) const {
             return this->subject().parse_main(scan);
         }
 
-        template <typename ScannerT>
+        template<typename ScannerT>
         typename parser_result<self_t, ScannerT>::type
-        parse(ScannerT const& scan) const
-        {
+        parse(ScannerT const &scan) const {
             typedef init_closure_context<self_t> init_context_t;
-            typedef parser_scanner_linker<ScannerT> scanner_t;
-            typedef closure_context_linker<init_context_t> context_t;
+            typedef parser_scanner_linker <ScannerT> scanner_t;
+            typedef closure_context_linker <init_context_t> context_t;
             typedef typename parser_result<self_t, ScannerT>::type result_t;
             BOOST_SPIRIT_CONTEXT_PARSE(
-                scan, *this, scanner_t, context_t, result_t);
+                    scan, *this, scanner_t, context_t, result_t);
         }
 
         ActorTupleT init;
@@ -179,151 +185,144 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
     //  closure class
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <
-            typename DerivedT
-        ,   typename T0
-        ,   typename T1
-        ,   typename T2
+    template<
+            typename DerivedT, typename T0, typename T1, typename T2
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 3
-        ,   typename T3
-        ,   typename T4
-        ,   typename T5
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 3
+    ,   typename T3
+    ,   typename T4
+    ,   typename T5
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 6
-        ,   typename T6
-        ,   typename T7
-        ,   typename T8
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 6
+    ,   typename T6
+    ,   typename T7
+    ,   typename T8
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 9
-        ,   typename T9
-        ,   typename T10
-        ,   typename T11
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 9
+    ,   typename T9
+    ,   typename T10
+    ,   typename T11
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 12
-        ,   typename T12
-        ,   typename T13
-        ,   typename T14
-    #endif
-    #endif
-    #endif
-    #endif
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 12
+    ,   typename T12
+    ,   typename T13
+    ,   typename T14
+#endif
+#endif
+#endif
+#endif
     >
     struct closure :
-        public ::phoenix::closure<
-            T0, T1, T2
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 3
-        ,   T3, T4, T5
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 6
-        ,   T6, T7, T8
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 9
-        ,   T9, T10, T11
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 12
-        ,   T12, T13, T14
-    #endif
-    #endif
-    #endif
-    #endif
-        >
-    {
-        typedef ::phoenix::closure<
-                T0, T1, T2
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 3
+            public ::phoenix::closure<
+                    T0, T1, T2
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 3
             ,   T3, T4, T5
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 6
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 6
             ,   T6, T7, T8
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 9
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 9
             ,   T9, T10, T11
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 12
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 12
             ,   T12, T13, T14
-    #endif
-    #endif
-    #endif
-    #endif
-            > phoenix_closure_t;
+#endif
+#endif
+#endif
+#endif
+            > {
+        typedef ::phoenix::closure <
+        T0, T1, T2
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 3
+        ,   T3, T4, T5
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 6
+        ,   T6, T7, T8
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 9
+        ,   T9, T10, T11
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 12
+        ,   T12, T13, T14
+#endif
+#endif
+#endif
+#endif
+        > phoenix_closure_t;
 
-        typedef closure_context<DerivedT> context_t;
+        typedef closure_context <DerivedT> context_t;
 
-        template <typename DerivedT2>
-        struct aux
-        {
-            DerivedT2& aux_derived()
-            { return *static_cast<DerivedT2*>(this); }
+        template<typename DerivedT2>
+        struct aux {
+            DerivedT2 &aux_derived() { return *static_cast<DerivedT2 *>(this); }
 
-            DerivedT2 const& aux_derived() const
-            { return *static_cast<DerivedT2 const*>(this); }
+            DerivedT2 const &aux_derived() const { return *static_cast<DerivedT2 const *>(this); }
 
-        // initialization functions
-            template <typename A>
+            // initialization functions
+            template<typename A>
             init_closure_parser<
-                DerivedT2,
-                ::phoenix::tuple<
-                    typename ::phoenix::as_actor<A>::type
-                >
+                    DerivedT2,
+                    ::phoenix::tuple <
+                    typename::phoenix::as_actor<A>::type
             >
-            operator()(A const &a) const
-            {
+            >
+
+            operator()(A const &a) const {
                 typedef typename ::phoenix::as_actor<A>::type a_t;
-                typedef ::phoenix::tuple<a_t> actor_tuple_t;
+                typedef ::phoenix::tuple <a_t> actor_tuple_t;
 
                 return init_closure_parser<DerivedT2, actor_tuple_t>(
                         aux_derived(),
                         actor_tuple_t(
-                            ::phoenix::as_actor<A>::convert(a)
+                                ::phoenix::as_actor<A>::convert(a)
                         )
-                    );
+                );
             }
 
-            template <typename A, typename B>
+            template<typename A, typename B>
             init_closure_parser<
-                DerivedT2,
-                ::phoenix::tuple<
-                    typename ::phoenix::as_actor<A>::type,
+                    DerivedT2,
+                    ::phoenix::tuple <
+                    typename::phoenix::as_actor<A>::type,
                     typename ::phoenix::as_actor<B>::type
-                >
             >
-            operator()(A const &a, B const &b) const
-            {
+            >
+
+            operator()(A const &a, B const &b) const {
                 typedef typename ::phoenix::as_actor<A>::type a_t;
                 typedef typename ::phoenix::as_actor<B>::type b_t;
-                typedef ::phoenix::tuple<a_t, b_t> actor_tuple_t;
+                typedef ::phoenix::tuple <a_t, b_t> actor_tuple_t;
 
                 return init_closure_parser<DerivedT2, actor_tuple_t>(
                         aux_derived(),
                         actor_tuple_t(
-                            ::phoenix::as_actor<A>::convert(a),
-                            ::phoenix::as_actor<B>::convert(b)
+                                ::phoenix::as_actor<A>::convert(a),
+                                ::phoenix::as_actor<B>::convert(b)
                         )
-                    );
+                );
             }
 
-            template <typename A, typename B, typename C>
+            template<typename A, typename B, typename C>
             init_closure_parser<
-                DerivedT2,
-                ::phoenix::tuple<
-                    typename ::phoenix::as_actor<A>::type,
+                    DerivedT2,
+                    ::phoenix::tuple <
+                    typename::phoenix::as_actor<A>::type,
                     typename ::phoenix::as_actor<B>::type,
                     typename ::phoenix::as_actor<C>::type
-                >
             >
-            operator()(A const &a, B const &b, C const &c) const
-            {
+            >
+
+            operator()(A const &a, B const &b, C const &c) const {
                 typedef typename ::phoenix::as_actor<A>::type a_t;
                 typedef typename ::phoenix::as_actor<B>::type b_t;
                 typedef typename ::phoenix::as_actor<C>::type c_t;
-                typedef ::phoenix::tuple<a_t, b_t, c_t> actor_tuple_t;
+                typedef ::phoenix::tuple <a_t, b_t, c_t> actor_tuple_t;
 
                 return init_closure_parser<DerivedT2, actor_tuple_t>(
                         aux_derived(),
                         actor_tuple_t(
-                            ::phoenix::as_actor<A>::convert(a),
-                            ::phoenix::as_actor<B>::convert(b),
-                            ::phoenix::as_actor<C>::convert(c)
+                                ::phoenix::as_actor<A>::convert(a),
+                                ::phoenix::as_actor<B>::convert(b),
+                                ::phoenix::as_actor<C>::convert(c)
                         )
-                    );
+                );
             }
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 3
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 3
 
             template <
                 typename A, typename B, typename C, typename D
@@ -441,7 +440,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
                     );
             }
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 6
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 6
 
             template <
                 typename A, typename B, typename C, typename D, typename E,
@@ -590,7 +589,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
                     );
             }
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 9
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 9
 
             template <
                 typename A, typename B, typename C, typename D, typename E,
@@ -772,7 +771,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
                     );
             }
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 12
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 12
 
             template <
                 typename A, typename B, typename C, typename D, typename E,
@@ -984,10 +983,10 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
                     );
             }
 
-    #endif
-    #endif
-    #endif
-    #endif
+#endif
+#endif
+#endif
+#endif
         };
 
         ~closure() {}
@@ -998,83 +997,86 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
     //  overloads for chseq_p and str_p taking in phoenix actors
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename ActorT>
-    struct container_begin
-    {
+    template<typename ActorT>
+    struct container_begin {
         typedef container_begin<ActorT> self_t;
 
-        template <typename TupleT>
-        struct result
-        {
+        template<typename TupleT>
+        struct result {
             typedef typename ::phoenix::actor_result<ActorT, TupleT>
-                ::plain_type::iterator type;
+            ::plain_type::iterator type;
         };
 
         container_begin(ActorT actor_)
-        : actor(actor_) {}
+                : actor(actor_) {}
 
-        template <typename TupleT>
+        template<typename TupleT>
         typename ::phoenix::actor_result<self_t, TupleT>::type
-        eval(TupleT const& /*args*/) const
-        { return actor().begin(); }
+        eval(TupleT const & /*args*/) const { return actor().begin(); }
 
         ActorT actor;
     };
 
-    template <typename ActorT>
-    struct container_end
-    {
+    template<typename ActorT>
+    struct container_end {
         typedef container_begin<ActorT> self_t;
 
-        template <typename TupleT>
-        struct result
-        {
+        template<typename TupleT>
+        struct result {
             typedef typename ::phoenix::actor_result<ActorT, TupleT>
-                ::plain_type::iterator type;
+            ::plain_type::iterator type;
         };
 
         container_end(ActorT actor_)
-        : actor(actor_) {}
+                : actor(actor_) {}
 
-        template <typename TupleT>
+        template<typename TupleT>
         typename ::phoenix::actor_result<self_t, TupleT>::type
-        eval(TupleT const& /*args*/) const
-        { return actor().end(); }
+        eval(TupleT const & /*args*/) const { return actor().end(); }
 
         ActorT actor;
     };
 
-    template <typename BaseT>
+    template<typename BaseT>
     inline f_chseq<
-        ::phoenix::actor<container_begin< ::phoenix::actor<BaseT> > >,
-        ::phoenix::actor<container_end< ::phoenix::actor<BaseT> > >
+            ::phoenix::actor < container_begin<::phoenix::actor < BaseT> > >,
+    ::phoenix::actor <container_end<::phoenix::actor < BaseT>> >
     >
-    f_chseq_p(::phoenix::actor<BaseT> const& a)
-    {
-        typedef ::phoenix::actor<container_begin< ::phoenix::actor<BaseT> > >
-            container_begin_t;
-        typedef ::phoenix::actor<container_end< ::phoenix::actor<BaseT> > >
-            container_end_t;
-        typedef f_chseq<container_begin_t, container_end_t> result_t;
+    f_chseq_p(::phoenix::actor<BaseT>
+    const& a) {
+    typedef ::phoenix::actor <container_begin<::phoenix::actor < BaseT>> >
+    container_begin_t;
+    typedef ::phoenix::actor <container_end<::phoenix::actor < BaseT>> >
+    container_end_t;
+    typedef f_chseq <container_begin_t, container_end_t> result_t;
 
-        return result_t(container_begin_t(a), container_end_t(a));
-    }
+    return
 
-    template <typename BaseT>
-    inline f_strlit<
-        ::phoenix::actor<container_begin< ::phoenix::actor<BaseT> > >,
-        ::phoenix::actor<container_end< ::phoenix::actor<BaseT> > >
-    >
-    f_str_p(::phoenix::actor<BaseT> const& a)
-    {
-        typedef ::phoenix::actor<container_begin< ::phoenix::actor<BaseT> > >
-            container_begin_t;
-        typedef ::phoenix::actor<container_end< ::phoenix::actor<BaseT> > >
-            container_end_t;
-        typedef f_strlit<container_begin_t, container_end_t> result_t;
+    result_t(container_begin_t(a), container_end_t(a)
 
-        return result_t(container_begin_t(a), container_end_t(a));
-    }
+    );
+}
+
+template<typename BaseT>
+inline f_strlit<
+        ::phoenix::actor < container_begin < ::phoenix::actor < BaseT> > >,
+::phoenix::actor <container_end<::phoenix::actor < BaseT>> >
+>
+f_str_p(::phoenix::actor<BaseT>
+const& a)
+{
+typedef ::phoenix::actor <container_begin<::phoenix::actor < BaseT>> >
+container_begin_t;
+typedef ::phoenix::actor <container_end<::phoenix::actor < BaseT>> >
+container_end_t;
+typedef f_strlit <container_begin_t, container_end_t> result_t;
+
+return
+
+result_t(container_begin_t(a), container_end_t(a)
+
+);
+}
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 

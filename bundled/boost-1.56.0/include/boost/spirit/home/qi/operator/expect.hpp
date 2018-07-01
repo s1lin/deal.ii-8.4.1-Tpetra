@@ -20,84 +20,89 @@
 #include <boost/spirit/home/support/info.hpp>
 #include <stdexcept>
 
-namespace boost { namespace spirit
-{
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<qi::domain, proto::tag::greater> // enables >
-      : mpl::true_ {};
+namespace boost {
+    namespace spirit {
+        ///////////////////////////////////////////////////////////////////////////
+        // Enablers
+        ///////////////////////////////////////////////////////////////////////////
+        template<>
+        struct use_operator<qi::domain, proto::tag::greater> // enables >
+                : mpl::true_ {
+        };
 
-    template <>
-    struct flatten_tree<qi::domain, proto::tag::greater> // flattens >
-      : mpl::true_ {};
-}}
+        template<>
+        struct flatten_tree<qi::domain, proto::tag::greater> // flattens >
+                : mpl::true_ {
+        };
+    }
+}
 
-namespace boost { namespace spirit { namespace qi
-{
-    template <typename Iterator>
-    struct expectation_failure : std::runtime_error
-    {
-        expectation_failure(Iterator first_, Iterator last_, info const& what)
-          : std::runtime_error("boost::spirit::qi::expectation_failure")
-          , first(first_), last(last_), what_(what)
-        {}
-        ~expectation_failure() throw() {}
+namespace boost {
+    namespace spirit {
+        namespace qi {
+            template<typename Iterator>
+            struct expectation_failure : std::runtime_error {
+                expectation_failure(Iterator first_, Iterator last_, info const &what)
+                        : std::runtime_error("boost::spirit::qi::expectation_failure"), first(first_), last(last_),
+                          what_(what) {}
 
-        Iterator first;
-        Iterator last;
-        info what_;
-    };
+                ~expectation_failure() throw() {}
 
-    template <typename Elements>
-    struct expect : sequence_base<expect<Elements>, Elements>
-    {
-        friend struct sequence_base<expect<Elements>, Elements>;
+                Iterator first;
+                Iterator last;
+                info what_;
+            };
 
-        expect(Elements const& elements)
-          : sequence_base<expect<Elements>, Elements>(elements) {}
+            template<typename Elements>
+            struct expect : sequence_base<expect<Elements>, Elements> {
+                friend struct sequence_base<expect<Elements>, Elements>;
 
-    private:
+                expect(Elements const &elements)
+                        : sequence_base<expect<Elements>, Elements>(elements) {}
 
-        template <typename Iterator, typename Context, typename Skipper>
-        static detail::expect_function<
-            Iterator, Context, Skipper
-          , expectation_failure<Iterator> >
-        fail_function(
-            Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper)
-        {
-            return detail::expect_function<
-                Iterator, Context, Skipper, expectation_failure<Iterator> >
-                (first, last, context, skipper);
+            private:
+
+                template<typename Iterator, typename Context, typename Skipper>
+                static detail::expect_function <
+                Iterator, Context, Skipper
+                , expectation_failure<Iterator>>
+                fail_function(
+                        Iterator &first, Iterator const &last, Context &context, Skipper const &skipper) {
+                    return detail::expect_function<
+                            Iterator, Context, Skipper, expectation_failure<Iterator> >
+                            (first, last, context, skipper);
+                }
+
+                std::string id() const { return "expect"; }
+            };
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Parser generators: make_xxx function (objects)
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename Elements, typename Modifiers>
+            struct make_composite<proto::tag::greater, Elements, Modifiers>
+                    : make_nary_composite<Elements, expect> {
+            };
         }
+    }
+}
 
-        std::string id() const { return "expect"; }
-    };
+namespace boost {
+    namespace spirit {
+        namespace traits {
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename Elements>
+            struct has_semantic_action<qi::expect<Elements> >
+                    : nary_has_semantic_action<Elements> {
+            };
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::greater, Elements, Modifiers>
-      : make_nary_composite<Elements, expect>
-    {};
-}}}
-
-namespace boost { namespace spirit { namespace traits
-{
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements>
-    struct has_semantic_action<qi::expect<Elements> >
-      : nary_has_semantic_action<Elements> {};
-
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Attribute, typename Context
-      , typename Iterator>
-    struct handles_container<qi::expect<Elements>, Attribute, Context
-          , Iterator>
-      : mpl::true_ {};
-}}}
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename Elements, typename Attribute, typename Context, typename Iterator>
+            struct handles_container<qi::expect<Elements>, Attribute, Context, Iterator>
+                    : mpl::true_ {
+            };
+        }
+    }
+}
 
 #endif

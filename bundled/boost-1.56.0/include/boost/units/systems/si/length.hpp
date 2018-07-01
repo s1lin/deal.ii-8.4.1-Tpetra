@@ -15,20 +15,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<length_dimension,si::system>    length;
-    
-BOOST_UNITS_STATIC_CONSTANT(meter,length);  
-BOOST_UNITS_STATIC_CONSTANT(meters,length); 
-BOOST_UNITS_STATIC_CONSTANT(metre,length);  
-BOOST_UNITS_STATIC_CONSTANT(metres,length); 
+            typedef unit <length_dimension, si::system> length;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(meter, length
+            );
+            BOOST_UNITS_STATIC_CONSTANT(meters, length
+            );
+            BOOST_UNITS_STATIC_CONSTANT(metre, length
+            );
+            BOOST_UNITS_STATIC_CONSTANT(metres, length
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

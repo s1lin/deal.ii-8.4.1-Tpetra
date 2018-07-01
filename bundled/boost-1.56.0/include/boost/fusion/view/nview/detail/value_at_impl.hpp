@@ -11,30 +11,28 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct nview_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_tag;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct value_at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_at_impl;
 
-        template<>
-        struct value_at_impl<nview_tag>
-        {
-            template<typename Sequence, typename N>
-            struct apply
-            {
-                typedef typename Sequence::sequence_type sequence_type;
-                typedef typename Sequence::index_type index_type;
+            template<>
+            struct value_at_impl<nview_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename Sequence::sequence_type sequence_type;
+                    typedef typename Sequence::index_type index_type;
 
-                typedef typename result_of::at<index_type, N>::type index;
-                typedef typename result_of::at<sequence_type, index>::type type;
+                    typedef typename result_of::at<index_type, N>::type index;
+                    typedef typename result_of::at<sequence_type, index>::type type;
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif

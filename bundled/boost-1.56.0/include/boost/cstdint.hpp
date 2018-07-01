@@ -41,10 +41,10 @@
 // so we disable use of stdint.h when GLIBC does not define __GLIBC_HAVE_LONG_LONG.
 // See https://svn.boost.org/trac/boost/ticket/3548 and http://sources.redhat.com/bugzilla/show_bug.cgi?id=10990
 //
-#if defined(BOOST_HAS_STDINT_H)					\
-  && (!defined(__GLIBC__)					\
-      || defined(__GLIBC_HAVE_LONG_LONG)			\
-      || (defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 17)))))
+#if defined(BOOST_HAS_STDINT_H)                    \
+ && (!defined(__GLIBC__)                    \
+ || defined(__GLIBC_HAVE_LONG_LONG)            \
+ || (defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 17)))))
 
 // The following #include is an implementation artifact; not part of interface.
 # ifdef __hpux
@@ -57,6 +57,7 @@
 # elif defined(__FreeBSD__) || defined(__IBMCPP__) || defined(_AIX)
 #   include <inttypes.h>
 # else
+
 #   include <stdint.h>
 
 // There is a bug in Cygwin two _C macros
@@ -100,43 +101,42 @@ typedef ::uintfast64_t uint_fast64_t;
 
 #endif
 
-namespace boost
-{
+namespace boost {
 
-  using ::int8_t;
-  using ::int_least8_t;
-  using ::int_fast8_t;
-  using ::uint8_t;
-  using ::uint_least8_t;
-  using ::uint_fast8_t;
+    using ::int8_t;
+    using ::int_least8_t;
+    using ::int_fast8_t;
+    using ::uint8_t;
+    using ::uint_least8_t;
+    using ::uint_fast8_t;
 
-  using ::int16_t;
-  using ::int_least16_t;
-  using ::int_fast16_t;
-  using ::uint16_t;
-  using ::uint_least16_t;
-  using ::uint_fast16_t;
+    using ::int16_t;
+    using ::int_least16_t;
+    using ::int_fast16_t;
+    using ::uint16_t;
+    using ::uint_least16_t;
+    using ::uint_fast16_t;
 
-  using ::int32_t;
-  using ::int_least32_t;
-  using ::int_fast32_t;
-  using ::uint32_t;
-  using ::uint_least32_t;
-  using ::uint_fast32_t;
+    using ::int32_t;
+    using ::int_least32_t;
+    using ::int_fast32_t;
+    using ::uint32_t;
+    using ::uint_least32_t;
+    using ::uint_fast32_t;
 
 # ifndef BOOST_NO_INT64_T
 
-  using ::int64_t;
-  using ::int_least64_t;
-  using ::int_fast64_t;
-  using ::uint64_t;
-  using ::uint_least64_t;
-  using ::uint_fast64_t;
+    using ::int64_t;
+    using ::int_least64_t;
+    using ::int_fast64_t;
+    using ::uint64_t;
+    using ::uint_least64_t;
+    using ::uint_fast64_t;
 
 # endif
 
-  using ::intmax_t;
-  using ::uintmax_t;
+    using ::intmax_t;
+    using ::uintmax_t;
 
 } // namespace boost
 
@@ -371,10 +371,10 @@ namespace boost
 #if !defined(__PGIC__)
 
 #if (defined(BOOST_WINDOWS) && !defined(_WIN32_WCE)) \
-    || (defined(_XOPEN_UNIX) && (_XOPEN_UNIX+0 > 0) && !defined(__UCLIBC__)) \
-    || defined(__CYGWIN__) \
-    || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__) \
-    || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+ || (defined(_XOPEN_UNIX) && (_XOPEN_UNIX + 0 > 0) && !defined(__UCLIBC__)) \
+ || defined(__CYGWIN__) \
+ || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__) \
+ || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 
 namespace boost {
     using ::intptr_t;

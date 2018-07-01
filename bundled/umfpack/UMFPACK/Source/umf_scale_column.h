@@ -5,7 +5,7 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_scale_column
-(
-    NumericType *Numeric,
-    WorkType *Work
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work
+        );

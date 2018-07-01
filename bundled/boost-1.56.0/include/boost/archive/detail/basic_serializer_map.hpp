@@ -24,43 +24,48 @@
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
-namespace serialization {
-    class extended_type_info;
-}
+namespace boost {
+    namespace serialization {
+        class extended_type_info;
+    }
 
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
-class basic_serializer;
+            class basic_serializer;
 
-class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
-basic_serializer_map : public
-    boost::noncopyable
-{
-    struct type_info_pointer_compare
-    {
-        bool operator()(
-            const basic_serializer * lhs, const basic_serializer * rhs
-        ) const ;
-    };
-    typedef std::set<
-        const basic_serializer *, 
-        type_info_pointer_compare
-    > map_type;
-    map_type m_map;
-public:
-    bool insert(const basic_serializer * bs);
-    void erase(const basic_serializer * bs);
-    const basic_serializer * find(
-        const boost::serialization::extended_type_info & type_
-    ) const;
-private:
-    // cw 8.3 requires this
-    basic_serializer_map& operator=(basic_serializer_map const&);
-};
+            class BOOST_ARCHIVE_OR_WARCHIVE_DECL (BOOST_PP_EMPTY())
 
-} // namespace detail
+            basic_serializer_map : public
+            boost::noncopyable {
+            struct type_info_pointer_compare {
+                bool operator()(
+                        const basic_serializer *lhs, const basic_serializer *rhs
+                ) const;
+            };
+
+            typedef std::set<
+                    const basic_serializer *,
+                    type_info_pointer_compare
+            > map_type;
+            map_type m_map;
+            public:
+
+            bool insert(const basic_serializer *bs);
+
+            void erase(const basic_serializer *bs);
+
+            const basic_serializer *find(
+                    const boost::serialization::extended_type_info &type_
+            ) const;
+
+            private:
+
+            // cw 8.3 requires this
+            basic_serializer_map &operator=(basic_serializer_map const &);
+        };
+
+    } // namespace detail
 } // namespace archive
 } // namespace boost
 

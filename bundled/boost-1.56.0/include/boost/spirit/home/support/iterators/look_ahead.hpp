@@ -15,55 +15,57 @@
 #include <boost/spirit/home/support/iterators/detail/combine_policies.hpp>
 #include <boost/spirit/home/support/iterators/multi_pass.hpp>
 
-namespace boost { namespace spirit 
-{
-    ///////////////////////////////////////////////////////////////////////////
-    //  this could be a template typedef, since such a thing doesn't
-    //  exist in C++, we'll use inheritance to accomplish the same thing.
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename T, std::size_t N>
-    class look_ahead :
-        public multi_pass<T
-          , iterator_policies::default_policy<
-                iterator_policies::first_owner
-              , iterator_policies::no_check
-              , iterator_policies::input_iterator
-              , iterator_policies::fixed_size_queue<N> > 
+namespace boost {
+    namespace spirit {
+        ///////////////////////////////////////////////////////////////////////////
+        //  this could be a template typedef, since such a thing doesn't
+        //  exist in C++, we'll use inheritance to accomplish the same thing.
+        ///////////////////////////////////////////////////////////////////////////
+        template<typename T, std::size_t N>
+        class look_ahead :
+                public multi_pass<T, iterator_policies::default_policy <
+                                     iterator_policies::first_owner, iterator_policies::no_check, iterator_policies::input_iterator,
+                        iterator_policies::fixed_size_queue < N>
+
         >
-    {
-    private:
-        typedef multi_pass<T
-          , iterator_policies::default_policy<
-                iterator_policies::first_owner
-              , iterator_policies::no_check
-              , iterator_policies::input_iterator
-              , iterator_policies::fixed_size_queue<N> > 
-        > base_type;
+        > {
+        private:
+        typedef multi_pass <T
+        , iterator_policies::default_policy<
+                iterator_policies::first_owner, iterator_policies::no_check, iterator_policies::input_iterator,
+                iterator_policies::fixed_size_queue < N>>
+        >
+        base_type;
 
-    public:
+        public:
+
         look_ahead()
-          : base_type() {}
+                : base_type() {}
 
-        explicit look_ahead(T x)
-          : base_type(x) {}
+        explicit look_ahead(T
+        x)
+        :
+        base_type(x) {}
 
-        look_ahead(look_ahead const& x)
-          : base_type(x) {}
+        look_ahead(look_ahead
+        const& x)
+        :
+        base_type(x) {}
 
 #if BOOST_WORKAROUND(__GLIBCPP__, == 20020514)
         look_ahead(int)         // workaround for a bug in the library
           : base_type() {}      // shipped with gcc 3.1
 #endif // BOOST_WORKAROUND(__GLIBCPP__, == 20020514)
 
-        look_ahead operator= (base_type const& rhs)
-        {
+        look_ahead operator=(base_type const &rhs) {
             this->base_type::operator=(rhs);
             return *this;
         }
 
-    // default generated operators destructor and assignment operator are ok.
+        // default generated operators destructor and assignment operator are ok.
     };
 
-}}
+}
+}
 
 #endif

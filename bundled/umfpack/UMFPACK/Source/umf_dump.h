@@ -158,7 +158,7 @@ GLOBAL EXTERN double UMF_gprob ;
 
 /* turn off all debugging macros */
 
-#define DEBUGk(k,params)
+#define DEBUGk(k, params)
 
 #define DEBUGm4(params)
 #define DEBUGm3(params)
@@ -175,7 +175,7 @@ GLOBAL EXTERN double UMF_gprob ;
 #define DEBUG8(params)
 #define DEBUG9(params)
 
-#define EDEBUGk(k,a)
+#define EDEBUGk(k, a)
 
 #define EDEBUG0(a)
 #define EDEBUG1(a)

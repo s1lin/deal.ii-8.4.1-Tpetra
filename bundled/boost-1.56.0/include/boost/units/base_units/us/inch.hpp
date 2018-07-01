@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<yard_base_unit, scale<36, static_rational<-1> > > inch_base_unit;
+            typedef scaled_base_unit <yard_base_unit, scale<36, static_rational < -1>> >
+            inch_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::inch_base_unit> {
-    static const char* name()   { return("inch"); }
-    static const char* symbol() { return("in"); }
-};
+        template<>
+        struct base_unit_info<us::inch_base_unit> {
+            static const char *name() { return ("inch"); }
 
-} // namespace units
+            static const char *symbol() { return ("in"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

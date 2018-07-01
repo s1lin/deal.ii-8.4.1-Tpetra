@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_QI_PARSE_ATTR
 #define BOOST_SPIRIT_INCLUDE_QI_PARSE_ATTR
+
 #include <boost/spirit/home/qi/parse_attr.hpp>
+
 #endif

@@ -26,7 +26,7 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Reduce dimension list to cardinal form. This algorithm collapses duplicate
 /// base dimension tags and sorts the resulting list by the tag ordinal value.
@@ -50,98 +50,85 @@ namespace units {
 ///         the exponents of the dimension by the static_rational.
 ///    - @c static_root takes a dimension and a static_rational and divides all
 ///         the exponents of the dimension by the static_rational.
-template<typename Seq>
-struct make_dimension_list
-{
-    typedef typename detail::sort_dims<Seq>::type type;
-};
+        template<typename Seq>
+        struct make_dimension_list {
+            typedef typename detail::sort_dims<Seq>::type type;
+        };
 
 /// Raise a dimension list to a scalar power.
-template<typename DL,typename Ex> 
-struct static_power
-{
-    typedef typename detail::static_power_impl<DL::size::value>::template apply<
-        DL,
-        Ex
-    >::type type;    
-};
+        template<typename DL, typename Ex>
+        struct static_power {
+            typedef typename detail::static_power_impl<DL::size::value>::template apply<
+                    DL,
+                    Ex
+            >::type type;
+        };
 
 /// Take a scalar root of a dimension list.
-template<typename DL,typename Rt> 
-struct static_root
-{
-    typedef typename detail::static_root_impl<DL::size::value>::template apply<
-        DL,
-        Rt
-    >::type type;    
-};
+        template<typename DL, typename Rt>
+        struct static_root {
+            typedef typename detail::static_root_impl<DL::size::value>::template apply<
+                    DL,
+                    Rt
+            >::type type;
+        };
 
-} // namespace units
+    } // namespace units
 
 #ifndef BOOST_UNITS_DOXYGEN
 
-namespace mpl {
+    namespace mpl {
 
-template<>
-struct plus_impl<boost::units::detail::dimension_list_tag,boost::units::detail::dimension_list_tag>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        BOOST_STATIC_ASSERT((boost::is_same<T0,T1>::value == true));
-        typedef T0 type;
-    };
-};
+        template<>
+        struct plus_impl<boost::units::detail::dimension_list_tag, boost::units::detail::dimension_list_tag> {
+            template<class T0, class T1>
+            struct apply {
+                BOOST_STATIC_ASSERT((boost::is_same<T0, T1>::value == true));
+                typedef T0 type;
+            };
+        };
 
-template<>
-struct minus_impl<boost::units::detail::dimension_list_tag,boost::units::detail::dimension_list_tag>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        BOOST_STATIC_ASSERT((boost::is_same<T0,T1>::value == true));
-        typedef T0 type;
-    };
-};
+        template<>
+        struct minus_impl<boost::units::detail::dimension_list_tag, boost::units::detail::dimension_list_tag> {
+            template<class T0, class T1>
+            struct apply {
+                BOOST_STATIC_ASSERT((boost::is_same<T0, T1>::value == true));
+                typedef T0 type;
+            };
+        };
 
-template<>
-struct times_impl<boost::units::detail::dimension_list_tag,boost::units::detail::dimension_list_tag>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        typedef typename boost::units::detail::merge_dimensions<T0,T1>::type type;
-    };
-};
+        template<>
+        struct times_impl<boost::units::detail::dimension_list_tag, boost::units::detail::dimension_list_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::detail::merge_dimensions<T0, T1>::type type;
+            };
+        };
 
-template<>
-struct divides_impl<boost::units::detail::dimension_list_tag,boost::units::detail::dimension_list_tag>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        typedef typename boost::units::detail::merge_dimensions<
-            T0,
-            typename boost::units::detail::static_inverse_impl<
-                T1::size::value
-            >::template apply<
-                T1
-            >::type
-        >::type type;
-    };
-};
+        template<>
+        struct divides_impl<boost::units::detail::dimension_list_tag, boost::units::detail::dimension_list_tag> {
+            template<class T0, class T1>
+            struct apply {
+                typedef typename boost::units::detail::merge_dimensions<
+                        T0,
+                        typename boost::units::detail::static_inverse_impl<
+                                T1::size::value
+                        >::template apply<
+                                T1
+                        >::type
+                >::type type;
+            };
+        };
 
-template<>
-struct negate_impl<boost::units::detail::dimension_list_tag>
-{
-    template<class T0>
-    struct apply
-    {
-        typedef T0 type;
-    };
-};
+        template<>
+        struct negate_impl<boost::units::detail::dimension_list_tag> {
+            template<class T0>
+            struct apply {
+                typedef T0 type;
+            };
+        };
 
-} // namespace mpl
+    } // namespace mpl
 
 #endif
 

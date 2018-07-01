@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_TREE_TO_XML
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_TREE_TO_XML
+
 #include <boost/spirit/home/classic/tree/tree_to_xml.hpp>
+
 #endif

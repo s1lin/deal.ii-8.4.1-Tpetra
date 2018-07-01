@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pint_base_unit, scale<16, static_rational<-1> > > fluid_ounce_base_unit;
+            typedef scaled_base_unit <pint_base_unit, scale<16, static_rational < -1>> >
+            fluid_ounce_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::fluid_ounce_base_unit> {
-    static const char* name()   { return("fluid ounce (U.S.)"); }
-    static const char* symbol() { return("fl oz"); }
-};
+        template<>
+        struct base_unit_info<us::fluid_ounce_base_unit> {
+            static const char *name() { return ("fluid ounce (U.S.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("fl oz"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

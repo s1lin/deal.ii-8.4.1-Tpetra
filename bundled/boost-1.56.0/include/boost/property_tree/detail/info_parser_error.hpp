@@ -13,20 +13,21 @@
 #include <boost/property_tree/detail/file_parser_error.hpp>
 #include <string>
 
-namespace boost { namespace property_tree { namespace info_parser
-{
+namespace boost {
+    namespace property_tree {
+        namespace info_parser {
 
-    class info_parser_error: public file_parser_error
-    {
-    public:
-        info_parser_error(const std::string &message,
-                          const std::string &filename,
-                          unsigned long line) :
-            file_parser_error(message, filename, line)
-        {
+            class info_parser_error : public file_parser_error {
+            public:
+                info_parser_error(const std::string &message,
+                                  const std::string &filename,
+                                  unsigned long line) :
+                        file_parser_error(message, filename, line) {
+                }
+            };
+
         }
-    };
-
-} } }
+    }
+}
 
 #endif

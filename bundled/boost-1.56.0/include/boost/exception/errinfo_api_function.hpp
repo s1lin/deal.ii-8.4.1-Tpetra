@@ -9,14 +9,13 @@
 #include "boost/exception/error_info.hpp"
 
 namespace
-boost
-    {
+boost {
     //Usage hint:
     //if( api_function(....)!=0 )
     //    BOOST_THROW_EXCEPTION(
     //        failure() <<
     //        errinfo_api_function("api_function") );
-    typedef error_info<struct errinfo_api_function_,char const *> errinfo_api_function;
-    }
+    typedef error_info<struct errinfo_api_function_, char const *> errinfo_api_function;
+}
 
 #endif

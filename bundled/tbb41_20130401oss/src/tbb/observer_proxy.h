@@ -37,143 +37,148 @@
 #include "tbb/aligned_space.h"
 
 namespace tbb {
-namespace internal {
+    namespace internal {
 
-class arena;
-class observer_proxy;
+        class arena;
 
-class observer_list {
-    friend class arena;
+        class observer_proxy;
 
-    // Mutex is wrapped with aligned_space to shut up warnings when its destructor
-    // is called while threads are still using it.
-    typedef aligned_space<spin_rw_mutex,1>  my_mutex_type;
+        class observer_list {
+            friend class arena;
 
-    //! Pointer to the head of this list.
-    observer_proxy* my_head;
+            // Mutex is wrapped with aligned_space to shut up warnings when its destructor
+            // is called while threads are still using it.
+            typedef aligned_space<spin_rw_mutex, 1> my_mutex_type;
 
-    //! Pointer to the tail of this list.
-    observer_proxy* my_tail;
+            //! Pointer to the head of this list.
+            observer_proxy *my_head;
 
-    //! Mutex protecting this list.
-    my_mutex_type my_mutex;
+            //! Pointer to the tail of this list.
+            observer_proxy *my_tail;
 
-    //! Back-pointer to the arena this list belongs to.
-    arena* my_arena;
+            //! Mutex protecting this list.
+            my_mutex_type my_mutex;
 
-    //! Decrement refcount of the proxy p if there are other outstanding references.
-    /** In case of success sets p to NULL. Must be invoked from under the list lock. **/
-    inline static void remove_ref_fast( observer_proxy*& p );
+            //! Back-pointer to the arena this list belongs to.
+            arena *my_arena;
 
-    //! Implements notify_entry_observers functionality.
-    void do_notify_entry_observers( observer_proxy*& last, bool worker );
+            //! Decrement refcount of the proxy p if there are other outstanding references.
+            /** In case of success sets p to NULL. Must be invoked from under the list lock. **/
+            inline static void remove_ref_fast(observer_proxy *&p);
 
-    //! Implements notify_exit_observers functionality.
-    void do_notify_exit_observers( observer_proxy* last, bool worker );
+            //! Implements notify_entry_observers functionality.
+            void do_notify_entry_observers(observer_proxy *&last, bool worker);
 
-public:
-    observer_list () : my_head(NULL), my_tail(NULL) {}
+            //! Implements notify_exit_observers functionality.
+            void do_notify_exit_observers(observer_proxy *last, bool worker);
 
-    //! Removes and destroys all observer proxies from the list.
-    /** Cannot be used concurrently with other methods. **/
-    void clear ();
+        public:
+            observer_list() : my_head(NULL), my_tail(NULL) {}
 
-    //! Add observer proxy to the tail of the list.
-    void insert ( observer_proxy* p );
+            //! Removes and destroys all observer proxies from the list.
+            /** Cannot be used concurrently with other methods. **/
+            void clear();
 
-    //! Remove observer proxy from the list.
-    void remove ( observer_proxy* p );
+            //! Add observer proxy to the tail of the list.
+            void insert(observer_proxy *p);
 
-    //! Decrement refcount of the proxy and destroy it if necessary.
-    /** When refcount reaches zero removes the proxy from the list and destructs it. **/
-    void remove_ref( observer_proxy* p );
+            //! Remove observer proxy from the list.
+            void remove(observer_proxy *p);
 
-    //! Type of the scoped lock for the reader-writer mutex associated with the list.
-    typedef spin_rw_mutex::scoped_lock scoped_lock;
+            //! Decrement refcount of the proxy and destroy it if necessary.
+            /** When refcount reaches zero removes the proxy from the list and destructs it. **/
+            void remove_ref(observer_proxy *p);
 
-    //! Accessor to the reader-writer mutex associated with the list.
-    spin_rw_mutex& mutex () { return my_mutex.begin()[0]; }
+            //! Type of the scoped lock for the reader-writer mutex associated with the list.
+            typedef spin_rw_mutex::scoped_lock scoped_lock;
 
-    bool empty () const { return my_head == NULL; }
+            //! Accessor to the reader-writer mutex associated with the list.
+            spin_rw_mutex &mutex() { return my_mutex.begin()[0]; }
 
-    //! Call entry notifications on observers added after last was notified.
-    /** Updates last to become the last notified observer proxy (in the global list)
-        or leaves it to be NULL. The proxy has its refcount incremented. **/
-    inline void notify_entry_observers( observer_proxy*& last, bool worker );
+            bool empty() const { return my_head == NULL; }
 
-    //! Call exit notifications on last and observers added before it.
-    inline void notify_exit_observers( observer_proxy* last, bool worker );
+            //! Call entry notifications on observers added after last was notified.
+            /** Updates last to become the last notified observer proxy (in the global list)
+                or leaves it to be NULL. The proxy has its refcount incremented. **/
+            inline void notify_entry_observers(observer_proxy *&last, bool worker);
 
-    //! Call on_scheduler_leaving callbacks to ask for permission for a worker thread to leave an arena
-    bool ask_permission_to_leave();
-}; // class observer_list
+            //! Call exit notifications on last and observers added before it.
+            inline void notify_exit_observers(observer_proxy *last, bool worker);
+
+            //! Call on_scheduler_leaving callbacks to ask for permission for a worker thread to leave an arena
+            bool ask_permission_to_leave();
+        }; // class observer_list
 
 //! Wrapper for an observer object
 /** To maintain shared lists of observers the scheduler first wraps each observer
     object into a proxy so that a list item remained valid even after the corresponding
     proxy object is destroyed by the user code. **/
-class observer_proxy {
-    friend class task_scheduler_observer_v3;
-    friend class observer_list;
-    //! Reference count used for garbage collection.
-    /** 1 for reference from my task_scheduler_observer.
-        1 for each task dispatcher's last observer pointer. 
-        No accounting for neighbors in the shared list. */
-    atomic<int> my_ref_count;
-    //! Reference to the list this observer belongs to.
-    observer_list* my_list;
-    //! Pointer to next observer in the list specified by my_head.
-    /** NULL for the last item in the list. **/
-    observer_proxy* my_next;
-    //! Pointer to the previous observer in the list specified by my_head.
-    /** For the head of the list points to the last item. **/
-    observer_proxy* my_prev;
-    //! Associated observer
-    task_scheduler_observer_v3* my_observer;
-    //! Version
-    char my_version;
+        class observer_proxy {
+            friend class task_scheduler_observer_v3;
 
-    interface6::task_scheduler_observer* get_v6_observer();
-    bool is_global(); //TODO: move them back inline when un-CPF'ing
+            friend class observer_list;
+            //! Reference count used for garbage collection.
+            /** 1 for reference from my task_scheduler_observer.
+                1 for each task dispatcher's last observer pointer.
+                No accounting for neighbors in the shared list. */
+            atomic<int> my_ref_count;
+            //! Reference to the list this observer belongs to.
+            observer_list *my_list;
+            //! Pointer to next observer in the list specified by my_head.
+            /** NULL for the last item in the list. **/
+            observer_proxy *my_next;
+            //! Pointer to the previous observer in the list specified by my_head.
+            /** For the head of the list points to the last item. **/
+            observer_proxy *my_prev;
+            //! Associated observer
+            task_scheduler_observer_v3 *my_observer;
+            //! Version
+            char my_version;
 
-    //! Constructs proxy for the given observer and adds it to the specified list.
-    observer_proxy( task_scheduler_observer_v3& );
+            interface6::task_scheduler_observer *get_v6_observer();
+
+            bool is_global(); //TODO: move them back inline when un-CPF'ing
+
+            //! Constructs proxy for the given observer and adds it to the specified list.
+            observer_proxy(task_scheduler_observer_v3 &);
 
 #if TBB_USE_ASSERT
-    ~observer_proxy();
+
+            ~observer_proxy();
+
 #endif /* TBB_USE_ASSERT */
 
-    //! Shut up the warning
-    observer_proxy& operator = ( const observer_proxy& );
-}; // class observer_proxy
+            //! Shut up the warning
+            observer_proxy &operator=(const observer_proxy &);
+        }; // class observer_proxy
 
-inline void observer_list::remove_ref_fast( observer_proxy*& p ) {
-    if( p->my_observer ) {
-        // 2 = 1 for observer and 1 for last
-        __TBB_ASSERT( p->my_ref_count>=2, NULL );
-        // Can decrement refcount quickly, as it cannot drop to zero while under the lock.
-        --p->my_ref_count;
-        p = NULL;
-    } else {
-        // Use slow form of refcount decrementing, after the lock is released.
-    }
-}
+        inline void observer_list::remove_ref_fast(observer_proxy *&p) {
+            if (p->my_observer) {
+                // 2 = 1 for observer and 1 for last
+                __TBB_ASSERT(p->my_ref_count >= 2, NULL);
+                // Can decrement refcount quickly, as it cannot drop to zero while under the lock.
+                --p->my_ref_count;
+                p = NULL;
+            } else {
+                // Use slow form of refcount decrementing, after the lock is released.
+            }
+        }
 
-inline void observer_list::notify_entry_observers( observer_proxy*& last, bool worker ) {
-    if ( last == my_tail )
-        return;
-    do_notify_entry_observers( last, worker );
-}
+        inline void observer_list::notify_entry_observers(observer_proxy *&last, bool worker) {
+            if (last == my_tail)
+                return;
+            do_notify_entry_observers(last, worker);
+        }
 
-inline void observer_list::notify_exit_observers( observer_proxy* last, bool worker ) {
-    if ( !last )
-        return;
-    do_notify_exit_observers( last, worker );
-}
+        inline void observer_list::notify_exit_observers(observer_proxy *last, bool worker) {
+            if (!last)
+                return;
+            do_notify_exit_observers(last, worker);
+        }
 
-extern observer_list the_global_observer_list;
+        extern observer_list the_global_observer_list;
 
-} // namespace internal
+    } // namespace internal
 } // namespace tbb
 
 #endif /* __TBB_SCHEDULER_OBSERVER */

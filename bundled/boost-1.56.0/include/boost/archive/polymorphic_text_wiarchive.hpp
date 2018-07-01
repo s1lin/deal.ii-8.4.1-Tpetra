@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+
 #ifdef BOOST_NO_STD_WSTREAMBUF
 #error "wide char i/o not supported on this platform"
 #else
@@ -29,20 +30,19 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost { 
-namespace archive {
+namespace boost {
+    namespace archive {
 
-class polymorphic_text_wiarchive : 
-    public detail::polymorphic_iarchive_route<text_wiarchive>
-{
-public:
-    polymorphic_text_wiarchive(std::wistream & is, unsigned int flags = 0) :
-        detail::polymorphic_iarchive_route<text_wiarchive>(is, flags)
-    {}
-    ~polymorphic_text_wiarchive(){}
-};
+        class polymorphic_text_wiarchive :
+                public detail::polymorphic_iarchive_route<text_wiarchive> {
+        public:
+            polymorphic_text_wiarchive(std::wistream &is, unsigned int flags = 0) :
+                    detail::polymorphic_iarchive_route<text_wiarchive>(is, flags) {}
 
-} // namespace archive
+            ~polymorphic_text_wiarchive() {}
+        };
+
+    } // namespace archive
 } // namespace boost
 
 #ifdef BOOST_MSVC
@@ -51,7 +51,7 @@ public:
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(
-    boost::archive::polymorphic_text_wiarchive
+        boost::archive::polymorphic_text_wiarchive
 )
 
 #endif // BOOST_NO_STD_WSTREAMBUF

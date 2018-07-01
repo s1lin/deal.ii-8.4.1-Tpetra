@@ -13,33 +13,35 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence>
-        struct pop_front
-        {
-            typedef 
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence>
+            struct pop_front {
+                typedef
                 iterator_range<
-                    typename next<
-                        typename begin<Sequence>::type
-                    >::type
-                  , typename end<Sequence>::type
-                > 
-            type;
-        };
-    }
+                        typename next<
+                                typename begin<Sequence>::type
+                        >::type, typename end<Sequence>::type
+                >
+                        type;
+            };
+        }
 
-    template <typename Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::pop_front<Sequence const>::type
-    pop_front(Sequence const& seq)
-    {
+        template<typename Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::pop_front<Sequence const>::type
+        pop_front(Sequence
+        const& seq) {
         typedef typename result_of::pop_front<Sequence const>::type result;
-        return result(fusion::next(fusion::begin(seq)), fusion::end(seq));
+        return
+
+        result(fusion::next(fusion::begin(seq)), fusion::end(seq)
+
+        );
     }
-}}
+}
+}
 
 #endif
 

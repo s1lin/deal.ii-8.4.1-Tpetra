@@ -17,13 +17,13 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// derived dimension for mass density : L^-3 M
-typedef derived_dimension<length_base_dimension,-3,
-                          mass_base_dimension,1>::type mass_density_dimension;            
+        typedef derived_dimension<length_base_dimension, -3,
+                mass_base_dimension, 1>::type mass_density_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

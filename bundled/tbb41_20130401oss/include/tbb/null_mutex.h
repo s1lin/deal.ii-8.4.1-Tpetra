@@ -30,33 +30,40 @@
 #define __TBB_null_mutex_H
 
 namespace tbb {
-    
+
 //! A mutex which does nothing
 /** A null_mutex does no operation and simulates success.
     @ingroup synchronization */
-class null_mutex {   
-    //! Deny assignment and copy construction 
-    null_mutex( const null_mutex& );   
-    void operator=( const null_mutex& );   
-public:   
-    //! Represents acquisition of a mutex.
-    class scoped_lock {   
-    public:   
-        scoped_lock() {}
-        scoped_lock( null_mutex& ) {}   
-        ~scoped_lock() {}
-        void acquire( null_mutex& ) {}
-        bool try_acquire( null_mutex& ) { return true; }
-        void release() {}
+    class null_mutex {
+        //! Deny assignment and copy construction
+        null_mutex(const null_mutex &);
+
+        void operator=(const null_mutex &);
+
+    public:
+        //! Represents acquisition of a mutex.
+        class scoped_lock {
+        public:
+            scoped_lock() {}
+
+            scoped_lock(null_mutex &) {}
+
+            ~scoped_lock() {}
+
+            void acquire(null_mutex &) {}
+
+            bool try_acquire(null_mutex &) { return true; }
+
+            void release() {}
+        };
+
+        null_mutex() {}
+
+        // Mutex traits
+        static const bool is_rw_mutex = false;
+        static const bool is_recursive_mutex = true;
+        static const bool is_fair_mutex = true;
     };
-  
-    null_mutex() {}
-    
-    // Mutex traits   
-    static const bool is_rw_mutex = false;   
-    static const bool is_recursive_mutex = true;
-    static const bool is_fair_mutex = true;
-};  
 
 }
 

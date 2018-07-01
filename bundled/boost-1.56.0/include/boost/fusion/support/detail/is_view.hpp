@@ -7,13 +7,15 @@
 #if !defined(FUSION_IS_VIEW_03202006_0018)
 #define FUSION_IS_VIEW_03202006_0018
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename T>
-    struct fusion_is_view
-    {
-        typedef typename T::is_view type;
-    };
-}}}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename T>
+            struct fusion_is_view {
+                typedef typename T::is_view type;
+            };
+        }
+    }
+}
 
 #endif

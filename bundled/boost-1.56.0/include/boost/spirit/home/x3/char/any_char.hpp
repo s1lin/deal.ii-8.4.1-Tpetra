@@ -13,29 +13,29 @@
 
 #include <boost/spirit/home/x3/char/literal_char.hpp>
 
-namespace boost { namespace spirit { namespace x3
-{
-    template <typename Encoding>
-    struct any_char : char_parser<any_char<Encoding>>
-    {
-        typedef typename Encoding::char_type char_type;
-        typedef Encoding encoding;
-        typedef char_type attribute_type;
-        static bool const has_attribute = true;
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            template<typename Encoding>
+            struct any_char : char_parser<any_char<Encoding>> {
+                typedef typename Encoding::char_type char_type;
+                typedef Encoding encoding;
+                typedef char_type attribute_type;
+                static bool const has_attribute = true;
 
-        template <typename Char, typename Context>
-        bool test(Char ch_, Context const&) const
-        {
-            return ((sizeof(Char) <= sizeof(char_type)) || encoding::ischar(ch_));
-        }
+                template<typename Char, typename Context>
+                bool test(Char ch_, Context const &) const {
+                    return ((sizeof(Char) <= sizeof(char_type)) || encoding::ischar(ch_));
+                }
 
-        template <typename Char>
-        literal_char<Encoding>
-        operator()(Char ch) const
-        {
-            return literal_char<Encoding>(ch);
+                template<typename Char>
+                literal_char <Encoding>
+                operator()(Char ch) const {
+                    return literal_char<Encoding>(ch);
+                }
+            };
         }
-    };
-}}}
+    }
+}
 
 #endif

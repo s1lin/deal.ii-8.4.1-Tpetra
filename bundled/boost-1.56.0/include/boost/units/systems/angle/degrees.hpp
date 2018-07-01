@@ -21,21 +21,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace degree {
+        namespace degree {
 
-typedef make_system<boost::units::angle::degree_base_unit>::type system;
+            typedef make_system<boost::units::angle::degree_base_unit>::type system;
 
-typedef unit<dimensionless_type,system>         dimensionless;
-typedef unit<plane_angle_dimension,system>      plane_angle;           ///< angle degree unit constant
+            typedef unit <dimensionless_type, system> dimensionless;
+            typedef unit <plane_angle_dimension, system> plane_angle;           ///< angle degree unit constant
 
-BOOST_UNITS_STATIC_CONSTANT(degree,plane_angle);
-BOOST_UNITS_STATIC_CONSTANT(degrees,plane_angle);
+            BOOST_UNITS_STATIC_CONSTANT(degree, plane_angle
+            );
+            BOOST_UNITS_STATIC_CONSTANT(degrees, plane_angle
+            );
 
-} // namespace degree
+        } // namespace degree
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

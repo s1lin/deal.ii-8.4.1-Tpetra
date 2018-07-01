@@ -16,14 +16,17 @@
 #endif
 
 namespace boost {
-namespace detail {
-namespace winapi {
+    namespace detail {
+        namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetCurrentProcess;
+            using ::GetCurrentProcess;
 #else
-    extern "C" __declspec(dllimport) HANDLE_ WINAPI GetCurrentProcess();
+            extern "C" __declspec(dllimport) HANDLE_ WINAPI
+
+            GetCurrentProcess();
+
 #endif
-}
-}
+        }
+    }
 }
 #endif // BOOST_DETAIL_WINAPI_GETCURRENTPROCESS_HPP

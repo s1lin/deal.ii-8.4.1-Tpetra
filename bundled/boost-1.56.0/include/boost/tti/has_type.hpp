@@ -82,7 +82,7 @@
     of EnclosingType and is the same type as SomeOtherType.
   
 */
-#define BOOST_TTI_TRAIT_HAS_TYPE(trait,name) \
+#define BOOST_TTI_TRAIT_HAS_TYPE(trait, name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
   template \
     < \

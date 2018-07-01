@@ -11,61 +11,57 @@
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/mpl/if.hpp>
 
-namespace boost { namespace fusion
-{
-    struct joint_view_tag;
+namespace boost {
+    namespace fusion {
+        struct joint_view_tag;
 
-    template <typename Category, typename First, typename Last, typename Concat>
-    struct joint_view_iterator;
+        template<typename Category, typename First, typename Last, typename Concat>
+        struct joint_view_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct begin_impl;
+        namespace extension {
+            template<typename Tag>
+            struct begin_impl;
 
-        template <>
-        struct begin_impl<joint_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::first_type first_type;
-                typedef typename Sequence::last_type last_type;
-                typedef typename Sequence::concat_type concat_type;
-                typedef typename Sequence::category category;
-                typedef result_of::equal_to<first_type, last_type> equal_to;
+            template<>
+            struct begin_impl<joint_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::first_type first_type;
+                    typedef typename Sequence::last_type last_type;
+                    typedef typename Sequence::concat_type concat_type;
+                    typedef typename Sequence::category category;
+                    typedef result_of::equal_to <first_type, last_type> equal_to;
 
-                typedef typename
+                    typedef typename
                     mpl::if_<
-                        equal_to
-                      , concat_type
-                      , joint_view_iterator<category, first_type, last_type, concat_type>
+                            equal_to, concat_type, joint_view_iterator<category, first_type, last_type, concat_type>
                     >::type
-                type;
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s, mpl::true_)
-                {
-                    return s.concat();
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s, mpl::true_)
+                    {
+                        return s.concat();
+                    }
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s, mpl::false_)
-                {
-                    return type(s.first(), s.concat());
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s, mpl::false_)
+                    {
+                        return type(s.first(), s.concat());
+                    }
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s)
-                {
-                    return call(s, equal_to());
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s)
+                    {
+                        return call(s, equal_to());
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

@@ -21,41 +21,40 @@
 #include <boost/mpl/aux_/config/ctps.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
 #if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 
-template<>
-struct empty_impl< aux::vector_tag >
-{
-    template< typename Vector > struct apply
-        : is_same<
-              typename Vector::lower_bound_
-            , typename Vector::upper_bound_
-            >
-    {
-    };
-};
+        template<>
+        struct empty_impl< aux::vector_tag >
+        {
+            template< typename Vector > struct apply
+                : is_same<
+                      typename Vector::lower_bound_
+                    , typename Vector::upper_bound_
+                    >
+            {
+            };
+        };
 
 #else
 
-template<>
-struct empty_impl< aux::vector_tag<0> >
-{
-    template< typename Vector > struct apply
-        : true_
-    {
+        template<>
+        struct empty_impl<aux::vector_tag < 0> > {
+        template<typename Vector>
+        struct apply
+                : true_ {
+        };
     };
-};
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-template< long N >
-struct empty_impl< aux::vector_tag<N> >
-{
-    template< typename Vector > struct apply
-        : false_
-    {
+    template<long N>
+    struct empty_impl<aux::vector_tag < N> > {
+    template<typename Vector>
+    struct apply
+            : false_ {
     };
 };
 

@@ -8,6 +8,7 @@
 
 #ifndef ASSIGNMENT_HPP
 #define ASSIGNMENT_HPP
+
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
 
@@ -15,25 +16,34 @@
     \brief uBlas assignment operator <<=.
 */
 
-namespace boost { namespace numeric { namespace ublas {
+namespace boost {
+    namespace numeric {
+        namespace ublas {
 
 /** \brief A CRTP and Barton-Nackman trick index manipulator wrapper class.
  *
  * This class is not meant to be used directly.
  */
-template <class TV>
-class index_manipulator {
-public:
-    typedef TV type;
-    BOOST_UBLAS_INLINE
-    const type &operator () () const {
-        return *static_cast<const type *> (this);
-    }
-    BOOST_UBLAS_INLINE
-    type &operator () () {
-        return *static_cast<type *> (this);
-    }
-};
+            template<class TV>
+            class index_manipulator {
+            public:
+                typedef TV type;
+                BOOST_UBLAS_INLINE
+                const type
+                &
+
+                operator()() const {
+                    return *static_cast<const type *> (this);
+                }
+
+                BOOST_UBLAS_INLINE
+                        type
+                &
+
+                operator()() {
+                    return *static_cast<type *> (this);
+                }
+            };
 
 /** \brief A move_to vector index manipulator.
  *
@@ -42,18 +52,19 @@ public:
  *
  * \sa move_to(T i)
  */
-template <typename T>
-class vector_move_to_manip: public index_manipulator<vector_move_to_manip<T> > {
-public:
-    BOOST_UBLAS_INLINE
-    vector_move_to_manip(const T &k): i(k) { }
+            template<typename T>
+            class vector_move_to_manip : public index_manipulator<vector_move_to_manip<T> > {
+            public:
+                BOOST_UBLAS_INLINE
+                vector_move_to_manip(const T &k): i(k) {}
 
-    template <typename V>
-    BOOST_UBLAS_INLINE
-    void manip(V &k) const { k=i; }
-private:
-    T i;
-};
+                template<typename V>
+                BOOST_UBLAS_INLINE
+                void manip(V &k) const { k = i; }
+
+            private:
+                T i;
+            };
 
 /** \brief An object generator that returns a move_to vector index manipulator
  *
@@ -73,10 +84,13 @@ private:
  * \tparam T Size type
  * \sa move_to()
  */
-template <typename T>
-BOOST_UBLAS_INLINE vector_move_to_manip<T>  move_to(T i) {
-    return vector_move_to_manip<T>(i);
-}
+            template<typename T>
+            BOOST_UBLAS_INLINE vector_move_to_manip<T>
+            move_to(T
+            i) {
+            return
+            vector_move_to_manip<T>(i);
+        }
 
 /** \brief A static move to vector manipulator.
  *
@@ -85,13 +99,13 @@ BOOST_UBLAS_INLINE vector_move_to_manip<T>  move_to(T i) {
  *
  * \sa move_to(T i) and move_to()
 */
-template <std::size_t I>
-class static_vector_move_to_manip: public index_manipulator<static_vector_move_to_manip<I> > {
-public:
-    template <typename V>
-    BOOST_UBLAS_INLINE
-    void manip(V &k) const { k=I; }
-};
+        template<std::size_t I>
+        class static_vector_move_to_manip : public index_manipulator<static_vector_move_to_manip<I> > {
+        public:
+            template<typename V>
+            BOOST_UBLAS_INLINE
+            void manip(V &k) const { k = I; }
+        };
 
 /** \brief An object generator that returns a static move_to vector index  manipulator.
  *
@@ -112,10 +126,12 @@ public:
  *
  * \tparam I The number of elements the manipulator will traverse the index when \c manip function is called
  */
-template <std::size_t I>
-BOOST_UBLAS_INLINE static_vector_move_to_manip<I>  move_to() {
-    return static_vector_move_to_manip<I>();
-}
+        template<std::size_t I>
+        BOOST_UBLAS_INLINE static_vector_move_to_manip<I>
+
+        move_to() {
+            return static_vector_move_to_manip < I > ();
+        }
 
 /** \brief A move vector index manipulator.
  *
@@ -124,17 +140,18 @@ BOOST_UBLAS_INLINE static_vector_move_to_manip<I>  move_to() {
  *
  * \see move(T i)
  */
-template <typename T>
-class vector_move_manip: public index_manipulator<vector_move_manip<T> > {
-public:
-    BOOST_UBLAS_INLINE
-    vector_move_manip(const T &k): i(k) { }
+        template<typename T>
+        class vector_move_manip : public index_manipulator<vector_move_manip<T> > {
+        public:
+            BOOST_UBLAS_INLINE
+            vector_move_manip(const T &k): i(k) {}
 
-    template <typename V>
-    BOOST_UBLAS_INLINE void manip(V &k) const { k+=i; }
-private:
-    T i;
-};
+            template<typename V>
+            BOOST_UBLAS_INLINE void manip(V &k) const { k += i; }
+
+        private:
+            T i;
+        };
 
 /**
 * \brief  An object generator that returns a move vector index manipulator
@@ -155,10 +172,13 @@ private:
 * \endcode
 *
 */
-template <typename T>
-BOOST_UBLAS_INLINE vector_move_manip<T>  move(T i) {
-    return vector_move_manip<T>(i);
-}
+        template<typename T>
+        BOOST_UBLAS_INLINE vector_move_manip<T>
+        move(T
+        i) {
+        return
+        vector_move_manip<T>(i);
+    }
 
 /**
 * \brief A static move vector manipulator
@@ -170,12 +190,12 @@ BOOST_UBLAS_INLINE vector_move_manip<T>  move(T i) {
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <std::size_t I>
-class static_vector_move_manip: public index_manipulator<static_vector_move_manip<I> > {
-public:
-    template <typename V>
-    BOOST_UBLAS_INLINE void manip(V &k) const { k+=I; }
-};
+    template<std::size_t I>
+    class static_vector_move_manip : public index_manipulator<static_vector_move_manip<I> > {
+    public:
+        template<typename V>
+        BOOST_UBLAS_INLINE void manip(V &k) const { k += I; }
+    };
 
 /**
 * \brief An object generator that returns a static move vector index manipulator.
@@ -198,10 +218,12 @@ public:
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <std::size_t I>
-BOOST_UBLAS_INLINE static_vector_move_manip<I>  move() {
-    return static_vector_move_manip<I>();
-}
+    template<std::size_t I>
+    BOOST_UBLAS_INLINE static_vector_move_manip<I>
+
+    move() {
+        return static_vector_move_manip < I > ();
+    }
 
 /**
 * \brief A move_to matrix manipulator
@@ -213,21 +235,22 @@ BOOST_UBLAS_INLINE static_vector_move_manip<I>  move() {
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <typename T>
-class matrix_move_to_manip: public index_manipulator<matrix_move_to_manip<T> > {
-public:
-    BOOST_UBLAS_INLINE
-    matrix_move_to_manip(T k, T l): i(k), j(l) { }
+    template<typename T>
+    class matrix_move_to_manip : public index_manipulator<matrix_move_to_manip<T> > {
+    public:
+        BOOST_UBLAS_INLINE
+        matrix_move_to_manip(T k, T l): i(k), j(l) {}
 
-    template <typename V1, typename V2>
-    BOOST_UBLAS_INLINE
-    void manip(V1 &k, V2 &l) const {
-        k=i;
-        l=j;
-    }
-private:
-    T i, j;
-};
+        template<typename V1, typename V2>
+        BOOST_UBLAS_INLINE
+        void manip(V1 &k, V2 &l) const {
+            k = i;
+            l = j;
+        }
+
+    private:
+        T i, j;
+    };
 
 /**
 * \brief  An object generator that returns a "move_to" matrix index manipulator
@@ -254,9 +277,15 @@ private:
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <typename T>
-BOOST_UBLAS_INLINE matrix_move_to_manip<T>  move_to(T i, T j) {
-    return matrix_move_to_manip<T>(i, j);
+    template<typename T>
+    BOOST_UBLAS_INLINE matrix_move_to_manip<T>
+    move_to(T
+    i,
+    T j
+    ) {
+    return
+    matrix_move_to_manip<T>(i, j
+    );
 }
 
 
@@ -269,14 +298,14 @@ BOOST_UBLAS_INLINE matrix_move_to_manip<T>  move_to(T i, T j) {
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <std::size_t I, std::size_t J>
-class static_matrix_move_to_manip: public index_manipulator<static_matrix_move_to_manip<I, J> > {
+template<std::size_t I, std::size_t J>
+class static_matrix_move_to_manip : public index_manipulator<static_matrix_move_to_manip<I, J> > {
 public:
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
     void manip(V &k, K &l) const {
-        k=I;
-        l=J;
+        k = I;
+        l = J;
     }
 };
 
@@ -302,9 +331,11 @@ public:
 * \endcode
 * \sa move_to(T i, T j) and static_matrix_move_to_manip
 */
-template <std::size_t I, std::size_t J>
-BOOST_UBLAS_INLINE static_matrix_move_to_manip<I, J>  move_to() {
-    return static_matrix_move_to_manip<I, J>();
+template<std::size_t I, std::size_t J>
+BOOST_UBLAS_INLINE static_matrix_move_to_manip<I, J>
+
+move_to() {
+    return static_matrix_move_to_manip < I, J > ();
 }
 
 /**
@@ -315,18 +346,19 @@ BOOST_UBLAS_INLINE static_matrix_move_to_manip<I, J>  move_to() {
 *
 * \sa move(T i, T j)
 */
-template <typename T>
-class matrix_move_manip: public index_manipulator<matrix_move_manip<T> > {
+template<typename T>
+class matrix_move_manip : public index_manipulator<matrix_move_manip<T> > {
 public:
     BOOST_UBLAS_INLINE
-    matrix_move_manip(T k, T l): i(k), j(l) { }
+    matrix_move_manip(T k, T l): i(k), j(l) {}
 
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
     void manip(V &k, K &l) const {
-        k+=i;
-        l+=j;
+        k += i;
+        l += j;
     }
+
 private:
     T i, j;
 };
@@ -354,9 +386,15 @@ private:
 * 0 0 0
 * \endcode
 */
-template <typename T>
-BOOST_UBLAS_INLINE matrix_move_manip<T>  move(T i, T j) {
-    return matrix_move_manip<T>(i, j);
+template<typename T>
+BOOST_UBLAS_INLINE matrix_move_manip<T>
+move(T
+i,
+T j
+) {
+return
+matrix_move_manip<T>(i, j
+);
 }
 
 /**
@@ -369,14 +407,14 @@ BOOST_UBLAS_INLINE matrix_move_manip<T>  move(T i, T j) {
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <std::size_t I, std::size_t J>
-class static_matrix_move_manip: public index_manipulator<static_matrix_move_manip<I, J> > {
+template<std::size_t I, std::size_t J>
+class static_matrix_move_manip : public index_manipulator<static_matrix_move_manip<I, J> > {
 public:
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
     void manip(V &k, K &l) const {
-        k+=I;
-        l+=J;
+        k += I;
+        l += J;
     }
 };
 
@@ -407,9 +445,11 @@ public:
 *
 * \todo Doxygen has some problems with similar template functions. Correct that.
 */
-template <std::size_t I, std::size_t J>
-BOOST_UBLAS_INLINE static_matrix_move_manip<I, J>  move() {
-    return static_matrix_move_manip<I, J>();
+template<std::size_t I, std::size_t J>
+BOOST_UBLAS_INLINE static_matrix_move_manip<I, J>
+
+move() {
+    return static_matrix_move_manip < I, J > ();
 }
 
 /**
@@ -420,12 +460,12 @@ BOOST_UBLAS_INLINE static_matrix_move_manip<I, J>  move() {
 *
 * \sa begin1()
 */
-class begin1_manip: public index_manipulator<begin1_manip > {
+class begin1_manip : public index_manipulator<begin1_manip> {
 public:
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
-    void manip(V & k, K &/*l*/) const {
-        k=0;
+    void manip(V &k, K &/*l*/) const {
+        k = 0;
     }
 };
 
@@ -451,7 +491,7 @@ public:
 * \endcode
 * \sa begin2()
 */
-inline begin1_manip  begin1() {
+inline begin1_manip begin1() {
     return begin1_manip();
 }
 
@@ -464,12 +504,12 @@ inline begin1_manip  begin1() {
 *
 * \sa begin2()
 */
-class begin2_manip: public index_manipulator<begin2_manip > {
+class begin2_manip : public index_manipulator<begin2_manip> {
 public:
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
     void manip(V &/*k*/, K &l) const {
-        l=0;
+        l = 0;
     }
 };
 
@@ -495,7 +535,7 @@ public:
 * \endcode
 * \sa begin1() begin2_manip
 */
-inline begin2_manip  begin2() {
+inline begin2_manip begin2() {
     return begin2_manip();
 }
 
@@ -508,13 +548,13 @@ inline begin2_manip  begin2() {
 *
 * \sa next_row()
 */
-class next_row_manip: public index_manipulator<next_row_manip> {
+class next_row_manip : public index_manipulator<next_row_manip> {
 public:
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
     void manip(V &k, K &l) const {
         k++;
-        l=0;
+        l = 0;
     }
 };
 
@@ -540,7 +580,7 @@ public:
 * \endcode
 * \sa next_column()
 */
-inline next_row_manip  next_row() {
+inline next_row_manip next_row() {
     return next_row_manip();
 }
 
@@ -552,12 +592,12 @@ inline next_row_manip  next_row() {
 *
 * \sa next_column()
 */
-class next_column_manip: public index_manipulator<next_column_manip> {
+class next_column_manip : public index_manipulator<next_column_manip> {
 public:
-    template <typename V, typename K>
+    template<typename V, typename K>
     BOOST_UBLAS_INLINE
     void manip(V &k, K &l) const {
-        k=0;
+        k = 0;
         l++;
     }
 };
@@ -592,7 +632,7 @@ inline next_column_manip next_column() {
 * \brief  A wrapper for fill policy classes
 *
 */
-template <class T>
+template<class T>
 class fill_policy_wrapper {
 public:
     typedef T type;
@@ -609,14 +649,15 @@ namespace fill_policy {
     *
     *
     */
-    class index_assign :public fill_policy_wrapper<index_assign> {
+    class index_assign : public fill_policy_wrapper<index_assign> {
     public:
-        template <class T, typename S, typename V>
+        template<class T, typename S, typename V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const V &v) {
             e()(i) = v;
         }
-        template <class T, typename S, typename V>
+
+        template<class T, typename S, typename V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const S &j, const V &v) {
             e()(i, j) = v;
@@ -631,14 +672,15 @@ namespace fill_policy {
     *
     *
     */
-    class index_plus_assign :public fill_policy_wrapper<index_plus_assign> {
+    class index_plus_assign : public fill_policy_wrapper<index_plus_assign> {
     public:
-        template <class T, typename S, typename V>
+        template<class T, typename S, typename V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const V &v) {
             e()(i) += v;
         }
-        template <class T, typename S, typename V>
+
+        template<class T, typename S, typename V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const S &j, const V &v) {
             e()(i, j) += v;
@@ -653,14 +695,15 @@ namespace fill_policy {
     *
     *
     */
-    class index_minus_assign :public fill_policy_wrapper<index_minus_assign> {
+    class index_minus_assign : public fill_policy_wrapper<index_minus_assign> {
     public:
-        template <class T, typename S, typename V>
+        template<class T, typename S, typename V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const V &v) {
             e()(i) -= v;
         }
-        template <class T, typename S, typename V>
+
+        template<class T, typename S, typename V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const S &j, const V &v) {
             e()(i, j) -= v;
@@ -676,17 +719,18 @@ namespace fill_policy {
     * It is important to note that push_back assign cannot be used to add elements before elements
     * already existing in a sparse container. To achieve that please use the sparse_insert fill policy.
     */
-    class sparse_push_back :public fill_policy_wrapper<sparse_push_back > {
+    class sparse_push_back : public fill_policy_wrapper<sparse_push_back> {
     public:
-        template <class T, class S, class V>
+        template<class T, class S, class V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const V &v) {
             e().push_back(i, v);
         }
-        template <class T, class S, class V>
+
+        template<class T, class S, class V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const S &j, const V &v) {
-            e().push_back(i,j, v);
+            e().push_back(i, j, v);
         }
     };
 
@@ -697,17 +741,18 @@ namespace fill_policy {
     * assign is pretty slow. It is slower than sparse_push_back fill policy, but it can be used to
     * insert elements anywhere inside the container.
     */
-    class sparse_insert :public fill_policy_wrapper<sparse_insert> {
+    class sparse_insert : public fill_policy_wrapper<sparse_insert> {
     public:
-        template <class T, class S, class V>
+        template<class T, class S, class V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const V &v) {
             e().insert_element(i, v);
         }
-        template <class T, class S, class V>
+
+        template<class T, class S, class V>
         BOOST_UBLAS_INLINE
         static void apply(T &e, const S &i, const S &j, const V &v) {
-            e().insert_element(i,j, v);
+            e().insert_element(i, j, v);
         }
     };
 
@@ -716,7 +761,7 @@ namespace fill_policy {
 /** \brief A wrapper for traverse policy classes
 *
 */
-template <class T>
+template<class T>
 class traverse_policy_wrapper {
 public:
     typedef T type;
@@ -735,7 +780,7 @@ namespace traverse_policy {
         /**
         * \brief  Element wrap method
         */
-        template <class S1, class S2, class S3>
+        template<class S1, class S2, class S3>
         BOOST_UBLAS_INLINE
         static void apply1(const S1 &/*s*/, S2 &/*i*/, S3 &/*j*/) {
         }
@@ -743,7 +788,7 @@ namespace traverse_policy {
         /**
         * \brief  Matrix block wrap method
         */
-        template <class S1, class S2, class S3>
+        template<class S1, class S2, class S3>
         BOOST_UBLAS_INLINE
         static void apply2(const S1 &/*s1*/, const S1 &/*s2*/, S2 &/*i1*/, S3 &/*i2*/) {
         }
@@ -758,23 +803,23 @@ namespace traverse_policy {
         /**
         * \brief  Element wrap method
         */
-        template <class S1, class S2, class S3>
+        template<class S1, class S2, class S3>
         BOOST_UBLAS_INLINE
         static void apply1(const S1 &s, S2 &i1, S3 &i2) {
-            if (i2>=s) {
+            if (i2 >= s) {
                 i1++;
-                i2=0;
+                i2 = 0;
             }
         }
 
         /**
         * \brief  Matrix block wrap method
         */
-        template <class S1, class S2, class S3>
+        template<class S1, class S2, class S3>
         BOOST_UBLAS_INLINE
         static void apply2(const S1 &s1, const S1 &s2, S2 &i1, S3 &i2) {
-            if (i2>=s2) i2=0;   // Wrap to the next block
-            else i1-=s1;        // Move up (or right) one block
+            if (i2 >= s2) i2 = 0;   // Wrap to the next block
+            else i1 -= s1;        // Move up (or right) one block
         }
     };
 
@@ -791,25 +836,29 @@ namespace traverse_policy {
     *
     * \todo Add examples link
     */
-    template <class Wrap = wrap>
-    class by_row_policy :public traverse_policy_wrapper<by_row_policy<Wrap> > {
+    template<class Wrap = wrap>
+    class by_row_policy : public traverse_policy_wrapper<by_row_policy<Wrap> > {
     public:
-        template <typename S1, typename S2>
+        template<typename S1, typename S2>
         BOOST_UBLAS_INLINE
-        static void advance(S1 &/*i*/, S2 &j) { j++;}
+        static void advance(S1 &/*i*/, S2 &j) { j++; }
 
-        template <class E1, class E2, typename S1, typename S2, typename S3, typename S4, typename S5>
+        template<class E1, class E2, typename S1, typename S2, typename S3, typename S4, typename S5>
         BOOST_UBLAS_INLINE
         static bool next(const E1 &e, const E2 &me, S1 &i, S2 &j, const S3 &/*i0*/, const S3 &j0, S4 &k, S5 &l) {
-            l++; j++;
-            if (l>=e().size2()) {
-                l=0; k++; j=j0; i++;
+            l++;
+            j++;
+            if (l >= e().size2()) {
+                l = 0;
+                k++;
+                j = j0;
+                i++;
                 // It is assumed that the iteration starts from 0 and happens only using this function from within
                 // an assigner object.
                 // Otherwise (i.e. if it is called outside the assigner object) apply2 should have been
                 // outside the if statement.
-                if (k>=e().size1()) {
-                    j=j0+e().size2();
+                if (k >= e().size1()) {
+                    j = j0 + e().size2();
                     Wrap::apply2(e().size1(), me().size2(), i, j);
                     return false;
                 }
@@ -817,9 +866,9 @@ namespace traverse_policy {
             return true;
         }
 
-        template <class E, typename S1, typename S2>
+        template<class E, typename S1, typename S2>
         BOOST_UBLAS_INLINE
-        static void apply_wrap(const E& e, S1 &i, S2 &j) {
+        static void apply_wrap(const E &e, S1 &i, S2 &j) {
             Wrap::apply1(e().size2(), i, j);
         }
     };
@@ -837,25 +886,29 @@ namespace traverse_policy {
     *
     * \todo Add examples link
     */
-    template <class Wrap = wrap>
-    class by_column_policy :public traverse_policy_wrapper<by_column_policy<Wrap> > {
+    template<class Wrap = wrap>
+    class by_column_policy : public traverse_policy_wrapper<by_column_policy<Wrap> > {
     public:
-        template <typename S1, typename S2>
+        template<typename S1, typename S2>
         BOOST_UBLAS_INLINE
-        static void advance(S1 &i, S2 &/*j*/) { i++;}
+        static void advance(S1 &i, S2 &/*j*/) { i++; }
 
-        template <class E1, class E2, typename S1, typename S2, typename S3, typename S4, typename S5>
+        template<class E1, class E2, typename S1, typename S2, typename S3, typename S4, typename S5>
         BOOST_UBLAS_INLINE
         static bool next(const E1 &e, const E2 &me, S1 &i, S2 &j, const S3 &i0, const S3 &/*j0*/, S4 &k, S5 &l) {
-            k++; i++;
-            if (k>=e().size1()) {
-                k=0; l++; i=i0; j++;
+            k++;
+            i++;
+            if (k >= e().size1()) {
+                k = 0;
+                l++;
+                i = i0;
+                j++;
                 // It is assumed that the iteration starts from 0 and happens only using this function from within
                 // an assigner object.
                 // Otherwise (i.e. if it is called outside the assigner object) apply2 should have been
                 // outside the if statement.
-                if (l>=e().size2()) {
-                    i=i0+e().size1();
+                if (l >= e().size2()) {
+                    i = i0 + e().size1();
                     Wrap::apply2(e().size2(), me().size1(), j, i);
                     return false;
                 }
@@ -863,30 +916,30 @@ namespace traverse_policy {
             return true;
         }
 
-        template <class E, typename S1, typename S2>
+        template<class E, typename S1, typename S2>
         BOOST_UBLAS_INLINE
-        static void apply_wrap(const E& e, S1 &i, S2 &j) {
+        static void apply_wrap(const E &e, S1 &i, S2 &j) {
             Wrap::apply1(e().size1(), j, i);
         }
     };
 }
 #ifndef BOOST_UBLAS_DEFAULT_NO_WRAP_POLICY
-    typedef traverse_policy::wrap DEFAULT_WRAP_POLICY;
+typedef traverse_policy::wrap DEFAULT_WRAP_POLICY;
 #else
-    typedef traverse_policy::no_wrap DEFAULT_WRAP_POLICY;
+typedef traverse_policy::no_wrap DEFAULT_WRAP_POLICY;
 #endif
 
 #ifndef BOOST_UBLAS_DEFAULT_ASSIGN_BY_COLUMN
-    typedef traverse_policy::by_row_policy<DEFAULT_WRAP_POLICY> DEFAULT_TRAVERSE_POLICY;
+typedef traverse_policy::by_row_policy<DEFAULT_WRAP_POLICY> DEFAULT_TRAVERSE_POLICY;
 #else
-    typedef traverse_policy::by_column<DEFAULT_WRAP_POLICY> DEFAULT_TRAVERSE_POLICY;
+typedef traverse_policy::by_column<DEFAULT_WRAP_POLICY> DEFAULT_TRAVERSE_POLICY;
 #endif
 
- // Traverse policy namespace
+// Traverse policy namespace
 namespace traverse_policy {
 
     inline by_row_policy<DEFAULT_WRAP_POLICY> by_row() {
-    return by_row_policy<DEFAULT_WRAP_POLICY>();
+        return by_row_policy<DEFAULT_WRAP_POLICY>();
     }
 
     inline by_row_policy<wrap> by_row_wrap() {
@@ -919,7 +972,7 @@ namespace traverse_policy {
 *
 * \todo Add examples link
 */
-template <class E, class Fill_Policy = fill_policy::index_assign>
+template<class E, class Fill_Policy = fill_policy::index_assign>
 class vector_expression_assigner {
 public:
     typedef typename E::expression_type::value_type value_type;
@@ -940,48 +993,62 @@ public:
         operator,(val);
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    vector_expression_assigner(E &e, const vector_expression<AE> &nve):ve(e), i(0) {
+    vector_expression_assigner(E &e, const vector_expression <AE> &nve):ve(e), i(0) {
         operator,(nve);
     }
 
-    template <typename T>
+    template<typename T>
     BOOST_UBLAS_INLINE
-    vector_expression_assigner(E &e, const index_manipulator<T> &ta):ve(e), i(0) {
+    vector_expression_assigner(E &e, const index_manipulator <T> &ta):ve(e), i(0) {
         operator,(ta);
     }
 
     BOOST_UBLAS_INLINE
-    vector_expression_assigner &operator, (const value_type& val) {
+            vector_expression_assigner
+    &
+
+    operator,(const value_type &val) {
         apply(val);
         return *this;
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    vector_expression_assigner &operator, (const vector_expression<AE> &nve) {
-        for (typename AE::size_type k = 0; k!= nve().size(); k++)
+            vector_expression_assigner
+    &
+
+    operator,(const vector_expression <AE> &nve) {
+        for (typename AE::size_type k = 0; k != nve().size(); k++)
             operator,(nve()(k));
         return *this;
     }
 
-    template <typename T>
+    template<typename T>
     BOOST_UBLAS_INLINE
-    vector_expression_assigner &operator, (const index_manipulator<T> &ta) {
+            vector_expression_assigner
+    &
+
+    operator,(const index_manipulator <T> &ta) {
         ta().manip(i);
         return *this;
     }
 
-    template <class T>
+    template<class T>
     BOOST_UBLAS_INLINE
-    vector_expression_assigner<E, T> operator, (fill_policy_wrapper<T>) const {
-        return vector_expression_assigner<E, T>(i, ve);
+            vector_expression_assigner<E, T>
+
+    operator,(fill_policy_wrapper<T>) const {
+        return vector_expression_assigner < E, T > (i, ve);
     }
 
 private:
     BOOST_UBLAS_INLINE
-    vector_expression_assigner &apply(const typename E::expression_type::value_type& val) {
+            vector_expression_assigner
+    &
+
+    apply(const typename E::expression_type::value_type &val) {
         Fill_Policy::apply(ve, i++, val);
         return *this;
     }
@@ -1042,10 +1109,13 @@ static_vector_expression_assigner<vector_expression<E>, 1 > test_static(vector_e
 *
 * \todo Add examples link
 */
-template <class E>
+template<class E>
 BOOST_UBLAS_INLINE
-vector_expression_assigner<vector_expression<E> > operator<<=(vector_expression<E> &v, const typename E::value_type &val) {
-    return vector_expression_assigner<vector_expression<E> >(v,val);
+        vector_expression_assigner<vector_expression < E>
+>
+
+operator<<=(vector_expression <E> &v, const typename E::value_type &val) {
+    return vector_expression_assigner < vector_expression < E > > (v, val);
 }
 
 /**
@@ -1055,10 +1125,13 @@ vector_expression_assigner<vector_expression<E> > operator<<=(vector_expression<
 *
 * \todo Add examples link
 */
-template <class E1, class E2>
+template<class E1, class E2>
 BOOST_UBLAS_INLINE
-vector_expression_assigner<vector_expression<E1> > operator<<=(vector_expression<E1> &v, const vector_expression<E2> &ve) {
-    return vector_expression_assigner<vector_expression<E1> >(v,ve);
+        vector_expression_assigner<vector_expression < E1>
+>
+
+operator<<=(vector_expression <E1> &v, const vector_expression <E2> &ve) {
+    return vector_expression_assigner < vector_expression < E1 > > (v, ve);
 }
 
 /**
@@ -1068,10 +1141,13 @@ vector_expression_assigner<vector_expression<E1> > operator<<=(vector_expression
 *
 * \todo Add examples link
 */
-template <class E, typename T>
+template<class E, typename T>
 BOOST_UBLAS_INLINE
-vector_expression_assigner<vector_expression<E> > operator<<=(vector_expression<E> &v, const index_manipulator<T> &nv) {
-    return vector_expression_assigner<vector_expression<E> >(v,nv);
+        vector_expression_assigner<vector_expression < E>
+>
+
+operator<<=(vector_expression <E> &v, const index_manipulator <T> &nv) {
+    return vector_expression_assigner < vector_expression < E > > (v, nv);
 }
 
 /**
@@ -1081,10 +1157,13 @@ vector_expression_assigner<vector_expression<E> > operator<<=(vector_expression<
 *
 * \todo Add examples link
 */
-template <class E, typename T>
+template<class E, typename T>
 BOOST_UBLAS_INLINE
-vector_expression_assigner<vector_expression<E>, T> operator<<=(vector_expression<E> &v, fill_policy_wrapper<T>) {
-    return vector_expression_assigner<vector_expression<E>, T>(v);
+        vector_expression_assigner<vector_expression < E>, T
+>
+
+operator<<=(vector_expression <E> &v, fill_policy_wrapper<T>) {
+    return vector_expression_assigner < vector_expression < E > , T > (v);
 }
 
 /**
@@ -1095,7 +1174,7 @@ vector_expression_assigner<vector_expression<E>, T> operator<<=(vector_expressio
 *
 * \todo Add examples link
 */
-template <class E, class Fill_Policy = fill_policy::index_assign, class Traverse_Policy = DEFAULT_TRAVERSE_POLICY >
+template<class E, class Fill_Policy = fill_policy::index_assign, class Traverse_Policy = DEFAULT_TRAVERSE_POLICY>
 class matrix_expression_assigner {
 public:
     typedef typename E::expression_type::size_type size_type;
@@ -1113,80 +1192,102 @@ public:
         operator,(val);
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner(E &e, const vector_expression<AE> &nve):me(e), i(0), j(0) {
+    matrix_expression_assigner(E &e, const vector_expression <AE> &nve):me(e), i(0), j(0) {
         operator,(nve);
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner(E &e, const matrix_expression<AE> &nme):me(e), i(0), j(0) {
+    matrix_expression_assigner(E &e, const matrix_expression <AE> &nme):me(e), i(0), j(0) {
         operator,(nme);
     }
 
-    template <typename T>
+    template<typename T>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner(E &e, const index_manipulator<T> &ta):me(e), i(0), j(0) {
+    matrix_expression_assigner(E &e, const index_manipulator <T> &ta):me(e), i(0), j(0) {
         operator,(ta);
     }
 
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner &operator, (const typename E::expression_type::value_type& val) {
-        Traverse_Policy::apply_wrap(me, i ,j);
+            matrix_expression_assigner
+    &
+
+    operator,(const typename E::expression_type::value_type &val) {
+        Traverse_Policy::apply_wrap(me, i, j);
         return apply(val);
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner &operator, (const vector_expression<AE> &nve) {
-        for (typename AE::size_type k = 0; k!= nve().size(); k++) {
+            matrix_expression_assigner
+    &
+
+    operator,(const vector_expression <AE> &nve) {
+        for (typename AE::size_type k = 0; k != nve().size(); k++) {
             operator,(nve()(k));
         }
         return *this;
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner &operator, (const matrix_expression<AE> &nme) {
+            matrix_expression_assigner
+    &
+
+    operator,(const matrix_expression <AE> &nme) {
         return apply(nme);
     }
 
-    template <typename T>
+    template<typename T>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner &operator, (const index_manipulator<T> &ta) {
+            matrix_expression_assigner
+    &
+
+    operator,(const index_manipulator <T> &ta) {
         ta().manip(i, j);
         return *this;
-    } 
+    }
 
-    template <class T>
+    template<class T>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner<E, T, Traverse_Policy> operator, (fill_policy_wrapper<T>) const {
-        return matrix_expression_assigner<E, T, Traverse_Policy>(me, i, j);
+            matrix_expression_assigner<E, T, Traverse_Policy>
+
+    operator,(fill_policy_wrapper<T>) const {
+        return matrix_expression_assigner < E, T, Traverse_Policy > (me, i, j);
     }
 
 
-    template <class T>
+    template<class T>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner<E, Fill_Policy, T> operator, (traverse_policy_wrapper<T>) {
-        Traverse_Policy::apply_wrap(me, i ,j);
-        return matrix_expression_assigner<E, Fill_Policy, T>(me, i, j);
+            matrix_expression_assigner<E, Fill_Policy, T>
+
+    operator,(traverse_policy_wrapper<T>) {
+        Traverse_Policy::apply_wrap(me, i, j);
+        return matrix_expression_assigner < E, Fill_Policy, T > (me, i, j);
     }
 
 private:
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner &apply(const typename E::expression_type::value_type& val) {
+            matrix_expression_assigner
+    &
+
+    apply(const typename E::expression_type::value_type &val) {
         Fill_Policy::apply(me, i, j, val);
-        Traverse_Policy::advance(i,j);
+        Traverse_Policy::advance(i, j);
         return *this;
     }
 
-    template <class AE>
+    template<class AE>
     BOOST_UBLAS_INLINE
-    matrix_expression_assigner &apply(const matrix_expression<AE> &nme) {
+            matrix_expression_assigner
+    &
+
+    apply(const matrix_expression <AE> &nme) {
         size_type bi = i;
         size_type bj = j;
-        typename AE::size_type k=0, l=0;
+        typename AE::size_type k = 0, l = 0;
         Fill_Policy::apply(me, i, j, nme()(k, l));
         while (Traverse_Policy::next(nme, me, i, j, bi, bj, k, l))
             Fill_Policy::apply(me, i, j, nme()(k, l));
@@ -1205,10 +1306,13 @@ private:
 *
 * \todo Add examples link
 */
-template <class E>
+template<class E>
 BOOST_UBLAS_INLINE
-matrix_expression_assigner<matrix_expression<E> > operator<<=(matrix_expression<E> &me, const typename E::value_type &val) {
-    return matrix_expression_assigner<matrix_expression<E> >(me,val);
+        matrix_expression_assigner<matrix_expression < E>
+>
+
+operator<<=(matrix_expression <E> &me, const typename E::value_type &val) {
+    return matrix_expression_assigner < matrix_expression < E > > (me, val);
 }
 
 /**
@@ -1218,10 +1322,13 @@ matrix_expression_assigner<matrix_expression<E> > operator<<=(matrix_expression<
 *
 * \todo Add examples link
 */
-template <class E, typename T>
+template<class E, typename T>
 BOOST_UBLAS_INLINE
-matrix_expression_assigner<matrix_expression<E>, T> operator<<=(matrix_expression<E> &me, fill_policy_wrapper<T>) {
-    return matrix_expression_assigner<matrix_expression<E>, T>(me);
+        matrix_expression_assigner<matrix_expression < E>, T
+>
+
+operator<<=(matrix_expression <E> &me, fill_policy_wrapper<T>) {
+    return matrix_expression_assigner < matrix_expression < E > , T > (me);
 }
 
 /**
@@ -1231,10 +1338,13 @@ matrix_expression_assigner<matrix_expression<E>, T> operator<<=(matrix_expressio
 *
 * \todo Add examples link
 */
-template <class E, typename T>
+template<class E, typename T>
 BOOST_UBLAS_INLINE
-matrix_expression_assigner<matrix_expression<E> > operator<<=(matrix_expression<E> &me, const index_manipulator<T> &ta) {
-    return matrix_expression_assigner<matrix_expression<E> >(me,ta);
+        matrix_expression_assigner<matrix_expression < E>
+>
+
+operator<<=(matrix_expression <E> &me, const index_manipulator <T> &ta) {
+    return matrix_expression_assigner < matrix_expression < E > > (me, ta);
 }
 
 /**
@@ -1244,10 +1354,13 @@ matrix_expression_assigner<matrix_expression<E> > operator<<=(matrix_expression<
 *
 * \todo Add examples link
 */
-template <class E, typename T>
+template<class E, typename T>
 BOOST_UBLAS_INLINE
-matrix_expression_assigner<matrix_expression<E>, fill_policy::index_assign, T> operator<<=(matrix_expression<E> &me, traverse_policy_wrapper<T>) {
-    return matrix_expression_assigner<matrix_expression<E>, fill_policy::index_assign, T>(me);
+        matrix_expression_assigner<matrix_expression < E>, fill_policy::index_assign, T
+>
+
+operator<<=(matrix_expression <E> &me, traverse_policy_wrapper<T>) {
+    return matrix_expression_assigner < matrix_expression < E > , fill_policy::index_assign, T > (me);
 }
 
 /**
@@ -1257,10 +1370,13 @@ matrix_expression_assigner<matrix_expression<E>, fill_policy::index_assign, T> o
 *
 * \todo Add examples link
 */
-template <class E1, class E2>
+template<class E1, class E2>
 BOOST_UBLAS_INLINE
-matrix_expression_assigner<matrix_expression<E1> > operator<<=(matrix_expression<E1> &me, const vector_expression<E2> &ve) {
-    return matrix_expression_assigner<matrix_expression<E1> >(me,ve);
+        matrix_expression_assigner<matrix_expression < E1>
+>
+
+operator<<=(matrix_expression <E1> &me, const vector_expression <E2> &ve) {
+    return matrix_expression_assigner < matrix_expression < E1 > > (me, ve);
 }
 
 /**
@@ -1270,12 +1386,15 @@ matrix_expression_assigner<matrix_expression<E1> > operator<<=(matrix_expression
 *
 * \todo Add examples link
 */
-template <class E1, class E2>
+template<class E1, class E2>
 BOOST_UBLAS_INLINE
-matrix_expression_assigner<matrix_expression<E1> > operator<<=(matrix_expression<E1> &me1, const matrix_expression<E2> &me2) {
-    return matrix_expression_assigner<matrix_expression<E1> >(me1,me2);
+        matrix_expression_assigner<matrix_expression < E1>
+>
+
+operator<<=(matrix_expression <E1> &me1, const matrix_expression <E2> &me2) {
+    return matrix_expression_assigner < matrix_expression < E1 > > (me1, me2);
 }
 
-} } }
+}}}
 
 #endif // ASSIGNMENT_HPP

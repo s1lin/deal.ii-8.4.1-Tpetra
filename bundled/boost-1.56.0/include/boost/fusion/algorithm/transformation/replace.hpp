@@ -13,32 +13,33 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename T>
-        struct replace
-        {
-            typedef transform_view<Sequence, detail::replacer<T> > type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename T>
+            struct replace {
+                typedef transform_view <Sequence, detail::replacer<T>> type;
+            };
+        }
 
-    template <typename Sequence, typename T>
-    BOOST_FUSION_GPU_ENABLED
-    inline 
-    typename
-        enable_if<
-            traits::is_sequence<Sequence>
-          , typename result_of::replace<Sequence const, T>::type
-        >::type
-    replace(Sequence const& seq, T const& old_value, T const& new_value)
-    {
-        typedef typename result_of::replace<Sequence const, T>::type result;
-        detail::replacer<T> f(old_value, new_value);
-        return result(seq, f);
+        template<typename Sequence, typename T>
+        BOOST_FUSION_GPU_ENABLED
+        inline
+        typename
+                enable_if<
+                traits::is_sequence < Sequence>
+        ,
+        typename result_of::replace<Sequence const, T>::type
+        >
+
+        ::type
+        replace(Sequence const &seq, T const &old_value, T const &new_value) {
+            typedef typename result_of::replace<Sequence const, T>::type result;
+            detail::replacer <T> f(old_value, new_value);
+            return result(seq, f);
+        }
     }
-}}
+}
 
 #endif
 

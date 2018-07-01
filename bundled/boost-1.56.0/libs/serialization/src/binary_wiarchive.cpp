@@ -15,6 +15,7 @@
 #else
 
 #define BOOST_WARCHIVE_SOURCE
+
 #include <boost/archive/binary_wiarchive.hpp>
 #include <boost/archive/detail/archive_serializer_map.hpp>
 
@@ -24,23 +25,32 @@
 #include <boost/archive/impl/basic_binary_iarchive.ipp>
 
 namespace boost {
-namespace archive {
+    namespace archive {
 
 // explicitly instantiate for this type of text stream
-template class detail::archive_serializer_map<binary_wiarchive>;
-template class basic_binary_iprimitive<
-    binary_wiarchive,
-    wchar_t, 
-    std::char_traits<wchar_t> 
->;
-template class basic_binary_iarchive<binary_wiarchive> ;
-template class binary_iarchive_impl<
-    binary_wiarchive, 
-    wchar_t, 
-    std::char_traits<wchar_t> 
->;
+        template
+        class detail::archive_serializer_map<binary_wiarchive>;
 
-} // namespace archive
+        template
+        class basic_binary_iprimitive<
+                binary_wiarchive,
+                wchar_t,
+                std::char_traits < wchar_t>
+
+        >;
+
+        template
+        class basic_binary_iarchive<binary_wiarchive>;
+
+        template
+        class binary_iarchive_impl<
+                binary_wiarchive,
+                wchar_t,
+                std::char_traits < wchar_t>
+
+        >;
+
+    } // namespace archive
 } // namespace boost
 
 #endif  // BOOST_NO_STD_WSTREAMBUF

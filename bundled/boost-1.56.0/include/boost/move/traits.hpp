@@ -21,7 +21,9 @@
 #include <boost/move/detail/meta_utils.hpp>
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
 #include <boost/move/core.hpp>
+
 #endif
 
 namespace boost {
@@ -35,100 +37,115 @@ namespace boost {
 //! By default this trait is true if the type has trivial destructor,
 //! every class should specialize this trait if it wants to improve performance
 //! when inserted in containers.
-template <class T>
-struct has_trivial_destructor_after_move
-   : ::boost::has_trivial_destructor<T>
-{};
+    template<class T>
+    struct has_trivial_destructor_after_move
+            : ::boost::has_trivial_destructor<T> {
+    };
 
 //! By default this traits returns
 //! <pre>boost::is_nothrow_move_constructible<T>::value && boost::is_nothrow_move_assignable<T>::value </pre>.
 //! Classes with non-throwing move constructor
 //! and assignment can specialize this trait to obtain some performance improvements.
-template <class T>
-struct has_nothrow_move
-   : public ::boost::move_detail::integral_constant
-      < bool
-      , boost::is_nothrow_move_constructible<T>::value &&
-        boost::is_nothrow_move_assignable<T>::value
-      >
-{};
+    template<class T>
+    struct has_nothrow_move
+            : public ::boost::move_detail::integral_constant
+                    <bool, boost::is_nothrow_move_constructible<T>::value &&
+                           boost::is_nothrow_move_assignable<T>::value
+                    > {
+    };
 
-namespace move_detail {
+    namespace move_detail {
 
 // Code from Jeffrey Lee Hellrung, many thanks
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T> struct forward_type { typedef T type; };
+        template<class T>
+        struct forward_type {
+            typedef T type;
+        };
 #else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T>
-   struct forward_type
-   { typedef const T &type; };
+        template< class T>
+        struct forward_type
+        { typedef const T &type; };
 
-   template< class T>
-   struct forward_type< boost::rv<T> >
-   { typedef T type; };
+        template< class T>
+        struct forward_type< boost::rv<T> >
+        { typedef T type; };
 #endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-template< class T > struct is_rvalue_reference : ::boost::move_detail::integral_constant<bool, false> { };
+        template<class T>
+        struct is_rvalue_reference : ::boost::move_detail::integral_constant<bool, false> {
+        };
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T > struct is_rvalue_reference< T&& > : ::boost::move_detail::integral_constant<bool, true> { };
+        template<class T>
+        struct is_rvalue_reference<T &&> : ::boost::move_detail::integral_constant<bool, true> {
+        };
 #else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T > struct is_rvalue_reference< boost::rv<T>& >
-      :  ::boost::move_detail::integral_constant<bool, true>
-   {};
+        template< class T > struct is_rvalue_reference< boost::rv<T>& >
+           :  ::boost::move_detail::integral_constant<bool, true>
+        {};
 
-   template< class T > struct is_rvalue_reference< const boost::rv<T>& >
-      : ::boost::move_detail::integral_constant<bool, true>
-   {};
+        template< class T > struct is_rvalue_reference< const boost::rv<T>& >
+           : ::boost::move_detail::integral_constant<bool, true>
+        {};
 #endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T > struct add_rvalue_reference { typedef T&& type; };
-#else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   namespace detail_add_rvalue_reference
-   {
-      template< class T
-              , bool emulation = ::boost::has_move_emulation_enabled<T>::value
-              , bool rv        = ::boost::move_detail::is_rv<T>::value  >
-      struct add_rvalue_reference_impl { typedef T type; };
-
-      template< class T, bool emulation>
-      struct add_rvalue_reference_impl< T, emulation, true > { typedef T & type; };
-
-      template< class T, bool rv >
-      struct add_rvalue_reference_impl< T, true, rv > { typedef ::boost::rv<T>& type; };
-   } // namespace detail_add_rvalue_reference
-
-   template< class T >
-   struct add_rvalue_reference
-      : detail_add_rvalue_reference::add_rvalue_reference_impl<T>
-   { };
-
-   template< class T >
-   struct add_rvalue_reference<T &>
-   {  typedef T & type; };
-
-#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-
-template< class T > struct remove_rvalue_reference { typedef T type; };
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T > struct remove_rvalue_reference< T&& >                  { typedef T type; };
+        template<class T>
+        struct add_rvalue_reference {
+            typedef T &&type;
+        };
 #else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   template< class T > struct remove_rvalue_reference< rv<T> >                { typedef T type; };
-   template< class T > struct remove_rvalue_reference< const rv<T> >          { typedef T type; };
-   template< class T > struct remove_rvalue_reference< volatile rv<T> >       { typedef T type; };
-   template< class T > struct remove_rvalue_reference< const volatile rv<T> > { typedef T type; };
-   template< class T > struct remove_rvalue_reference< rv<T>& >               { typedef T type; };
-   template< class T > struct remove_rvalue_reference< const rv<T>& >         { typedef T type; };
-   template< class T > struct remove_rvalue_reference< volatile rv<T>& >      { typedef T type; };
-   template< class T > struct remove_rvalue_reference< const volatile rv<T>& >{ typedef T type; };
+        namespace detail_add_rvalue_reference
+        {
+           template< class T
+                   , bool emulation = ::boost::has_move_emulation_enabled<T>::value
+                   , bool rv        = ::boost::move_detail::is_rv<T>::value  >
+           struct add_rvalue_reference_impl { typedef T type; };
+
+           template< class T, bool emulation>
+           struct add_rvalue_reference_impl< T, emulation, true > { typedef T & type; };
+
+           template< class T, bool rv >
+           struct add_rvalue_reference_impl< T, true, rv > { typedef ::boost::rv<T>& type; };
+        } // namespace detail_add_rvalue_reference
+
+        template< class T >
+        struct add_rvalue_reference
+           : detail_add_rvalue_reference::add_rvalue_reference_impl<T>
+        { };
+
+        template< class T >
+        struct add_rvalue_reference<T &>
+        {  typedef T & type; };
+
 #endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-template <typename T>
-typename boost::move_detail::add_rvalue_reference<T>::type declval();
+        template<class T>
+        struct remove_rvalue_reference {
+            typedef T type;
+        };
 
-}  //move_detail {
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        template<class T>
+        struct remove_rvalue_reference<T &&> {
+            typedef T type;
+        };
+#else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        template< class T > struct remove_rvalue_reference< rv<T> >                { typedef T type; };
+        template< class T > struct remove_rvalue_reference< const rv<T> >          { typedef T type; };
+        template< class T > struct remove_rvalue_reference< volatile rv<T> >       { typedef T type; };
+        template< class T > struct remove_rvalue_reference< const volatile rv<T> > { typedef T type; };
+        template< class T > struct remove_rvalue_reference< rv<T>& >               { typedef T type; };
+        template< class T > struct remove_rvalue_reference< const rv<T>& >         { typedef T type; };
+        template< class T > struct remove_rvalue_reference< volatile rv<T>& >      { typedef T type; };
+        template< class T > struct remove_rvalue_reference< const volatile rv<T>& >{ typedef T type; };
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
+        template<typename T>
+        typename boost::move_detail::add_rvalue_reference<T>::type declval();
+
+    }  //move_detail {
 
 // Ideas from Boost.Move review, Jeffrey Lee Hellrung:
 //

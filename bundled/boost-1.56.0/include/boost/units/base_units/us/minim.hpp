@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pint_base_unit, scale<7680, static_rational<-1> > > minim_base_unit;
+            typedef scaled_base_unit <pint_base_unit, scale<7680, static_rational < -1>> >
+            minim_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::minim_base_unit> {
-    static const char* name()   { return("minim (U.S.)"); }
-    static const char* symbol() { return("minim"); }
-};
+        template<>
+        struct base_unit_info<us::minim_base_unit> {
+            static const char *name() { return ("minim (U.S.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("minim"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

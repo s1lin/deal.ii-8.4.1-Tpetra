@@ -18,22 +18,24 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace imperial {
+        namespace imperial {
 
 //typedef scaled_base_unit<pint_base_unit, scale<2, static_rational<-2> > > gill_base_unit;
-typedef scaled_base_unit<pint_base_unit, scale<4, static_rational<-1> > > gill_base_unit;
+            typedef scaled_base_unit <pint_base_unit, scale<4, static_rational < -1>> >
+            gill_base_unit;
 
-} // namespace imperial
+        } // namespace imperial
 
-template<>
-struct base_unit_info<imperial::gill_base_unit> {
-    static const char* name()   { return("gill (imp.)"); }
-    static const char* symbol() { return("gill"); }
-};
+        template<>
+        struct base_unit_info<imperial::gill_base_unit> {
+            static const char *name() { return ("gill (imp.)"); }
 
-} // namespace units
+            static const char *symbol() { return ("gill"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

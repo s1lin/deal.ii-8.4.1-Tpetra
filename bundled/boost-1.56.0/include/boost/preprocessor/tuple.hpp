@@ -6,15 +6,24 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 # /* Revised by Edward Diener (2011,2013) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_TUPLE_HPP
 # define BOOST_PREPROCESSOR_TUPLE_HPP
 #
+
+
 # include <boost/preprocessor/tuple/eat.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
 # include <boost/preprocessor/tuple/enum.hpp>
@@ -31,5 +40,7 @@
 # include <boost/preprocessor/tuple/to_array.hpp>
 # include <boost/preprocessor/tuple/to_list.hpp>
 # include <boost/preprocessor/tuple/to_seq.hpp>
+
 #
+
 # endif

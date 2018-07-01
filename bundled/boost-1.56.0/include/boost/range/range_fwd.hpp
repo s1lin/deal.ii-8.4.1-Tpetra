@@ -10,8 +10,7 @@
 #ifndef BOOST_RANGE_RANGE_FWD_HPP_INCLUDED
 #define BOOST_RANGE_RANGE_FWD_HPP_INCLUDED
 
-namespace boost
-{
+namespace boost {
 
 // Extension points
     template<typename C, typename Enabler>

@@ -5,6 +5,6 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_valid_symbolic
-(
-    SymbolicType *Symbolic
-) ;
+        (
+                SymbolicType *Symbolic
+        );

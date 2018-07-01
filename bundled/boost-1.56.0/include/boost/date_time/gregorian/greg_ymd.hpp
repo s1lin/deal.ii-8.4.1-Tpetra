@@ -16,15 +16,15 @@
 #include "boost/date_time/gregorian/greg_month.hpp"
 
 namespace boost {
-namespace gregorian {
-  
-  typedef date_time::year_month_day_base<greg_year, 
-                                         greg_month, 
-                                         greg_day> greg_year_month_day;
-  
-  
-  
-} } //namespace gregorian
+    namespace gregorian {
+
+        typedef date_time::year_month_day_base <greg_year,
+        greg_month,
+        greg_day> greg_year_month_day;
+
+
+    }
+} //namespace gregorian
 
 
 

@@ -18,6 +18,7 @@
 
 #   ifndef BOOST_FT_DETAIL_CC_LOOP_MASTER_HPP_INCLUDED
 #   define BOOST_FT_DETAIL_CC_LOOP_MASTER_HPP_INCLUDED
+
 #     include <boost/function_types/config/cc_names.hpp>
 
 #     include <boost/preprocessor/cat.hpp>
@@ -27,6 +28,7 @@
 #     include <boost/preprocessor/iteration/iterate.hpp>
 #     include <boost/preprocessor/facilities/expand.hpp>
 #     include <boost/preprocessor/arithmetic/inc.hpp>
+
 #   endif
 
 #   include <boost/function_types/detail/encoding/def.hpp>
@@ -36,7 +38,9 @@
         <boost/function_types/detail/pp_cc_loop/master.hpp>
 #   define  BOOST_PP_ITERATION_LIMITS \
         (0,BOOST_PP_SEQ_SIZE(BOOST_FT_CC_NAMES_SEQ)-1)
+
 #   include BOOST_PP_ITERATE()
+
 #   if !defined(BOOST_FT_config_valid) && BOOST_FT_CC_PREPROCESSING
 #     define BOOST_FT_cc_id 1
 #     define BOOST_FT_cc_name implicit_cc
@@ -48,20 +52,38 @@
 #     undef BOOST_FT_cc
 #     undef BOOST_FT_cc_id
 #   elif !defined(BOOST_FT_config_valid) // and generating preprocessed file
-BOOST_PP_EXPAND(#) ifndef BOOST_FT_config_valid
-BOOST_PP_EXPAND(#)   define BOOST_FT_cc_id 1
-BOOST_PP_EXPAND(#)   define BOOST_FT_cc_name implicit_cc
-BOOST_PP_EXPAND(#)   define BOOST_FT_cc BOOST_PP_EMPTY
-BOOST_PP_EXPAND(#)   define BOOST_FT_cond callable_builtin
+BOOST_PP_EXPAND(#)
+ifndef BOOST_FT_config_valid
+BOOST_PP_EXPAND(#)
+define BOOST_FT_cc_id
+1
+BOOST_PP_EXPAND(#)
+define BOOST_FT_cc_name
+implicit_cc
+        BOOST_PP_EXPAND(
+#)
+define BOOST_FT_cc
+BOOST_PP_EMPTY
+        BOOST_PP_EXPAND(
+#)
+define BOOST_FT_cond
+callable_builtin
 #define _()
-BOOST_PP_EXPAND(#)   include BOOST_FT_cc_file
+        BOOST_PP_EXPAND(
+#)
+include BOOST_FT_cc_file
 #undef _
-BOOST_PP_EXPAND(#)   undef BOOST_FT_cond
-BOOST_PP_EXPAND(#)   undef BOOST_FT_cc_name
-BOOST_PP_EXPAND(#)   undef BOOST_FT_cc
-BOOST_PP_EXPAND(#)   undef BOOST_FT_cc_id
+BOOST_PP_EXPAND(#)
+undef BOOST_FT_cond
+BOOST_PP_EXPAND(#)
+undef BOOST_FT_cc_name
+BOOST_PP_EXPAND(#)
+undef BOOST_FT_cc
+BOOST_PP_EXPAND(#)
+undef BOOST_FT_cc_id
 BOOST_PP_EXPAND(#) else
-BOOST_PP_EXPAND(#)   undef BOOST_FT_config_valid
+BOOST_PP_EXPAND(#)
+undef BOOST_FT_config_valid
 BOOST_PP_EXPAND(#) endif
 
 #   else

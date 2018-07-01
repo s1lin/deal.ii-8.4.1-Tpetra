@@ -18,17 +18,18 @@
 #include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/list/aux_/tag.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct pop_front_impl< aux::list_tag >
-{
-    template< typename List > struct apply
-    {
-        typedef typename mpl::next<List>::type type;
-    };
-};
+        template<>
+        struct pop_front_impl<aux::list_tag> {
+            template<typename List>
+            struct apply {
+                typedef typename mpl::next<List>::type type;
+            };
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_LIST_AUX_POP_FRONT_HPP_INCLUDED

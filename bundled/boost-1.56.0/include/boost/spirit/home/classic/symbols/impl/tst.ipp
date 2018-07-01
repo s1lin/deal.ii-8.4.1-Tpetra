@@ -14,12 +14,12 @@
 #include <boost/spirit/home/classic/core/assert.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    namespace impl
-    {
+        namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -40,242 +40,203 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //          not meant for public consumption ***
 //
 ///////////////////////////////////////////////////////////////////////////////
-    template <typename T, typename CharT>
-    struct tst_node
-    {
-        tst_node(CharT value_)
-        : value(value_)
-        , left(0)
-        , right(0)
-        { middle.link = 0; }
+            template<typename T, typename CharT>
+            struct tst_node {
+                tst_node(CharT value_)
+                        : value(value_), left(0), right(0) { middle.link = 0; }
 
-        ~tst_node()
-        {
-            delete left;
-            delete right;
-            if (value)
-                delete middle.link;
-            else
-                delete middle.data;
-        }
-
-        tst_node*
-        clone() const
-        {
-            std::auto_ptr<tst_node> copy(new tst_node(value));
-
-            if (left)
-                copy->left = left->clone();
-            if (right)
-                copy->right = right->clone();
-
-            if (value && middle.link)
-            {
-                copy->middle.link = middle.link->clone();
-            }
-            else
-            {
-                std::auto_ptr<T> mid_data(new T(*middle.data));
-                copy->middle.data = mid_data.release();
-            }
-
-            return copy.release();
-        }
-
-        union center {
-
-            tst_node*   link;
-            T*          data;
-        };
-
-        CharT       value;
-        tst_node*   left;
-        center      middle;
-        tst_node*   right;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename T, typename CharT>
-    class tst
-    {
-    public:
-
-        struct search_info
-        {
-            T*          data;
-            std::size_t length;
-        };
-
-        tst()
-        : root(0) {}
-
-        tst(tst const& other)
-        : root(other.root ? other.root->clone() : 0) {}
-
-        ~tst()
-        { delete root; }
-
-        tst&
-        operator=(tst const& other)
-        {
-            if (this != &other)
-            {
-                node_t* new_root = other.root ? other.root->clone() : 0;
-                delete root;
-                root = new_root;
-            }
-            return *this;
-        }
-
-        template <typename IteratorT>
-        T* add(IteratorT first, IteratorT const& last, T const& data)
-        {
-            if (first == last)
-                return 0;
-
-            node_t**  np = &root;
-            CharT   ch = *first;
-
-            BOOST_SPIRIT_ASSERT((first == last || ch != 0)
-                && "Won't add string containing null character");
-
-            for (;;)
-            {
-                if (*np == 0 || ch == 0)
-                {
-                    node_t* right = 0;
-                    if (np != 0)
-                        right = *np;
-                    *np = new node_t(ch);
-                    if (right)
-                        (**np).right = right;
-                }
-
-                if (ch < (**np).value)
-                {
-                    np = &(**np).left;
-                }
-                else
-                {
-                    if (ch == (**np).value)
-                    {
-                        if (ch == 0)
-                        {
-                            if ((**np).middle.data == 0)
-                            {
-                                (**np).middle.data = new T(data);
-                                return (**np).middle.data;
-                            }
-                            else
-                            {
-                                //  re-addition is disallowed
-                                return 0;
-                            }
-                       }
-                        ++first;
-                        ch = (first == last) ? CharT(0) : *first;
-                        BOOST_SPIRIT_ASSERT((first == last || ch != 0)
-                            && "Won't add string containing null character");
-                        np = &(**np).middle.link;
-                    }
+                ~tst_node() {
+                    delete left;
+                    delete right;
+                    if (value)
+                        delete middle.link;
                     else
-                    {
-                        np = &(**np).right;
+                        delete middle.data;
+                }
+
+                tst_node *
+                clone() const {
+                    std::auto_ptr<tst_node> copy(new tst_node(value));
+
+                    if (left)
+                        copy->left = left->clone();
+                    if (right)
+                        copy->right = right->clone();
+
+                    if (value && middle.link) {
+                        copy->middle.link = middle.link->clone();
+                    } else {
+                        std::auto_ptr<T> mid_data(new T(*middle.data));
+                        copy->middle.data = mid_data.release();
+                    }
+
+                    return copy.release();
+                }
+
+                union center {
+
+                    tst_node *link;
+                    T *data;
+                };
+
+                CharT value;
+                tst_node *left;
+                center middle;
+                tst_node *right;
+            };
+
+            ///////////////////////////////////////////////////////////////////////////
+            template<typename T, typename CharT>
+            class tst {
+            public:
+
+                struct search_info {
+                    T *data;
+                    std::size_t length;
+                };
+
+                tst()
+                        : root(0) {}
+
+                tst(tst const &other)
+                        : root(other.root ? other.root->clone() : 0) {}
+
+                ~tst() { delete root; }
+
+                tst &
+                operator=(tst const &other) {
+                    if (this != &other) {
+                        node_t *new_root = other.root ? other.root->clone() : 0;
+                        delete root;
+                        root = new_root;
+                    }
+                    return *this;
+                }
+
+                template<typename IteratorT>
+                T *add(IteratorT first, IteratorT const &last, T const &data) {
+                    if (first == last)
+                        return 0;
+
+                    node_t **np = &root;
+                    CharT ch = *first;
+
+                    BOOST_SPIRIT_ASSERT((first == last || ch != 0)
+                                        && "Won't add string containing null character");
+
+                    for (;;) {
+                        if (*np == 0 || ch == 0) {
+                            node_t *right = 0;
+                            if (np != 0)
+                                right = *np;
+                            *np = new node_t(ch);
+                            if (right)
+                                (**np).right = right;
+                        }
+
+                        if (ch < (**np).value) {
+                            np = &(**np).left;
+                        } else {
+                            if (ch == (**np).value) {
+                                if (ch == 0) {
+                                    if ((**np).middle.data == 0) {
+                                        (**np).middle.data = new T(data);
+                                        return (**np).middle.data;
+                                    } else {
+                                        //  re-addition is disallowed
+                                        return 0;
+                                    }
+                                }
+                                ++first;
+                                ch = (first == last) ? CharT(0) : *first;
+                                BOOST_SPIRIT_ASSERT((first == last || ch != 0)
+                                                    && "Won't add string containing null character");
+                                np = &(**np).middle.link;
+                            } else {
+                                np = &(**np).right;
+                            }
+                        }
                     }
                 }
-            }
-        }
 
-        template <typename ScannerT>
-        search_info find(ScannerT const& scan) const
-        {
-            search_info result = { 0, 0 };
-            if (scan.at_end()) {
-                return result;
-            }
+                template<typename ScannerT>
+                search_info find(ScannerT const &scan) const {
+                    search_info result = {0, 0};
+                    if (scan.at_end()) {
+                        return result;
+                    }
 
-            typedef typename ScannerT::iterator_t iterator_t;
-            node_t*     np = root;
-            CharT       ch = *scan;
-            iterator_t  save = scan.first;
-            iterator_t  latest = scan.first;
-            std::size_t latest_len = 0;
+                    typedef typename ScannerT::iterator_t iterator_t;
+                    node_t *np = root;
+                    CharT ch = *scan;
+                    iterator_t save = scan.first;
+                    iterator_t latest = scan.first;
+                    std::size_t latest_len = 0;
 
-            while (np)
-            {
+                    while (np) {
 
-                if (ch < np->value) // => go left!
-                {
-                    if (np->value == 0)
-                    {
-                        result.data = np->middle.data;
-                        if (result.data)
+                        if (ch < np->value) // => go left!
                         {
-                            latest = scan.first;
-                            latest_len = result.length;
+                            if (np->value == 0) {
+                                result.data = np->middle.data;
+                                if (result.data) {
+                                    latest = scan.first;
+                                    latest_len = result.length;
+                                }
+                            }
+
+                            np = np->left;
+                        } else if (ch == np->value) // => go middle!
+                        {
+                            // Matching the null character is not allowed.
+                            if (np->value == 0) {
+                                result.data = np->middle.data;
+                                if (result.data) {
+                                    latest = scan.first;
+                                    latest_len = result.length;
+                                }
+                                break;
+                            }
+
+                            ++scan;
+                            ch = scan.at_end() ? CharT(0) : *scan;
+                            np = np->middle.link;
+                            ++result.length;
+                        } else // (ch > np->value) => go right!
+                        {
+                            if (np->value == 0) {
+                                result.data = np->middle.data;
+                                if (result.data) {
+                                    latest = scan.first;
+                                    latest_len = result.length;
+                                }
+                            }
+
+                            np = np->right;
                         }
                     }
 
-                    np = np->left;
-                }
-                else if (ch == np->value) // => go middle!
-                {
-                    // Matching the null character is not allowed.
-                    if (np->value == 0)
-                    {
-                        result.data = np->middle.data;
-                        if (result.data)
-                        {
-                            latest = scan.first;
-                            latest_len = result.length;
-                        }
-                        break;
+                    if (result.data == 0) {
+                        scan.first = save;
+                    } else {
+                        scan.first = latest;
+                        result.length = latest_len;
                     }
-
-                    ++scan;
-                    ch = scan.at_end() ? CharT(0) : *scan;
-                    np = np->middle.link;
-                    ++result.length;
+                    return result;
                 }
-                else // (ch > np->value) => go right!
-                {
-                    if (np->value == 0)
-                    {
-                        result.data = np->middle.data;
-                        if (result.data)
-                        {
-                            latest = scan.first;
-                            latest_len = result.length;
-                        }
-                    }
 
-                    np = np->right;
-                }
-            }
+            private:
 
-            if (result.data == 0)
-            {
-                scan.first = save;
-            }
-            else
-            {
-                scan.first = latest;
-                result.length = latest_len;
-            }
-            return result;
-        }
-
-    private:
-
-        typedef tst_node<T, CharT> node_t;
-        node_t* root;
-    };
+                typedef tst_node<T, CharT> node_t;
+                node_t *root;
+            };
 
 ///////////////////////////////////////////////////////////////////////////////
-    } // namespace impl
+        } // namespace impl
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_END
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace boost::spirit
+    }
+} // namespace boost::spirit
 
 #endif

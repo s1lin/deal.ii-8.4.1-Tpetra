@@ -6,17 +6,27 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_REPETITION_DETAIL_MSVC_FOR_HPP
 # define BOOST_PREPROCESSOR_REPETITION_DETAIL_MSVC_FOR_HPP
 #
+
+
 # include <boost/preprocessor/control/if.hpp>
 # include <boost/preprocessor/tuple/eat.hpp>
+
 #
+
 # define BOOST_PP_FOR_1(s, p, o, m) BOOST_PP_IF(p(2, s), m, BOOST_PP_TUPLE_EAT_2)(2, s) BOOST_PP_IF(p(2, s), BOOST_PP_FOR_2, BOOST_PP_TUPLE_EAT_4)(o(2, s), p, o, m)
 # define BOOST_PP_FOR_2(s, p, o, m) BOOST_PP_IF(p(3, s), m, BOOST_PP_TUPLE_EAT_2)(3, s) BOOST_PP_IF(p(3, s), BOOST_PP_FOR_3, BOOST_PP_TUPLE_EAT_4)(o(3, s), p, o, m)
 # define BOOST_PP_FOR_3(s, p, o, m) BOOST_PP_IF(p(4, s), m, BOOST_PP_TUPLE_EAT_2)(4, s) BOOST_PP_IF(p(4, s), BOOST_PP_FOR_4, BOOST_PP_TUPLE_EAT_4)(o(4, s), p, o, m)
@@ -274,4 +284,5 @@
 # define BOOST_PP_FOR_255(s, p, o, m) BOOST_PP_IF(p(256, s), m, BOOST_PP_TUPLE_EAT_2)(256, s) BOOST_PP_IF(p(256, s), BOOST_PP_FOR_256, BOOST_PP_TUPLE_EAT_4)(o(256, s), p, o, m)
 # define BOOST_PP_FOR_256(s, p, o, m) BOOST_PP_IF(p(257, s), m, BOOST_PP_TUPLE_EAT_2)(257, s) BOOST_PP_IF(p(257, s), BOOST_PP_FOR_257, BOOST_PP_TUPLE_EAT_4)(o(257, s), p, o, m)
 #
+
 # endif

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_DISTINCT_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_DISTINCT_FWD
+
 #include <boost/spirit/home/classic/utility/distinct_fwd.hpp>
+
 #endif

@@ -12,34 +12,37 @@
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 #include <boost/fusion/container/list/cons.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nil_;
+namespace boost {
+    namespace fusion {
+        struct nil_;
 
-    namespace result_of
-    {
-        template <typename Car, typename Cdr = nil_>
-        struct make_cons
-        {
-            typedef cons<typename detail::as_fusion_element<Car>::type, Cdr> type;
-        };
+        namespace result_of {
+            template<typename Car, typename Cdr = nil_>
+            struct make_cons {
+                typedef cons<typename detail::as_fusion_element<Car>::type, Cdr> type;
+            };
+        }
+
+        template<typename Car>
+        BOOST_FUSION_GPU_ENABLED
+        inline cons<typename detail::as_fusion_element<Car>::type>
+        make_cons(Car
+        const& car) {
+        return
+        cons<typename detail::as_fusion_element<Car>::type>(car);
     }
 
-    template <typename Car>
-    BOOST_FUSION_GPU_ENABLED
-    inline cons<typename detail::as_fusion_element<Car>::type>
-    make_cons(Car const& car)
-    {
-        return cons<typename detail::as_fusion_element<Car>::type>(car);
-    }
-
-    template <typename Car, typename Cdr>
+    template<typename Car, typename Cdr>
     BOOST_FUSION_GPU_ENABLED
     inline cons<typename detail::as_fusion_element<Car>::type, Cdr>
-    make_cons(Car const& car, Cdr const& cdr)
-    {
-        return cons<typename detail::as_fusion_element<Car>::type, Cdr>(car, cdr);
-    }
+    make_cons(Car
+    const& car,
+    Cdr const &cdr
+    ) {
+    return
+    cons<typename detail::as_fusion_element<Car>::type, Cdr>(car, cdr
+    );
+}
 }}
 
 #endif

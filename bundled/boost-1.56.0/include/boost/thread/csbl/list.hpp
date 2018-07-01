@@ -17,19 +17,19 @@
 #endif
 #include <boost/container/list.hpp>
 #else
+
 #include <list>
+
 #endif
 
-namespace boost
-{
-  namespace csbl
-  {
+namespace boost {
+    namespace csbl {
 #if defined BOOST_THREAD_USES_BOOST_LIST
-    using ::boost::container::list;
+        using ::boost::container::list;
 #else
-    using ::std::list;
+        using ::std::list;
 #endif
 
-  }
+    }
 }
 #endif // header

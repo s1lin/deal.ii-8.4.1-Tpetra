@@ -33,183 +33,171 @@ PRIVATE Int init_count ;
 #endif
 
 PRIVATE void get_L
-(
-    Int Lp [ ],
-    Int Lj [ ],
-    double Lx [ ],
+        (
+                Int Lp[],
+                Int Lj[],
+                double Lx[],
 #ifdef COMPLEX
-    double Lz [ ],
+        double Lz [ ],
 #endif
-    NumericType *Numeric,
-    Int Pattern [ ],
-    Int Wi [ ]
-) ;
+                NumericType *Numeric,
+                Int Pattern[],
+                Int Wi[]
+);
 
 PRIVATE void get_U
-(
-    Int Up [ ],
-    Int Ui [ ],
-    double Ux [ ],
+        (
+                Int Up[],
+                Int Ui[],
+                double Ux[],
 #ifdef COMPLEX
-    double Uz [ ],
+        double Uz [ ],
 #endif
-    NumericType *Numeric,
-    Int Pattern [ ],
-    Int Wi [ ]
-) ;
+                NumericType *Numeric,
+                Int Pattern[],
+                Int Wi[]
+);
 
 /* ========================================================================== */
 /* === UMFPACK_get_numeric ================================================== */
 /* ========================================================================== */
 
 GLOBAL Int UMFPACK_get_numeric
-(
-    Int Lp [ ],
-    Int Lj [ ],
-    double Lx [ ],
+        (
+                Int Lp[],
+                Int Lj[],
+                double Lx[],
 #ifdef COMPLEX
-    double Lz [ ],
+        double Lz [ ],
 #endif
-    Int Up [ ],
-    Int Ui [ ],
-    double Ux [ ],
+                Int Up[],
+                Int Ui[],
+                double Ux[],
 #ifdef COMPLEX
-    double Uz [ ],
+        double Uz [ ],
 #endif
-    Int P [ ],
-    Int Q [ ],
-    double Dx [ ],
+                Int P[],
+                Int Q[],
+                double Dx[],
 #ifdef COMPLEX
-    double Dz [ ],
+        double Dz [ ],
 #endif
-    Int *p_do_recip,
-    double Rs [ ],
-    void *NumericHandle
-)
-{
+                Int *p_do_recip,
+                double Rs[],
+                void *NumericHandle
+) {
 
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    NumericType *Numeric ;
+    NumericType *Numeric;
     Int getL, getU, *Rperm, *Cperm, k, nn, n_row, n_col, *Wi, *Pattern,
-	n_inner ;
-    double *Rs1 ;
-    Entry *D ;
+            n_inner;
+    double *Rs1;
+    Entry *D;
 
 #ifndef NDEBUG
     init_count = UMF_malloc_count ;
 #endif
 
-    Wi = (Int *) NULL ;
-    Pattern = (Int *) NULL ;
+    Wi = (Int *) NULL;
+    Pattern = (Int *) NULL;
 
     /* ---------------------------------------------------------------------- */
     /* check input parameters */
     /* ---------------------------------------------------------------------- */
 
-    Numeric = (NumericType *) NumericHandle ;
-    if (!UMF_valid_numeric (Numeric))
-    {
-	return (UMFPACK_ERROR_invalid_Numeric_object) ;
+    Numeric = (NumericType *) NumericHandle;
+    if (!UMF_valid_numeric(Numeric)) {
+        return (UMFPACK_ERROR_invalid_Numeric_object);
     }
 
-    n_row = Numeric->n_row ;
-    n_col = Numeric->n_col ;
-    nn = MAX (n_row, n_col) ;
-    n_inner = MIN (n_row, n_col) ;
+    n_row = Numeric->n_row;
+    n_col = Numeric->n_col;
+    nn = MAX (n_row, n_col);
+    n_inner = MIN (n_row, n_col);
 
     /* ---------------------------------------------------------------------- */
     /* allocate workspace */
     /* ---------------------------------------------------------------------- */
 
-    getL = Lp && Lj && Lx ;
-    getU = Up && Ui && Ux ;
+    getL = Lp && Lj && Lx;
+    getU = Up && Ui && Ux;
 
-    if (getL || getU)
-    {
-	Wi = (Int *) UMF_malloc (nn, sizeof (Int)) ;
-	Pattern = (Int *) UMF_malloc (nn, sizeof (Int)) ;
-	if (!Wi || !Pattern)
-	{
-	    (void) UMF_free ((void *) Wi) ;
-	    (void) UMF_free ((void *) Pattern) ;
-	    ASSERT (UMF_malloc_count == init_count) ;
-	    DEBUGm4 (("out of memory: get numeric\n")) ;
-	    return (UMFPACK_ERROR_out_of_memory) ;
-	}
-	ASSERT (UMF_malloc_count == init_count + 2) ;
+    if (getL || getU) {
+        Wi = (Int *) UMF_malloc(nn, sizeof(Int));
+        Pattern = (Int *) UMF_malloc(nn, sizeof(Int));
+        if (!Wi || !Pattern) {
+            (void) UMF_free((void *) Wi);
+            (void) UMF_free((void *) Pattern);
+            ASSERT (UMF_malloc_count == init_count);
+            DEBUGm4 (("out of memory: get numeric\n"));
+            return (UMFPACK_ERROR_out_of_memory);
+        }
+        ASSERT (UMF_malloc_count == init_count + 2);
     }
 
     /* ---------------------------------------------------------------------- */
     /* get contents of Numeric */
     /* ---------------------------------------------------------------------- */
 
-    if (P != (Int *) NULL)
-    {
-	Rperm = Numeric->Rperm ;
-	for (k = 0 ; k < n_row ; k++)
-	{
-	    P [k] = Rperm [k] ;
-	}
+    if (P != (Int *) NULL) {
+        Rperm = Numeric->Rperm;
+        for (k = 0; k < n_row; k++) {
+            P[k] = Rperm[k];
+        }
     }
 
-    if (Q != (Int *) NULL)
-    {
-	Cperm = Numeric->Cperm ;
-	for (k = 0 ; k < n_col ; k++)
-	{
-	    Q [k] = Cperm [k] ;
-	}
+    if (Q != (Int *) NULL) {
+        Cperm = Numeric->Cperm;
+        for (k = 0; k < n_col; k++) {
+            Q[k] = Cperm[k];
+        }
     }
 
-    if (getL)
-    {
-	get_L (Lp, Lj, Lx,
+    if (getL) {
+        get_L(Lp, Lj, Lx,
 #ifdef COMPLEX
-	    Lz,
+                Lz,
 #endif
-	    Numeric, Pattern, Wi) ;
+              Numeric, Pattern, Wi);
     }
 
-    if (getU)
-    {
-	get_U (Up, Ui, Ux,
+    if (getU) {
+        get_U(Up, Ui, Ux,
 #ifdef COMPLEX
-	    Uz,
+                Uz,
 #endif
-	    Numeric, Pattern, Wi) ;
+              Numeric, Pattern, Wi);
     }
 
-    if (Dx != (double *) NULL)
-    {
-	D = Numeric->D ;
+    if (Dx != (double *) NULL) {
+        D = Numeric->D;
 #ifdef COMPLEX
-	if (SPLIT (Dz))
-	{
-	    for (k = 0 ; k < n_inner ; k++)
-	    {
-		Dx [k] = REAL_COMPONENT (D [k]) ;
-		Dz [k] = IMAG_COMPONENT (D [k]) ;
-	    }
-	}
-	else
-	{
-	    for (k = 0 ; k < n_inner ; k++)
-	    {
-	        Dx [2*k  ] =  REAL_COMPONENT (D [k]) ;
-	        Dx [2*k+1] =  IMAG_COMPONENT (D [k]) ;
-	    }
-	}
+        if (SPLIT (Dz))
+        {
+            for (k = 0 ; k < n_inner ; k++)
+            {
+            Dx [k] = REAL_COMPONENT (D [k]) ;
+            Dz [k] = IMAG_COMPONENT (D [k]) ;
+            }
+        }
+        else
+        {
+            for (k = 0 ; k < n_inner ; k++)
+            {
+                Dx [2*k  ] =  REAL_COMPONENT (D [k]) ;
+                Dx [2*k+1] =  IMAG_COMPONENT (D [k]) ;
+            }
+        }
 #else
-	{
-	    D = Numeric->D ;
-	    for (k = 0 ; k < n_inner ; k++)
-	    {
-		Dx [k] = D [k] ;
-	    }
-	}
+        {
+            D = Numeric->D;
+            for (k = 0; k < n_inner; k++) {
+                Dx[k] = D[k];
+            }
+        }
 #endif
     }
 
@@ -218,44 +206,37 @@ GLOBAL Int UMFPACK_get_numeric
      * If NRECIPROCAL is defined at compile time, the scale factors are always
      * to be used by dividing.
      */
-    if (p_do_recip != (Int *) NULL)
-    {
+    if (p_do_recip != (Int *) NULL) {
 #ifndef NRECIPROCAL
-	*p_do_recip = Numeric->do_recip ;
+        *p_do_recip = Numeric->do_recip;
 #else
-	*p_do_recip = FALSE ;
+        *p_do_recip = FALSE ;
 #endif
     }
 
-    if (Rs != (double *) NULL)
-    {
-	Rs1 = Numeric->Rs ;
-	if (Rs1 == (double *) NULL)
-	{
-	    /* R is the identity matrix.  */
-	    for (k = 0 ; k < n_row ; k++)
-	    {
-		Rs [k] = 1.0 ;
-	    }
-	}
-	else
-	{
-	    for (k = 0 ; k < n_row ; k++)
-	    {
-		Rs [k] = Rs1 [k] ;
-	    }
-	}
+    if (Rs != (double *) NULL) {
+        Rs1 = Numeric->Rs;
+        if (Rs1 == (double *) NULL) {
+            /* R is the identity matrix.  */
+            for (k = 0; k < n_row; k++) {
+                Rs[k] = 1.0;
+            }
+        } else {
+            for (k = 0; k < n_row; k++) {
+                Rs[k] = Rs1[k];
+            }
+        }
     }
 
     /* ---------------------------------------------------------------------- */
     /* free the workspace */
     /* ---------------------------------------------------------------------- */
 
-    (void) UMF_free ((void *) Wi) ;
-    (void) UMF_free ((void *) Pattern) ;
-    ASSERT (UMF_malloc_count == init_count) ;
+    (void) UMF_free((void *) Wi);
+    (void) UMF_free((void *) Pattern);
+    ASSERT (UMF_malloc_count == init_count);
 
-    return (UMFPACK_OK) ;
+    return (UMFPACK_OK);
 }
 
 
@@ -321,26 +302,25 @@ GLOBAL Int UMFPACK_get_numeric
 /* ========================================================================== */
 
 PRIVATE void get_L
-(
-    Int Lp [ ],		/* of size n_row+1 */
-    Int Lj [ ],		/* of size lnz, where lnz = Lp [n_row] */
-    double Lx [ ],	/* of size lnz */
+        (
+                Int Lp[],        /* of size n_row+1 */
+                Int Lj[],        /* of size lnz, where lnz = Lp [n_row] */
+                double Lx[],    /* of size lnz */
 #ifdef COMPLEX
-    double Lz [ ],	/* of size lnz */
+        double Lz [ ],	/* of size lnz */
 #endif
-    NumericType *Numeric,
-    Int Pattern [ ],	/* workspace of size n_row */
-    Int Wi [ ]		/* workspace of size n_row */
-)
-{
+                NumericType *Numeric,
+                Int Pattern[],    /* workspace of size n_row */
+                Int Wi[]        /* workspace of size n_row */
+) {
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    Entry value ;
-    Entry *xp, *Lval ;
+    Entry value;
+    Entry *xp, *Lval;
     Int deg, *ip, j, row, n_row, n_col, n_inner, *Lpos, *Lilen, *Lip, p, llen,
-        lnz2, lp, newLchain, k, pos, npiv, *Li, n1 ;
+            lnz2, lp, newLchain, k, pos, npiv, *Li, n1;
 #ifdef COMPLEX
     Int split = SPLIT (Lz) ;
 #endif
@@ -349,114 +329,122 @@ PRIVATE void get_L
     /* get parameters */
     /* ---------------------------------------------------------------------- */
 
-    DEBUG4 (("get_L start:\n")) ;
-    n_row = Numeric->n_row ;
-    n_col = Numeric->n_col ;
-    n_inner = MIN (n_row, n_col) ;
-    npiv = Numeric->npiv ;
-    n1 = Numeric->n1 ;
-    Lpos = Numeric->Lpos ;
-    Lilen = Numeric->Lilen ;
-    Lip = Numeric->Lip ;
-    deg = 0 ;
+    DEBUG4 (("get_L start:\n"));
+    n_row = Numeric->n_row;
+    n_col = Numeric->n_col;
+    n_inner = MIN (n_row, n_col);
+    npiv = Numeric->npiv;
+    n1 = Numeric->n1;
+    Lpos = Numeric->Lpos;
+    Lilen = Numeric->Lilen;
+    Lip = Numeric->Lip;
+    deg = 0;
 
     /* ---------------------------------------------------------------------- */
     /* count the nonzeros in each row of L */
     /* ---------------------------------------------------------------------- */
 
 #pragma ivdep
-    for (row = 0 ; row < n_inner ; row++)
-    {
-	/* include the diagonal entry in the row counts */
-	Wi [row] = 1 ;
+    for (row = 0; row < n_inner; row++) {
+        /* include the diagonal entry in the row counts */
+        Wi[row] = 1;
     }
 #pragma ivdep
-    for (row = n_inner ; row < n_row ; row++)
-    {
-	Wi [row] = 0 ;
+    for (row = n_inner; row < n_row; row++) {
+        Wi[row] = 0;
     }
 
     /* singletons */
-    for (k = 0 ; k < n1 ; k++)
-    {
-	DEBUG4 (("Singleton k " ID "\n", k)) ;
-	deg = Lilen [k] ;
-	if (deg > 0)
-	{
-	    lp = Lip [k] ;
-	    Li = (Int *) (Numeric->Memory + lp) ;
-	    lp += UNITS (Int, deg) ;
-	    Lval = (Entry *) (Numeric->Memory + lp) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		row = Li [j] ;
-		value = Lval [j] ;
-		DEBUG4 (("  row " ID "  k " ID " value", row, k)) ;
-		EDEBUG4 (value) ;
-		DEBUG4 (("\n")) ;
-		if (IS_NONZERO (value))
-		{
-		    Wi [row]++ ;
-		}
-	    }
-	}
+    for (k = 0; k < n1; k++) {
+        DEBUG4 (("Singleton k "
+                        ID
+                        "\n", k));
+        deg = Lilen[k];
+        if (deg > 0) {
+            lp = Lip[k];
+            Li = (Int *) (Numeric->Memory + lp);
+            lp += UNITS (Int, deg);
+            Lval = (Entry *) (Numeric->Memory + lp);
+            for (j = 0; j < deg; j++) {
+                row = Li[j];
+                value = Lval[j];
+                DEBUG4 (("  row "
+                                ID
+                                "  k "
+                                ID
+                                " value", row, k));
+                EDEBUG4 (value);
+                DEBUG4 (("\n"));
+                if (IS_NONZERO (value)) {
+                    Wi[row]++;
+                }
+            }
+        }
     }
 
     /* non-singletons */
-    for (k = n1 ; k < npiv ; k++)
-    {
+    for (k = n1; k < npiv; k++) {
 
-	/* ------------------------------------------------------------------ */
-	/* make column of L in Pattern [0..deg-1] */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* make column of L in Pattern [0..deg-1] */
+        /* ------------------------------------------------------------------ */
 
-	lp = Lip [k] ;
-	newLchain = (lp < 0) ;
-	if (newLchain)
-	{
-	    lp = -lp ;
-	    deg = 0 ;
-	    DEBUG4 (("start of chain for column of L\n")) ;
-	}
+        lp = Lip[k];
+        newLchain = (lp < 0);
+        if (newLchain) {
+            lp = -lp;
+            deg = 0;
+            DEBUG4 (("start of chain for column of L\n"));
+        }
 
-	/* remove pivot row */
-	pos = Lpos [k] ;
-	if (pos != EMPTY)
-	{
-	    DEBUG4 (("  k " ID " removing row " ID " at position " ID "\n",
-	    k, Pattern [pos], pos)) ;
-	    ASSERT (!newLchain) ;
-	    ASSERT (deg > 0) ;
-	    ASSERT (pos >= 0 && pos < deg) ;
-	    ASSERT (Pattern [pos] == k) ;
-	    Pattern [pos] = Pattern [--deg] ;
-	}
+        /* remove pivot row */
+        pos = Lpos[k];
+        if (pos != EMPTY) {
+            DEBUG4 (("  k "
+                            ID
+                            " removing row "
+                            ID
+                            " at position "
+                            ID
+                            "\n",
+                                    k, Pattern[pos], pos));
+            ASSERT (!newLchain);
+            ASSERT (deg > 0);
+            ASSERT (pos >= 0 && pos < deg);
+            ASSERT (Pattern[pos] == k);
+            Pattern[pos] = Pattern[--deg];
+        }
 
-	/* concatenate the pattern */
-	ip = (Int *) (Numeric->Memory + lp) ;
-	llen = Lilen [k] ;
-	for (j = 0 ; j < llen ; j++)
-	{
-	    row = *ip++ ;
-	    DEBUG4 (("  row " ID "  k " ID "\n", row, k)) ;
-	    ASSERT (row > k && row < n_row) ;
-	    Pattern [deg++] = row ;
-	}
+        /* concatenate the pattern */
+        ip = (Int *) (Numeric->Memory + lp);
+        llen = Lilen[k];
+        for (j = 0; j < llen; j++) {
+            row = *ip++;
+            DEBUG4 (("  row "
+                            ID
+                            "  k "
+                            ID
+                            "\n", row, k));
+            ASSERT (row > k && row < n_row);
+            Pattern[deg++] = row;
+        }
 
-	xp = (Entry *) (Numeric->Memory + lp + UNITS (Int, llen)) ;
+        xp = (Entry *) (Numeric->Memory + lp + UNITS (Int, llen));
 
-	for (j = 0 ; j < deg ; j++)
-	{
-	    DEBUG4 (("  row " ID "  k " ID " value", Pattern [j], k)) ;
-	    row = Pattern [j] ;
-	    value = *xp++ ;
-	    EDEBUG4 (value) ;
-	    DEBUG4 (("\n")) ;
-	    if (IS_NONZERO (value))
-	    {
-		Wi [row]++ ;
-	    }
-	}
+        for (j = 0; j < deg; j++) {
+            DEBUG4 (("  row "
+                            ID
+                            "  k "
+                            ID
+                            " value", Pattern[j], k));
+            row = Pattern[j];
+            value = *xp++;
+            EDEBUG4 (value);
+            DEBUG4 (("\n"));
+            if (IS_NONZERO (value)) {
+                Wi[row]++;
+            }
+        }
     }
 
     /* ---------------------------------------------------------------------- */
@@ -464,164 +452,172 @@ PRIVATE void get_L
     /* ---------------------------------------------------------------------- */
 
     /* create the row pointers */
-    lnz2 = 0 ;
-    for (row = 0 ; row < n_row ; row++)
-    {
-	Lp [row] = lnz2 ;
-	lnz2 += Wi [row] ;
-	Wi [row] = Lp [row] ;
+    lnz2 = 0;
+    for (row = 0; row < n_row; row++) {
+        Lp[row] = lnz2;
+        lnz2 += Wi[row];
+        Wi[row] = Lp[row];
     }
-    Lp [n_row] = lnz2 ;
-    ASSERT (Numeric->lnz + n_inner == lnz2) ;
+    Lp[n_row] = lnz2;
+    ASSERT (Numeric->lnz + n_inner == lnz2);
 
     /* add entries from the rows of L (singletons) */
-    for (k = 0 ; k < n1 ; k++)
-    {
-	DEBUG4 (("Singleton k " ID "\n", k)) ;
-	deg = Lilen [k] ;
-	if (deg > 0)
-	{
-	    lp = Lip [k] ;
-	    Li = (Int *) (Numeric->Memory + lp) ;
-	    lp += UNITS (Int, deg) ;
-	    Lval = (Entry *) (Numeric->Memory + lp) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		row = Li [j] ;
-		value = Lval [j] ;
-		DEBUG4 (("  row " ID "  k " ID " value", row, k)) ;
-		EDEBUG4 (value) ;
-		DEBUG4 (("\n")) ;
-		if (IS_NONZERO (value))
-		{
-		    p = Wi [row]++ ;
-		    Lj [p] = k ;
+    for (k = 0; k < n1; k++) {
+        DEBUG4 (("Singleton k "
+                        ID
+                        "\n", k));
+        deg = Lilen[k];
+        if (deg > 0) {
+            lp = Lip[k];
+            Li = (Int *) (Numeric->Memory + lp);
+            lp += UNITS (Int, deg);
+            Lval = (Entry *) (Numeric->Memory + lp);
+            for (j = 0; j < deg; j++) {
+                row = Li[j];
+                value = Lval[j];
+                DEBUG4 (("  row "
+                                ID
+                                "  k "
+                                ID
+                                " value", row, k));
+                EDEBUG4 (value);
+                DEBUG4 (("\n"));
+                if (IS_NONZERO (value)) {
+                    p = Wi[row]++;
+                    Lj[p] = k;
 #ifdef COMPLEX
-		    if (split)
-		    {
+                    if (split)
+                    {
 
-		        Lx [p] = REAL_COMPONENT (value) ;
-			Lz [p] = IMAG_COMPONENT (value) ;
-		    }
-		    else
-		    {
-			Lx [2*p  ] = REAL_COMPONENT (value) ;
-			Lx [2*p+1] = IMAG_COMPONENT (value) ;
-		    }
+                        Lx [p] = REAL_COMPONENT (value) ;
+                    Lz [p] = IMAG_COMPONENT (value) ;
+                    }
+                    else
+                    {
+                    Lx [2*p  ] = REAL_COMPONENT (value) ;
+                    Lx [2*p+1] = IMAG_COMPONENT (value) ;
+                    }
 #else
-		    Lx [p] = value ;
+                    Lx[p] = value;
 #endif
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 
     /* add entries from the rows of L (non-singletons) */
-    for (k = n1 ; k < npiv ; k++)
-    {
+    for (k = n1; k < npiv; k++) {
 
-	/* ------------------------------------------------------------------ */
-	/* make column of L in Pattern [0..deg-1] */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* make column of L in Pattern [0..deg-1] */
+        /* ------------------------------------------------------------------ */
 
-	lp = Lip [k] ;
-	newLchain = (lp < 0) ;
-	if (newLchain)
-	{
-	    lp = -lp ;
-	    deg = 0 ;
-	    DEBUG4 (("start of chain for column of L\n")) ;
-	}
+        lp = Lip[k];
+        newLchain = (lp < 0);
+        if (newLchain) {
+            lp = -lp;
+            deg = 0;
+            DEBUG4 (("start of chain for column of L\n"));
+        }
 
-	/* remove pivot row */
-	pos = Lpos [k] ;
-	if (pos != EMPTY)
-	{
-	    DEBUG4 (("  k " ID " removing row " ID " at position " ID "\n",
-	    k, Pattern [pos], pos)) ;
-	    ASSERT (!newLchain) ;
-	    ASSERT (deg > 0) ;
-	    ASSERT (pos >= 0 && pos < deg) ;
-	    ASSERT (Pattern [pos] == k) ;
-	    Pattern [pos] = Pattern [--deg] ;
-	}
+        /* remove pivot row */
+        pos = Lpos[k];
+        if (pos != EMPTY) {
+            DEBUG4 (("  k "
+                            ID
+                            " removing row "
+                            ID
+                            " at position "
+                            ID
+                            "\n",
+                                    k, Pattern[pos], pos));
+            ASSERT (!newLchain);
+            ASSERT (deg > 0);
+            ASSERT (pos >= 0 && pos < deg);
+            ASSERT (Pattern[pos] == k);
+            Pattern[pos] = Pattern[--deg];
+        }
 
-	/* concatenate the pattern */
-	ip = (Int *) (Numeric->Memory + lp) ;
-	llen = Lilen [k] ;
-	for (j = 0 ; j < llen ; j++)
-	{
-	    row = *ip++ ;
-	    DEBUG4 (("  row " ID "  k " ID "\n", row, k)) ;
-	    ASSERT (row > k) ;
-	    Pattern [deg++] = row ;
-	}
+        /* concatenate the pattern */
+        ip = (Int *) (Numeric->Memory + lp);
+        llen = Lilen[k];
+        for (j = 0; j < llen; j++) {
+            row = *ip++;
+            DEBUG4 (("  row "
+                            ID
+                            "  k "
+                            ID
+                            "\n", row, k));
+            ASSERT (row > k);
+            Pattern[deg++] = row;
+        }
 
-	xp = (Entry *) (Numeric->Memory + lp + UNITS (Int, llen)) ;
+        xp = (Entry *) (Numeric->Memory + lp + UNITS (Int, llen));
 
-	for (j = 0 ; j < deg ; j++)
-	{
-	    DEBUG4 (("  row " ID "  k " ID " value", Pattern [j], k)) ;
-	    row = Pattern [j] ;
-	    value = *xp++ ;
-	    EDEBUG4 (value) ;
-	    DEBUG4 (("\n")) ;
-	    if (IS_NONZERO (value))
-	    {
-		p = Wi [row]++ ;
-		Lj [p] = k ;
+        for (j = 0; j < deg; j++) {
+            DEBUG4 (("  row "
+                            ID
+                            "  k "
+                            ID
+                            " value", Pattern[j], k));
+            row = Pattern[j];
+            value = *xp++;
+            EDEBUG4 (value);
+            DEBUG4 (("\n"));
+            if (IS_NONZERO (value)) {
+                p = Wi[row]++;
+                Lj[p] = k;
 #ifdef COMPLEX
-		if (split)
-		{
-		    Lx [p] = REAL_COMPONENT (value) ;
-		    Lz [p] = IMAG_COMPONENT (value) ;
-		}
-		else
-		{
-		    Lx [2*p  ] = REAL_COMPONENT (value) ;
-		    Lx [2*p+1] = IMAG_COMPONENT (value) ;
-		}
+                if (split)
+                {
+                    Lx [p] = REAL_COMPONENT (value) ;
+                    Lz [p] = IMAG_COMPONENT (value) ;
+                }
+                else
+                {
+                    Lx [2*p  ] = REAL_COMPONENT (value) ;
+                    Lx [2*p+1] = IMAG_COMPONENT (value) ;
+                }
 #else
-		Lx [p] = value ;
+                Lx[p] = value;
 #endif
-	    }
-	}
+            }
+        }
     }
 
     /* add all of the diagonal entries (L is unit diagonal) */
-    for (row = 0 ; row < n_inner ; row++)
-    {
-	p = Wi [row]++ ;
-	Lj [p] = row ;
+    for (row = 0; row < n_inner; row++) {
+        p = Wi[row]++;
+        Lj[p] = row;
 
 #ifdef COMPLEX
-	if (split)
-	{
-	    Lx [p] = 1. ;
-	    Lz [p] = 0. ;
-	}
-	else
-	{
-	    Lx [2*p  ] = 1. ;
-	    Lx [2*p+1] = 0. ;
-	}
+        if (split)
+        {
+            Lx [p] = 1. ;
+            Lz [p] = 0. ;
+        }
+        else
+        {
+            Lx [2*p  ] = 1. ;
+            Lx [2*p+1] = 0. ;
+        }
 #else
-	Lx [p] = 1. ;
+        Lx[p] = 1.;
 #endif
 
-	ASSERT (Wi [row] == Lp [row+1]) ;
+        ASSERT (Wi[row] == Lp[row + 1]);
     }
 
 #ifndef NDEBUG
     DEBUG6 (("L matrix (stored by rows):")) ;
     UMF_dump_col_matrix (Lx,
 #ifdef COMPLEX
-	Lz,
+    Lz,
 #endif
-	Lj, Lp, n_inner, n_row, Numeric->lnz+n_inner) ;
+    Lj, Lp, n_inner, n_row, Numeric->lnz+n_inner) ;
 #endif
 
-    DEBUG4 (("get_L done:\n")) ;
+    DEBUG4 (("get_L done:\n"));
 }
 
 
@@ -686,26 +682,25 @@ PRIVATE void get_L
 /* ========================================================================== */
 
 PRIVATE void get_U
-(
-    Int Up [ ],		/* of size n_col+1 */
-    Int Ui [ ],		/* of size unz, where unz = Up [n_col] */
-    double Ux [ ],	/* of size unz */
+        (
+                Int Up[],        /* of size n_col+1 */
+                Int Ui[],        /* of size unz, where unz = Up [n_col] */
+                double Ux[],    /* of size unz */
 #ifdef COMPLEX
-    double Uz [ ],	/* of size unz */
+        double Uz [ ],	/* of size unz */
 #endif
-    NumericType *Numeric,
-    Int Pattern [ ],	/* workspace of size n_col */
-    Int Wi [ ]		/* workspace of size n_col */
-)
-{
+                NumericType *Numeric,
+                Int Pattern[],    /* workspace of size n_col */
+                Int Wi[]        /* workspace of size n_col */
+) {
     /* ---------------------------------------------------------------------- */
     /* local variables */
     /* ---------------------------------------------------------------------- */
 
-    Entry value ;
-    Entry *xp, *D, *Uval ;
+    Entry value;
+    Entry *xp, *D, *Uval;
     Int deg, j, *ip, col, *Upos, *Uilen, *Uip, n_col, ulen, *Usi,
-        unz2, p, k, up, newUchain, pos, npiv, n1 ;
+            unz2, p, k, up, newUchain, pos, npiv, n1;
 #ifdef COMPLEX
     Int split = SPLIT (Uz) ;
 #endif
@@ -717,146 +712,165 @@ PRIVATE void get_U
     /* get parameters */
     /* ---------------------------------------------------------------------- */
 
-    DEBUG4 (("get_U start:\n")) ;
-    n_col = Numeric->n_col ;
-    n1 = Numeric->n1 ;
-    npiv = Numeric->npiv ;
-    Upos = Numeric->Upos ;
-    Uilen = Numeric->Uilen ;
-    Uip = Numeric->Uip ;
-    D = Numeric->D ;
+    DEBUG4 (("get_U start:\n"));
+    n_col = Numeric->n_col;
+    n1 = Numeric->n1;
+    npiv = Numeric->npiv;
+    Upos = Numeric->Upos;
+    Uilen = Numeric->Uilen;
+    Uip = Numeric->Uip;
+    D = Numeric->D;
 
     /* ---------------------------------------------------------------------- */
     /* count the nonzeros in each column of U */
     /* ---------------------------------------------------------------------- */
 
-    for (col = 0 ; col < npiv ; col++)
-    {
-	/* include the diagonal entry in the column counts */
-	DEBUG4 (("D [" ID "] = ", col)) ;
-	EDEBUG4 (D [col]) ;
-	Wi [col] = IS_NONZERO (D [col]) ;
-	DEBUG4 ((" is nonzero: " ID "\n", Wi [col])) ;
+    for (col = 0; col < npiv; col++) {
+        /* include the diagonal entry in the column counts */
+        DEBUG4 (("D ["
+                        ID
+                        "] = ", col));
+        EDEBUG4 (D[col]);
+        Wi[col] = IS_NONZERO (D[col]);
+        DEBUG4 ((" is nonzero: "
+                        ID
+                        "\n", Wi[col]));
 #ifndef NDEBUG
-	nnzpiv += IS_NONZERO (D [col]) ;
+        nnzpiv += IS_NONZERO (D [col]) ;
 #endif
     }
-    DEBUG4 (("nnzpiv " ID " " ID "\n", nnzpiv, Numeric->nnzpiv)) ;
-    ASSERT (nnzpiv == Numeric->nnzpiv) ;
-    for (col = npiv ; col < n_col ; col++)
-    {
-	/* diagonal entries are zero for structurally singular part */
-	Wi [col] = 0 ;
+    DEBUG4 (("nnzpiv "
+                    ID
+                    " "
+                    ID
+                    "\n", nnzpiv, Numeric->nnzpiv));
+    ASSERT (nnzpiv == Numeric->nnzpiv);
+    for (col = npiv; col < n_col; col++) {
+        /* diagonal entries are zero for structurally singular part */
+        Wi[col] = 0;
     }
 
-    deg = Numeric->ulen ;
-    if (deg > 0)
-    {
-	/* make last pivot row of U (singular matrices only) */
-	DEBUG0 (("Last pivot row of U: ulen " ID "\n", deg)) ;
-	for (j = 0 ; j < deg ; j++)
-	{
-	    Pattern [j] = Numeric->Upattern [j] ;
-	    DEBUG0 (("    column " ID "\n", Pattern [j])) ;
-	}
+    deg = Numeric->ulen;
+    if (deg > 0) {
+        /* make last pivot row of U (singular matrices only) */
+        DEBUG0 (("Last pivot row of U: ulen "
+                        ID
+                        "\n", deg));
+        for (j = 0; j < deg; j++) {
+            Pattern[j] = Numeric->Upattern[j];
+            DEBUG0 (("    column "
+                            ID
+                            "\n", Pattern[j]));
+        }
     }
 
     /* non-singletons */
-    for (k = npiv-1 ; k >= n1 ; k--)
-    {
+    for (k = npiv - 1; k >= n1; k--) {
 
-	/* ------------------------------------------------------------------ */
-	/* use row k of U */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* use row k of U */
+        /* ------------------------------------------------------------------ */
 
-	up = Uip [k] ;
-	ulen = Uilen [k] ;
-	newUchain = (up < 0) ;
-	if (newUchain)
-	{
-	    up = -up ;
-	    xp = (Entry *) (Numeric->Memory + up + UNITS (Int, ulen)) ;
-	}
-	else
-	{
-	    xp = (Entry *) (Numeric->Memory + up) ;
-	}
+        up = Uip[k];
+        ulen = Uilen[k];
+        newUchain = (up < 0);
+        if (newUchain) {
+            up = -up;
+            xp = (Entry *) (Numeric->Memory + up + UNITS (Int, ulen));
+        } else {
+            xp = (Entry *) (Numeric->Memory + up);
+        }
 
-	for (j = 0 ; j < deg ; j++)
-	{
-	    DEBUG4 (("  k " ID " col " ID " value\n", k, Pattern [j])) ;
-	    col = Pattern [j] ;
-	    ASSERT (col >= 0 && col < n_col) ;
-	    value = *xp++ ;
-	    EDEBUG4 (value) ;
-	    DEBUG4 (("\n")) ;
-	    if (IS_NONZERO (value))
-	    {
-		Wi [col]++ ;
-	    }
-	}
+        for (j = 0; j < deg; j++) {
+            DEBUG4 (("  k "
+                            ID
+                            " col "
+                            ID
+                            " value\n", k, Pattern[j]));
+            col = Pattern[j];
+            ASSERT (col >= 0 && col < n_col);
+            value = *xp++;
+            EDEBUG4 (value);
+            DEBUG4 (("\n"));
+            if (IS_NONZERO (value)) {
+                Wi[col]++;
+            }
+        }
 
-	/* ------------------------------------------------------------------ */
-	/* make row k-1 of U in Pattern [0..deg-1] */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* make row k-1 of U in Pattern [0..deg-1] */
+        /* ------------------------------------------------------------------ */
 
-	if (k == n1) break ;
+        if (k == n1) break;
 
-	if (newUchain)
-	{
-	    /* next row is a new Uchain */
-	    deg = ulen ;
-	    DEBUG4 (("end of chain for row of U " ID " deg " ID "\n", k-1, deg)) ;
-	    ip = (Int *) (Numeric->Memory + up) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		col = *ip++ ;
-		DEBUG4 (("  k " ID " col " ID "\n", k-1, col)) ;
-		ASSERT (k <= col) ;
-		Pattern [j] = col ;
-	    }
-	}
-	else
-	{
-	    deg -= ulen ;
-	    DEBUG4 (("middle of chain for row of U " ID " deg " ID "\n", k-1, deg));
-	    ASSERT (deg >= 0) ;
-	    pos = Upos [k] ;
-	    if (pos != EMPTY)
-	    {
-		/* add the pivot column */
-		DEBUG4 (("k " ID " add pivot entry at position " ID "\n", k, pos)) ;
-		ASSERT (pos >= 0 && pos <= deg) ;
-		Pattern [deg++] = Pattern [pos] ;
-		Pattern [pos] = k ;
-	    }
-	}
+        if (newUchain) {
+            /* next row is a new Uchain */
+            deg = ulen;
+            DEBUG4 (("end of chain for row of U "
+                            ID
+                            " deg "
+                            ID
+                            "\n", k - 1, deg));
+            ip = (Int *) (Numeric->Memory + up);
+            for (j = 0; j < deg; j++) {
+                col = *ip++;
+                DEBUG4 (("  k "
+                                ID
+                                " col "
+                                ID
+                                "\n", k - 1, col));
+                ASSERT (k <= col);
+                Pattern[j] = col;
+            }
+        } else {
+            deg -= ulen;
+            DEBUG4 (("middle of chain for row of U "
+                            ID
+                            " deg "
+                            ID
+                            "\n", k - 1, deg));
+            ASSERT (deg >= 0);
+            pos = Upos[k];
+            if (pos != EMPTY) {
+                /* add the pivot column */
+                DEBUG4 (("k "
+                                ID
+                                " add pivot entry at position "
+                                ID
+                                "\n", k, pos));
+                ASSERT (pos >= 0 && pos <= deg);
+                Pattern[deg++] = Pattern[pos];
+                Pattern[pos] = k;
+            }
+        }
     }
 
     /* singletons */
-    for (k = n1 - 1 ; k >= 0 ; k--)
-    {
-	deg = Uilen [k] ;
-	DEBUG4 (("Singleton k " ID "\n", k)) ;
-	if (deg > 0)
-	{
-	    up = Uip [k] ;
-	    Usi = (Int *) (Numeric->Memory + up) ;
-	    up += UNITS (Int, deg) ;
-	    Uval = (Entry *) (Numeric->Memory + up) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		col = Usi [j] ;
-		value = Uval [j] ;
-		DEBUG4 (("  k " ID " col " ID " value", k, col)) ;
-		EDEBUG4 (value) ;
-		DEBUG4 (("\n")) ;
-		if (IS_NONZERO (value))
-		{
-		    Wi [col]++ ;
-		}
-	    }
-	}
+    for (k = n1 - 1; k >= 0; k--) {
+        deg = Uilen[k];
+        DEBUG4 (("Singleton k "
+                        ID
+                        "\n", k));
+        if (deg > 0) {
+            up = Uip[k];
+            Usi = (Int *) (Numeric->Memory + up);
+            up += UNITS (Int, deg);
+            Uval = (Entry *) (Numeric->Memory + up);
+            for (j = 0; j < deg; j++) {
+                col = Usi[j];
+                value = Uval[j];
+                DEBUG4 (("  k "
+                                ID
+                                " col "
+                                ID
+                                " value", k, col));
+                EDEBUG4 (value);
+                DEBUG4 (("\n"));
+                if (IS_NONZERO (value)) {
+                    Wi[col]++;
+                }
+            }
+        }
     }
 
     /* ---------------------------------------------------------------------- */
@@ -864,194 +878,207 @@ PRIVATE void get_U
     /* ---------------------------------------------------------------------- */
 
     /* create the column pointers */
-    unz2 = 0 ;
-    for (col = 0 ; col < n_col ; col++)
-    {
-	Up [col] = unz2 ;
-	unz2 += Wi [col] ;
+    unz2 = 0;
+    for (col = 0; col < n_col; col++) {
+        Up[col] = unz2;
+        unz2 += Wi[col];
     }
-    Up [n_col] = unz2 ;
-    DEBUG1 (("Numeric->unz " ID "  npiv " ID " nnzpiv " ID " unz2 " ID "\n",
-	Numeric->unz, npiv, Numeric->nnzpiv, unz2)) ;
-    ASSERT (Numeric->unz + Numeric->nnzpiv == unz2) ;
+    Up[n_col] = unz2;
+    DEBUG1 (("Numeric->unz "
+                    ID
+                    "  npiv "
+                    ID
+                    " nnzpiv "
+                    ID
+                    " unz2 "
+                    ID
+                    "\n",
+                            Numeric->unz, npiv, Numeric->nnzpiv, unz2));
+    ASSERT (Numeric->unz + Numeric->nnzpiv == unz2);
 
-    for (col = 0 ; col < n_col ; col++)
-    {
-	Wi [col] = Up [col+1] ;
+    for (col = 0; col < n_col; col++) {
+        Wi[col] = Up[col + 1];
     }
 
     /* add all of the diagonal entries */
-    for (col = 0 ; col < npiv ; col++)
-    {
-	if (IS_NONZERO (D [col]))
-	{
-	    p = --(Wi [col]) ;
-	    Ui [p] = col ;
+    for (col = 0; col < npiv; col++) {
+        if (IS_NONZERO (D[col])) {
+            p = --(Wi[col]);
+            Ui[p] = col;
 #ifdef COMPLEX
-	    if (split)
-	    {
+            if (split)
+            {
 
-	        Ux [p] = REAL_COMPONENT (D [col]) ;
-		Uz [p] = IMAG_COMPONENT (D [col]) ;
-	    }
-	    else
-	    {
-		Ux [2*p  ] = REAL_COMPONENT (D [col]) ;
-		Ux [2*p+1] = IMAG_COMPONENT (D [col]) ;
-	    }
+                Ux [p] = REAL_COMPONENT (D [col]) ;
+            Uz [p] = IMAG_COMPONENT (D [col]) ;
+            }
+            else
+            {
+            Ux [2*p  ] = REAL_COMPONENT (D [col]) ;
+            Ux [2*p+1] = IMAG_COMPONENT (D [col]) ;
+            }
 #else
-	    Ux [p] = D [col] ;
+            Ux[p] = D[col];
 #endif
-	}
+        }
     }
 
     /* add all the entries from the rows of U */
 
-    deg = Numeric->ulen ;
-    if (deg > 0)
-    {
-	/* make last pivot row of U (singular matrices only) */
-	for (j = 0 ; j < deg ; j++)
-	{
-	    Pattern [j] = Numeric->Upattern [j] ;
-	}
+    deg = Numeric->ulen;
+    if (deg > 0) {
+        /* make last pivot row of U (singular matrices only) */
+        for (j = 0; j < deg; j++) {
+            Pattern[j] = Numeric->Upattern[j];
+        }
     }
 
     /* non-singletons */
-    for (k = npiv-1 ; k >= n1 ; k--)
-    {
+    for (k = npiv - 1; k >= n1; k--) {
 
-	/* ------------------------------------------------------------------ */
-	/* use row k of U */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* use row k of U */
+        /* ------------------------------------------------------------------ */
 
-	up = Uip [k] ;
-	ulen = Uilen [k] ;
-	newUchain = (up < 0) ;
-	if (newUchain)
-	{
-	    up = -up ;
-	    xp = (Entry *) (Numeric->Memory + up + UNITS (Int, ulen)) ;
-	}
-	else
-	{
-	    xp = (Entry *) (Numeric->Memory + up) ;
-	}
+        up = Uip[k];
+        ulen = Uilen[k];
+        newUchain = (up < 0);
+        if (newUchain) {
+            up = -up;
+            xp = (Entry *) (Numeric->Memory + up + UNITS (Int, ulen));
+        } else {
+            xp = (Entry *) (Numeric->Memory + up);
+        }
 
-	xp += deg ;
-	for (j = deg-1 ; j >= 0 ; j--)
-	{
-	    DEBUG4 (("  k " ID " col " ID " value", k, Pattern [j])) ;
-	    col = Pattern [j] ;
-	    ASSERT (col >= 0 && col < n_col) ;
-	    value = *(--xp) ;
-	    EDEBUG4 (value) ;
-	    DEBUG4 (("\n")) ;
-	    if (IS_NONZERO (value))
-	    {
-		p = --(Wi [col]) ;
-		Ui [p] = k ;
+        xp += deg;
+        for (j = deg - 1; j >= 0; j--) {
+            DEBUG4 (("  k "
+                            ID
+                            " col "
+                            ID
+                            " value", k, Pattern[j]));
+            col = Pattern[j];
+            ASSERT (col >= 0 && col < n_col);
+            value = *(--xp);
+            EDEBUG4 (value);
+            DEBUG4 (("\n"));
+            if (IS_NONZERO (value)) {
+                p = --(Wi[col]);
+                Ui[p] = k;
 #ifdef COMPLEX
-		if (split)
-		{
-		    Ux [p] = REAL_COMPONENT (value) ;
-		    Uz [p] = IMAG_COMPONENT (value) ;
-		}
-		else
-		{
-		    Ux [2*p  ] = REAL_COMPONENT (value) ;
-		    Ux [2*p+1] = IMAG_COMPONENT (value) ;
-		}
+                if (split)
+                {
+                    Ux [p] = REAL_COMPONENT (value) ;
+                    Uz [p] = IMAG_COMPONENT (value) ;
+                }
+                else
+                {
+                    Ux [2*p  ] = REAL_COMPONENT (value) ;
+                    Ux [2*p+1] = IMAG_COMPONENT (value) ;
+                }
 #else
-		Ux [p] = value ;
+                Ux[p] = value;
 #endif
 
-	    }
-	}
+            }
+        }
 
-	/* ------------------------------------------------------------------ */
-	/* make row k-1 of U in Pattern [0..deg-1] */
-	/* ------------------------------------------------------------------ */
+        /* ------------------------------------------------------------------ */
+        /* make row k-1 of U in Pattern [0..deg-1] */
+        /* ------------------------------------------------------------------ */
 
-	if (newUchain)
-	{
-	    /* next row is a new Uchain */
-	    deg = ulen ;
-	    DEBUG4 (("end of chain for row of U " ID " deg " ID "\n", k-1, deg)) ;
-	    ip = (Int *) (Numeric->Memory + up) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		col = *ip++ ;
-		DEBUG4 (("  k " ID " col " ID "\n", k-1, col)) ;
-		ASSERT (k <= col) ;
-		Pattern [j] = col ;
-	    }
-	}
-	else
-	{
-	    deg -= ulen ;
-	    DEBUG4 (("middle of chain for row of U " ID " deg " ID "\n", k-1, deg));
-	    ASSERT (deg >= 0) ;
-	    pos = Upos [k] ;
-	    if (pos != EMPTY)
-	    {
-		/* add the pivot column */
-		DEBUG4 (("k " ID " add pivot entry at position " ID "\n", k, pos)) ;
-		ASSERT (pos >= 0 && pos <= deg) ;
-		Pattern [deg++] = Pattern [pos] ;
-		Pattern [pos] = k ;
-	    }
-	}
+        if (newUchain) {
+            /* next row is a new Uchain */
+            deg = ulen;
+            DEBUG4 (("end of chain for row of U "
+                            ID
+                            " deg "
+                            ID
+                            "\n", k - 1, deg));
+            ip = (Int *) (Numeric->Memory + up);
+            for (j = 0; j < deg; j++) {
+                col = *ip++;
+                DEBUG4 (("  k "
+                                ID
+                                " col "
+                                ID
+                                "\n", k - 1, col));
+                ASSERT (k <= col);
+                Pattern[j] = col;
+            }
+        } else {
+            deg -= ulen;
+            DEBUG4 (("middle of chain for row of U "
+                            ID
+                            " deg "
+                            ID
+                            "\n", k - 1, deg));
+            ASSERT (deg >= 0);
+            pos = Upos[k];
+            if (pos != EMPTY) {
+                /* add the pivot column */
+                DEBUG4 (("k "
+                                ID
+                                " add pivot entry at position "
+                                ID
+                                "\n", k, pos));
+                ASSERT (pos >= 0 && pos <= deg);
+                Pattern[deg++] = Pattern[pos];
+                Pattern[pos] = k;
+            }
+        }
     }
 
     /* singletons */
-    for (k = n1 - 1 ; k >= 0 ; k--)
-    {
-	deg = Uilen [k] ;
-	DEBUG4 (("Singleton k " ID "\n", k)) ;
-	if (deg > 0)
-	{
-	    up = Uip [k] ;
-	    Usi = (Int *) (Numeric->Memory + up) ;
-	    up += UNITS (Int, deg) ;
-	    Uval = (Entry *) (Numeric->Memory + up) ;
-	    for (j = 0 ; j < deg ; j++)
-	    {
-		col = Usi [j] ;
-		value = Uval [j] ;
-		DEBUG4 (("  k " ID " col " ID " value", k, col)) ;
-		EDEBUG4 (value) ;
-		DEBUG4 (("\n")) ;
-		if (IS_NONZERO (value))
-		{
-		    p = --(Wi [col]) ;
-		    Ui [p] = k ;
+    for (k = n1 - 1; k >= 0; k--) {
+        deg = Uilen[k];
+        DEBUG4 (("Singleton k "
+                        ID
+                        "\n", k));
+        if (deg > 0) {
+            up = Uip[k];
+            Usi = (Int *) (Numeric->Memory + up);
+            up += UNITS (Int, deg);
+            Uval = (Entry *) (Numeric->Memory + up);
+            for (j = 0; j < deg; j++) {
+                col = Usi[j];
+                value = Uval[j];
+                DEBUG4 (("  k "
+                                ID
+                                " col "
+                                ID
+                                " value", k, col));
+                EDEBUG4 (value);
+                DEBUG4 (("\n"));
+                if (IS_NONZERO (value)) {
+                    p = --(Wi[col]);
+                    Ui[p] = k;
 #ifdef COMPLEX
-		    if (split)
-		    {
-			Ux [p] = REAL_COMPONENT (value) ;
-			Uz [p] = IMAG_COMPONENT (value) ;
-		    }
-		    else
-		    {
-			Ux [2*p  ] = REAL_COMPONENT (value) ;
-			Ux [2*p+1] = IMAG_COMPONENT (value) ;
-		    }
+                    if (split)
+                    {
+                    Ux [p] = REAL_COMPONENT (value) ;
+                    Uz [p] = IMAG_COMPONENT (value) ;
+                    }
+                    else
+                    {
+                    Ux [2*p  ] = REAL_COMPONENT (value) ;
+                    Ux [2*p+1] = IMAG_COMPONENT (value) ;
+                    }
 #else
-		    Ux [p] = value ;
+                    Ux[p] = value;
 #endif
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 
 #ifndef NDEBUG
     DEBUG6 (("U matrix:")) ;
     UMF_dump_col_matrix (Ux,
 #ifdef COMPLEX
-	Uz,
+    Uz,
 #endif
-	Ui, Up, Numeric->n_row, n_col, Numeric->unz + Numeric->nnzpiv) ;
+    Ui, Up, Numeric->n_row, n_col, Numeric->unz + Numeric->nnzpiv) ;
 #endif
 
 }

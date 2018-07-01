@@ -19,9 +19,10 @@
 #include <boost/spirit/home/classic/core/nil.hpp>  // for nil_t
 #include <boost/detail/iterator.hpp> // for boost::detail::iterator_traits
 
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -31,19 +32,23 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //  newlines since no column tracking is needed.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename String>
-class position_policy<file_position_without_column_base<String> > {
+        template<typename String>
+        class position_policy<file_position_without_column_base < String>
 
-public:
-    void next_line(file_position_without_column_base<String>& pos)
-    {
-        ++pos.line;
-    }
+        > {
 
-    void set_tab_chars(unsigned int /*chars*/){}
-    void next_char(file_position_without_column_base<String>& /*pos*/)    {}
-    void tabulation(file_position_without_column_base<String>& /*pos*/)   {}
-};
+        public:
+
+        void next_line(file_position_without_column_base <String> &pos) {
+            ++pos.line;
+        }
+
+        void set_tab_chars(unsigned int /*chars*/) {}
+
+        void next_char(file_position_without_column_base <String> & /*pos*/) {}
+
+        void tabulation(file_position_without_column_base <String> & /*pos*/) {}
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -56,40 +61,39 @@ public:
 //  of position_iterator.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename String>
-class position_policy<file_position_base<String> > {
+    template<typename String>
+    class position_policy<file_position_base < String>
 
-public:
+    > {
+
+    public:
+
     position_policy()
-        : m_CharsPerTab(4)
-    {}
+            : m_CharsPerTab(4) {}
 
-    void next_line(file_position_base<String>& pos)
-    {
+    void next_line(file_position_base <String> &pos) {
         ++pos.line;
         pos.column = 1;
     }
 
-    void set_tab_chars(unsigned int chars)
-    {
+    void set_tab_chars(unsigned int chars) {
         m_CharsPerTab = chars;
     }
 
-    void next_char(file_position_base<String>& pos)
-    {
+    void next_char(file_position_base <String> &pos) {
         ++pos.column;
     }
 
-    void tabulation(file_position_base<String>& pos)
-    {
+    void tabulation(file_position_base <String> &pos) {
         pos.column += m_CharsPerTab - (pos.column - 1) % m_CharsPerTab;
     }
 
-private:
+    private:
     unsigned int m_CharsPerTab;
 };
 
-/* namespace boost::spirit { */ namespace iterator_ { namespace impl {
+/* namespace boost::spirit { */ namespace iterator_ {
+    namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -100,36 +104,36 @@ private:
 //  mainly to keep the public interface (position_iterator) cleanear.
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename MainIterT, typename ForwardIterT, typename PositionT>
-struct position_iterator_base_generator
-{
-private:
-    typedef boost::detail::iterator_traits<ForwardIterT> traits;
-    typedef typename traits::value_type value_type;
-    typedef typename traits::iterator_category iter_category_t;
+        template<typename MainIterT, typename ForwardIterT, typename PositionT>
+        struct position_iterator_base_generator {
+        private:
+            typedef boost::detail::iterator_traits<ForwardIterT> traits;
+            typedef typename traits::value_type value_type;
+            typedef typename traits::iterator_category iter_category_t;
 
-    // Position iterator is always a non-mutable iterator
-    typedef typename boost::add_const<value_type>::type const_value_type;
+            // Position iterator is always a non-mutable iterator
+            typedef typename boost::add_const<value_type>::type const_value_type;
 
-public:
-    // Check if the MainIterT is nil. If it's nil, it means that the actual
-    //  self type is position_iterator. Otherwise, it's a real type we
-    //  must use
-    typedef typename boost::mpl::if_<
-        typename boost::is_same<MainIterT, nil_t>::type,
-        position_iterator<ForwardIterT, PositionT, nil_t>,
-        MainIterT
-    >::type main_iter_t;
+        public:
+            // Check if the MainIterT is nil. If it's nil, it means that the actual
+            //  self type is position_iterator. Otherwise, it's a real type we
+            //  must use
+            typedef typename boost::mpl::if_<
+                    typename boost::is_same<MainIterT, nil_t>::type,
+                    position_iterator < ForwardIterT, PositionT, nil_t>,
+            MainIterT
+            >::type main_iter_t;
 
-    typedef boost::iterator_adaptor<
-        main_iter_t,
-        ForwardIterT,
-        const_value_type,
-        boost::forward_traversal_tag
-    > type;
-};
+            typedef boost::iterator_adaptor<
+                    main_iter_t,
+                    ForwardIterT,
+                    const_value_type,
+                    boost::forward_traversal_tag
+            > type;
+        };
 
-}}
+    }
+}
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 

@@ -5,6 +5,6 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL void UMF_blas3_update
-(
-    WorkType *Work
-) ;
+        (
+                WorkType *Work
+        );

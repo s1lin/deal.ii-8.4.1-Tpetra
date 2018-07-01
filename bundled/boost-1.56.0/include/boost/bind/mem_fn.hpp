@@ -25,19 +25,18 @@
 #include <boost/get_pointer.hpp>
 #include <boost/detail/workaround.hpp>
 
-namespace boost
-{
+namespace boost {
 
 #if defined(BOOST_NO_VOID_RETURNS)
 
 #define BOOST_MEM_FN_CLASS_F , class F
 #define BOOST_MEM_FN_TYPEDEF(X)
 
-namespace _mfi // mem_fun_impl
-{
+    namespace _mfi // mem_fun_impl
+    {
 
-template<class V> struct mf
-{
+    template<class V> struct mf
+    {
 
 #define BOOST_MEM_FN_RETURN return
 
@@ -87,10 +86,10 @@ template<class V> struct mf
 
 #undef BOOST_MEM_FN_RETURN
 
-}; // struct mf<V>
+    }; // struct mf<V>
 
-template<> struct mf<void>
-{
+    template<> struct mf<void>
+    {
 
 #define BOOST_MEM_FN_RETURN
 
@@ -140,7 +139,7 @@ template<> struct mf<void>
 
 #undef BOOST_MEM_FN_RETURN
 
-}; // struct mf<void>
+    }; // struct mf<void>
 
 #undef BOOST_MEM_FN_CLASS_F
 #undef BOOST_MEM_FN_TYPEDEF_F
@@ -197,15 +196,14 @@ template<> struct mf<void>
 
 #endif
 
-} // namespace _mfi
+    } // namespace _mfi
 
 #else // #ifdef BOOST_NO_VOID_RETURNS
 
 #define BOOST_MEM_FN_CLASS_F
 #define BOOST_MEM_FN_TYPEDEF(X) typedef X;
 
-namespace _mfi
-{
+    namespace _mfi {
 
 #define BOOST_MEM_FN_RETURN return
 
@@ -308,81 +306,76 @@ namespace _mfi
 
 // data member support
 
-namespace _mfi
-{
+    namespace _mfi {
 
-template<class R, class T> class dm
-{
-public:
+        template<class R, class T>
+        class dm {
+        public:
 
-    typedef R const & result_type;
-    typedef T const * argument_type;
+            typedef R const &result_type;
+            typedef T const *argument_type;
 
-private:
-    
-    typedef R (T::*F);
-    F f_;
+        private:
 
-    template<class U> R const & call(U & u, T const *) const
-    {
-        return (u.*f_);
-    }
+            typedef R (T::*F);
+            F f_;
 
-    template<class U> R const & call(U & u, void const *) const
-    {
-        return (get_pointer(u)->*f_);
-    }
+            template<class U>
+            R const &call(U &u, T const *) const {
+                return (u.*f_);
+            }
 
-public:
-    
-    explicit dm(F f): f_(f) {}
+            template<class U>
+            R const &call(U &u, void const *) const {
+                return (get_pointer(u)->*f_);
+            }
 
-    R & operator()(T * p) const
-    {
-        return (p->*f_);
-    }
+        public:
 
-    R const & operator()(T const * p) const
-    {
-        return (p->*f_);
-    }
+            explicit dm(F f) : f_(f) {}
 
-    template<class U> R const & operator()(U const & u) const
-    {
-        return call(u, &u);
-    }
+            R &operator()(T *p) const {
+                return (p->*f_);
+            }
+
+            R const &operator()(T const *p) const {
+                return (p->*f_);
+            }
+
+            template<class U>
+            R const &operator()(U const &u) const {
+                return call(u, &u);
+            }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && !BOOST_WORKAROUND(__MWERKS__, < 0x3200)
 
-    R & operator()(T & t) const
-    {
-        return (t.*f_);
-    }
+            R & operator()(T & t) const
+            {
+                return (t.*f_);
+            }
 
-    R const & operator()(T const & t) const
-    {
-        return (t.*f_);
-    }
+            R const & operator()(T const & t) const
+            {
+                return (t.*f_);
+            }
 
 #endif
 
-    bool operator==(dm const & rhs) const
-    {
-        return f_ == rhs.f_;
+            bool operator==(dm const &rhs) const {
+                return f_ == rhs.f_;
+            }
+
+            bool operator!=(dm const &rhs) const {
+                return f_ != rhs.f_;
+            }
+        };
+
+    } // namespace _mfi
+
+    template<class R, class T>
+    _mfi::dm<R, T> mem_fn(R T::*f) {
+        return _mfi::dm<R, T>(f);
     }
-
-    bool operator!=(dm const & rhs) const
-    {
-        return f_ != rhs.f_;
-    }
-};
-
-} // namespace _mfi
-
-template<class R, class T> _mfi::dm<R, T> mem_fn(R T::*f)
-{
-    return _mfi::dm<R, T>(f);
-}
 
 } // namespace boost
 

@@ -14,51 +14,48 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion
-{
-    struct map_tag;
+namespace boost {
+    namespace fusion {
+        struct map_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct at_impl;
+        namespace extension {
+            template<typename Tag>
+            struct at_impl;
 
-        template <>
-        struct at_impl<map_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply 
-            {
-                typedef typename 
-                    mpl::at<typename Sequence::storage_type::types, N>::type 
-                element;
-                typedef typename detail::ref_result<element>::type type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& m)
-                {
-                    return m.get_data().at_impl(N());
-                }
+            template<>
+            struct at_impl<map_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename
+                    mpl::at<typename Sequence::storage_type::types, N>::type
+                            element;
+                    typedef typename detail::ref_result<element>::type type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& m)
+                    {
+                        return m.get_data().at_impl(N());
+                    }
+                };
+
+                template<typename Sequence, typename N>
+                struct apply<Sequence const, N> {
+                    typedef typename
+                    mpl::at<typename Sequence::storage_type::types, N>::type
+                            element;
+                    typedef typename detail::cref_result<element>::type type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence const& m)
+                    {
+                        return m.get_data().at_impl(N());
+                    }
+                };
             };
-
-            template <typename Sequence, typename N>
-            struct apply<Sequence const, N>
-            {
-                typedef typename 
-                    mpl::at<typename Sequence::storage_type::types, N>::type 
-                element;
-                typedef typename detail::cref_result<element>::type type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence const& m)
-                {
-                    return m.get_data().at_impl(N());
-                }
-            };
-        };
+        }
     }
-}}
+}
 
 #endif //BOOST_FUSION_MAP_DETAIL_AT_IMPL_HPP

@@ -5,23 +5,23 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_transpose
-(
-    Int n_row,
-    Int n_col,
-    const Int Ap [ ],
-    const Int Ai [ ],
-    const double Ax [ ],
-    const Int P [ ],
-    const Int Q [ ],
-    Int nq,
-    Int Rp [ ],
-    Int Ri [ ],
-    double Rx [ ],
-    Int W [ ],
-    Int check
+        (
+                Int n_row,
+                Int n_col,
+                const Int Ap[],
+                const Int Ai[],
+                const double Ax[],
+                const Int P[],
+                const Int Q[],
+                Int nq,
+                Int Rp[],
+                Int Ri[],
+                double Rx[],
+                Int W[],
+                Int check
 #ifdef COMPLEX
-    , const double Az [ ]
-    , double Rz [ ]
-    , Int do_conjugate
+, const double Az [ ]
+, double Rz [ ]
+, Int do_conjugate
 #endif
-) ;
+);

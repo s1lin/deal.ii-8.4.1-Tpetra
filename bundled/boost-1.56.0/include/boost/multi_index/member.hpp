@@ -20,16 +20,19 @@
 #include <cstddef>
 
 #if !defined(BOOST_NO_SFINAE)
+
 #include <boost/type_traits/is_convertible.hpp>
+
 #endif
 
-namespace boost{
+namespace boost {
 
-template<class T> class reference_wrapper; /* fwd decl. */
+    template<class T>
+    class reference_wrapper; /* fwd decl. */
 
-namespace multi_index{
+    namespace multi_index {
 
-namespace detail{
+        namespace detail {
 
 /* member is a read/write key extractor for accessing a given
  * member of a class.
@@ -41,94 +44,82 @@ namespace detail{
  * arbitrary combinations of these (vg. T** or auto_ptr<T*>.)
  */
 
-template<class Class,typename Type,Type Class::*PtrToMember>
-struct const_member_base
-{
-  typedef Type result_type;
+            template<class Class, typename Type, Type Class::*PtrToMember>
+            struct const_member_base {
+                typedef Type result_type;
 
-  template<typename ChainedPtr>
-
-#if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
-#else
-  Type&
-#endif
-  
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
-
-  Type& operator()(const Class& x)const
-  {
-    return x.*PtrToMember;
-  }
-
-  Type& operator()(const reference_wrapper<const Class>& x)const
-  {
-    return operator()(x.get());
-  }
-
-  Type& operator()(const reference_wrapper<Class>& x)const
-  { 
-    return operator()(x.get());
-  }
-};
-
-template<class Class,typename Type,Type Class::*PtrToMember>
-struct non_const_member_base
-{
-  typedef Type result_type;
-
-  template<typename ChainedPtr>
+                template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
+                typename disable_if<
+                        is_convertible<const ChainedPtr &, const Class &>, Type &>::type
 #else
-  Type&
+                Type&
 #endif
 
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
 
-  const Type& operator()(const Class& x)const
-  {
-    return x.*PtrToMember;
-  }
+                Type &operator()(const Class &x) const {
+                    return x.*PtrToMember;
+                }
 
-  Type& operator()(Class& x)const
-  { 
-    return x.*PtrToMember;
-  }
+                Type &operator()(const reference_wrapper<const Class> &x) const {
+                    return operator()(x.get());
+                }
 
-  const Type& operator()(const reference_wrapper<const Class>& x)const
-  {
-    return operator()(x.get());
-  }
+                Type &operator()(const reference_wrapper<Class> &x) const {
+                    return operator()(x.get());
+                }
+            };
 
-  Type& operator()(const reference_wrapper<Class>& x)const
-  { 
-    return operator()(x.get());
-  }
-};
+            template<class Class, typename Type, Type Class::*PtrToMember>
+            struct non_const_member_base {
+                typedef Type result_type;
 
-} /* namespace multi_index::detail */
+                template<typename ChainedPtr>
 
-template<class Class,typename Type,Type Class::*PtrToMember>
-struct member:
-  mpl::if_c<
-    is_const<Type>::value,
-    detail::const_member_base<Class,Type,PtrToMember>,
-    detail::non_const_member_base<Class,Type,PtrToMember>
-  >::type
-{
-};
+#if !defined(BOOST_NO_SFINAE)
+                typename disable_if<
+                        is_convertible<const ChainedPtr &, const Class &>, Type &>::type
+#else
+                Type&
+#endif
 
-namespace detail{
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
+
+                const Type &operator()(const Class &x) const {
+                    return x.*PtrToMember;
+                }
+
+                Type &operator()(Class &x) const {
+                    return x.*PtrToMember;
+                }
+
+                const Type &operator()(const reference_wrapper<const Class> &x) const {
+                    return operator()(x.get());
+                }
+
+                Type &operator()(const reference_wrapper<Class> &x) const {
+                    return operator()(x.get());
+                }
+            };
+
+        } /* namespace multi_index::detail */
+
+        template<class Class, typename Type, Type Class::*PtrToMember>
+        struct member :
+                mpl::if_c<
+                        is_const<Type>::value,
+                        detail::const_member_base<Class, Type, PtrToMember>,
+                        detail::non_const_member_base<Class, Type, PtrToMember>
+                >::type {
+        };
+
+        namespace detail {
 
 /* MSVC++ 6.0 does not support properly pointers to members as
  * non-type template arguments, as reported in
@@ -147,100 +138,88 @@ namespace detail{
  * [non_]const_member_offset_base is deprecated.
  */
 
-template<class Class,typename Type,std::size_t OffsetOfMember>
-struct const_member_offset_base
-{
-  typedef Type result_type;
+            template<class Class, typename Type, std::size_t OffsetOfMember>
+            struct const_member_offset_base {
+                typedef Type result_type;
 
-  template<typename ChainedPtr>
-
-#if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
-#else
-  Type&
-#endif 
-    
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
-
-  Type& operator()(const Class& x)const
-  {
-    return *static_cast<const Type*>(
-      static_cast<const void*>(
-        static_cast<const char*>(
-          static_cast<const void *>(&x))+OffsetOfMember));
-  }
-
-  Type& operator()(const reference_wrapper<const Class>& x)const
-  {
-    return operator()(x.get());
-  }
-
-  Type& operator()(const reference_wrapper<Class>& x)const
-  {
-    return operator()(x.get());
-  }
-};
-
-template<class Class,typename Type,std::size_t OffsetOfMember>
-struct non_const_member_offset_base
-{
-  typedef Type result_type;
-
-  template<typename ChainedPtr>
+                template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
+                typename disable_if<
+                        is_convertible<const ChainedPtr &, const Class &>, Type &>::type
 #else
-  Type&
-#endif 
-  
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
+                Type&
+#endif
 
-  const Type& operator()(const Class& x)const
-  {
-    return *static_cast<const Type*>(
-      static_cast<const void*>(
-        static_cast<const char*>(
-          static_cast<const void *>(&x))+OffsetOfMember));
-  }
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
 
-  Type& operator()(Class& x)const
-  { 
-    return *static_cast<Type*>(
-      static_cast<void*>(
-        static_cast<char*>(static_cast<void *>(&x))+OffsetOfMember));
-  }
+                Type &operator()(const Class &x) const {
+                    return *static_cast<const Type *>(
+                            static_cast<const void *>(
+                                    static_cast<const char *>(
+                                            static_cast<const void *>(&x)) + OffsetOfMember));
+                }
 
-  const Type& operator()(const reference_wrapper<const Class>& x)const
-  {
-    return operator()(x.get());
-  }
+                Type &operator()(const reference_wrapper<const Class> &x) const {
+                    return operator()(x.get());
+                }
 
-  Type& operator()(const reference_wrapper<Class>& x)const
-  {
-    return operator()(x.get());
-  }
-};
+                Type &operator()(const reference_wrapper<Class> &x) const {
+                    return operator()(x.get());
+                }
+            };
 
-} /* namespace multi_index::detail */
+            template<class Class, typename Type, std::size_t OffsetOfMember>
+            struct non_const_member_offset_base {
+                typedef Type result_type;
 
-template<class Class,typename Type,std::size_t OffsetOfMember>
-struct member_offset:
-  mpl::if_c<
-    is_const<Type>::value,
-    detail::const_member_offset_base<Class,Type,OffsetOfMember>,
-    detail::non_const_member_offset_base<Class,Type,OffsetOfMember>
-  >::type
-{
-};
+                template<typename ChainedPtr>
+
+#if !defined(BOOST_NO_SFINAE)
+                typename disable_if<
+                        is_convertible<const ChainedPtr &, const Class &>, Type &>::type
+#else
+                Type&
+#endif
+
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
+
+                const Type &operator()(const Class &x) const {
+                    return *static_cast<const Type *>(
+                            static_cast<const void *>(
+                                    static_cast<const char *>(
+                                            static_cast<const void *>(&x)) + OffsetOfMember));
+                }
+
+                Type &operator()(Class &x) const {
+                    return *static_cast<Type *>(
+                            static_cast<void *>(
+                                    static_cast<char *>(static_cast<void *>(&x)) + OffsetOfMember));
+                }
+
+                const Type &operator()(const reference_wrapper<const Class> &x) const {
+                    return operator()(x.get());
+                }
+
+                Type &operator()(const reference_wrapper<Class> &x) const {
+                    return operator()(x.get());
+                }
+            };
+
+        } /* namespace multi_index::detail */
+
+        template<class Class, typename Type, std::size_t OffsetOfMember>
+        struct member_offset :
+                mpl::if_c<
+                        is_const<Type>::value,
+                        detail::const_member_offset_base<Class, Type, OffsetOfMember>,
+                        detail::non_const_member_offset_base<Class, Type, OffsetOfMember>
+                >::type {
+        };
 
 /* BOOST_MULTI_INDEX_MEMBER resolves to member in the normal cases,
  * and to member_offset as a workaround in those defective compilers for
@@ -251,11 +230,11 @@ struct member_offset:
 #define BOOST_MULTI_INDEX_MEMBER(Class,Type,MemberName) \
 ::boost::multi_index::member_offset< Class,Type,offsetof(Class,MemberName) >
 #else
-#define BOOST_MULTI_INDEX_MEMBER(Class,Type,MemberName) \
+#define BOOST_MULTI_INDEX_MEMBER(Class, Type, MemberName) \
 ::boost::multi_index::member< Class,Type,&Class::MemberName >
 #endif
 
-} /* namespace multi_index */
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

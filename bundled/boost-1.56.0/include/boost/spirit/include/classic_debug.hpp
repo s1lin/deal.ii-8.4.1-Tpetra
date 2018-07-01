@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_DEBUG
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_DEBUG
+
 #include <boost/spirit/home/classic/debug.hpp>
+
 #endif

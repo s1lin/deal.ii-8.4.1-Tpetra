@@ -11,15 +11,18 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/container/set/detail/value_of_data_impl.hpp>
 
-namespace boost { namespace fusion { namespace extension
-{
-    template <typename>
-    struct key_of_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct key_of_impl;
 
-    template <>
-    struct key_of_impl<set_iterator_tag>
-      : value_of_impl<set_iterator_tag>
-    {};
-}}}
+            template<>
+            struct key_of_impl<set_iterator_tag>
+                    : value_of_impl<set_iterator_tag> {
+            };
+        }
+    }
+}
 
 #endif

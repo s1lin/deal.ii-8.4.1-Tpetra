@@ -19,80 +19,79 @@
 #include <boost/detail/winapi/GetCurrentThread.hpp>
 #include <boost/detail/winapi/GetThreadTimes.hpp>
 
-namespace boost
-{
-namespace chrono
-{
+namespace boost {
+    namespace chrono {
 
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-thread_clock::time_point thread_clock::now( system::error_code & ec )
-{
-    //  note that Windows uses 100 nanosecond ticks for FILETIME
-    boost::detail::winapi::FILETIME_ creation, exit, user_time, system_time;
 
-    if ( boost::detail::winapi::GetThreadTimes(
-            boost::detail::winapi::GetCurrentThread (), &creation, &exit,
-            &system_time, &user_time ) )
-    {
-        duration user = duration(
-                ((static_cast<duration::rep>(user_time.dwHighDateTime) << 32)
-                        | user_time.dwLowDateTime) * 100 );
+        thread_clock::time_point thread_clock::now(system::error_code &ec) {
+            //  note that Windows uses 100 nanosecond ticks for FILETIME
+            boost::detail::winapi::FILETIME_ creation, exit, user_time, system_time;
 
-        duration system = duration(
-                ((static_cast<duration::rep>(system_time.dwHighDateTime) << 32)
-                        | system_time.dwLowDateTime) * 100 );
+            if (boost::detail::winapi::GetThreadTimes(
+                    boost::detail::winapi::GetCurrentThread(), &creation, &exit,
+                    &system_time, &user_time)) {
+                duration user = duration(
+                        ((static_cast<duration::rep>(user_time.dwHighDateTime) << 32)
+                         | user_time.dwLowDateTime) * 100);
 
-        if (!BOOST_CHRONO_IS_THROWS(ec)) 
-        {
-            ec.clear();
+                duration system = duration(
+                        ((static_cast<duration::rep>(system_time.dwHighDateTime) << 32)
+                         | system_time.dwLowDateTime) * 100);
+
+                if (!BOOST_CHRONO_IS_THROWS(ec)) {
+                    ec.clear();
+                }
+                return time_point(system + user);
+
+            } else {
+                if (BOOST_CHRONO_IS_THROWS(ec)) {
+                    boost::throw_exception(
+                            system::system_error(
+                                    boost::detail::winapi::GetLastError(),
+                                    BOOST_CHRONO_SYSTEM_CATEGORY,
+                                    "chrono::thread_clock"));
+                } else {
+                    ec.assign(boost::detail::winapi::GetLastError(), BOOST_CHRONO_SYSTEM_CATEGORY);
+                    return thread_clock::time_point(duration(0));
+                }
+            }
         }
-        return time_point(system+user);
 
-    }
-    else
-    {
-        if (BOOST_CHRONO_IS_THROWS(ec)) 
-        {
-            boost::throw_exception(
-                    system::system_error( 
-                            boost::detail::winapi::GetLastError(), 
-                            BOOST_CHRONO_SYSTEM_CATEGORY, 
-                            "chrono::thread_clock" ));
-        } 
-        else 
-        {
-            ec.assign( boost::detail::winapi::GetLastError(), BOOST_CHRONO_SYSTEM_CATEGORY );
-            return thread_clock::time_point(duration(0));
-        }
-    }
-}
 #endif
 
-thread_clock::time_point thread_clock::now() BOOST_NOEXCEPT
-{
+        thread_clock::time_point thread_clock::now()
 
-    //  note that Windows uses 100 nanosecond ticks for FILETIME
-    boost::detail::winapi::FILETIME_ creation, exit, user_time, system_time;
+        BOOST_NOEXCEPT {
 
-    if ( boost::detail::winapi::GetThreadTimes( 
-            boost::detail::winapi::GetCurrentThread (), &creation, &exit,
-            &system_time, &user_time ) )
-    {
-        duration user   = duration(
+        //  note that Windows uses 100 nanosecond ticks for FILETIME
+        boost::detail::winapi::FILETIME_ creation, exit, user_time, system_time;
+
+        if (
+
+        boost::detail::winapi::GetThreadTimes(
+                boost::detail::winapi::GetCurrentThread(), &creation, &exit,
+                &system_time, &user_time
+
+        )) {
+        duration user = duration(
                 ((static_cast<duration::rep>(user_time.dwHighDateTime) << 32)
-                        | user_time.dwLowDateTime) * 100 );
+                 | user_time.dwLowDateTime) * 100);
 
         duration system = duration(
                 ((static_cast<duration::rep>(system_time.dwHighDateTime) << 32)
-                        | system_time.dwLowDateTime) * 100 );
+                 | system_time.dwLowDateTime) * 100);
 
-        return time_point(system+user);
+        return
+        time_point(system
+        +user);
     }
-    else
-    {
-      BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
-      return time_point();
-    }
+    else {
+    BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+    return
+
+    time_point();
+}
 
 }
 

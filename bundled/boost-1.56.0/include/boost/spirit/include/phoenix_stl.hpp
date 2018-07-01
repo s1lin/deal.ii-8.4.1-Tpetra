@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX_STL
 #define BOOST_SPIRIT_INCLUDE_PHOENIX_STL
+
 #include <boost/phoenix/stl.hpp>
+
 #endif

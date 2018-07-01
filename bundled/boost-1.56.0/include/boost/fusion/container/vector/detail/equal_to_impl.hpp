@@ -12,29 +12,26 @@
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/and.hpp>
 
-namespace boost { namespace fusion
-{
-    struct vector_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct vector_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct equal_to_impl;
+        namespace extension {
+            template<typename Tag>
+            struct equal_to_impl;
 
-        template <>
-        struct equal_to_impl<vector_iterator_tag>
-        {
-            template <typename I1, typename I2>
-            struct apply             
-                : is_same<
-                    typename I1::identity
-                  , typename I2::identity
-                >
-            {
+            template<>
+            struct equal_to_impl<vector_iterator_tag> {
+                template<typename I1, typename I2>
+                struct apply
+                        : is_same<
+                                typename I1::identity, typename I2::identity
+                        > {
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

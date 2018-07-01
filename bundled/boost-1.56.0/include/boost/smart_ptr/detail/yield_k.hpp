@@ -33,13 +33,13 @@
 
 // BOOST_SMT_PAUSE
 
-#if defined(_MSC_VER) && _MSC_VER >= 1310 && ( defined(_M_IX86) || defined(_M_X64) )
+#if defined(_MSC_VER) && _MSC_VER >= 1310 && (defined(_M_IX86) || defined(_M_X64))
 
 extern "C" void _mm_pause();
 
 #define BOOST_SMT_PAUSE _mm_pause();
 
-#elif defined(__GNUC__) && ( defined(__i386__) || defined(__x86_64__) )
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 
 #define BOOST_SMT_PAUSE __asm__ __volatile__( "rep; nop" : : : "memory" );
 
@@ -143,17 +143,14 @@ inline void yield( unsigned k )
 
 #else
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-inline void yield( unsigned )
-{
-}
+        inline void yield(unsigned) {
+        }
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace boost
 

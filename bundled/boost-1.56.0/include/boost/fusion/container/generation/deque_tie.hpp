@@ -11,7 +11,9 @@
 #include <boost/fusion/container/deque/deque.hpp>
 
 #if !defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
+
 # include <boost/fusion/container/generation/detail/pp_deque_tie.hpp>
+
 #else
 
 ///////////////////////////////////////////////////////////////////////////////

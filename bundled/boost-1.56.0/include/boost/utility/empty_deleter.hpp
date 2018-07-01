@@ -36,7 +36,7 @@
 namespace boost {
 
 //! A deprecated name for \c null_deleter
-typedef null_deleter empty_deleter;
+    typedef null_deleter empty_deleter;
 
 } // namespace boost
 

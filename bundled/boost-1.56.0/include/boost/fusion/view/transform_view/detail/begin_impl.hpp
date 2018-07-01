@@ -10,61 +10,57 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/view/transform_view/transform_view_fwd.hpp>
 
-namespace boost { namespace fusion
-{
-    template <typename First, typename F>
-    struct transform_view_iterator;
+namespace boost {
+    namespace fusion {
+        template<typename First, typename F>
+        struct transform_view_iterator;
 
-    template <typename First1, typename First2, typename F>
-    struct transform_view_iterator2;
+        template<typename First1, typename First2, typename F>
+        struct transform_view_iterator2;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct begin_impl;
+        namespace extension {
+            template<typename Tag>
+            struct begin_impl;
 
-        // Unary Version
-        template <>
-        struct begin_impl<transform_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::first_type first_type;
-                typedef typename Sequence::transform_type transform_type;
-                typedef transform_view_iterator<first_type, transform_type> type;
+            // Unary Version
+            template<>
+            struct begin_impl<transform_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::first_type first_type;
+                    typedef typename Sequence::transform_type transform_type;
+                    typedef transform_view_iterator<first_type, transform_type> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s)
-                {
-                    return type(s.first(), s.f);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s)
+                    {
+                        return type(s.first(), s.f);
+                    }
+                };
             };
-        };
 
-        // Binary Version
-        template <>
-        struct begin_impl<transform_view2_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::first1_type first1_type;
-                typedef typename Sequence::first2_type first2_type;
-                typedef typename Sequence::transform_type transform_type;
-                typedef transform_view_iterator2<first1_type, first2_type, transform_type> type;
+            // Binary Version
+            template<>
+            struct begin_impl<transform_view2_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::first1_type first1_type;
+                    typedef typename Sequence::first2_type first2_type;
+                    typedef typename Sequence::transform_type transform_type;
+                    typedef transform_view_iterator2<first1_type, first2_type, transform_type> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& s)
-                {
-                    return type(s.first1(), s.first2(), s.f);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s)
+                    {
+                        return type(s.first1(), s.first2(), s.f);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace imperial {
+        namespace imperial {
 
-typedef scaled_base_unit<pound_base_unit, scale<2, static_rational<-4> > > ounce_base_unit;
+            typedef scaled_base_unit <pound_base_unit, scale<2, static_rational < -4>> >
+            ounce_base_unit;
 
-} // namespace imperial
+        } // namespace imperial
 
-template<>
-struct base_unit_info<imperial::ounce_base_unit> {
-    static const char* name()   { return("ounce"); }
-    static const char* symbol() { return("oz"); }
-};
+        template<>
+        struct base_unit_info<imperial::ounce_base_unit> {
+            static const char *name() { return ("ounce"); }
 
-} // namespace units
+            static const char *symbol() { return ("oz"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

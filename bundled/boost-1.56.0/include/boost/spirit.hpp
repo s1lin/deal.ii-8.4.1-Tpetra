@@ -22,6 +22,7 @@
 #if !defined(BOOST_SPIRIT_USE_OLD_NAMESPACE)
 #define BOOST_SPIRIT_USE_OLD_NAMESPACE
 #endif
+
 #include <boost/spirit/include/classic.hpp>
 
 #endif

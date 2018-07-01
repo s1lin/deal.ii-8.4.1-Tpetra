@@ -48,9 +48,10 @@ BOOST_STATIC_ASSERT(BOOST_SPIRIT_SWITCH_CASE_LIMIT > 0);
 #include <boost/spirit/home/classic/dynamic/impl/switch.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost {
+    namespace spirit {
 
-BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
+        BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -86,116 +87,124 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 //  defined).
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename CaseT, typename CondT = impl::get_next_token_cond>
-struct switch_parser
-:   public unary<CaseT, parser<switch_parser<CaseT, CondT> > >
-{
-    typedef switch_parser<CaseT, CondT>     self_t;
-    typedef unary_parser_category           parser_category_t;
-    typedef unary<CaseT, parser<self_t> >   base_t;
+        template<typename CaseT, typename CondT = impl::get_next_token_cond>
+        struct switch_parser
+                : public unary<CaseT, parser < switch_parser<CaseT, CondT> > > {
+        typedef switch_parser<CaseT, CondT> self_t;
+        typedef unary_parser_category parser_category_t;
+        typedef unary <CaseT, parser<self_t>> base_t;
 
-    switch_parser(CaseT const &case_)
-    :   base_t(case_), cond(CondT())
-    {}
+        switch_parser(CaseT
+        const &case_)
+        :
 
-    switch_parser(CaseT const &case_, CondT const &cond_)
-    :   base_t(case_), cond(cond_)
-    {}
+        base_t (case_), cond(CondT()) {}
 
-    template <typename ScannerT>
-    struct result
-    {
-        typedef typename match_result<ScannerT, nil_t>::type type;
-    };
+        switch_parser(CaseT
+        const &case_,
+        CondT const &cond_
+        )
+        :
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        return this->subject().parse(scan,
-            impl::make_cond_functor<CondT>::do_(cond));
-    }
+        base_t (case_), cond(cond_) {}
 
-    CondT cond;
-};
+        template<typename ScannerT>
+        struct result {
+            typedef typename match_result<ScannerT, nil_t>::type type;
+        };
 
-///////////////////////////////////////////////////////////////////////////////
-template <typename CondT>
-struct switch_cond_parser
-{
-    switch_cond_parser(CondT const &cond_)
-    :   cond(cond_)
-    {}
-
-    template <typename ParserT>
-    switch_parser<ParserT, CondT>
-    operator[](parser<ParserT> const &p) const
-    {
-        return switch_parser<ParserT, CondT>(p.derived(), cond);
-    }
-
-    CondT const &cond;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-template <int N, typename ParserT, bool IsDefault>
-struct case_parser
-:   public unary<ParserT, parser<case_parser<N, ParserT, IsDefault> > >
-{
-    typedef case_parser<N, ParserT, IsDefault> self_t;
-    typedef unary_parser_category               parser_category_t;
-    typedef unary<ParserT, parser<self_t> >     base_t;
-
-    typedef typename base_t::subject_t          self_subject_t;
-
-    BOOST_STATIC_CONSTANT(int, value = N);
-    BOOST_STATIC_CONSTANT(bool, is_default = IsDefault);
-    BOOST_STATIC_CONSTANT(bool, is_simple = true);
-    BOOST_STATIC_CONSTANT(bool, is_epsilon = (
-        is_default && boost::is_same<self_subject_t, epsilon_parser>::value
-    ));
-
-    case_parser(parser<ParserT> const &p)
-    :   base_t(p.derived())
-    {}
-
-    template <typename ScannerT>
-    struct result
-    {
-        typedef typename match_result<ScannerT, nil_t>::type type;
-    };
-
-    template <typename ScannerT, typename CondT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan, CondT const &cond) const
-    {
-        typedef impl::default_case<self_t> default_t;
-
-        if (!scan.at_end()) {
-            typedef impl::default_delegate_parse<
-                value, is_default, default_t::value> default_parse_t;
-
-            typename ScannerT::iterator_t const save(scan.first);
-            return default_parse_t::parse(cond(scan), *this,
-                *this, scan, save);
+        template<typename ScannerT>
+        typename parser_result<self_t, ScannerT>::type
+        parse(ScannerT const &scan) const {
+            return this->subject().parse(scan,
+                                         impl::make_cond_functor<CondT>::do_(cond));
         }
 
-        return default_t::is_epsilon ? scan.empty_match() : scan.no_match();
+        CondT cond;
+    };
+
+///////////////////////////////////////////////////////////////////////////////
+    template<typename CondT>
+    struct switch_cond_parser {
+        switch_cond_parser(CondT const &cond_)
+                : cond(cond_) {}
+
+        template<typename ParserT>
+        switch_parser <ParserT, CondT>
+        operator[](parser <ParserT> const &p) const {
+            return switch_parser<ParserT, CondT>(p.derived(), cond);
+        }
+
+        CondT const &cond;
+    };
+
+///////////////////////////////////////////////////////////////////////////////
+    template<int N, typename ParserT, bool IsDefault>
+    struct case_parser
+            : public unary<ParserT, parser < case_parser<N, ParserT, IsDefault> > > {
+    typedef case_parser<N, ParserT, IsDefault> self_t;
+    typedef unary_parser_category parser_category_t;
+    typedef unary <ParserT, parser<self_t>> base_t;
+
+    typedef typename base_t::subject_t self_subject_t;
+
+    BOOST_STATIC_CONSTANT(int, value = N);
+
+    BOOST_STATIC_CONSTANT(bool, is_default = IsDefault);
+
+    BOOST_STATIC_CONSTANT(bool, is_simple = true);
+
+    BOOST_STATIC_CONSTANT(bool, is_epsilon = (
+            is_default && boost::is_same<self_subject_t, epsilon_parser>::value
+    ));
+
+    case_parser(parser<ParserT>
+    const &p)
+    :
+    base_t(p
+    .
+
+    derived()
+
+    ) {
+}
+
+template<typename ScannerT>
+struct result {
+    typedef typename match_result<ScannerT, nil_t>::type type;
+};
+
+template<typename ScannerT, typename CondT>
+typename parser_result<self_t, ScannerT>::type
+parse(ScannerT const &scan, CondT const &cond) const {
+    typedef impl::default_case <self_t> default_t;
+
+    if (!scan.at_end()) {
+        typedef impl::default_delegate_parse <
+        value, is_default, default_t::value> default_parse_t;
+
+        typename ScannerT::iterator_t const save(scan.first);
+        return default_parse_t::parse(cond(scan), *this,
+                                      *this, scan, save);
     }
 
-    template <int N1, typename ParserT1, bool IsDefault1>
-    impl::compound_case_parser<
-        self_t, case_parser<N1, ParserT1, IsDefault1>, IsDefault1
-    >
-    operator, (case_parser<N1, ParserT1, IsDefault1> const &p) const
-    {
-        //  If the following compile time assertion fires, you've probably used
-        //  more than one default_p case inside the switch_p parser construct.
-        BOOST_STATIC_ASSERT(!is_default || !IsDefault1);
+    return default_t::is_epsilon ? scan.empty_match() : scan.no_match();
+}
 
-        typedef case_parser<N1, ParserT1, IsDefault1> right_t;
-        return impl::compound_case_parser<self_t, right_t, IsDefault1>(*this, p);
-    }
+template<int N1, typename ParserT1, bool IsDefault1>
+impl::compound_case_parser <
+self_t, case_parser<N1, ParserT1, IsDefault1>, IsDefault1
+>
+        operator,(case_parser < N1, ParserT1, IsDefault1 >
+const &p) const
+{
+//  If the following compile time assertion fires, you've probably used
+//  more than one default_p case inside the switch_p parser construct.
+BOOST_STATIC_ASSERT(!is_default || !IsDefault1);
+
+typedef case_parser <N1, ParserT1, IsDefault1> right_t;
+return impl::compound_case_parser<self_t, right_t, IsDefault1>(*this, p);
+}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,19 +214,17 @@ struct switch_parser_gen {
 //  returned by the lazy parameter expression 'cond'. This may be a parser,
 //  which result is used or a phoenix actor, which will be dereferenced to
 //  obtain the switch condition value.
-    template <typename CondT>
-    switch_cond_parser<CondT>
-    operator()(CondT const &cond) const
-    {
+    template<typename CondT>
+    switch_cond_parser <CondT>
+    operator()(CondT const &cond) const {
         return switch_cond_parser<CondT>(cond);
     }
 
 //  This generates a switch parser, which is driven by the next character/token
 //  found in the input stream.
-    template <typename CaseT>
-    switch_parser<CaseT>
-    operator[](parser<CaseT> const &p) const
-    {
+    template<typename CaseT>
+    switch_parser <CaseT>
+    operator[](parser <CaseT> const &p) const {
         return switch_parser<CaseT>(p.derived());
     }
 };
@@ -225,26 +232,25 @@ struct switch_parser_gen {
 switch_parser_gen const switch_p = switch_parser_gen();
 
 ///////////////////////////////////////////////////////////////////////////////
-template <int N, typename ParserT>
+template<int N, typename ParserT>
 inline case_parser<N, ParserT, false>
-case_p(parser<ParserT> const &p)
+        case_p(parser < ParserT >
+const &p)
 {
-    return case_parser<N, ParserT, false>(p);
+return
+case_parser<N, ParserT, false>(p);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 struct default_parser_gen
-:   public case_parser<BOOST_SPIRIT_DEFAULTCASE_MAGIC, epsilon_parser, true>
-{
+        : public case_parser<BOOST_SPIRIT_DEFAULTCASE_MAGIC, epsilon_parser, true> {
     default_parser_gen()
-    :   case_parser<BOOST_SPIRIT_DEFAULTCASE_MAGIC, epsilon_parser, true>
-            (epsilon_p)
-    {}
+            : case_parser<BOOST_SPIRIT_DEFAULTCASE_MAGIC, epsilon_parser, true>
+                      (epsilon_p) {}
 
-    template <typename ParserT>
+    template<typename ParserT>
     case_parser<BOOST_SPIRIT_DEFAULTCASE_MAGIC, ParserT, true>
-    operator()(parser<ParserT> const &p) const
-    {
+    operator()(parser <ParserT> const &p) const {
         return case_parser<BOOST_SPIRIT_DEFAULTCASE_MAGIC, ParserT, true>(p);
     }
 };

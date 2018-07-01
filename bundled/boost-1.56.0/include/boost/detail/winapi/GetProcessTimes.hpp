@@ -16,24 +16,27 @@
 #endif
 
 namespace boost {
-namespace detail {
-namespace winapi {
+    namespace detail {
+        namespace winapi {
 #if !defined(UNDER_CE)  // Windows CE does not define GetProcessTimes
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetProcessTimes;
+            using ::GetProcessTimes;
 #else
-    extern "C" __declspec(dllimport) BOOL_ WINAPI
-        GetProcessTimes(
-            HANDLE_ hProcess,
+            extern "C" __declspec(dllimport) BOOL_ WINAPI
+            GetProcessTimes(
+                    HANDLE_
+            hProcess,
             LPFILETIME_ lpCreationTime,
-            LPFILETIME_ lpExitTime,
+                    LPFILETIME_
+            lpExitTime,
             LPFILETIME_ lpKernelTime,
-            LPFILETIME_ lpUserTime
-        );
+                    LPFILETIME_
+            lpUserTime
+            );
 #endif
 #endif
-}
-}
+        }
+    }
 }
 
 #endif // BOOST_DETAIL_WINAPI_GETPROCESSTIMES_HPP

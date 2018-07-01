@@ -22,20 +22,20 @@
 
 namespace boost {
 
-namespace detail {
+    namespace detail {
 
-template <typename T>
-struct is_reference_impl
-{
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_or<
-         ::boost::is_lvalue_reference<T>::value, ::boost::is_rvalue_reference<T>::value
-       >::value));
-};
+        template<typename T>
+        struct is_reference_impl {
+            BOOST_STATIC_CONSTANT(bool, value =
+            (::boost::type_traits::ice_or<
+                    ::boost::is_lvalue_reference<T>::value, ::boost::is_rvalue_reference<T>::value
+            >::value));
+        };
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_reference,T,::boost::detail::is_reference_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_reference, T, ::boost::detail::is_reference_impl<T>::value
+    )
 
 } // namespace boost
 

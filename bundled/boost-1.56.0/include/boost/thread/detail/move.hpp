@@ -8,7 +8,9 @@
 #define BOOST_THREAD_MOVE_HPP
 
 #include <boost/thread/detail/config.hpp>
+
 #ifndef BOOST_NO_SFINAE
+
 #include <boost/core/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -21,64 +23,66 @@
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/add_pointer.hpp>
 #include <boost/type_traits/decay.hpp>
+
 #endif
 
 #include <boost/thread/detail/delete.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/traits.hpp>
 #include <boost/config/abi_prefix.hpp>
+
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
 #include <type_traits>
+
 #endif
-namespace boost
-{
+namespace boost {
 
-    namespace detail
-    {
-      template <typename T>
-      struct enable_move_utility_emulation_dummy_specialization;
+    namespace detail {
         template<typename T>
-        struct thread_move_t
-        {
-            T& t;
-            explicit thread_move_t(T& t_):
-                t(t_)
-            {}
+        struct enable_move_utility_emulation_dummy_specialization;
 
-            T& operator*() const
-            {
+        template<typename T>
+        struct thread_move_t {
+            T &t;
+
+            explicit thread_move_t(T &t_) :
+                    t(t_) {}
+
+            T &operator*() const {
                 return t;
             }
 
-            T* operator->() const
-            {
+            T *operator->() const {
                 return &t;
             }
+
         private:
-            void operator=(thread_move_t&);
+            void operator=(thread_move_t &);
         };
     }
 
 #if !defined BOOST_THREAD_USES_MOVE
 
 #ifndef BOOST_NO_SFINAE
+
     template<typename T>
-    typename enable_if<boost::is_convertible<T&,boost::detail::thread_move_t<T> >, boost::detail::thread_move_t<T> >::type move(T& t)
-    {
+    typename enable_if<boost::is_convertible<T &, boost::detail::thread_move_t<T> >, boost::detail::thread_move_t<T> >::type
+    move(T &t) {
         return boost::detail::thread_move_t<T>(t);
     }
+
 #endif
 
     template<typename T>
-    boost::detail::thread_move_t<T> move(boost::detail::thread_move_t<T> t)
-    {
+    boost::detail::thread_move_t<T> move(boost::detail::thread_move_t<T> t) {
         return t;
     }
 
 #endif   //#if !defined BOOST_THREAD_USES_MOVE
 }
 
-#if ! defined  BOOST_NO_CXX11_RVALUE_REFERENCES
+#if !defined  BOOST_NO_CXX11_RVALUE_REFERENCES
 
 #define BOOST_THREAD_RV_REF(TYPE) BOOST_RV_REF(TYPE)
 #define BOOST_THREAD_RV_REF_2_TEMPL_ARGS(TYPE) BOOST_RV_REF_2_TEMPL_ARGS(TYPE)
@@ -98,7 +102,7 @@ namespace boost
       {}; \
     }
 
-#elif ! defined  BOOST_NO_CXX11_RVALUE_REFERENCES && defined  BOOST_MSVC
+#elif !defined  BOOST_NO_CXX11_RVALUE_REFERENCES && defined  BOOST_MSVC
 
 #define BOOST_THREAD_RV_REF(TYPE) BOOST_RV_REF(TYPE)
 #define BOOST_THREAD_RV_REF_2_TEMPL_ARGS(TYPE) BOOST_RV_REF_2_TEMPL_ARGS(TYPE)
@@ -194,7 +198,7 @@ namespace detail
 #endif
 
 
-#if ! defined  BOOST_NO_CXX11_RVALUE_REFERENCES
+#if !defined  BOOST_NO_CXX11_RVALUE_REFERENCES
 
 #define BOOST_THREAD_MOVABLE(TYPE)
 
@@ -245,68 +249,69 @@ namespace detail
 
 
 
-namespace boost
-{
-  namespace thread_detail
-  {
+namespace boost {
+    namespace thread_detail {
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    template <class Tp>
-    struct remove_reference : boost::remove_reference<Tp> {};
-    template <class Tp>
-    struct  decay : boost::decay<Tp> {};
+        template<class Tp>
+        struct remove_reference : boost::remove_reference<Tp> {
+        };
+        template<class Tp>
+        struct decay : boost::decay<Tp> {
+        };
 #else
-  template <class Tp>
-  struct remove_reference
-  {
-    typedef Tp type;
-  };
-  template <class Tp>
-  struct remove_reference<Tp&>
-  {
-    typedef Tp type;
-  };
-  template <class Tp>
-  struct remove_reference< rv<Tp> > {
-    typedef Tp type;
-  };
+        template <class Tp>
+        struct remove_reference
+        {
+          typedef Tp type;
+        };
+        template <class Tp>
+        struct remove_reference<Tp&>
+        {
+          typedef Tp type;
+        };
+        template <class Tp>
+        struct remove_reference< rv<Tp> > {
+          typedef Tp type;
+        };
 
-  template <class Tp>
-  struct  decay
-  {
-  private:
-    typedef typename boost::move_detail::remove_rvalue_reference<Tp>::type Up0;
-    typedef typename boost::remove_reference<Up0>::type Up;
-  public:
-      typedef typename conditional
-                       <
-                           is_array<Up>::value,
-                           typename remove_extent<Up>::type*,
-                           typename conditional
-                           <
-                                is_function<Up>::value,
-                                typename add_pointer<Up>::type,
-                                typename remove_cv<Up>::type
-                           >::type
-                       >::type type;
-  };
+        template <class Tp>
+        struct  decay
+        {
+        private:
+          typedef typename boost::move_detail::remove_rvalue_reference<Tp>::type Up0;
+          typedef typename boost::remove_reference<Up0>::type Up;
+        public:
+            typedef typename conditional
+                             <
+                                 is_array<Up>::value,
+                                 typename remove_extent<Up>::type*,
+                                 typename conditional
+                                 <
+                                      is_function<Up>::value,
+                                      typename add_pointer<Up>::type,
+                                      typename remove_cv<Up>::type
+                                 >::type
+                             >::type type;
+        };
 #endif
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-      template <class T>
-      typename decay<T>::type
-      decay_copy(T&& t)
-      {
-          return boost::forward<T>(t);
-      }
+
+        template<class T>
+        typename decay<T>::type
+        decay_copy(T &&t) {
+            return boost::forward<T>(t);
+        }
+
 #else
-  template <class T>
-  typename decay<T>::type
-  decay_copy(BOOST_THREAD_FWD_REF(T) t)
-  {
-      return boost::forward<T>(t);
-  }
+        template <class T>
+        typename decay<T>::type
+        decay_copy(BOOST_THREAD_FWD_REF(T) t)
+        {
+            return boost::forward<T>(t);
+        }
 #endif
-  }
+    }
 }
 
 #include <boost/config/abi_suffix.hpp>

@@ -3,12 +3,12 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
- /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         auto_link.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Automatic library inclusion for Borland/Microsoft compilers.
-  */
+/*
+ *   LOCATION:    see http://www.boost.org for most recent version.
+ *   FILE         auto_link.hpp
+ *   VERSION      see <boost/version.hpp>
+ *   DESCRIPTION: Automatic library inclusion for Borland/Microsoft compilers.
+ */
 
 /*************************************************************************
 
@@ -76,7 +76,9 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 
 #ifdef __cplusplus
 #  ifndef BOOST_CONFIG_HPP
+
 #     include <boost/config.hpp>
+
 #  endif
 #elif defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
 //
@@ -90,9 +92,9 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 // Only include what follows for known and supported compilers:
 //
 #if defined(BOOST_MSVC) \
-    || defined(__BORLANDC__) \
-    || (defined(__MWERKS__) && defined(_WIN32) && (__MWERKS__ >= 0x3000)) \
-    || (defined(__ICL) && defined(_MSC_EXTENSIONS) && (_MSC_VER >= 1200))
+ || defined(__BORLANDC__) \
+ || (defined(__MWERKS__) && defined(_WIN32) && (__MWERKS__ >= 0x3000)) \
+ || (defined(__ICL) && defined(_MSC_EXTENSIONS) && (_MSC_VER >= 1200))
 
 #ifndef BOOST_VERSION_HPP
 #  include <boost/version.hpp>

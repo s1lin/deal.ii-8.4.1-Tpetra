@@ -20,32 +20,35 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <int size>
-    struct as_set;
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<int size>
+            struct as_set;
 
-    template <>
-    struct as_set<0>
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef set<> type;
-        };
+            template<>
+            struct as_set<0> {
+                template<typename Iterator>
+                struct apply {
+                    typedef set<> type;
+                };
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        static typename apply<Iterator>::type
-        call(Iterator)
-        {
-            return set<>();
+                template<typename Iterator>
+                BOOST_FUSION_GPU_ENABLED
+                static typename apply<Iterator>::type
+                call(Iterator)
+                        {
+                                return set<>();
+                        }
+            };
         }
-    };
-}}}
+    }
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/set/detail/preprocessed/as_set.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/as_set" FUSION_MAX_SET_SIZE_STR ".hpp")

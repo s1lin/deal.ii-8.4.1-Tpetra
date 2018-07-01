@@ -23,10 +23,9 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/mpl/eval_if.hpp>
 
-namespace boost
-{
+namespace boost {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)  
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
 
     namespace range_detail_vc7_1  
     {  
@@ -44,33 +43,32 @@ namespace boost
        {  
            typedef T* type;  
        };       
-    }  
-    
-#endif  
+    }
 
-    template< typename C, typename Enabler=void >
-    struct range_iterator
-    {
+#endif
+
+    template<typename C, typename Enabler=void>
+    struct range_iterator {
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
-  
+
         typedef BOOST_RANGE_DEDUCED_TYPENAME  
-               range_detail_vc7_1::range_iterator<C>::type type;  
-           
-#else  
+               range_detail_vc7_1::range_iterator<C>::type type;
+
+#else
 
     private:
         typedef typename remove_reference<C>::type param_t;
 
     public:
         typedef typename mpl::eval_if_c<
-            is_const<param_t>::value,
-            range_const_iterator<typename remove_const<param_t>::type>,
-            range_mutable_iterator<param_t>
+                is_const<param_t>::value,
+                range_const_iterator < typename remove_const<param_t>::type>,
+        range_mutable_iterator <param_t>
         >::type type;
-        
-#endif         
+
+#endif
     };
-    
+
 } // namespace boost
 
 #endif

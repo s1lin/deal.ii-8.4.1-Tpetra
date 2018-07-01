@@ -13,7 +13,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #if defined(BOOST_EXTERNAL_LIB_NAME)
 # if defined(BOOST_MSVC) \
@@ -44,6 +44,7 @@
 
 // And include the header that does the work.
 # include <boost/config/auto_link.hpp>
+
 #endif  // auto-linking disabled
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_AUTO_LINK_HPP_INCLUDED

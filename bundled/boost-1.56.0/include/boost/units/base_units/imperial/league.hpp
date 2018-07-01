@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace imperial {
+        namespace imperial {
 
-typedef scaled_base_unit<yard_base_unit, scale<5280, static_rational<1> > > league_base_unit;
+            typedef scaled_base_unit <yard_base_unit, scale<5280, static_rational < 1>> >
+            league_base_unit;
 
-} // namespace imperial
+        } // namespace imperial
 
-template<>
-struct base_unit_info<imperial::league_base_unit> {
-    static const char* name()   { return("league"); }
-    static const char* symbol() { return("league"); }
-};
+        template<>
+        struct base_unit_info<imperial::league_base_unit> {
+            static const char *name() { return ("league"); }
 
-} // namespace units
+            static const char *symbol() { return ("league"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

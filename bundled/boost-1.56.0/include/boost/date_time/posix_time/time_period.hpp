@@ -14,15 +14,16 @@
 #include "boost/date_time/posix_time/ptime.hpp"
 
 namespace boost {
-namespace posix_time {
+    namespace posix_time {
 
-  //! Time period type
-  /*! \ingroup time_basics
-   */
-  typedef date_time::period<ptime, time_duration> time_period;
+        //! Time period type
+        /*! \ingroup time_basics
+         */
+        typedef date_time::period <ptime, time_duration> time_period;
 
 
-} }//namespace posix_time
+    }
+}//namespace posix_time
 
 
 #endif

@@ -41,8 +41,7 @@ namespace boost {
             \return An instance of the \c is_classified predicate 
         */
         inline detail::is_classifiedF
-        is_classified(std::ctype_base::mask Type, const std::locale& Loc=std::locale())
-        {
+        is_classified(std::ctype_base::mask Type, const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(Type, Loc);
         }
 
@@ -53,9 +52,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate
         */
-        inline detail::is_classifiedF 
-        is_space(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_space(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::space, Loc);
         }
 
@@ -66,9 +64,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_alnum(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_alnum(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::alnum, Loc);
         }
 
@@ -79,9 +76,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_alpha(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_alpha(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::alpha, Loc);
         }
 
@@ -92,9 +88,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_cntrl(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_cntrl(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::cntrl, Loc);
         }
 
@@ -105,9 +100,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_digit(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_digit(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::digit, Loc);
         }
 
@@ -119,8 +113,7 @@ namespace boost {
             \return An instance of the \c is_classified predicate 
         */
         inline detail::is_classifiedF
-        is_graph(const std::locale& Loc=std::locale())
-        {
+        is_graph(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::graph, Loc);
         }
 
@@ -131,9 +124,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_lower(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_lower(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::lower, Loc);
         }
 
@@ -144,9 +136,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_print(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_print(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::print, Loc);
         }
 
@@ -157,9 +148,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_punct(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_punct(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::punct, Loc);
         }
 
@@ -170,9 +160,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_upper(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_upper(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::upper, Loc);
         }
 
@@ -183,9 +172,8 @@ namespace boost {
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate 
         */
-        inline detail::is_classifiedF 
-        is_xdigit(const std::locale& Loc=std::locale())
-        {
+        inline detail::is_classifiedF
+        is_xdigit(const std::locale &Loc = std::locale()) {
             return detail::is_classifiedF(std::ctype_base::xdigit, Loc);
         }
 
@@ -199,11 +187,12 @@ namespace boost {
         */
         template<typename RangeT>
         inline detail::is_any_ofF<
-            BOOST_STRING_TYPENAME range_value<RangeT>::type> 
-        is_any_of( const RangeT& Set )
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_set(boost::as_literal(Set));
-            return detail::is_any_ofF<BOOST_STRING_TYPENAME range_value<RangeT>::type>(lit_set); 
+                BOOST_STRING_TYPENAME range_value<RangeT>::type>
+        is_any_of(const RangeT &Set) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_const_iterator<RangeT>::type > lit_set(boost::as_literal(Set));
+            return detail::is_any_ofF < BOOST_STRING_TYPENAME
+            range_value<RangeT>::type > (lit_set);
         }
 
         //! is_from_range predicate
@@ -216,11 +205,10 @@ namespace boost {
             \return An instance of the \c is_from_range predicate 
         */
         template<typename CharT>
-        inline detail::is_from_rangeF<CharT> is_from_range(CharT From, CharT To)
-        {
-            return detail::is_from_rangeF<CharT>(From,To); 
+        inline detail::is_from_rangeF <CharT> is_from_range(CharT From, CharT To) {
+            return detail::is_from_rangeF<CharT>(From, To);
         }
-        
+
         // predicate combinators ---------------------------------------------------//
 
         //! predicate 'and' composition predicate
@@ -234,17 +222,16 @@ namespace boost {
             \return An instance of the \c class_and predicate     
         */
         template<typename Pred1T, typename Pred2T>
-        inline detail::pred_andF<Pred1T, Pred2T>
-        operator&&( 
-            const predicate_facade<Pred1T>& Pred1, 
-            const predicate_facade<Pred2T>& Pred2 )
-        {    
+        inline detail::pred_andF <Pred1T, Pred2T>
+        operator&&(
+                const predicate_facade <Pred1T> &Pred1,
+                const predicate_facade <Pred2T> &Pred2) {
             // Doing the static_cast with the pointer instead of the reference
             // is a workaround for some compilers which have problems with
             // static_cast's of template references, i.e. CW8. /grafik/
-            return detail::pred_andF<Pred1T,Pred2T>(
-                *static_cast<const Pred1T*>(&Pred1), 
-                *static_cast<const Pred2T*>(&Pred2) );
+            return detail::pred_andF<Pred1T, Pred2T>(
+                    *static_cast<const Pred1T *>(&Pred1),
+                    *static_cast<const Pred2T *>(&Pred2));
         }
 
         //! predicate 'or' composition predicate
@@ -258,17 +245,16 @@ namespace boost {
             \return An instance of the \c class_or predicate     
         */
         template<typename Pred1T, typename Pred2T>
-        inline detail::pred_orF<Pred1T, Pred2T>
-        operator||( 
-            const predicate_facade<Pred1T>& Pred1, 
-            const predicate_facade<Pred2T>& Pred2 )
-        {    
+        inline detail::pred_orF <Pred1T, Pred2T>
+        operator||(
+                const predicate_facade <Pred1T> &Pred1,
+                const predicate_facade <Pred2T> &Pred2) {
             // Doing the static_cast with the pointer instead of the reference
             // is a workaround for some compilers which have problems with
             // static_cast's of template references, i.e. CW8. /grafik/
-            return detail::pred_orF<Pred1T,Pred2T>(
-                *static_cast<const Pred1T*>(&Pred1), 
-                *static_cast<const Pred2T*>(&Pred2));
+            return detail::pred_orF<Pred1T, Pred2T>(
+                    *static_cast<const Pred1T *>(&Pred1),
+                    *static_cast<const Pred2T *>(&Pred2));
         }
 
         //! predicate negation operator
@@ -280,13 +266,12 @@ namespace boost {
             \return An instance of the \c class_not predicate     
         */
         template<typename PredT>
-        inline detail::pred_notF<PredT>
-        operator!( const predicate_facade<PredT>& Pred )
-        {
+        inline detail::pred_notF <PredT>
+        operator!(const predicate_facade <PredT> &Pred) {
             // Doing the static_cast with the pointer instead of the reference
             // is a workaround for some compilers which have problems with
             // static_cast's of template references, i.e. CW8. /grafik/
-            return detail::pred_notF<PredT>(*static_cast<const PredT*>(&Pred)); 
+            return detail::pred_notF<PredT>(*static_cast<const PredT *>(&Pred));
         }
 
     } // namespace algorithm

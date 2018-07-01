@@ -54,7 +54,9 @@ Version number available as major, minor, and patch.
 #define BOOST_LIB_STD_STLPORT_NAME "STLport"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_LIB_STD_STLPORT,BOOST_LIB_STD_STLPORT_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_LIB_STD_STLPORT,
+BOOST_LIB_STD_STLPORT_NAME)
 
 
 #endif

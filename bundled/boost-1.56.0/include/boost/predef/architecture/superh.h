@@ -62,7 +62,9 @@ If available versions \[1-5\] are specifically detected.
 #define BOOST_ARCH_SH_NAME "SuperH"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_SH,BOOST_ARCH_SH_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_SH,
+BOOST_ARCH_SH_NAME)
 
 
 #endif

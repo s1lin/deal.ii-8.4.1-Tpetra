@@ -32,225 +32,222 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-namespace boost { namespace iostreams {
+namespace boost {
+    namespace iostreams {
 
-template<typename T>
-void close(T& t);
+        template<typename T>
+        void close(T &t);
 
-template<typename T>
-void close(T& t, BOOST_IOS::openmode which);
+        template<typename T>
+        void close(T &t, BOOST_IOS::openmode which);
 
-template<typename T, typename Sink>
-void close(T& t, Sink& snk, BOOST_IOS::openmode which);
-    
-namespace detail {
+        template<typename T, typename Sink>
+        void close(T &t, Sink &snk, BOOST_IOS::openmode which);
 
-template<typename T>
-void close_all(T& t)
-{ 
-    try {
-        boost::iostreams::close(t, BOOST_IOS::in);
-    } catch (...) {
-        try {
-            boost::iostreams::close(t, BOOST_IOS::out);
-        } catch (...) { }
-        throw;
+        namespace detail {
+
+            template<typename T>
+            void close_all(T &t) {
+                try {
+                    boost::iostreams::close(t, BOOST_IOS::in);
+                } catch (...) {
+                    try {
+                        boost::iostreams::close(t, BOOST_IOS::out);
+                    } catch (...) {}
+                    throw;
+                }
+                boost::iostreams::close(t, BOOST_IOS::out);
+            }
+
+            template<typename T, typename Sink>
+            void close_all(T &t, Sink &snk) {
+                try {
+                    boost::iostreams::close(t, snk, BOOST_IOS::in);
+                } catch (...) {
+                    try {
+                        boost::iostreams::close(t, snk, BOOST_IOS::out);
+                    } catch (...) {}
+                    throw;
+                }
+                boost::iostreams::close(t, snk, BOOST_IOS::out);
+            }
+
+        } // End namespace detail.
+
     }
-    boost::iostreams::close(t, BOOST_IOS::out);
-}
-
-template<typename T, typename Sink>
-void close_all(T& t, Sink& snk)
-{ 
-    try {
-        boost::iostreams::close(t, snk, BOOST_IOS::in);
-    } catch (...) {
-        try {
-            boost::iostreams::close(t, snk, BOOST_IOS::out);
-        } catch (...) { }
-        throw;
-    }
-    boost::iostreams::close(t, snk, BOOST_IOS::out);
-}
-
-} // End namespace detail. 
-
-} } // End namespaces iostreams, boost.
+} // End namespaces iostreams, boost.
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
 # include <boost/iostreams/detail/vc6/close.hpp>
 #else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
 
-namespace boost { namespace iostreams {
+namespace boost {
+    namespace iostreams {
 
-namespace detail {
+        namespace detail {
 
-template<typename T>
-struct close_impl;
+            template<typename T>
+            struct close_impl;
 
-} // End namespace detail.
+        } // End namespace detail.
 
-template<typename T>
-void close(T& t) { detail::close_all(t); }
+        template<typename T>
+        void close(T &t) { detail::close_all(t); }
 
-template<typename T>
-void close(T& t, BOOST_IOS::openmode which)
-{ 
+        template<typename T>
+        void close(T &t, BOOST_IOS::openmode which) {
 #ifdef BOOST_IOSTREAMS_STRICT
-    BOOST_ASSERT(which == BOOST_IOS::in || which == BOOST_IOS::out);
+            BOOST_ASSERT(which == BOOST_IOS::in || which == BOOST_IOS::out);
 #else
-    if (which == (BOOST_IOS::in | BOOST_IOS::out)) {
-        detail::close_all(t);
-        return;
-    }
+            if (which == (BOOST_IOS::in | BOOST_IOS::out)) {
+                detail::close_all(t);
+                return;
+            }
 #endif
-    detail::close_impl<T>::close(detail::unwrap(t), which); 
-}
+            detail::close_impl<T>::close(detail::unwrap(t), which);
+        }
 
-template<typename T, typename Sink>
-void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-{ 
+        template<typename T, typename Sink>
+        void close(T &t, Sink &snk, BOOST_IOS::openmode which) {
 #ifdef BOOST_IOSTREAMS_STRICT
-    BOOST_ASSERT(which == BOOST_IOS::in || which == BOOST_IOS::out);
+            BOOST_ASSERT(which == BOOST_IOS::in || which == BOOST_IOS::out);
 #else
-    if (which == (BOOST_IOS::in | BOOST_IOS::out)) {
-        detail::close_all(t, snk);
-        return;
-    }
+            if (which == (BOOST_IOS::in | BOOST_IOS::out)) {
+                detail::close_all(t, snk);
+                return;
+            }
 #endif
-    detail::close_impl<T>::close(detail::unwrap(t), snk, which); 
-}
+            detail::close_impl<T>::close(detail::unwrap(t), snk, which);
+        }
 
-namespace detail {
+        namespace detail {
 
 //------------------Definition of close_impl----------------------------------//
 
-struct close_boost_stream { };
-struct close_filtering_stream { };
+            struct close_boost_stream {
+            };
+            struct close_filtering_stream {
+            };
 
-template<typename T>
-struct close_tag {
-    typedef typename category_of<T>::type             category;
-    typedef typename detail::unwrapped_type<T>::type  unwrapped;
-    typedef typename
-            iostreams::select<
-                mpl::not_< is_convertible<category, closable_tag> >,
+            template<typename T>
+            struct close_tag {
+                typedef typename category_of<T>::type category;
+                typedef typename detail::unwrapped_type<T>::type unwrapped;
+                typedef typename
+                iostreams::select<
+                        mpl::not_ < is_convertible < category, closable_tag> >,
                 any_tag,
-                mpl::or_<
-                    is_boost_stream<unwrapped>,
-                    is_boost_stream_buffer<unwrapped>
+                mpl::or_ <
+                is_boost_stream<unwrapped>,
+                is_boost_stream_buffer<unwrapped>
                 >,
                 close_boost_stream,
-                mpl::or_<
-                    is_filtering_stream<unwrapped>,
-                    is_filtering_streambuf<unwrapped>
+                mpl::or_ <
+                is_filtering_stream<unwrapped>,
+                is_filtering_streambuf<unwrapped>
                 >,
                 close_filtering_stream,
-                mpl::or_<
-                    is_convertible<category, two_sequence>,
-                    is_convertible<category, dual_use>
+                mpl::or_ <
+                is_convertible<category, two_sequence>,
+                is_convertible<category, dual_use>
                 >,
                 two_sequence,
                 else_,
                 closable_tag
-            >::type type;
-};
+                >::type type;
+            };
 
-template<typename T>
-struct close_impl
-    : mpl::if_<
-          is_custom<T>,
-          operations<T>,
-          close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
-      >::type
-    { };
+            template<typename T>
+            struct close_impl
+                    : mpl::if_<
+                            is_custom < T>,
+                      operations<T>,
+                      close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
+            >::type {
+        };
 
-template<>
-struct close_impl<any_tag> {
-    template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which)
-    {
-        if (which == BOOST_IOS::out)
-            iostreams::flush(t);
-    }
+        template<>
+        struct close_impl<any_tag> {
+            template<typename T>
+            static void close(T &t, BOOST_IOS::openmode which) {
+                if (which == BOOST_IOS::out)
+                    iostreams::flush(t);
+            }
 
-    template<typename T, typename Sink>
-    static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-    {
-        if (which == BOOST_IOS::out) {
-            non_blocking_adapter<Sink> nb(snk);
-            iostreams::flush(t, nb);
-        }
-    }
-};
+            template<typename T, typename Sink>
+            static void close(T &t, Sink &snk, BOOST_IOS::openmode which) {
+                if (which == BOOST_IOS::out) {
+                    non_blocking_adapter <Sink> nb(snk);
+                    iostreams::flush(t, nb);
+                }
+            }
+        };
 
-template<>
-struct close_impl<close_boost_stream> {
-    template<typename T>
-    static void close(T& t)
-    {
-        t.close();
-    }
-    template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which)
-    {
-        if (which == BOOST_IOS::out)
-            t.close();
-    }
-};
+        template<>
+        struct close_impl<close_boost_stream> {
+            template<typename T>
+            static void close(T &t) {
+                t.close();
+            }
 
-template<>
-struct close_impl<close_filtering_stream> {
-    template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which)
-    {
-        typedef typename category_of<T>::type category;
-        const bool in =  is_convertible<category, input>::value &&
-                        !is_convertible<category, output>::value;
-        if (in == (which == BOOST_IOS::in) && t.is_complete())
-            t.pop();
-    }
-};
+            template<typename T>
+            static void close(T &t, BOOST_IOS::openmode which) {
+                if (which == BOOST_IOS::out)
+                    t.close();
+            }
+        };
 
-template<>
-struct close_impl<closable_tag> {
-    template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which)
-    {
-        typedef typename category_of<T>::type category;
-        const bool in =  is_convertible<category, input>::value &&
-                        !is_convertible<category, output>::value;
-        if (in == (which == BOOST_IOS::in))
-            t.close();
-    }
-    template<typename T, typename Sink>
-    static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-    {
-        typedef typename category_of<T>::type category;
-        const bool in =  is_convertible<category, input>::value &&
-                        !is_convertible<category, output>::value;
-        if (in == (which == BOOST_IOS::in)) {
-            non_blocking_adapter<Sink> nb(snk);
-            t.close(nb);
-        }
-    }
-};
+        template<>
+        struct close_impl<close_filtering_stream> {
+            template<typename T>
+            static void close(T &t, BOOST_IOS::openmode which) {
+                typedef typename category_of<T>::type category;
+                const bool in = is_convertible<category, input>::value &&
+                                !is_convertible<category, output>::value;
+                if (in == (which == BOOST_IOS::in) && t.is_complete())
+                    t.pop();
+            }
+        };
 
-template<>
-struct close_impl<two_sequence> {
-    template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which) { t.close(which); }
-    template<typename T, typename Sink>
-    static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-    {
-        non_blocking_adapter<Sink> nb(snk);
-        t.close(nb, which);
-    }
-};
+        template<>
+        struct close_impl<closable_tag> {
+            template<typename T>
+            static void close(T &t, BOOST_IOS::openmode which) {
+                typedef typename category_of<T>::type category;
+                const bool in = is_convertible<category, input>::value &&
+                                !is_convertible<category, output>::value;
+                if (in == (which == BOOST_IOS::in))
+                    t.close();
+            }
 
-} // End namespace detail.
+            template<typename T, typename Sink>
+            static void close(T &t, Sink &snk, BOOST_IOS::openmode which) {
+                typedef typename category_of<T>::type category;
+                const bool in = is_convertible<category, input>::value &&
+                                !is_convertible<category, output>::value;
+                if (in == (which == BOOST_IOS::in)) {
+                    non_blocking_adapter <Sink> nb(snk);
+                    t.close(nb);
+                }
+            }
+        };
 
-} } // End namespaces iostreams, boost.
+        template<>
+        struct close_impl<two_sequence> {
+            template<typename T>
+            static void close(T &t, BOOST_IOS::openmode which) { t.close(which); }
+
+            template<typename T, typename Sink>
+            static void close(T &t, Sink &snk, BOOST_IOS::openmode which) {
+                non_blocking_adapter <Sink> nb(snk);
+                t.close(nb, which);
+            }
+        };
+
+    } // End namespace detail.
+
+}
+} // End namespaces iostreams, boost.
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
 

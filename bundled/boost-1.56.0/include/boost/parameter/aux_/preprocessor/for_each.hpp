@@ -16,10 +16,10 @@
 # include <boost/preprocessor/for.hpp>
 # include <boost/preprocessor/repetition/deduce_r.hpp>
 
-# define BOOST_PARAMETER_FOR_EACH_head_aux2(x,y) (x,y), ~
-# define BOOST_PARAMETER_FOR_EACH_head_aux3(x,y,z) (x,y,z), ~
-# define BOOST_PARAMETER_FOR_EACH_head_aux4(x,y,z,u) (x,y,z,u), ~
-# define BOOST_PARAMETER_FOR_EACH_head(n,x) \
+# define BOOST_PARAMETER_FOR_EACH_head_aux2(x, y) (x,y), ~
+# define BOOST_PARAMETER_FOR_EACH_head_aux3(x, y, z) (x,y,z), ~
+# define BOOST_PARAMETER_FOR_EACH_head_aux4(x, y, z, u) (x,y,z,u), ~
+# define BOOST_PARAMETER_FOR_EACH_head(n, x) \
     BOOST_PP_SPLIT(0, BOOST_PP_CAT(BOOST_PARAMETER_FOR_EACH_head_aux,n) x)
 
 # define BOOST_PARAMETER_FOR_EACH_pred_aux_BOOST_PARAMETER_FOR_EACH_END_SENTINEL
@@ -28,14 +28,14 @@
         BOOST_PP_CAT(BOOST_PARAMETER_FOR_EACH_pred_aux_, x) \
     )), ~
 
-# define BOOST_PARAMETER_FOR_EACH_pred_aux2(x,y) \
+# define BOOST_PARAMETER_FOR_EACH_pred_aux2(x, y) \
     BOOST_PARAMETER_FOR_EACH_pred_aux_check(x)
-# define BOOST_PARAMETER_FOR_EACH_pred_aux3(x,y,z) \
+# define BOOST_PARAMETER_FOR_EACH_pred_aux3(x, y, z) \
     BOOST_PARAMETER_FOR_EACH_pred_aux_check(x)
-# define BOOST_PARAMETER_FOR_EACH_pred_aux4(x,y,z,u) \
+# define BOOST_PARAMETER_FOR_EACH_pred_aux4(x, y, z, u) \
     BOOST_PARAMETER_FOR_EACH_pred_aux_check(x)
 
-# define BOOST_PARAMETER_FOR_EACH_pred_aux0(n,x) \
+# define BOOST_PARAMETER_FOR_EACH_pred_aux0(n, x) \
     BOOST_PP_CAT(BOOST_PARAMETER_FOR_EACH_pred_aux,n) x
 
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
@@ -81,7 +81,7 @@
       , BOOST_PP_TUPLE_ELEM(5,1,state) \
     )
 
-# define BOOST_PARAMETER_FOR_EACH_build_end_sentinel(z,n,text) \
+# define BOOST_PARAMETER_FOR_EACH_build_end_sentinel(z, n, text) \
     BOOST_PP_COMMA_IF(n) BOOST_PARAMETER_FOR_EACH_END_SENTINEL
 # define BOOST_PARAMETER_FOR_EACH_build_end_sentinel_tuple(arity) \
     ( \

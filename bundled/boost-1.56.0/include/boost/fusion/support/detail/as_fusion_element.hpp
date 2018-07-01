@@ -11,38 +11,36 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/ref.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename T>
-    struct as_fusion_element
-    {
-        typedef T type;
-    };
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename T>
+            struct as_fusion_element {
+                typedef T type;
+            };
 
-    template <typename T>
-    struct as_fusion_element<reference_wrapper<T> >
-    {
-        typedef T& type;
-    };
+            template<typename T>
+            struct as_fusion_element<reference_wrapper < T> > {
+            typedef T &type;
+        };
 
-    template <typename T, int N>
-    struct as_fusion_element<T[N]>
-    {
-        typedef const T(&type)[N];
-    };
+        template<typename T, int N>
+        struct as_fusion_element<T[N]> {
+            typedef const T(&type)[N];
+        };
 
-    template <typename T, int N>
-    struct as_fusion_element<volatile T[N]>
-    {
-        typedef const volatile T(&type)[N];
-    };
+        template<typename T, int N>
+        struct as_fusion_element<volatile T[N]> {
+            typedef const volatile T(&type)[N];
+        };
 
-    template <typename T, int N>
-    struct as_fusion_element<const volatile T[N]>
-    {
-        typedef const volatile T(&type)[N];
-    };
+        template<typename T, int N>
+        struct as_fusion_element<const volatile T[N]> {
+            typedef const volatile T(&type)[N];
+        };
 
-}}}
+    }
+}
+}
 
 #endif

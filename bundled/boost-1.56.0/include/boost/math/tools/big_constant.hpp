@@ -8,38 +8,49 @@
 #define BOOST_MATH_TOOLS_BIG_CONSTANT_HPP
 
 #include <boost/math/tools/config.hpp>
+
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
+
 #include <boost/lexical_cast.hpp>
+
 #endif
+
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/math/cstdfloat/cstdfloat_types.hpp>
 
-namespace boost{ namespace math{ 
+namespace boost {
+    namespace math {
 
-namespace tools{
+        namespace tools {
 
-template <class T>
-inline BOOST_CONSTEXPR_OR_CONST T make_big_value(boost::floatmax_t v, const char*, mpl::true_ const&, mpl::false_ const&)
-{
-   return static_cast<T>(v);
-}
-template <class T>
-inline BOOST_CONSTEXPR_OR_CONST T make_big_value(boost::floatmax_t v, const char*, mpl::true_ const&, mpl::true_ const&)
-{
-   return static_cast<T>(v);
-}
+            template<class T>
+            inline BOOST_CONSTEXPR_OR_CONST T
+            make_big_value(boost::floatmax_t
+            v, const char*, mpl::true_ const&, mpl::false_ const&) {
+            return static_cast
+            <T>(v);
+        }
+        template<class T>
+        inline BOOST_CONSTEXPR_OR_CONST T
+        make_big_value(boost::floatmax_t
+        v, const char*, mpl::true_ const&, mpl::true_ const&) {
+        return static_cast
+        <T>(v);
+    }
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
-template <class T>
-inline T make_big_value(boost::floatmax_t, const char* s, mpl::false_ const&, mpl::false_ const&)
-{
-   return boost::lexical_cast<T>(s);
-}
+
+    template<class T>
+    inline T make_big_value(boost::floatmax_t, const char *s, mpl::false_ const &, mpl::false_ const &) {
+        return boost::lexical_cast<T>(s);
+    }
+
 #endif
-template <class T>
-inline BOOST_CONSTEXPR const char* make_big_value(boost::floatmax_t, const char* s, mpl::false_ const&, mpl::true_ const&)
-{
-   return s;
-}
+
+    template<class T>
+    inline BOOST_CONSTEXPR const char *
+    make_big_value(boost::floatmax_t, const char *s, mpl::false_ const &, mpl::true_ const &) {
+        return s;
+    }
 
 //
 // For constants which might fit in a long double (if it's big enough):
@@ -62,7 +73,8 @@ inline BOOST_CONSTEXPR const char* make_big_value(boost::floatmax_t, const char*
    mpl::bool_<is_floating_point<T>::value || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::max_exponent <= std::numeric_limits<long double>::max_exponent && std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits)>(), \
    boost::is_convertible<const char*, T>())
 
-}}} // namespaces
+}
+}} // namespaces
 
 #endif
 

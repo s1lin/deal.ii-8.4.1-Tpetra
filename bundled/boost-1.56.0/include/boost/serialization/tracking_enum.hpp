@@ -17,25 +17,24 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
 // addresses of serialized objects may be tracked to avoid saving/loading
 // redundant copies.  This header defines a class trait that can be used
 // to specify when objects should be tracked
 
 // names for each tracking level
-enum tracking_type
-{
-    // never track this type
-    track_never = 0,
-    // track objects of this type if the object is serialized through a 
-    // pointer.
-    track_selectively = 1,
-    // always track this type
-    track_always = 2
-};
+        enum tracking_type {
+            // never track this type
+                    track_never = 0,
+            // track objects of this type if the object is serialized through a
+            // pointer.
+                    track_selectively = 1,
+            // always track this type
+                    track_always = 2
+        };
 
-} // namespace serialization
+    } // namespace serialization
 } // namespace boost
 
 #endif // BOOST_SERIALIZATION_TRACKING_ENUM_HPP

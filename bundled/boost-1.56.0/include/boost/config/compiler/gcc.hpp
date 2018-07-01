@@ -46,7 +46,7 @@
 #define BOOST_HAS_PRAGMA_ONCE
 #endif
 
-#if __GNUC__ < 4 || ( __GNUC__ == 4 && __GNUC_MINOR__ < 4 )
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4)
 // Previous versions of GCC did not completely implement value-initialization:
 // GCC Bug 30111, "Value-initialization of POD base class doesn't initialize
 // members", reported by Jonathan Wakely in 2006,
@@ -95,9 +95,9 @@
 //
 #if __GNUC__ >= 4
 #  if (defined(_WIN32) || defined(__WIN32__) || defined(WIN32)) && !defined(__CYGWIN__)
-     // All Win32 development environments, including 64-bit Windows and MinGW, define
-     // _WIN32 or one of its variant spellings. Note that Cygwin is a POSIX environment,
-     // so does not define _WIN32 or its variants.
+// All Win32 development environments, including 64-bit Windows and MinGW, define
+// _WIN32 or one of its variant spellings. Note that Cygwin is a POSIX environment,
+// so does not define _WIN32 or its variants.
 #    define BOOST_HAS_DECLSPEC
 #    define BOOST_SYMBOL_EXPORT __attribute__((__dllexport__))
 #    define BOOST_SYMBOL_IMPORT __attribute__((__dllimport__))
@@ -199,7 +199,7 @@
 
 // C++0x features in 4.5.1 and later
 //
-#if (__GNUC__*10000 + __GNUC_MINOR__*100 + __GNUC_PATCHLEVEL__ < 40501) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ < 40501) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 // scoped enums have a serious bug in 4.4.0, so define BOOST_NO_CXX11_SCOPED_ENUMS before 4.5.1
 // See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38064
 #  define BOOST_NO_CXX11_SCOPED_ENUMS
@@ -230,7 +230,7 @@
 
 // C++0x features in 4.8.1 and later
 //
-#if (__GNUC__*10000 + __GNUC_MINOR__*100 + __GNUC_PATCHLEVEL__ < 40801) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ < 40801) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_NO_CXX11_DECLTYPE_N3276
 #  define BOOST_NO_CXX11_REF_QUALIFIERS
 #endif

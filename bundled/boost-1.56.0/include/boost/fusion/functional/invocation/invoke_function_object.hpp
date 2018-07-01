@@ -32,73 +32,84 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/functional/invocation/limits.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <class Function, class Sequence> struct invoke_function_object;
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<class Function, class Sequence>
+            struct invoke_function_object;
+        }
 
-    template <class Function, class Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::invoke_function_object<Function, Sequence>::type
-    invoke_function_object(Function, Sequence &);
+        template<class Function, class Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::invoke_function_object<Function, Sequence>::type
+        invoke_function_object(Function, Sequence
+        &);
 
-    template <class Function, class Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::invoke_function_object<Function, Sequence const
-        >::type invoke_function_object(Function, Sequence const &);
+        template<class Function, class Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::invoke_function_object<Function, Sequence const
+        >::type
+        invoke_function_object(Function, Sequence
+        const &);
 
-    //----- ---- --- -- - -  -   -
+        //----- ---- --- -- - -  -   -
 
-    namespace detail
-    {
-        template<
-            class Function, class Sequence,
-            int N = result_of::size<Sequence>::value,
-            bool RandomAccess = traits::is_random_access<Sequence>::value
+        namespace detail {
+            template<
+                    class Function, class Sequence,
+                    int N = result_of::size<Sequence>::value,
+                    bool RandomAccess = traits::is_random_access<Sequence>::value
             >
-        struct invoke_function_object_impl;
+            struct invoke_function_object_impl;
 
-        template <class Sequence, int N>
-        struct invoke_function_object_param_types;
+            template<class Sequence, int N>
+            struct invoke_function_object_param_types;
 
-        #define  BOOST_PP_FILENAME_1 \
+#define  BOOST_PP_FILENAME_1 \
             <boost/fusion/functional/invocation/invoke_function_object.hpp>
-        #define  BOOST_PP_ITERATION_LIMITS \
+#define  BOOST_PP_ITERATION_LIMITS \
             (0, BOOST_FUSION_INVOKE_FUNCTION_OBJECT_MAX_ARITY)
-        #include BOOST_PP_ITERATE()
-    }
 
-    namespace result_of
-    {
-        template <class Function, class Sequence> struct invoke_function_object
-        {
-            typedef typename detail::invoke_function_object_impl<
-                typename boost::remove_reference<Function>::type, Sequence
+#include BOOST_PP_ITERATE()
+
+        }
+
+        namespace result_of {
+            template<class Function, class Sequence>
+            struct invoke_function_object {
+                typedef typename detail::invoke_function_object_impl<
+                        typename boost::remove_reference<Function>::type, Sequence
                 >::result_type type;
-        };
+            };
+        }
+
+        template<class Function, class Sequence>
+        BOOST_FUSION_GPU_ENABLED
+        inline typename result_of::invoke_function_object<Function, Sequence>::type
+        invoke_function_object(Function
+        f,
+        Sequence &s
+        ) {
+        return
+        detail::invoke_function_object_impl<
+                typename boost::remove_reference<Function>::type, Sequence
+        >::call(f, s
+        );
     }
 
-    template <class Function, class Sequence>
+    template<class Function, class Sequence>
     BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::invoke_function_object<Function,Sequence>::type
-    invoke_function_object(Function f, Sequence & s)
-    {
-        return detail::invoke_function_object_impl<
-                typename boost::remove_reference<Function>::type,Sequence
-            >::call(f,s);
-    }
-
-    template <class Function, class Sequence>
-    BOOST_FUSION_GPU_ENABLED
-    inline typename result_of::invoke_function_object<Function,Sequence const>::type
-    invoke_function_object(Function f, Sequence const & s)
-    {
-        return detail::invoke_function_object_impl<
-                typename boost::remove_reference<Function>::type,Sequence const
-            >::call(f,s);
-    }
+    inline typename result_of::invoke_function_object<Function, Sequence const>::type
+    invoke_function_object(Function
+    f,
+    Sequence const &s
+    ) {
+    return
+    detail::invoke_function_object_impl<
+            typename boost::remove_reference<Function>::type, Sequence const
+    >::call(f, s
+    );
+}
 
 }}
 

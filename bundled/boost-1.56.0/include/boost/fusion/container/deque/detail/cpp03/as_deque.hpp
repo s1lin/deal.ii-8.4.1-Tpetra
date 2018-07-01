@@ -21,32 +21,35 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <int size>
-    struct as_deque;
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<int size>
+            struct as_deque;
 
-    template <>
-    struct as_deque<0>
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef deque<> type;
-        };
+            template<>
+            struct as_deque<0> {
+                template<typename Iterator>
+                struct apply {
+                    typedef deque<> type;
+                };
 
-        template <typename Iterator>
-        BOOST_FUSION_GPU_ENABLED
-        static typename apply<Iterator>::type
-        call(Iterator)
-        {
-            return deque<>();
+                template<typename Iterator>
+                BOOST_FUSION_GPU_ENABLED
+                static typename apply<Iterator>::type
+                call(Iterator)
+                        {
+                                return deque<>();
+                        }
+            };
         }
-    };
-}}}
+    }
+}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/deque/detail/cpp03/preprocessed/as_deque.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/as_deque" FUSION_MAX_DEQUE_SIZE_STR ".hpp")

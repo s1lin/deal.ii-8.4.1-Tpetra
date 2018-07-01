@@ -15,81 +15,78 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/support/segmented_fold_until.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename Pred>
-    struct segmented_find_if_fun
-    {
-        template <typename Sequence, typename State, typename Context>
-        struct apply
-        {
-            typedef
-                typename result_of::find_if<Sequence, Pred>::type
-            iterator_type;
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename Pred>
+            struct segmented_find_if_fun {
+                template<typename Sequence, typename State, typename Context>
+                struct apply {
+                    typedef
+                    typename result_of::find_if<Sequence, Pred>::type
+                            iterator_type;
 
-            typedef
-                typename result_of::equal_to<
+                    typedef
+                    typename result_of::equal_to<
+                            iterator_type, typename result_of::end<Sequence>::type
+                    >::type
+                            continue_type;
+
+                    typedef
+                    typename mpl::eval_if<
+                            continue_type, mpl::identity < State>
+                    , result_of::make_segmented_iterator <
                     iterator_type
-                  , typename result_of::end<Sequence>::type
-                >::type
-            continue_type;
-
-            typedef
-                typename mpl::eval_if<
-                    continue_type
-                  , mpl::identity<State>
-                  , result_of::make_segmented_iterator<
-                        iterator_type
-                      , Context
+                    , Context
                     >
-                >::type
-            type;
+                    >::type
+                            type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type call(Sequence& seq, State const&state, Context const& context, segmented_find_if_fun)
-            {
-                return call_impl(seq, state, context, continue_type());
-            }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq, State const &state, Context const& context, segmented_find_if_fun)
+                    {
+                        return call_impl(seq, state, context, continue_type());
+                    }
 
-            BOOST_FUSION_GPU_ENABLED
-            static type call_impl(Sequence&, State const&state, Context const&, mpl::true_)
-            {
-                return state;
-            }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call_impl(Sequence&, State const &state, Context const&, mpl::true_)
+                    {
+                        return state;
+                    }
 
-            BOOST_FUSION_GPU_ENABLED
-            static type call_impl(Sequence& seq, State const&, Context const& context, mpl::false_)
-            {
-                return fusion::make_segmented_iterator(fusion::find_if<Pred>(seq), context);
-            }
-        };
-    };
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call_impl(Sequence& seq, State const&, Context const &context, mpl::false_)
+                    {
+                        return fusion::make_segmented_iterator(fusion::find_if<Pred>(seq), context);
+                    }
+                };
+            };
 
-    template <typename Sequence, typename Pred>
-    struct result_of_segmented_find_if
-    {
-        struct filter
-        {
-            typedef
-                typename result_of::segmented_fold_until<
-                    Sequence
-                  , typename result_of::end<Sequence>::type
-                  , segmented_find_if_fun<Pred>
-                >::type
-            type;
+            template<typename Sequence, typename Pred>
+            struct result_of_segmented_find_if {
+                struct filter {
+                    typedef
+                    typename result_of::segmented_fold_until<
+                            Sequence, typename result_of::end<Sequence>::type, segmented_find_if_fun<Pred>
+                    >::type
+                            type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type call(Sequence& seq)
-            {
-                return fusion::segmented_fold_until(
-                    seq
-                  , fusion::end(seq)
-                  , segmented_find_if_fun<Pred>());
-            }
-        };
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return fusion::segmented_fold_until(
+                                seq, fusion::end(seq), segmented_find_if_fun<Pred>());
+                    }
+                };
 
-        typedef typename filter::type type;
-    };
-}}}
+                typedef typename filter::type type;
+            };
+        }
+    }
+}
 
 #endif

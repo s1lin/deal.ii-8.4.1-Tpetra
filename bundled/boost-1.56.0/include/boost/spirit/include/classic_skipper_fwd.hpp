@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SKIPPER_FWD
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SKIPPER_FWD
+
 #include <boost/spirit/home/classic/core/scanner/skipper_fwd.hpp>
+
 #endif

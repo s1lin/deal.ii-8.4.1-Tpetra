@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SUBRULE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SUBRULE
+
 #include <boost/spirit/home/classic/core/non_terminal/subrule.hpp>
+
 #endif

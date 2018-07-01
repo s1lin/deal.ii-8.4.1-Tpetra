@@ -21,8 +21,8 @@
 #include <boost/type_traits/integral_constant.hpp>
 
 namespace boost {
-namespace numeric {
-namespace odeint {
+    namespace numeric {
+        namespace odeint {
 
 
 /*
@@ -31,37 +31,70 @@ namespace odeint {
  * These tags are used by integrate() to choose which integration method is used
  */
 
-struct stepper_tag {};
+            struct stepper_tag {
+            };
 // struct explicit_stepper_tag : stepper_tag {};
 // struct implicit_stepper_tag : stepper_tag {};
 
 
-struct error_stepper_tag : stepper_tag {};
-struct explicit_error_stepper_tag : error_stepper_tag {};
-struct explicit_error_stepper_fsal_tag : error_stepper_tag {};
+            struct error_stepper_tag : stepper_tag {
+            };
+            struct explicit_error_stepper_tag : error_stepper_tag {
+            };
+            struct explicit_error_stepper_fsal_tag : error_stepper_tag {
+            };
 
-struct controlled_stepper_tag {};
-struct explicit_controlled_stepper_tag : controlled_stepper_tag {};
-struct explicit_controlled_stepper_fsal_tag : controlled_stepper_tag {};
+            struct controlled_stepper_tag {
+            };
+            struct explicit_controlled_stepper_tag : controlled_stepper_tag {
+            };
+            struct explicit_controlled_stepper_fsal_tag : controlled_stepper_tag {
+            };
 
-struct dense_output_stepper_tag {};
-
-
-template< class tag > struct base_tag ;
-template< > struct base_tag< stepper_tag > { typedef stepper_tag type; };
-template< > struct base_tag< error_stepper_tag > { typedef stepper_tag type; };
-template< > struct base_tag< explicit_error_stepper_tag > { typedef stepper_tag type; };
-template< > struct base_tag< explicit_error_stepper_fsal_tag > { typedef stepper_tag type; };
-
-template< > struct base_tag< controlled_stepper_tag > { typedef controlled_stepper_tag type; };
-template< > struct base_tag< explicit_controlled_stepper_tag > { typedef controlled_stepper_tag type; };
-template< > struct base_tag< explicit_controlled_stepper_fsal_tag > { typedef controlled_stepper_tag type; };
-
-template< > struct base_tag< dense_output_stepper_tag > { typedef dense_output_stepper_tag type; };
+            struct dense_output_stepper_tag {
+            };
 
 
-} // odeint
-} // numeric
+            template<class tag>
+            struct base_tag;
+            template<>
+            struct base_tag<stepper_tag> {
+                typedef stepper_tag type;
+            };
+            template<>
+            struct base_tag<error_stepper_tag> {
+                typedef stepper_tag type;
+            };
+            template<>
+            struct base_tag<explicit_error_stepper_tag> {
+                typedef stepper_tag type;
+            };
+            template<>
+            struct base_tag<explicit_error_stepper_fsal_tag> {
+                typedef stepper_tag type;
+            };
+
+            template<>
+            struct base_tag<controlled_stepper_tag> {
+                typedef controlled_stepper_tag type;
+            };
+            template<>
+            struct base_tag<explicit_controlled_stepper_tag> {
+                typedef controlled_stepper_tag type;
+            };
+            template<>
+            struct base_tag<explicit_controlled_stepper_fsal_tag> {
+                typedef controlled_stepper_tag type;
+            };
+
+            template<>
+            struct base_tag<dense_output_stepper_tag> {
+                typedef dense_output_stepper_tag type;
+            };
+
+
+        } // odeint
+    } // numeric
 } // boost
 
 

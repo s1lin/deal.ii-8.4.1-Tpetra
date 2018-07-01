@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace imperial {
+        namespace imperial {
 
-typedef scaled_base_unit<pound_base_unit, scale<112, static_rational<1> > > hundredweight_base_unit;
+            typedef scaled_base_unit <pound_base_unit, scale<112, static_rational < 1>> >
+            hundredweight_base_unit;
 
-} // namespace imperial
+        } // namespace imperial
 
-template<>
-struct base_unit_info<imperial::hundredweight_base_unit> {
-    static const char* name()   { return("hundredweight"); }
-    static const char* symbol() { return("cwt"); }
-};
+        template<>
+        struct base_unit_info<imperial::hundredweight_base_unit> {
+            static const char *name() { return ("hundredweight"); }
 
-} // namespace units
+            static const char *symbol() { return ("cwt"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

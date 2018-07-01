@@ -21,14 +21,14 @@
 #endif
 
 namespace boost {
-namespace atomics {
-namespace detail {
+    namespace atomics {
+        namespace detail {
 
-template< unsigned int Size, bool Signed >
-struct operations;
+            template<unsigned int Size, bool Signed>
+            struct operations;
 
-} // namespace detail
-} // namespace atomics
+        } // namespace detail
+    } // namespace atomics
 } // namespace boost
 
 #endif // BOOST_ATOMIC_DETAIL_OPERATIONS_FWD_HPP_INCLUDED_

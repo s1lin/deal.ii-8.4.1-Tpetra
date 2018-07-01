@@ -17,39 +17,42 @@
 #if defined(FUSION_DIRECT_OPERATOR_USAGE)
 #include <boost/fusion/sequence/comparison/detail/greater_equal.hpp>
 #else
+
 #include <boost/fusion/sequence/comparison/less.hpp>
+
 #endif
 
-namespace boost { namespace fusion
-{
-    template <typename Seq1, typename Seq2>
-    BOOST_FUSION_GPU_ENABLED
-    inline bool
-    greater_equal(Seq1 const& a, Seq2 const& b)
-    {
-#if defined(FUSION_DIRECT_OPERATOR_USAGE)
-        return detail::sequence_greater_equal<Seq1 const, Seq2 const>::
-            call(fusion::begin(a), fusion::begin(b));
-#else
-        return !(a < b);
-#endif
-    }
-
-    namespace operators
-    {
-        template <typename Seq1, typename Seq2>
+namespace boost {
+    namespace fusion {
+        template<typename Seq1, typename Seq2>
         BOOST_FUSION_GPU_ENABLED
-        inline typename
-            boost::enable_if<
-                traits::enable_comparison<Seq1, Seq2>
-              , bool
-            >::type
-        operator>=(Seq1 const& a, Seq2 const& b)
-        {
-            return fusion::greater_equal(a, b);
+        inline bool
+        greater_equal(Seq1 const &a, Seq2 const &b) {
+#if defined(FUSION_DIRECT_OPERATOR_USAGE)
+            return detail::sequence_greater_equal<Seq1 const, Seq2 const>::
+                call(fusion::begin(a), fusion::begin(b));
+#else
+            return !(a < b);
+#endif
         }
+
+        namespace operators {
+            template<typename Seq1, typename Seq2>
+            BOOST_FUSION_GPU_ENABLED
+            inline typename
+                    boost::enable_if<
+                    traits::enable_comparison < Seq1, Seq2>
+            ,
+            bool
+            >
+
+            ::type
+            operator>=(Seq1 const &a, Seq2 const &b) {
+                return fusion::greater_equal(a, b);
+            }
+        }
+        using operators::operator>=;
     }
-    using operators::operator>=;
-}}
+}
 
 #endif

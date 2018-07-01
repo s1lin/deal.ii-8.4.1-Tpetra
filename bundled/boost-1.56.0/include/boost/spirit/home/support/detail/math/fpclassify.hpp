@@ -55,181 +55,209 @@ depending on whether all the mantissa bits are copied or not.
 #include <boost/spirit/home/support/detail/math/detail/fp_traits.hpp>
 
 namespace boost {
-namespace spirit {
-namespace math {
-    
-//------------------------------------------------------------------------------
-
-template<class T> bool (isfinite)(T x)
-{
-    typedef BOOST_DEDUCED_TYPENAME detail::fp_traits<T>::type traits;
-    traits::init();
-
-    BOOST_DEDUCED_TYPENAME traits::bits a;
-    traits::get_bits(x,a);
-    a &= traits::exponent;
-    return a != traits::exponent;
-}
+    namespace spirit {
+        namespace math {
 
 //------------------------------------------------------------------------------
 
-template<class T> bool (isnormal)(T x)
-{
-    typedef BOOST_DEDUCED_TYPENAME detail::fp_traits<T>::type traits;
-    traits::init();
+            template<class T>
+            bool (isfinite)(T x) {
+                typedef BOOST_DEDUCED_TYPENAME detail
+                ::fp_traits<T>::type traits;
+                traits::init();
 
-    BOOST_DEDUCED_TYPENAME traits::bits a;
-    traits::get_bits(x,a);
-    a &= traits::exponent | traits::flag;
-    return (a != 0) && (a < traits::exponent);
-}
-
-//------------------------------------------------------------------------------
-
-namespace detail {
-
-    template<class T> bool isinf_impl(T x, all_bits)
-    {
-        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
-
-        BOOST_DEDUCED_TYPENAME traits::bits a;
-        traits::get_bits(x,a);
-        a &= traits::exponent | traits::mantissa;
-        return a == traits::exponent;
-    }
-
-    template<class T> bool isinf_impl(T x, not_all_bits)
-    {
-        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
-
-        BOOST_DEDUCED_TYPENAME traits::bits a;
-        traits::get_bits(x,a);
-        a &= traits::exponent | traits::mantissa;
-        if(a != traits::exponent)
-            return false;
-
-        traits::set_bits(x,0);
-        return x == 0;
-    }
-
-}   // namespace detail
-
-template<class T> bool (isinf)(T x)
-{
-    typedef BOOST_DEDUCED_TYPENAME detail::fp_traits<T>::type traits;
-    traits::init();
-    return detail::isinf_impl(x, BOOST_DEDUCED_TYPENAME traits::coverage());
-}
+                BOOST_DEDUCED_TYPENAME
+                traits::bits a;
+                traits::get_bits(x, a);
+                a &= traits::exponent;
+                return a != traits::exponent;
+            }
 
 //------------------------------------------------------------------------------
 
-namespace detail {
+            template<class T>
+            bool (isnormal)(T x) {
+                typedef BOOST_DEDUCED_TYPENAME detail
+                ::fp_traits<T>::type traits;
+                traits::init();
 
-    template<class T> bool isnan_impl(T x, all_bits)
-    {
-        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
-        traits::init();
-
-        BOOST_DEDUCED_TYPENAME traits::bits a;
-        traits::get_bits(x,a);
-        a &= traits::exponent | traits::mantissa;
-        return a > traits::exponent;
-    }
-
-    template<class T> bool isnan_impl(T x, not_all_bits)
-    {
-        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
-        traits::init();
-
-        BOOST_DEDUCED_TYPENAME traits::bits a;
-        traits::get_bits(x,a);
-
-        a &= traits::exponent | traits::mantissa;
-        if(a < traits::exponent)
-            return false;
-
-        a &= traits::mantissa;
-        traits::set_bits(x,a);
-        return x != 0;
-    }
-
-}   // namespace detail
-
-template<class T> bool (isnan)(T x)
-{
-    typedef BOOST_DEDUCED_TYPENAME detail::fp_traits<T>::type traits;
-    traits::init();
-    return detail::isnan_impl(x, BOOST_DEDUCED_TYPENAME traits::coverage());
-}
+                BOOST_DEDUCED_TYPENAME
+                traits::bits a;
+                traits::get_bits(x, a);
+                a &= traits::exponent | traits::flag;
+                return (a != 0) && (a < traits::exponent);
+            }
 
 //------------------------------------------------------------------------------
 
-namespace detail {
+            namespace detail {
 
-    template<class T> int fpclassify_impl(T x, all_bits)
-    {
-        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
+                template<class T>
+                bool isinf_impl(T x, all_bits) {
+                    typedef BOOST_DEDUCED_TYPENAME fp_traits
+                    <T>::type
+                    traits;
 
-        BOOST_DEDUCED_TYPENAME traits::bits a;
-        traits::get_bits(x,a);
-        a &= traits::exponent | traits::flag | traits::mantissa;
+                    BOOST_DEDUCED_TYPENAME
+                    traits::bits a;
+                    traits::get_bits(x, a);
+                    a &= traits::exponent | traits::mantissa;
+                    return a == traits::exponent;
+                }
 
-        if(a <= traits::mantissa) {
-            if(a == 0)
-                return FP_ZERO;
-            else
-                return FP_SUBNORMAL;
-        }
+                template<class T>
+                bool isinf_impl(T x, not_all_bits) {
+                    typedef BOOST_DEDUCED_TYPENAME fp_traits
+                    <T>::type
+                    traits;
 
-        if(a < traits::exponent)
-            return FP_NORMAL;
+                    BOOST_DEDUCED_TYPENAME
+                    traits::bits a;
+                    traits::get_bits(x, a);
+                    a &= traits::exponent | traits::mantissa;
+                    if (a != traits::exponent)
+                        return false;
 
-        a &= traits::mantissa;
-        if(a == 0)
-            return FP_INFINITE;
+                    traits::set_bits(x, 0);
+                    return x == 0;
+                }
 
-        return FP_NAN;
-    }
+            }   // namespace detail
 
-    template<class T> int fpclassify_impl(T x, not_all_bits)
-    {
-        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
-
-        BOOST_DEDUCED_TYPENAME traits::bits a;
-        traits::get_bits(x,a); 
-        a &= traits::exponent | traits::flag | traits::mantissa;
-
-        if(a <= traits::mantissa) {
-            if(x == 0)
-                return FP_ZERO;
-            else
-                return FP_SUBNORMAL;
-        }
-            
-        if(a < traits::exponent)
-            return FP_NORMAL;
-
-        a &= traits::mantissa;
-        traits::set_bits(x,a);
-        if(x == 0)
-            return FP_INFINITE;
-        
-        return FP_NAN;
-    }
-
-}   // namespace detail
-
-template<class T> int (fpclassify)(T x)
-{
-    typedef BOOST_DEDUCED_TYPENAME detail::fp_traits<T>::type traits;
-    traits::init();
-    return detail::fpclassify_impl(x, BOOST_DEDUCED_TYPENAME traits::coverage());
-}
+            template<class T>
+            bool (isinf)(T x) {
+                typedef BOOST_DEDUCED_TYPENAME detail
+                ::fp_traits<T>::type traits;
+                traits::init();
+                return detail::isinf_impl(x, BOOST_DEDUCED_TYPENAME
+                traits::coverage());
+            }
 
 //------------------------------------------------------------------------------
 
-}   // namespace math
-}   // namespace spirit
+            namespace detail {
+
+                template<class T>
+                bool isnan_impl(T x, all_bits) {
+                    typedef BOOST_DEDUCED_TYPENAME fp_traits
+                    <T>::type
+                    traits;
+                    traits::init();
+
+                    BOOST_DEDUCED_TYPENAME
+                    traits::bits a;
+                    traits::get_bits(x, a);
+                    a &= traits::exponent | traits::mantissa;
+                    return a > traits::exponent;
+                }
+
+                template<class T>
+                bool isnan_impl(T x, not_all_bits) {
+                    typedef BOOST_DEDUCED_TYPENAME fp_traits
+                    <T>::type
+                    traits;
+                    traits::init();
+
+                    BOOST_DEDUCED_TYPENAME
+                    traits::bits a;
+                    traits::get_bits(x, a);
+
+                    a &= traits::exponent | traits::mantissa;
+                    if (a < traits::exponent)
+                        return false;
+
+                    a &= traits::mantissa;
+                    traits::set_bits(x, a);
+                    return x != 0;
+                }
+
+            }   // namespace detail
+
+            template<class T>
+            bool (isnan)(T x) {
+                typedef BOOST_DEDUCED_TYPENAME detail
+                ::fp_traits<T>::type traits;
+                traits::init();
+                return detail::isnan_impl(x, BOOST_DEDUCED_TYPENAME
+                traits::coverage());
+            }
+
+//------------------------------------------------------------------------------
+
+            namespace detail {
+
+                template<class T>
+                int fpclassify_impl(T x, all_bits) {
+                    typedef BOOST_DEDUCED_TYPENAME fp_traits
+                    <T>::type
+                    traits;
+
+                    BOOST_DEDUCED_TYPENAME
+                    traits::bits a;
+                    traits::get_bits(x, a);
+                    a &= traits::exponent | traits::flag | traits::mantissa;
+
+                    if (a <= traits::mantissa) {
+                        if (a == 0)
+                            return FP_ZERO;
+                        else
+                            return FP_SUBNORMAL;
+                    }
+
+                    if (a < traits::exponent)
+                        return FP_NORMAL;
+
+                    a &= traits::mantissa;
+                    if (a == 0)
+                        return FP_INFINITE;
+
+                    return FP_NAN;
+                }
+
+                template<class T>
+                int fpclassify_impl(T x, not_all_bits) {
+                    typedef BOOST_DEDUCED_TYPENAME fp_traits
+                    <T>::type
+                    traits;
+
+                    BOOST_DEDUCED_TYPENAME
+                    traits::bits a;
+                    traits::get_bits(x, a);
+                    a &= traits::exponent | traits::flag | traits::mantissa;
+
+                    if (a <= traits::mantissa) {
+                        if (x == 0)
+                            return FP_ZERO;
+                        else
+                            return FP_SUBNORMAL;
+                    }
+
+                    if (a < traits::exponent)
+                        return FP_NORMAL;
+
+                    a &= traits::mantissa;
+                    traits::set_bits(x, a);
+                    if (x == 0)
+                        return FP_INFINITE;
+
+                    return FP_NAN;
+                }
+
+            }   // namespace detail
+
+            template<class T>
+            int (fpclassify)(T x) {
+                typedef BOOST_DEDUCED_TYPENAME detail
+                ::fp_traits<T>::type traits;
+                traits::init();
+                return detail::fpclassify_impl(x, BOOST_DEDUCED_TYPENAME
+                traits::coverage());
+            }
+
+//------------------------------------------------------------------------------
+
+        }   // namespace math
+    }   // namespace spirit
 }   // namespace boost
 
 #endif

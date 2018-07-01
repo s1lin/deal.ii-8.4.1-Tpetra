@@ -29,98 +29,94 @@
 #  pragma warning (disable: 4512) // assignment operator could not be generated.
 #endif
 
-namespace boost { namespace fusion
-{
-    template <class Function, bool AllowNullary = true>
-    class unfused;
+namespace boost {
+    namespace fusion {
+        template<class Function, bool AllowNullary = true>
+        class unfused;
 
-    //----- ---- --- -- - -  -   -
+        //----- ---- --- -- - -  -   -
 
-    template <class Function> 
-    class unfused<Function,true>
-      : public unfused<Function,false>
-    {
-        typedef typename detail::qf_c<Function>::type function_c;
-        typedef typename detail::qf<Function>::type function;
-        typedef typename detail::call_param<Function>::type func_const_fwd_t;
-      public:
+        template<class Function>
+        class unfused<Function, true>
+                : public unfused<Function, false> {
+            typedef typename detail::qf_c<Function>::type function_c;
+            typedef typename detail::qf<Function>::type function;
+            typedef typename detail::call_param<Function>::type func_const_fwd_t;
+        public:
 
-        using unfused<Function,false>::operator();
+            using unfused<Function, false>::operator();
 
-        BOOST_FUSION_GPU_ENABLED inline explicit unfused(func_const_fwd_t f = function())
-            : unfused<Function,false>(f)
-        { }
+            BOOST_FUSION_GPU_ENABLED inline explicit unfused(func_const_fwd_t f = function())
+                    : unfused<Function, false>(f) {}
 
-        typedef typename boost::result_of<
-            function_c(fusion::vector0<> &) >::type call_const_0_result;
+            typedef typename boost::result_of<
+                    function_c(fusion::vector0<> &)>::type call_const_0_result;
 
-        BOOST_FUSION_GPU_ENABLED inline call_const_0_result operator()() const
-        {
-            fusion::vector0<> arg;
-            return this->fnc_transformed(arg);
-        }
+            BOOST_FUSION_GPU_ENABLED inline call_const_0_result
 
-        typedef typename boost::result_of< 
-            function(fusion::vector0<> &) >::type call_0_result;
+            operator()() const {
+                fusion::vector0<> arg;
+                return this->fnc_transformed(arg);
+            }
 
-        BOOST_FUSION_GPU_ENABLED inline call_0_result operator()() 
-        {
-            fusion::vector0<> arg;
-            return this->fnc_transformed(arg);
-        }
-    };
+            typedef typename boost::result_of<
+                    function(fusion::vector0<> &)>::type call_0_result;
 
-    template <class Function> class unfused<Function,false>
-    {
-      protected:
-        Function fnc_transformed;
-        typedef typename detail::qf_c<Function>::type function_c;
-        typedef typename detail::qf<Function>::type function;
-        typedef typename detail::call_param<Function>::type func_const_fwd_t;
-      public:
+            BOOST_FUSION_GPU_ENABLED inline call_0_result
 
-        BOOST_FUSION_GPU_ENABLED
-        inline explicit unfused(func_const_fwd_t f = function())
-            : fnc_transformed(f)
-        { }
+            operator()() {
+                fusion::vector0<> arg;
+                return this->fnc_transformed(arg);
+            }
+        };
 
-        template <typename Sig>
-        struct result;
+        template<class Function>
+        class unfused<Function, false> {
+        protected:
+            Function fnc_transformed;
+            typedef typename detail::qf_c<Function>::type function_c;
+            typedef typename detail::qf<Function>::type function;
+            typedef typename detail::call_param<Function>::type func_const_fwd_t;
+        public:
 
-        #define  BOOST_PP_FILENAME_1 \
+            BOOST_FUSION_GPU_ENABLED
+            inline explicit unfused(func_const_fwd_t f = function())
+                    : fnc_transformed(f) {}
+
+            template<typename Sig>
+            struct result;
+
+#define  BOOST_PP_FILENAME_1 \
             <boost/fusion/functional/adapter/unfused.hpp>
-        #define  BOOST_PP_ITERATION_LIMITS \
+#define  BOOST_PP_ITERATION_LIMITS \
             (1,BOOST_FUSION_UNFUSED_MAX_ARITY)
-        #include BOOST_PP_ITERATE()
-    };
-}}
+
+#include BOOST_PP_ITERATE()
+        };
+    }
+}
 
 #if defined (BOOST_MSVC)
 #  pragma warning(pop)
 #endif
 
-namespace boost 
-{
+namespace boost {
 #if !defined(BOOST_RESULT_OF_USE_DECLTYPE) || defined(BOOST_NO_CXX11_DECLTYPE)
     template<class F>
-    struct result_of< boost::fusion::unfused<F> const () >
-    {
+    struct result_of<boost::fusion::unfused<F> const()> {
         typedef typename boost::fusion::unfused<F>::call_const_0_result type;
     };
     template<class F>
-    struct result_of< boost::fusion::unfused<F>() >
-    {
+    struct result_of<boost::fusion::unfused<F>()> {
         typedef typename boost::fusion::unfused<F>::call_0_result type;
     };
 #endif
     template<class F>
-    struct tr1_result_of< boost::fusion::unfused<F> const () >
-    {
+    struct tr1_result_of<boost::fusion::unfused<F> const()> {
         typedef typename boost::fusion::unfused<F>::call_const_0_result type;
     };
     template<class F>
-    struct tr1_result_of< boost::fusion::unfused<F>() >
-    {
+    struct tr1_result_of<boost::fusion::unfused<F>()> {
         typedef typename boost::fusion::unfused<F>::call_0_result type;
     };
 }

@@ -25,9 +25,13 @@
 #include "boost/type_traits/extent.hpp"
 #include "boost/type_traits/floating_point_promotion.hpp"
 #include "boost/type_traits/function_traits.hpp"
+
 #if !defined(__BORLANDC__) && !defined(__CUDACC__)
+
 #include "boost/type_traits/has_new_operator.hpp"
+
 #endif
+
 #include "boost/type_traits/has_nothrow_assign.hpp"
 #include "boost/type_traits/has_nothrow_constructor.hpp"
 #include "boost/type_traits/has_nothrow_copy.hpp"
@@ -91,9 +95,12 @@
 #include "boost/type_traits/remove_reference.hpp"
 #include "boost/type_traits/remove_volatile.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
+
 #if !(defined(__sgi) && defined(__EDG_VERSION__) && (__EDG_VERSION__ == 238))
+
 #include "boost/type_traits/integral_promotion.hpp"
 #include "boost/type_traits/promote.hpp"
+
 #endif
 
 #include "boost/type_traits/ice.hpp"

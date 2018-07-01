@@ -14,42 +14,40 @@
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    namespace detail
-    {
-        template <typename T>
-        struct mpl_sequence_category_of
-        {
-            // assumes T is an mpl sequence
-            // there should be no way this will ever be
-            // called where T is an mpl iterator
-        
-            BOOST_STATIC_ASSERT(mpl::is_sequence<T>::value);
-            typedef typename 
-                mpl_iterator_category<
-                    typename mpl::begin<T>::type::category
-                >::type
-            type;
-        };
-    }
-
-    struct mpl_sequence_tag;
-
-    namespace extension
-    {
-        template<typename Tag>
-        struct category_of_impl;
-
-        template<>
-        struct category_of_impl<mpl_sequence_tag>
-        {
+        namespace detail {
             template<typename T>
-            struct apply
-                : detail::mpl_sequence_category_of<T>
-            {};
-        };
+            struct mpl_sequence_category_of {
+                // assumes T is an mpl sequence
+                // there should be no way this will ever be
+                // called where T is an mpl iterator
+
+                BOOST_STATIC_ASSERT(mpl::is_sequence<T>::value);
+                typedef typename
+                mpl_iterator_category<
+                        typename mpl::begin<T>::type::category
+                >::type
+                        type;
+            };
+        }
+
+        struct mpl_sequence_tag;
+
+        namespace extension {
+            template<typename Tag>
+            struct category_of_impl;
+
+            template<>
+            struct category_of_impl<mpl_sequence_tag> {
+                template<typename T>
+                struct apply
+                        : detail::mpl_sequence_category_of<T> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

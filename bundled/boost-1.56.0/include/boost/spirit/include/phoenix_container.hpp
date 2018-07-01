@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX_CONTAINER
 #define BOOST_SPIRIT_INCLUDE_PHOENIX_CONTAINER
+
 #include <boost/phoenix/stl/container.hpp>
+
 #endif

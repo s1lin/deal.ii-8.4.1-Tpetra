@@ -21,23 +21,23 @@
 
 namespace boost {
 
-namespace detail{
+    namespace detail {
 
-template <typename T>
-struct is_member_object_pointer_impl
-{
-   BOOST_STATIC_CONSTANT(
-      bool, value = (::boost::type_traits::ice_and<
-         ::boost::is_member_pointer<T>::value,
-         ::boost::type_traits::ice_not<
-            ::boost::is_member_function_pointer<T>::value
-         >::value
-      >::value ));
-};
+        template<typename T>
+        struct is_member_object_pointer_impl {
+            BOOST_STATIC_CONSTANT(
+                    bool, value = (::boost::type_traits::ice_and<
+                    ::boost::is_member_pointer<T>::value,
+                    ::boost::type_traits::ice_not<
+                            ::boost::is_member_function_pointer<T>::value
+                    >::value
+            >::value));
+        };
 
-} // namespace detail
+    } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_member_object_pointer,T,::boost::detail::is_member_object_pointer_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_member_object_pointer, T, ::boost::detail::is_member_object_pointer_impl<T>::value
+    )
 
 } // namespace boost
 

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_PARSE_TREE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_PARSE_TREE
+
 #include <boost/spirit/home/classic/tree/parse_tree.hpp>
+
 #endif

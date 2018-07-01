@@ -16,33 +16,35 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<pressure_dimension,si::system>      pressure;
+            typedef unit <pressure_dimension, si::system> pressure;
 
 // windef.h #defines pascal on Metrowerks compilers
 #if defined(__MWERKS__)
-   #if !__option(only_std_keywords)
-       #define BOOST_UNITS_NO_PASCAL 1
-   #elif defined(pascal)
-       #define BOOST_UNITS_NO_PASCAL 1
-   #endif
+#if !__option(only_std_keywords)
+#define BOOST_UNITS_NO_PASCAL 1
 #elif defined(pascal)
-   #define BOOST_UNITS_NO_PASCAL 1
+#define BOOST_UNITS_NO_PASCAL 1
+#endif
+#elif defined(pascal)
+#define BOOST_UNITS_NO_PASCAL 1
 #elif BOOST_MSVC
-   #define BOOST_UNITS_NO_PASCAL 1
+#define BOOST_UNITS_NO_PASCAL 1
 #endif
 
 #ifndef BOOST_UNITS_NO_PASCAL
-BOOST_UNITS_STATIC_CONSTANT(pascal,pressure);   
+            BOOST_UNITS_STATIC_CONSTANT(pascal, pressure
+            );
 #endif
-BOOST_UNITS_STATIC_CONSTANT(pascals,pressure);  
+            BOOST_UNITS_STATIC_CONSTANT(pascals, pressure
+            );
 
-} // namespace si
+        } // namespace si
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

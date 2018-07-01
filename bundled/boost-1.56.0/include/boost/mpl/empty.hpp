@@ -20,20 +20,21 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    >
-struct empty
-    : empty_impl< typename sequence_tag<Sequence>::type >
-        ::template apply< Sequence >
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,empty,(Sequence))
-};
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(Sequence)
+        >
+        struct empty
+                : empty_impl<typename sequence_tag<Sequence>::type>
+                  ::template apply<Sequence> {
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(1, empty, (Sequence))
+        };
 
-BOOST_MPL_AUX_NA_SPEC(1, empty)
+        BOOST_MPL_AUX_NA_SPEC(1, empty)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_EMPTY_HPP_INCLUDED

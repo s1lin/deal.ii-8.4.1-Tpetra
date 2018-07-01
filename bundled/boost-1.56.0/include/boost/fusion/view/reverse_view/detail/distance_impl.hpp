@@ -11,37 +11,36 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/distance.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct reverse_view_iterator_tag;
+        struct reverse_view_iterator_tag;
 
-    template <typename Iterator>
-    struct reverse_view_iterator;
+        template<typename Iterator>
+        struct reverse_view_iterator;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct distance_impl;
+        namespace extension {
+            template<typename Tag>
+            struct distance_impl;
 
-        template<>
-        struct distance_impl<reverse_view_iterator_tag>
-        {
-            template<typename First, typename Last>
-            struct apply
-            {
-                typedef typename First::first_type first_type;
-                typedef typename Last::first_type last_type;
-                typedef typename result_of::distance<last_type, first_type>::type type;
+            template<>
+            struct distance_impl<reverse_view_iterator_tag> {
+                template<typename First, typename Last>
+                struct apply {
+                    typedef typename First::first_type first_type;
+                    typedef typename Last::first_type last_type;
+                    typedef typename result_of::distance<last_type, first_type>::type type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(First const& first, Last const& last)
-                {
-                    return boost::fusion::distance(last.first, first.first);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(First const& first, Last const &last)
+                    {
+                        return boost::fusion::distance(last.first, first.first);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

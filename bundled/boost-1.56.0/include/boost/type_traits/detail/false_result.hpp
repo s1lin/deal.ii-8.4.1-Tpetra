@@ -12,17 +12,17 @@
 #include <boost/config.hpp>
 
 namespace boost {
-namespace type_traits {
+    namespace type_traits {
 
 // Utility class which always "returns" false
-struct false_result
-{
-    template <typename T> struct result_
-    {
-        BOOST_STATIC_CONSTANT(bool, value = false);
-    };
-};
+        struct false_result {
+            template<typename T>
+            struct result_ {
+                BOOST_STATIC_CONSTANT(bool, value = false);
+            };
+        };
 
-}} // namespace boost::type_traits
+    }
+} // namespace boost::type_traits
 
 #endif // BOOST_TT_DETAIL_FALSE_RESULT_HPP_INCLUDED

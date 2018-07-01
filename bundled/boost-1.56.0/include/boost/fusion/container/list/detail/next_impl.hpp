@@ -16,45 +16,42 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/add_const.hpp>
 
-namespace boost { namespace fusion
-{
-    struct cons_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct cons_iterator_tag;
 
-    template <typename Cons>
-    struct cons_iterator;
+        template<typename Cons>
+        struct cons_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct next_impl;
+        namespace extension {
+            template<typename Tag>
+            struct next_impl;
 
-        template <>
-        struct next_impl<cons_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                typedef typename Iterator::cons_type cons_type;
-                typedef typename cons_type::cdr_type cdr_type;
-    
-                typedef cons_iterator<
-                    typename mpl::eval_if<
-                        is_const<cons_type>
-                      , add_const<cdr_type>
-                      , mpl::identity<cdr_type>
+            template<>
+            struct next_impl<cons_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename Iterator::cons_type cons_type;
+                    typedef typename cons_type::cdr_type cdr_type;
+
+                    typedef cons_iterator<
+                            typename mpl::eval_if<
+                                    is_const < cons_type>, add_const < cdr_type>
+                    , mpl::identity <cdr_type>
                     >::type>
-                type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return type(i.cons.cdr);
-                }
+                    type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return type(i.cons.cdr);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

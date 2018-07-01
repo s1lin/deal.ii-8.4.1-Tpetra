@@ -21,17 +21,14 @@
 
 #include <boost/signals2/dummy_mutex.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace signals2
-{
+    namespace signals2 {
 
-class mutex: public dummy_mutex
-{
-};
+        class mutex : public dummy_mutex {
+        };
 
-} // namespace signals2
+    } // namespace signals2
 
 } // namespace boost
 

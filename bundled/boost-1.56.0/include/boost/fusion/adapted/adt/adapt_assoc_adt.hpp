@@ -43,7 +43,7 @@
 #define BOOST_FUSION_ADAPT_ASSOC_ADT_FILLER_0_END
 #define BOOST_FUSION_ADAPT_ASSOC_ADT_FILLER_1_END
 
-#define BOOST_FUSION_ADAPT_ASSOC_ADT_C(                                         \
+#define BOOST_FUSION_ADAPT_ASSOC_ADT_C(\
     TEMPLATE_PARAMS_SEQ, NAME_SEQ, I, ATTRIBUTE)                                \
                                                                                 \
     BOOST_FUSION_ADAPT_ADT_C_BASE(TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,ATTRIBUTE,5)   \
@@ -56,7 +56,7 @@
         typedef BOOST_PP_TUPLE_ELEM(5, 4, ATTRIBUTE) type;                      \
     };
 
-#define BOOST_FUSION_ADAPT_ASSOC_TPL_ADT(                                       \
+#define BOOST_FUSION_ADAPT_ASSOC_TPL_ADT(\
     TEMPLATE_PARAMS_SEQ, NAME_SEQ, ATTRIBUTES)                                  \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \

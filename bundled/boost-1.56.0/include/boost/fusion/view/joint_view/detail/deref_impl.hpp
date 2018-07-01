@@ -10,20 +10,21 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/iterator/detail/adapt_deref_traits.hpp>
 
-namespace boost { namespace fusion
-{
-    struct joint_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct joint_view_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct deref_impl;
+        namespace extension {
+            template<typename Tag>
+            struct deref_impl;
 
-        template <>
-        struct deref_impl<joint_view_iterator_tag>
-            : detail::adapt_deref_traits {};
+            template<>
+            struct deref_impl<joint_view_iterator_tag>
+                    : detail::adapt_deref_traits {
+            };
+        }
     }
-}}
+}
 
 #endif
 

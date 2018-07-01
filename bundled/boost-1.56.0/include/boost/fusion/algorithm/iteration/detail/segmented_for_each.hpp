@@ -13,40 +13,41 @@
 #include <boost/fusion/algorithm/iteration/for_each_fwd.hpp>
 #include <boost/fusion/support/segmented_fold_until.hpp>
 
-namespace boost { namespace fusion { namespace detail
-{
-    template <typename Fun>
-    struct segmented_for_each_fun
-    {
-        BOOST_FUSION_GPU_ENABLED
-        explicit segmented_for_each_fun(Fun const& f)
-          : fun(f)
-        {}
+namespace boost {
+    namespace fusion {
+        namespace detail {
+            template<typename Fun>
+            struct segmented_for_each_fun {
+                BOOST_FUSION_GPU_ENABLED
+                explicit segmented_for_each_fun(Fun const &f)
+                        : fun(f) {}
 
-        Fun const& fun;
+                Fun const &fun;
 
-        template <typename Sequence, typename State, typename Context>
-        struct apply
-        {
-            typedef void_ type;
-            typedef mpl::true_ continue_type;
+                template<typename Sequence, typename State, typename Context>
+                struct apply {
+                    typedef void_ type;
+                    typedef mpl::true_ continue_type;
 
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq, State const&, Context const&, segmented_for_each_fun const &fun)
+                    {
+                        fusion::for_each(seq, fun.fun);
+                        return void_();
+                    }
+                };
+            };
+
+            template<typename Sequence, typename F>
             BOOST_FUSION_GPU_ENABLED
-            static type call(Sequence& seq, State const&, Context const&, segmented_for_each_fun const& fun)
+            inline void
+            for_each(Sequence &seq, F const &f, mpl::true_) // segmented implementation
             {
-                fusion::for_each(seq, fun.fun);
-                return void_();
+                fusion::segmented_fold_until(seq, void_(), segmented_for_each_fun<F>(f));
             }
-        };
-    };
-
-    template <typename Sequence, typename F>
-    BOOST_FUSION_GPU_ENABLED
-    inline void
-    for_each(Sequence& seq, F const& f, mpl::true_) // segmented implementation
-    {
-        fusion::segmented_fold_until(seq, void_(), segmented_for_each_fun<F>(f));
+        }
     }
-}}}
+}
 
 #endif

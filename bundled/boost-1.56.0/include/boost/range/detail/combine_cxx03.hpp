@@ -39,19 +39,16 @@
 #include <vector>
 #include <list>
 
-namespace boost
-{
-    namespace range_detail
-    {
+namespace boost {
+    namespace range_detail {
 
-template<typename F, typename T, int SIZE>
-struct combined_result_impl;
+        template<typename F, typename T, int SIZE>
+        struct combined_result_impl;
 
-template<typename F, typename T>
-struct combined_result
-    : combined_result_impl<F, T, tuples::length<T>::value>
-{
-};
+        template<typename F, typename T>
+        struct combined_result
+                : combined_result_impl<F, T, tuples::length<T>::value> {
+        };
 
 #define BOOST_RANGE_combined_element(z, n, data) \
     typename tuples::element<n, T>::type
@@ -67,6 +64,7 @@ struct combined_result
 
 #define BOOST_PP_LOCAL_LIMITS (BOOST_RANGE_MIN_COMBINE_ARGS, \
                                BOOST_RANGE_MAX_COMBINE_ARGS)
+
 #include BOOST_PP_LOCAL_ITERATE()
 
 #define BOOST_RANGE_combined_get(z, n, data) get<n>(tuple)
@@ -86,8 +84,7 @@ struct combined_result
 
 } // namespace range_detail
 
-namespace range
-{
+namespace range {
 
 #define BOOST_RANGE_combined_seq(z, n, data) boost::data(BOOST_PP_CAT(r,n))
 

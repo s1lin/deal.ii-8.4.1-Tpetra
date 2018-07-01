@@ -6,20 +6,32 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_ARITHMETIC_DIV_HPP
 # define BOOST_PREPROCESSOR_ARITHMETIC_DIV_HPP
 #
+
+
 # include <boost/preprocessor/arithmetic/detail/div_base.hpp>
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
+
 #
+
 # /* BOOST_PP_DIV */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_DIV(x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_DIV_BASE(x, y))
 # else
@@ -27,8 +39,11 @@
 #    define BOOST_PP_DIV_I(x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_DIV_BASE(x, y))
 # endif
 #
+
 # /* BOOST_PP_DIV_D */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    define BOOST_PP_DIV_D(d, x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_DIV_BASE_D(d, x, y))
 # else
@@ -36,4 +51,5 @@
 #    define BOOST_PP_DIV_D_I(d, x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_DIV_BASE_D(d, x, y))
 # endif
 #
+
 # endif

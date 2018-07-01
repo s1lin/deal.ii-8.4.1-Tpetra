@@ -22,6 +22,7 @@
 #define BOOST_PP_FILENAME_1 \
     <boost/fusion/container/deque/detail/cpp03/deque_forward_ctor.hpp>
 #define BOOST_PP_ITERATION_LIMITS (2, FUSION_MAX_DEQUE_SIZE)
+
 #include BOOST_PP_ITERATE()
 
 #undef FUSION_DEQUE_FORWARD_CTOR_FORWARD

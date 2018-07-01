@@ -15,7 +15,9 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/vector/detail/preprocessed/vector50_fwd.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/vector50_fwd.hpp")
@@ -38,9 +40,9 @@
 namespace boost { namespace fusion
 {
     // expand vector41 to vector50
-    #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/vector50_fwd.hpp>
-    #define BOOST_PP_ITERATION_LIMITS (41, 50)
-    #include BOOST_PP_ITERATE()
+#define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/vector50_fwd.hpp>
+#define BOOST_PP_ITERATION_LIMITS (41, 50)
+#include BOOST_PP_ITERATE()
 }}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
@@ -53,7 +55,7 @@ namespace boost { namespace fusion
 
 #else
 
-    template <BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename T)>
-    struct BOOST_PP_CAT(vector, BOOST_PP_ITERATION());
+template <BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename T)>
+struct BOOST_PP_CAT(vector, BOOST_PP_ITERATION());
 
 #endif

@@ -22,10 +22,12 @@
 #include <boost/shared_array.hpp>
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
+
 # include <boost/weak_ptr.hpp>
 # include <boost/intrusive_ptr.hpp>
 # include <boost/enable_shared_from_this.hpp>
 # include <boost/make_shared.hpp>
+
 #endif
 
 #endif // #ifndef BOOST_SMART_PTR_HPP_INCLUDED

@@ -33,44 +33,41 @@
 #include <boost/serialization/wrapper.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-template<class T>
-struct ephemeral_object : 
-    public wrapper_traits<ephemeral_object<T> >
-{
-    explicit ephemeral_object(T& t) :
-        val(t)
-    {}
+        template<class T>
+        struct ephemeral_object :
+                public wrapper_traits<ephemeral_object<T> > {
+            explicit ephemeral_object(T &t) :
+                    val(t) {}
 
-    T & value() const {
-        return val;
-    }
+            T &value() const {
+                return val;
+            }
 
-    const T & const_value() const {
-        return val;
-    }
+            const T &const_value() const {
+                return val;
+            }
 
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int) const
-    {
-       ar & val;
-    }
+            template<class Archive>
+            void serialize(Archive &ar, const unsigned int) const {
+                ar & val;
+            }
 
-private:
-    T & val;
-};
+        private:
+            T &val;
+        };
 
-template<class T>
-inline
+        template<class T>
+        inline
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-const
+        const
 #endif
-ephemeral_object<T> ephemeral(const char * name, T & t){
-    return ephemeral_object<T>(name, t);
-}
+        ephemeral_object<T> ephemeral(const char *name, T &t) {
+            return ephemeral_object<T>(name, t);
+        }
 
-} // seralization
+    } // seralization
 } // boost
 
 #endif // BOOST_SERIALIZATION_EPHEMERAL_HPP

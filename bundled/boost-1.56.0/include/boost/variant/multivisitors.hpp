@@ -28,29 +28,32 @@
 #   define BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS 4
 #endif
 
-namespace boost { 
+namespace boost {
 
-namespace detail { namespace variant {
+    namespace detail {
+        namespace variant {
 
-    template <class VisitorT, class Visitable1T, class Visitable2T>
-    struct two_variables_holder {
-    private:
-        VisitorT&       visitor_;
-        Visitable1T&    visitable1_;
-        Visitable2T&    visitable2_;
+            template<class VisitorT, class Visitable1T, class Visitable2T>
+            struct two_variables_holder {
+            private:
+                VisitorT &visitor_;
+                Visitable1T &visitable1_;
+                Visitable2T &visitable2_;
 
-        // required to supress warnings and enshure that we do not copy 
-        // this visitor
-        two_variables_holder& operator=(const two_variables_holder&);
+                // required to supress warnings and enshure that we do not copy
+                // this visitor
+                two_variables_holder &operator=(const two_variables_holder &);
 
-    public:
-        typedef BOOST_DEDUCED_TYPENAME VisitorT::result_type result_type;
+            public:
+                typedef BOOST_DEDUCED_TYPENAME VisitorT
+                ::result_type result_type;
 
-        explicit two_variables_holder(VisitorT& visitor, Visitable1T& visitable1, Visitable2T& visitable2) BOOST_NOEXCEPT 
-            : visitor_(visitor)
-            , visitable1_(visitable1)
-            , visitable2_(visitable2)
-        {}
+                explicit two_variables_holder(VisitorT &visitor, Visitable1T &visitable1, Visitable2T &visitable2)
+
+                BOOST_NOEXCEPT
+                        : visitor_(visitor)
+                , visitable1_(visitable1)
+                , visitable2_(visitable2) {}
 
 #define BOOST_VARIANT_OPERATOR_BEG()                            \
     return ::boost::apply_visitor(                              \
@@ -77,31 +80,42 @@ namespace detail { namespace variant {
     }                                                                                       \
     /**/
 
-BOOST_PP_REPEAT( BOOST_PP_SUB(BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_VARIANT_VISIT, ~)
+                BOOST_PP_REPEAT ( BOOST_PP_SUB(
+
+                BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_VARIANT_VISIT,
+                ~
+                )
 #undef BOOST_VARIANT_OPERATOR_BEG
 #undef BOOST_VARIANT_OPERATOR_END
 #undef BOOST_VARANT_VISITORS_VARIABLES_PRINTER
 #undef BOOST_VARIANT_VISIT
 
-    };
+            };
 
-    template <class VisitorT, class Visitable1T, class Visitable2T>
-    inline two_variables_holder<VisitorT, Visitable1T, Visitable2T> make_two_variables_holder(
-            VisitorT& visitor, Visitable1T& visitable1, Visitable2T& visitable2
-        ) BOOST_NOEXCEPT
-    {
-        return two_variables_holder<VisitorT, Visitable1T, Visitable2T>(visitor, visitable1, visitable2);
+            template<class VisitorT, class Visitable1T, class Visitable2T>
+            inline two_variables_holder<VisitorT, Visitable1T, Visitable2T> make_two_variables_holder(
+                    VisitorT &visitor, Visitable1T &visitable1, Visitable2T &visitable2
+            )
+
+            BOOST_NOEXCEPT {
+            return
+            two_variables_holder<VisitorT, Visitable1T, Visitable2T>(visitor, visitable1, visitable2
+            );
+        }
+
+        template<class VisitorT, class Visitable1T, class Visitable2T>
+        inline two_variables_holder<const VisitorT, Visitable1T, Visitable2T> make_two_variables_holder(
+                const VisitorT &visitor, Visitable1T &visitable1, Visitable2T &visitable2
+        )
+
+        BOOST_NOEXCEPT {
+        return
+        two_variables_holder<const VisitorT, Visitable1T, Visitable2T>(visitor, visitable1, visitable2
+        );
     }
 
-    template <class VisitorT, class Visitable1T, class Visitable2T>
-    inline two_variables_holder<const VisitorT, Visitable1T, Visitable2T> make_two_variables_holder(
-            const VisitorT& visitor, Visitable1T& visitable1, Visitable2T& visitable2
-        ) BOOST_NOEXCEPT
-    {
-        return two_variables_holder<const VisitorT, Visitable1T, Visitable2T>(visitor, visitable1, visitable2);
-    }
-
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 
 #define BOOST_VARIANT_APPLY_VISITOR_BEG()                                               \
     return ::boost::apply_visitor(                                                      \
@@ -129,14 +143,17 @@ BOOST_PP_REPEAT( BOOST_PP_SUB(BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_V
     }                                                                                                   \
     /**/
 
-BOOST_PP_REPEAT( BOOST_PP_SUB(BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_VARIANT_VISIT, const Visitor& visitor)
-BOOST_PP_REPEAT( BOOST_PP_SUB(BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_VARIANT_VISIT, Visitor& visitor)
+BOOST_PP_REPEAT( BOOST_PP_SUB(BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_VARIANT_VISIT,
+const Visitor &visitor
+)
+BOOST_PP_REPEAT( BOOST_PP_SUB(BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS, 2), BOOST_VARIANT_VISIT, Visitor
+& visitor)
 
 #undef BOOST_VARIANT_APPLY_VISITOR_BEG
 #undef BOOST_VARIANT_APPLY_VISITOR_END
 #undef BOOST_VARANT_VISITORS_VARIABLES_PRINTER
 #undef BOOST_VARIANT_VISIT
-    
+
 } // namespace boost
 
 #endif // BOOST_VARIANT_MULTIVISITORS_HPP

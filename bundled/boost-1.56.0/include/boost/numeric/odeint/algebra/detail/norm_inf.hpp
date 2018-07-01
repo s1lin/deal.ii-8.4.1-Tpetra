@@ -21,24 +21,23 @@
 #include <cmath>
 
 namespace boost {
-namespace numeric {
-namespace odeint {
-namespace detail {
+    namespace numeric {
+        namespace odeint {
+            namespace detail {
 
-template< typename Value , class Iterator1 >
-inline Value norm_inf( Iterator1 first1 , Iterator1 last1 , Value init )
-{
-    using std::max;
-    using std::abs;
-    for( ; first1 != last1 ; )
-        init = max( init , abs( *first1++ ) );
-    return init;
-}
+                template<typename Value, class Iterator1>
+                inline Value norm_inf(Iterator1 first1, Iterator1 last1, Value init) {
+                    using std::max;
+                    using std::abs;
+                    for (; first1 != last1;)
+                        init = max(init, abs(*first1++));
+                    return init;
+                }
 
 
-} // detail
-} // odeint
-} // numeric
+            } // detail
+        } // odeint
+    } // numeric
 } // boost
 
 

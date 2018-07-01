@@ -8,31 +8,30 @@
 
 #include <boost/thread/win32/basic_timed_mutex.hpp>
 #include <boost/thread/exceptions.hpp>
+
 #if defined BOOST_THREAD_PROVIDES_NESTED_LOCKS
 #include <boost/thread/lock_types.hpp>
 #endif
+
 #include <boost/thread/detail/delete.hpp>
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-    namespace detail
-    {
+namespace boost {
+    namespace detail {
         typedef ::boost::detail::basic_timed_mutex underlying_mutex;
     }
 
-    class mutex:
-        public ::boost::detail::underlying_mutex
-    {
+    class mutex :
+            public ::boost::detail::underlying_mutex {
     public:
         BOOST_THREAD_NO_COPYABLE(mutex)
-        mutex()
-        {
+
+        mutex() {
             initialize();
         }
-        ~mutex()
-        {
+
+        ~mutex() {
             destroy();
         }
 
@@ -44,18 +43,16 @@ namespace boost
 
     typedef mutex try_mutex;
 
-    class timed_mutex:
-        public ::boost::detail::basic_timed_mutex
-    {
+    class timed_mutex :
+            public ::boost::detail::basic_timed_mutex {
     public:
         BOOST_THREAD_NO_COPYABLE(timed_mutex)
-        timed_mutex()
-        {
+
+        timed_mutex() {
             initialize();
         }
 
-        ~timed_mutex()
-        {
+        ~timed_mutex() {
             destroy();
         }
 

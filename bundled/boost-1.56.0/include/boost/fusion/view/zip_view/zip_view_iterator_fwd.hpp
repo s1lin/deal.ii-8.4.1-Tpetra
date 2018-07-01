@@ -11,13 +11,15 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/view/detail/strictest_traversal.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    template<
-        typename IteratorSequence, 
-        typename Traversal = typename detail::strictest_traversal<IteratorSequence>::type>
-    struct zip_view_iterator;
+        template<
+                typename IteratorSequence,
+                typename Traversal = typename detail::strictest_traversal<IteratorSequence>::type>
+        struct zip_view_iterator;
 
-}}
+    }
+}
 
 #endif

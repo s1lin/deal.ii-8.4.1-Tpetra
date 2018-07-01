@@ -88,7 +88,7 @@
 // be linked in one way (statically or dynamically), in these cases this 
 // macro has no effect.
 // #define BOOST_ALL_DYN_LINK
- 
+
 // BOOST_WHATEVER_DYN_LINK: Forces library "whatever" to be linked as a dll 
 // rather than a static library on Microsoft Windows: replace the WHATEVER 
 // part of the macro name with the name of the library that you want to 
@@ -100,7 +100,7 @@
 // be linked in one way (statically or dynamically), 
 // in these cases this macro is unsupported.
 // #define BOOST_WHATEVER_DYN_LINK
- 
+
 // BOOST_ALL_NO_LIB: Tells the config system not to automatically select 
 // which libraries to link against.  
 // Normally if a compiler supports #pragma lib, then the correct library 
@@ -108,7 +108,7 @@
 // simply by the act of including one of that library's headers.  
 // This macro turns that feature off.
 // #define BOOST_ALL_NO_LIB
- 
+
 // BOOST_WHATEVER_NO_LIB: Tells the config system not to automatically 
 // select which library to link against for library "whatever", 
 // replace WHATEVER in the macro name with the name of the library; 

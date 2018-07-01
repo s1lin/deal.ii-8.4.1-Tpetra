@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_SYMBOLS
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_SYMBOLS
+
 #include <boost/spirit/home/classic/symbols.hpp>
+
 #endif

@@ -9,28 +9,28 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_load_numeric
-(
-    void **Numeric,
-    char *filename
-) ;
+        (
+                void **Numeric,
+                char *filename
+        );
 
 UF_long umfpack_dl_load_numeric
-(
-    void **Numeric,
-    char *filename
-) ;
+        (
+                void **Numeric,
+                char *filename
+        );
 
 int umfpack_zi_load_numeric
-(
-    void **Numeric,
-    char *filename
-) ;
+        (
+                void **Numeric,
+                char *filename
+        );
 
 UF_long umfpack_zl_load_numeric
-(
-    void **Numeric,
-    char *filename
-) ;
+        (
+                void **Numeric,
+                char *filename
+        );
 
 /*
 double int Syntax:

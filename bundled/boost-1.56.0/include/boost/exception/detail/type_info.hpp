@@ -5,7 +5,7 @@
 
 #ifndef UUID_C3E1741C754311DDB2834CCA55D89593
 #define UUID_C3E1741C754311DDB2834CCA55D89593
-#if (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#if (__GNUC__ * 100 + __GNUC_MINOR__ > 301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
 #endif
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
@@ -21,55 +21,48 @@
 #include <string>
 
 namespace
-boost
-    {
-    template <class T>
+boost {
+    template<class T>
     inline
     std::string
-    tag_type_name()
-        {
+    tag_type_name() {
 #ifdef BOOST_NO_TYPEID
         return BOOST_CURRENT_FUNCTION;
 #else
-        return /*units::detail::demangle*/(typeid(T*).name());
+        return /*units::detail::demangle*/(typeid(T *).name());
 #endif
-        }
+    }
 
-    template <class T>
+    template<class T>
     inline
     std::string
-    type_name()
-        {
+    type_name() {
 #ifdef BOOST_NO_TYPEID
         return BOOST_CURRENT_FUNCTION;
 #else
         return /*units::detail::demangle*/(typeid(T).name());
 #endif
-        }
+    }
 
     namespace
-    exception_detail
-        {
+    exception_detail {
         struct
-        type_info_
-            {
-            detail::sp_typeinfo const * type_;
+        type_info_ {
+            detail::sp_typeinfo const *type_;
 
             explicit
-            type_info_( detail::sp_typeinfo const & type ):
-                type_(&type)
-                {
-                }
+            type_info_(detail::sp_typeinfo const &type) :
+                    type_(&type) {
+            }
 
             friend
             bool
-            operator<( type_info_ const & a, type_info_ const & b )
-                {
-                return 0!=(a.type_->before(*b.type_));
-                }
-            };
-        }
+            operator<(type_info_ const &a, type_info_ const &b) {
+                return 0 != (a.type_->before(*b.type_));
+            }
+        };
     }
+}
 
 #define BOOST_EXCEPTION_STATIC_TYPEID(T) ::boost::exception_detail::type_info_(BOOST_SP_TYPEID(T))
 

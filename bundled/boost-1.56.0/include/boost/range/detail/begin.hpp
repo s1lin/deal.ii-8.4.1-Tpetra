@@ -16,12 +16,10 @@
 #include <boost/range/iterator.hpp>
 #include <boost/range/detail/common.hpp>
 
-namespace boost
-{
+namespace boost {
 
-    namespace range_detail
-    {
-        template< typename T >
+    namespace range_detail {
+        template<typename T>
         struct range_begin;
 
         //////////////////////////////////////////////////////////////////////
@@ -29,10 +27,10 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct range_begin<std_container_>
-        {
-            template< typename C >
-            static BOOST_RANGE_DEDUCED_TYPENAME range_iterator<C>::type fun( C& c )
+        struct range_begin<std_container_> {
+            template<typename C>
+            static BOOST_RANGE_DEDUCED_TYPENAME range_iterator<C>::type
+            fun( C& c )
             {
                 return c.begin();
             };
@@ -43,11 +41,11 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct range_begin<std_pair_>
-        {
-            template< typename P >
-            static BOOST_RANGE_DEDUCED_TYPENAME range_iterator<P>::type fun( const P& p )
-            {
+        struct range_begin<std_pair_> {
+            template<typename P>
+            static BOOST_RANGE_DEDUCED_TYPENAME range_iterator<P>::type
+
+            fun(const P &p) {
                 return p.first;
             }
         };
@@ -57,8 +55,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct range_begin<array_>
-        {
+        struct range_begin<array_> {
             template<typename T>
             static BOOST_RANGE_DEDUCED_TYPENAME range_value<T>::type* fun(T& t)
             {
@@ -68,15 +65,15 @@ namespace boost
 
     } // namespace 'range_detail'
 
-    namespace range_adl_barrier
-    {
-        template< typename C >
+    namespace range_adl_barrier {
+        template<typename C>
         inline BOOST_RANGE_DEDUCED_TYPENAME range_iterator<C>::type
-        begin( C& c )
-        {
-            return range_detail::range_begin< BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
-        }
+        begin( C
+        & c ) {
+        return
+        range_detail::range_begin<BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type>::fun( c );
     }
+}
 } // namespace 'boost'
 
 

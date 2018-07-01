@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-typedef unit<momentum_dimension,cgs::system>     momentum;
+            typedef unit <momentum_dimension, cgs::system> momentum;
 
-} // namespace cgs
+        } // namespace cgs
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

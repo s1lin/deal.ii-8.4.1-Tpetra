@@ -18,30 +18,30 @@
 #include <string.h>
 
 #ifndef BOOST_NO_CWCHAR
+
 #include <wchar.h>
+
 #endif
 
-namespace boost
-{
-    namespace range_detail
-    {
-        template <typename T>
-        inline void boost_range_silence_warning( const T& ) { }
+namespace boost {
+    namespace range_detail {
+        template<typename T>
+        inline void boost_range_silence_warning(const T &) {}
 
         /////////////////////////////////////////////////////////////////////
         // end() help
         /////////////////////////////////////////////////////////////////////
 
-        inline const char* str_end( const char* s, const char* )
-        {
-            return s + strlen( s );
+        inline const char *str_end(const char *s, const char *) {
+            return s + strlen(s);
         }
 
 #ifndef BOOST_NO_CWCHAR
-        inline const wchar_t* str_end( const wchar_t* s, const wchar_t* )
-        {
-            return s + wcslen( s );
+
+        inline const wchar_t *str_end(const wchar_t *s, const wchar_t *) {
+            return s + wcslen(s);
         }
+
 #else
         inline const wchar_t* str_end( const wchar_t* s, const wchar_t* )
         {
@@ -53,21 +53,18 @@ namespace boost
         }
 #endif
 
-        template< class Char >
-        inline Char* str_end( Char* s )
-        {
-            return const_cast<Char*>( str_end( s, s ) );
+        template<class Char>
+        inline Char *str_end(Char *s) {
+            return const_cast<Char *>( str_end(s, s));
         }
 
-        template< class T, std::size_t sz >
-        inline T* array_end( T BOOST_RANGE_ARRAY_REF()[sz] )
-        {
+        template<class T, std::size_t sz>
+        inline T *array_end(T BOOST_RANGE_ARRAY_REF()[sz]) {
             return boost_range_array + sz;
         }
 
-        template< class T, std::size_t sz >
-        inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz] )
-        {
+        template<class T, std::size_t sz>
+        inline const T *array_end(const T BOOST_RANGE_ARRAY_REF()[sz]) {
             return boost_range_array + sz;
         }
 
@@ -75,34 +72,29 @@ namespace boost
         // size() help
         /////////////////////////////////////////////////////////////////////
 
-        template< class Char >
-        inline std::size_t str_size( const Char* const& s )
-        {
-            return str_end( s ) - s;
+        template<class Char>
+        inline std::size_t str_size(const Char *const &s) {
+            return str_end(s) - s;
         }
 
-        template< class T, std::size_t sz >
-        inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz] )
-        {
-            boost_range_silence_warning( boost_range_array );
+        template<class T, std::size_t sz>
+        inline std::size_t array_size(T BOOST_RANGE_ARRAY_REF()[sz]) {
+            boost_range_silence_warning(boost_range_array);
             return sz;
         }
 
-        template< class T, std::size_t sz >
-        inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz] )
-        {
-            boost_range_silence_warning( boost_range_array );
+        template<class T, std::size_t sz>
+        inline std::size_t array_size(const T BOOST_RANGE_ARRAY_REF()[sz]) {
+            boost_range_silence_warning(boost_range_array);
             return sz;
         }
 
-        inline bool is_same_address(const void* l, const void* r)
-        {
+        inline bool is_same_address(const void *l, const void *r) {
             return l == r;
         }
 
         template<class T1, class T2>
-        inline bool is_same_object(const T1& l, const T2& r)
-        {
+        inline bool is_same_object(const T1 &l, const T2 &r) {
             return range_detail::is_same_address(&l, &r);
         }
 

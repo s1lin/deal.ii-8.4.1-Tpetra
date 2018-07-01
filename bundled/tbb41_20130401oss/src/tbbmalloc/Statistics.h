@@ -56,7 +56,7 @@ enum common_counter_type {
 };
 
 #if COLLECT_STATISTICS
-/* Statistics reporting callback registred via a static object dtor 
+/* Statistics reporting callback registred via a static object dtor
    on Posix or DLL_PROCESS_DETACH on Windows.
  */
 
@@ -81,7 +81,7 @@ static inline void initStatisticsCollection() {
 }
 
 #else
-#define STAT_increment(a,b,c) ((void)0)
+#define STAT_increment(a, b, c) ((void)0)
 #endif /* COLLECT_STATISTICS */
 
 #if COLLECT_STATISTICS

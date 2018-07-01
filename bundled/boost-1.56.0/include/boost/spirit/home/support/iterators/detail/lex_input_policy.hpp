@@ -10,77 +10,73 @@
 #include <boost/spirit/home/support/iterators/multi_pass_fwd.hpp>
 #include <boost/spirit/home/support/iterators/detail/multi_pass.hpp>
 
-namespace boost { namespace spirit { namespace iterator_policies
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    //  class lex_input
-    //  Implementation of the InputPolicy used by multi_pass
-    // 
-    //  The lex_input class gets tokens (integers) from yylex()
-    ///////////////////////////////////////////////////////////////////////////
-    struct lex_input
-    {
-        typedef int value_type;
+namespace boost {
+    namespace spirit {
+        namespace iterator_policies {
+            ///////////////////////////////////////////////////////////////////////////////
+            //  class lex_input
+            //  Implementation of the InputPolicy used by multi_pass
+            //
+            //  The lex_input class gets tokens (integers) from yylex()
+            ///////////////////////////////////////////////////////////////////////////
+            struct lex_input {
+                typedef int value_type;
 
-        ///////////////////////////////////////////////////////////////////////
-        template <typename T>
-        class unique : public detail::default_input_policy
-        {
-        public:
-            typedef std::ptrdiff_t difference_type;
-            typedef std::ptrdiff_t distance_type;
-            typedef int* pointer;
-            typedef int& reference;
+                ///////////////////////////////////////////////////////////////////////
+                template<typename T>
+                class unique : public detail::default_input_policy {
+                public:
+                    typedef std::ptrdiff_t difference_type;
+                    typedef std::ptrdiff_t distance_type;
+                    typedef int *pointer;
+                    typedef int &reference;
 
-        protected:
-            unique() {}
-            explicit unique(T) {}
+                protected:
+                    unique() {}
 
-        public:
-            template <typename MultiPass>
-            static typename MultiPass::reference get_input(MultiPass& mp)
-            {
-                value_type& curtok = mp.shared()->curtok;
-                if (-1 == curtok)
-                {
-                    extern int yylex();
-                    curtok = yylex();
-                }
-                return curtok;
-            }
+                    explicit unique(T) {}
 
-            template <typename MultiPass>
-            static void advance_input(MultiPass& mp)
-            {
-                extern int yylex();
-                mp.shared()->curtok = yylex();
-            }
+                public:
+                    template<typename MultiPass>
+                    static typename MultiPass::reference get_input(MultiPass &mp) {
+                        value_type &curtok = mp.shared()->curtok;
+                        if (-1 == curtok) {
+                            extern int yylex();
+                            curtok = yylex();
+                        }
+                        return curtok;
+                    }
 
-            // test, whether we reached the end of the underlying stream
-            template <typename MultiPass>
-            static bool input_at_eof(MultiPass const& mp) 
-            {
-                return mp.shared()->curtok == 0;
-            }
+                    template<typename MultiPass>
+                    static void advance_input(MultiPass &mp) {
+                        extern int yylex();
+                        mp.shared()->curtok = yylex();
+                    }
 
-            template <typename MultiPass>
-            static bool input_is_valid(MultiPass const&, value_type const& t) 
-            {
-                return -1 != t;
-            }
-        };
+                    // test, whether we reached the end of the underlying stream
+                    template<typename MultiPass>
+                    static bool input_at_eof(MultiPass const &mp) {
+                        return mp.shared()->curtok == 0;
+                    }
 
-        ///////////////////////////////////////////////////////////////////////
-        template <typename T>
-        struct shared
-        {
-            explicit shared(T) : curtok(-1) {}
+                    template<typename MultiPass>
+                    static bool input_is_valid(MultiPass const &, value_type const &t) {
+                        return -1 != t;
+                    }
+                };
 
-            value_type curtok;
-        };
-    };
+                ///////////////////////////////////////////////////////////////////////
+                template<typename T>
+                struct shared {
+                    explicit shared(T) : curtok(-1) {}
 
-}}}
+                    value_type curtok;
+                };
+            };
+
+        }
+    }
+}
 
 #endif
 

@@ -24,130 +24,142 @@
 # include <boost/spirit/home/support/char_encoding/unicode.hpp>
 #endif
 
-namespace boost { namespace spirit
-{
-    typedef mpl::vector<
-            spirit::char_encoding::ascii
-          , spirit::char_encoding::iso8859_1
-          , spirit::char_encoding::standard
-          , spirit::char_encoding::standard_wide
+namespace boost {
+    namespace spirit {
+        typedef mpl::vector <
+        spirit::char_encoding::ascii
+        , spirit::char_encoding::iso8859_1
+        , spirit::char_encoding::standard
+        , spirit::char_encoding::standard_wide
 #if defined(BOOST_SPIRIT_UNICODE)
-          , spirit::char_encoding::unicode
+        , spirit::char_encoding::unicode
 #endif
         >
-    char_encodings;
+                char_encodings;
 
-    template <typename T>
-    struct is_char_encoding : mpl::false_ {};
+        template<typename T>
+        struct is_char_encoding : mpl::false_ {
+        };
 
-    template <>
-    struct is_char_encoding<spirit::char_encoding::ascii> : mpl::true_ {};
+        template<>
+        struct is_char_encoding<spirit::char_encoding::ascii> : mpl::true_ {
+        };
 
-    template <>
-    struct is_char_encoding<spirit::char_encoding::iso8859_1> : mpl::true_ {};
+        template<>
+        struct is_char_encoding<spirit::char_encoding::iso8859_1> : mpl::true_ {
+        };
 
-    template <>
-    struct is_char_encoding<spirit::char_encoding::standard> : mpl::true_ {};
+        template<>
+        struct is_char_encoding<spirit::char_encoding::standard> : mpl::true_ {
+        };
 
-    template <>
-    struct is_char_encoding<spirit::char_encoding::standard_wide> : mpl::true_ {};
+        template<>
+        struct is_char_encoding<spirit::char_encoding::standard_wide> : mpl::true_ {
+        };
 
 #if defined(BOOST_SPIRIT_UNICODE)
-    template <>
-    struct is_char_encoding<spirit::char_encoding::unicode> : mpl::true_ {};
+        template <>
+        struct is_char_encoding<spirit::char_encoding::unicode> : mpl::true_ {};
 #endif
 
-    template <typename Encoding>
-    struct encoding
-        : proto::terminal<tag::char_code<tag::encoding, Encoding> >::type
-    {};
+        template<typename Encoding>
+        struct encoding
+                : proto::terminal<tag::char_code < tag::encoding, Encoding> >::type {
+    };
 
     // Our basic terminals
     BOOST_SPIRIT_DEFINE_TERMINALS_NAME(
-        ( verbatim, verbatim_type )
-        ( no_delimit, no_delimit_type )
-        ( lexeme, lexeme_type )
-        ( no_skip, no_skip_type )
-        ( omit, omit_type )
-        ( raw, raw_type )
-        ( as_string, as_string_type )
-        ( as_wstring, as_wstring_type )
-        ( inf, inf_type )
-        ( eol, eol_type )
-        ( eoi, eoi_type )
-        ( buffer, buffer_type )
-        ( true_, true_type )
-        ( false_, false_type )
-        ( matches, matches_type )
-        ( hold, hold_type )
-        ( strict, strict_type )
-        ( relaxed, relaxed_type )
-        ( duplicate, duplicate_type )
+    ( verbatim, verbatim_type
+    )
+    ( no_delimit, no_delimit_type )
+    ( lexeme, lexeme_type )
+    ( no_skip, no_skip_type )
+    ( omit, omit_type )
+    ( raw, raw_type )
+    ( as_string, as_string_type )
+    ( as_wstring, as_wstring_type )
+    ( inf, inf_type )
+    ( eol, eol_type )
+    ( eoi, eoi_type )
+    ( buffer, buffer_type )
+    ( true_, true_type )
+    ( false_, false_type )
+    ( matches, matches_type )
+    ( hold, hold_type )
+    ( strict, strict_type )
+    ( relaxed, relaxed_type )
+    ( duplicate, duplicate_type )
     )
 
     // Our extended terminals
     BOOST_SPIRIT_DEFINE_TERMINALS_NAME_EX(
-        ( lit, lit_type )
-        ( bin, bin_type )
-        ( oct, oct_type )
-        ( hex, hex_type )
-        ( bool_, bool_type )
-        ( ushort_, ushort_type )
-        ( ulong_, ulong_type )
-        ( uint_, uint_type )
-        ( short_, short_type )
-        ( long_, long_type )
-        ( int_, int_type )
-        ( ulong_long, ulong_long_type )
-        ( long_long, long_long_type )
-        ( float_, float_type )
-        ( double_, double_type )
-        ( long_double, long_double_type )
-        ( repeat, repeat_type )
-        ( eps, eps_type )
-        ( pad, pad_type )
-        ( byte_, byte_type )
-        ( word, word_type )
-        ( big_word, big_word_type )
-        ( little_word, little_word_type )
-        ( dword, dword_type )
-        ( big_dword, big_dword_type )
-        ( little_dword, little_dword_type )
-        ( qword, qword_type )
-        ( big_qword, big_qword_type )
-        ( little_qword, little_qword_type )
-        ( bin_float, bin_float_type )
-        ( big_bin_float, big_bin_float_type )
-        ( little_bin_float, little_bin_float_type )
-        ( bin_double, bin_double_type )
-        ( big_bin_double, big_bin_double_type )
-        ( little_bin_double, little_bin_double_type )
-        ( skip, skip_type )
-        ( delimit, delimit_type )
-        ( stream, stream_type )
-        ( wstream, wstream_type )
-        ( left_align, left_align_type )
-        ( right_align, right_align_type )
-        ( center, center_type )
-        ( maxwidth, maxwidth_type )
-        ( set_state, set_state_type )
-        ( in_state, in_state_type )
-        ( token, token_type )
-        ( tokenid, tokenid_type )
-        ( raw_token, raw_token_type )
-        ( tokenid_mask, tokenid_mask_type )
-        ( attr, attr_type )
-        ( columns, columns_type )
-        ( auto_, auto_type )
+    ( lit, lit_type
+    )
+    ( bin, bin_type )
+    ( oct, oct_type )
+    ( hex, hex_type )
+    ( bool_, bool_type )
+    ( ushort_, ushort_type )
+    ( ulong_, ulong_type )
+    ( uint_, uint_type )
+    ( short_, short_type )
+    ( long_, long_type )
+    ( int_, int_type )
+    ( ulong_long, ulong_long_type )
+    ( long_long, long_long_type )
+    ( float_, float_type )
+    ( double_, double_type )
+    ( long_double, long_double_type )
+    ( repeat, repeat_type )
+    ( eps, eps_type )
+    ( pad, pad_type )
+    ( byte_, byte_type )
+    ( word, word_type )
+    ( big_word, big_word_type )
+    ( little_word, little_word_type )
+    ( dword, dword_type )
+    ( big_dword, big_dword_type )
+    ( little_dword, little_dword_type )
+    ( qword, qword_type )
+    ( big_qword, big_qword_type )
+    ( little_qword, little_qword_type )
+    ( bin_float, bin_float_type )
+    ( big_bin_float, big_bin_float_type )
+    ( little_bin_float, little_bin_float_type )
+    ( bin_double, bin_double_type )
+    ( big_bin_double, big_bin_double_type )
+    ( little_bin_double, little_bin_double_type )
+    ( skip, skip_type )
+    ( delimit, delimit_type )
+    ( stream, stream_type )
+    ( wstream, wstream_type )
+    ( left_align, left_align_type )
+    ( right_align, right_align_type )
+    ( center, center_type )
+    ( maxwidth, maxwidth_type )
+    ( set_state, set_state_type )
+    ( in_state, in_state_type )
+    ( token, token_type )
+    ( tokenid, tokenid_type )
+    ( raw_token, raw_token_type )
+    ( tokenid_mask, tokenid_mask_type )
+    ( attr, attr_type )
+    ( columns, columns_type )
+    ( auto_, auto_type )
     )
 
     // special tags (used mainly for stateful tag types)
-    namespace tag
-    {
-        struct attr_cast { BOOST_SPIRIT_IS_TAG() };
-        struct as { BOOST_SPIRIT_IS_TAG() };
+    namespace tag {
+        struct attr_cast {
+            BOOST_SPIRIT_IS_TAG()
+        };
+
+        struct as {
+            BOOST_SPIRIT_IS_TAG()
+        };
     }
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Here we place the character-set sensitive placeholders. We have one set
@@ -236,26 +248,29 @@ BOOST_SPIRIT_DEFINE_CHAR_CODES(iso8859_1)
 BOOST_SPIRIT_DEFINE_CHAR_CODES(standard)
 BOOST_SPIRIT_DEFINE_CHAR_CODES(standard_wide)
 
-namespace boost { namespace spirit { namespace traits
-{
-    template <typename Char>
-    struct char_encoding_from_char;
+namespace boost {
+    namespace spirit {
+        namespace traits {
+            template<typename Char>
+            struct char_encoding_from_char;
 
-    template <>
-    struct char_encoding_from_char<char>
-      : mpl::identity<spirit::char_encoding::standard>
-    {};
+            template<>
+            struct char_encoding_from_char<char>
+                    : mpl::identity<spirit::char_encoding::standard> {
+            };
 
-    template <>
-    struct char_encoding_from_char<wchar_t>
-      : mpl::identity<spirit::char_encoding::standard_wide>
-    {};
+            template<>
+            struct char_encoding_from_char<wchar_t>
+                    : mpl::identity<spirit::char_encoding::standard_wide> {
+            };
 
-    template <typename T>
-    struct char_encoding_from_char<T const>
-      : char_encoding_from_char<T>
-    {};
-}}}
+            template<typename T>
+            struct char_encoding_from_char<T const>
+                    : char_encoding_from_char<T> {
+            };
+        }
+    }
+}
 
 #if defined(BOOST_SPIRIT_UNICODE)
 BOOST_SPIRIT_DEFINE_CHAR_CODES(unicode)

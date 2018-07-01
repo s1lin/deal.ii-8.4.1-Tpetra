@@ -12,18 +12,19 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct front_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct front_impl;
 
-    template <>
-    struct front_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply : 
-            fusion::result_of::value_of<typename fusion::result_of::begin<Sequence>::type> {};
-    };
-}}
+        template<>
+        struct front_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply :
+                    fusion::result_of::value_of<typename fusion::result_of::begin<Sequence>::type> {
+            };
+        };
+    }
+}
 
 #endif

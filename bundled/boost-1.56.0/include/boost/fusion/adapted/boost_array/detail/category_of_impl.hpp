@@ -11,26 +11,25 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/config/no_tr1/utility.hpp>
 
-namespace boost { namespace fusion { 
+namespace boost {
+    namespace fusion {
 
-    struct boost_array_tag;
-    struct random_access_traversal_tag;
+        struct boost_array_tag;
+        struct random_access_traversal_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct category_of_impl;
-
-        template<>
-        struct category_of_impl<boost_array_tag>
-        {
+        namespace extension {
             template<typename T>
-            struct apply
-            {
-                typedef random_access_traversal_tag type;
+            struct category_of_impl;
+
+            template<>
+            struct category_of_impl<boost_array_tag> {
+                template<typename T>
+                struct apply {
+                    typedef random_access_traversal_tag type;
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

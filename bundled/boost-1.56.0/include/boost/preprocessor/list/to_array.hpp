@@ -6,12 +6,18 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LIST_TO_ARRAY_HPP
 # define BOOST_PREPROCESSOR_LIST_TO_ARRAY_HPP
 #
+
+
 # include <boost/preprocessor/arithmetic/dec.hpp>
 # include <boost/preprocessor/arithmetic/inc.hpp>
 # include <boost/preprocessor/config/config.hpp>
@@ -19,16 +25,20 @@
 # include <boost/preprocessor/list/adt.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
 # include <boost/preprocessor/tuple/rem.hpp>
+
 #
+
 # /* BOOST_PP_LIST_TO_ARRAY */
+
 #
+
 # define BOOST_PP_LIST_TO_ARRAY(list) BOOST_PP_LIST_TO_ARRAY_I(BOOST_PP_WHILE, list)
 
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
 #    define BOOST_PP_LIST_TO_ARRAY_I(w, list) \
         BOOST_PP_LIST_TO_ARRAY_II(((BOOST_PP_TUPLE_REM_CTOR( \
             3, \
-	        w(BOOST_PP_LIST_TO_ARRAY_P, BOOST_PP_LIST_TO_ARRAY_O, (list, 1, (~))) \
+            w(BOOST_PP_LIST_TO_ARRAY_P, BOOST_PP_LIST_TO_ARRAY_O, (list, 1, (~))) \
         )))) \
         /**/
 #    define BOOST_PP_LIST_TO_ARRAY_II(p) BOOST_PP_LIST_TO_ARRAY_II_B(p)
@@ -38,7 +48,7 @@
 #    define BOOST_PP_LIST_TO_ARRAY_I(w, list) \
         BOOST_PP_LIST_TO_ARRAY_II(BOOST_PP_TUPLE_REM_CTOR( \
             3, \
-	        w(BOOST_PP_LIST_TO_ARRAY_P, BOOST_PP_LIST_TO_ARRAY_O, (list, 1, (~))) \
+            w(BOOST_PP_LIST_TO_ARRAY_P, BOOST_PP_LIST_TO_ARRAY_O, (list, 1, (~))) \
         )) \
         /**/
 #    define BOOST_PP_LIST_TO_ARRAY_II(im) BOOST_PP_LIST_TO_ARRAY_III(im)
@@ -116,8 +126,12 @@
 # define BOOST_PP_LIST_TO_ARRAY_O(d, state) BOOST_PP_LIST_TO_ARRAY_O_I state
 # define BOOST_PP_LIST_TO_ARRAY_O_I(list, size, tuple) (BOOST_PP_LIST_REST(list), BOOST_PP_INC(size), (BOOST_PP_TUPLE_REM(size) tuple, BOOST_PP_LIST_FIRST(list)))
 #
+
 # /* BOOST_PP_LIST_TO_ARRAY_D */
+
 #
+
 # define BOOST_PP_LIST_TO_ARRAY_D(d, list) BOOST_PP_LIST_TO_ARRAY_I(BOOST_PP_WHILE_ ## d, list)
 #
+
 # endif /* BOOST_PREPROCESSOR_LIST_TO_ARRAY_HPP */

@@ -13,44 +13,42 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/mpl/if.hpp>
 
-namespace boost { namespace fusion
-{
-    struct vector_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct vector_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct deref_impl;
+        namespace extension {
+            template<typename Tag>
+            struct deref_impl;
 
-        template <>
-        struct deref_impl<vector_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply 
-            {
-                typedef typename Iterator::vector vector;
-                typedef typename Iterator::index index;
-                typedef typename mpl::at<
-                    typename vector::types, index>::type
-                element;
-                
-                typedef typename
+            template<>
+            struct deref_impl<vector_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename Iterator::vector vector;
+                    typedef typename Iterator::index index;
+                    typedef typename mpl::at<
+                            typename vector::types, index>::type
+                            element;
+
+                    typedef typename
                     mpl::if_<
-                        is_const<vector>
-                      , typename fusion::detail::cref_result<element>::type
-                      , typename fusion::detail::ref_result<element>::type
+                            is_const < vector>
+                    , typename fusion::detail::cref_result<element>::type
+                    , typename fusion::detail::ref_result<element>::type
                     >::type
-                type;
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return i.vec.at_impl(index());
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return i.vec.at_impl(index());
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

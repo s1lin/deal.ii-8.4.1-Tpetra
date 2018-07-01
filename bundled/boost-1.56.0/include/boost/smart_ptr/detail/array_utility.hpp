@@ -12,47 +12,50 @@
 #include <boost/config.hpp>
 #include <boost/type_traits/has_trivial_constructor.hpp>
 #include <boost/type_traits/has_trivial_destructor.hpp>
+
 #if !defined(BOOST_NO_CXX11_ALLOCATOR)
+
 #include <memory>
+
 #endif
 
 namespace boost {
     namespace detail {
-        typedef boost::true_type  ms_is_trivial;
+        typedef boost::true_type ms_is_trivial;
         typedef boost::false_type ms_no_trivial;
 
         template<class T>
-        inline void ms_destroy(T*, std::size_t, ms_is_trivial) {
+        inline void ms_destroy(T *, std::size_t, ms_is_trivial) {
         }
 
         template<class T>
-        inline void ms_destroy(T* memory, std::size_t size, ms_no_trivial) {
+        inline void ms_destroy(T *memory, std::size_t size, ms_no_trivial) {
             for (std::size_t i = size; i > 0;) {
                 memory[--i].~T();
             }
         }
 
         template<class T>
-        inline void ms_destroy(T* memory, std::size_t size) {
+        inline void ms_destroy(T *memory, std::size_t size) {
             boost::has_trivial_destructor<T> trivial;
             ms_destroy(memory, size, trivial);
         }
 
         template<class T>
-        inline void ms_init(T* memory, std::size_t size, ms_is_trivial) {
+        inline void ms_init(T *memory, std::size_t size, ms_is_trivial) {
             for (std::size_t i = 0; i < size; i++) {
-                void* p1 = memory + i;
+                void *p1 = memory + i;
                 ::new(p1) T();
             }
         }
 
         template<class T>
-        inline void ms_init(T* memory, std::size_t size, ms_no_trivial) {
+        inline void ms_init(T *memory, std::size_t size, ms_no_trivial) {
 #if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
-                    void* p1 = memory + i;
+                    void *p1 = memory + i;
                     ::new(p1) T();
                 }
             } catch (...) {
@@ -68,18 +71,18 @@ namespace boost {
         }
 
         template<class T>
-        inline void ms_init(T* memory, std::size_t size) {
+        inline void ms_init(T *memory, std::size_t size) {
             boost::has_trivial_default_constructor<T> trivial;
             ms_init(memory, size, trivial);
         }
 
         template<class T, std::size_t N>
-        inline void ms_init(T* memory, std::size_t size, const T* list) {
+        inline void ms_init(T *memory, std::size_t size, const T *list) {
 #if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
-                    void* p1 = memory + i;
+                    void *p1 = memory + i;
                     ::new(p1) T(list[i % N]);
                 }
             } catch (...) {
@@ -95,13 +98,14 @@ namespace boost {
         }
 
 #if !defined(BOOST_NO_CXX11_ALLOCATOR)
+
         template<class T, class A>
-        inline void as_destroy(const A& allocator, T* memory,
-            std::size_t size) {
+        inline void as_destroy(const A &allocator, T *memory,
+                               std::size_t size) {
             typedef typename std::allocator_traits<A>::
-                template rebind_alloc<T> TA;
+            template rebind_alloc<T> TA;
             typedef typename std::allocator_traits<A>::
-                template rebind_traits<T> TT;
+            template rebind_traits<T> TT;
             TA a2(allocator);
             for (std::size_t i = size; i > 0;) {
                 TT::destroy(a2, &memory[--i]);
@@ -109,12 +113,12 @@ namespace boost {
         }
 
         template<class T, class A>
-        inline void as_init(const A& allocator, T* memory, std::size_t size,
-            ms_is_trivial) {
+        inline void as_init(const A &allocator, T *memory, std::size_t size,
+                            ms_is_trivial) {
             typedef typename std::allocator_traits<A>::
-                template rebind_alloc<T> TA;
+            template rebind_alloc<T> TA;
             typedef typename std::allocator_traits<A>::
-                template rebind_traits<T> TT;
+            template rebind_traits<T> TT;
             TA a2(allocator);
             for (std::size_t i = 0; i < size; i++) {
                 TT::construct(a2, memory + i);
@@ -122,12 +126,12 @@ namespace boost {
         }
 
         template<class T, class A>
-        inline void as_init(const A& allocator, T* memory, std::size_t size,
-            ms_no_trivial) {
+        inline void as_init(const A &allocator, T *memory, std::size_t size,
+                            ms_no_trivial) {
             typedef typename std::allocator_traits<A>::
-                template rebind_alloc<T> TA;
+            template rebind_alloc<T> TA;
             typedef typename std::allocator_traits<A>::
-                template rebind_traits<T> TT;
+            template rebind_traits<T> TT;
             TA a2(allocator);
 #if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
@@ -147,18 +151,18 @@ namespace boost {
         }
 
         template<class T, class A>
-        inline void as_init(const A& allocator, T* memory, std::size_t size) {
+        inline void as_init(const A &allocator, T *memory, std::size_t size) {
             boost::has_trivial_default_constructor<T> trivial;
             as_init(allocator, memory, size, trivial);
         }
 
         template<class T, class A, std::size_t N>
-        inline void as_init(const A& allocator, T* memory, std::size_t size,
-            const T* list) {
+        inline void as_init(const A &allocator, T *memory, std::size_t size,
+                            const T *list) {
             typedef typename std::allocator_traits<A>::
-                template rebind_alloc<T> TA;
+            template rebind_alloc<T> TA;
             typedef typename std::allocator_traits<A>::
-                template rebind_traits<T> TT;
+            template rebind_traits<T> TT;
             TA a2(allocator);
 #if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
@@ -176,19 +180,20 @@ namespace boost {
             }
 #endif
         }
+
 #endif
 
         template<class T>
-        inline void ms_noinit(T*, std::size_t, ms_is_trivial) {
+        inline void ms_noinit(T *, std::size_t, ms_is_trivial) {
         }
 
         template<class T>
-        inline void ms_noinit(T* memory, std::size_t size, ms_no_trivial) {
+        inline void ms_noinit(T *memory, std::size_t size, ms_no_trivial) {
 #if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
-                    void* p1 = memory + i;
+                    void *p1 = memory + i;
                     ::new(p1) T;
                 }
             } catch (...) {
@@ -204,7 +209,7 @@ namespace boost {
         }
 
         template<class T>
-        inline void ms_noinit(T* memory, std::size_t size) {
+        inline void ms_noinit(T *memory, std::size_t size) {
             boost::has_trivial_default_constructor<T> trivial;
             ms_noinit(memory, size, trivial);
         }

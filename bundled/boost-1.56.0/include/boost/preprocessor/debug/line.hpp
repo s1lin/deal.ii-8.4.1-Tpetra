@@ -6,19 +6,29 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_DEBUG_LINE_HPP
 # define BOOST_PREPROCESSOR_DEBUG_LINE_HPP
 #
+
+
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/iteration/iterate.hpp>
 # include <boost/preprocessor/stringize.hpp>
+
 #
+
 # /* BOOST_PP_LINE */
+
 #
+
 # if BOOST_PP_CONFIG_EXTENDED_LINE_INFO
 #    define BOOST_PP_LINE(line, file) line BOOST_PP_CAT(BOOST_PP_LINE_, BOOST_PP_IS_ITERATING)(file)
 #    define BOOST_PP_LINE_BOOST_PP_IS_ITERATING(file) #file
@@ -32,4 +42,5 @@
 #    define BOOST_PP_LINE(line, file) line __FILE__
 # endif
 #
+
 # endif

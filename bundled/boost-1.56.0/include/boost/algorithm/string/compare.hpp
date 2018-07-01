@@ -31,16 +31,14 @@ namespace boost {
             Standard STL equal_to only handle comparison between arguments
             of the same type. This is a less restrictive version which wraps operator ==.
         */
-        struct is_equal
-        {
+        struct is_equal {
             //! Function operator
             /*!
                 Compare two operands for equality
             */
-            template< typename T1, typename T2 >
-                bool operator()( const T1& Arg1, const T2& Arg2 ) const
-            {
-                return Arg1==Arg2;
+            template<typename T1, typename T2>
+            bool operator()(const T1 &Arg1, const T2 &Arg2) const {
+                return Arg1 == Arg2;
             }
         };
 
@@ -49,27 +47,25 @@ namespace boost {
             Case insensitive comparison predicate. Comparison is done using
             specified locales.
         */
-        struct is_iequal
-        {
+        struct is_iequal {
             //! Constructor
             /*!
                 \param Loc locales used for comparison
             */
-            is_iequal( const std::locale& Loc=std::locale() ) :
-                m_Loc( Loc ) {}
+            is_iequal(const std::locale &Loc = std::locale()) :
+                    m_Loc(Loc) {}
 
             //! Function operator
             /*!
                 Compare two operands. Case is ignored.
             */
-            template< typename T1, typename T2 >
-                bool operator()( const T1& Arg1, const T2& Arg2 ) const
-            {
-                #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
-                    return std::toupper(Arg1)==std::toupper(Arg2);
-                #else
-                    return std::toupper<T1>(Arg1,m_Loc)==std::toupper<T2>(Arg2,m_Loc);
-                #endif
+            template<typename T1, typename T2>
+            bool operator()(const T1 &Arg1, const T2 &Arg2) const {
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
+                return std::toupper(Arg1)==std::toupper(Arg2);
+#else
+                return std::toupper<T1>(Arg1, m_Loc) == std::toupper<T2>(Arg2, m_Loc);
+#endif
             }
 
         private:
@@ -83,16 +79,14 @@ namespace boost {
             Convenient version of standard std::less. Operation is templated, therefore it is 
             not required to specify the exact types upon the construction
          */
-        struct is_less
-        {
+        struct is_less {
             //! Functor operation
             /*!
                 Compare two operands using > operator
              */
-            template< typename T1, typename T2 >
-                bool operator()( const T1& Arg1, const T2& Arg2 ) const
-            {
-                return Arg1<Arg2;
+            template<typename T1, typename T2>
+            bool operator()(const T1 &Arg1, const T2 &Arg2) const {
+                return Arg1 < Arg2;
             }
         };
 
@@ -102,27 +96,25 @@ namespace boost {
             Case insensitive comparison predicate. Comparison is done using
             specified locales.
         */
-        struct is_iless
-        {
+        struct is_iless {
             //! Constructor
             /*!
                 \param Loc locales used for comparison
             */
-            is_iless( const std::locale& Loc=std::locale() ) :
-                m_Loc( Loc ) {}
+            is_iless(const std::locale &Loc = std::locale()) :
+                    m_Loc(Loc) {}
 
             //! Function operator
             /*!
                 Compare two operands. Case is ignored.
             */
-            template< typename T1, typename T2 >
-                bool operator()( const T1& Arg1, const T2& Arg2 ) const
-            {
-                #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
-                    return std::toupper(Arg1)<std::toupper(Arg2);
-                #else
-                    return std::toupper<T1>(Arg1,m_Loc)<std::toupper<T2>(Arg2,m_Loc);
-                #endif
+            template<typename T1, typename T2>
+            bool operator()(const T1 &Arg1, const T2 &Arg2) const {
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
+                return std::toupper(Arg1)<std::toupper(Arg2);
+#else
+                return std::toupper<T1>(Arg1, m_Loc) < std::toupper<T2>(Arg2, m_Loc);
+#endif
             }
 
         private:
@@ -136,16 +128,14 @@ namespace boost {
             Convenient version of standard std::not_greater_to. Operation is templated, therefore it is 
             not required to specify the exact types upon the construction
          */
-        struct is_not_greater
-        {
+        struct is_not_greater {
             //! Functor operation
             /*!
                 Compare two operands using > operator
              */
-            template< typename T1, typename T2 >
-                bool operator()( const T1& Arg1, const T2& Arg2 ) const
-            {
-                return Arg1<=Arg2;
+            template<typename T1, typename T2>
+            bool operator()(const T1 &Arg1, const T2 &Arg2) const {
+                return Arg1 <= Arg2;
             }
         };
 
@@ -155,27 +145,25 @@ namespace boost {
             Case insensitive comparison predicate. Comparison is done using
             specified locales.
         */
-        struct is_not_igreater
-        {
+        struct is_not_igreater {
             //! Constructor
             /*!
                 \param Loc locales used for comparison
             */
-            is_not_igreater( const std::locale& Loc=std::locale() ) :
-                m_Loc( Loc ) {}
+            is_not_igreater(const std::locale &Loc = std::locale()) :
+                    m_Loc(Loc) {}
 
             //! Function operator
             /*!
                 Compare two operands. Case is ignored.
             */
-            template< typename T1, typename T2 >
-                bool operator()( const T1& Arg1, const T2& Arg2 ) const
-            {
-                #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
-                    return std::toupper(Arg1)<=std::toupper(Arg2);
-                #else
-                    return std::toupper<T1>(Arg1,m_Loc)<=std::toupper<T2>(Arg2,m_Loc);
-                #endif
+            template<typename T1, typename T2>
+            bool operator()(const T1 &Arg1, const T2 &Arg2) const {
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
+                return std::toupper(Arg1)<=std::toupper(Arg2);
+#else
+                return std::toupper<T1>(Arg1, m_Loc) <= std::toupper<T2>(Arg2, m_Loc);
+#endif
             }
 
         private:

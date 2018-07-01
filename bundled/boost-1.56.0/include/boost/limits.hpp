@@ -16,11 +16,13 @@
 #ifdef BOOST_NO_LIMITS
 #  error "There is no std::numeric_limits suppport available."
 #else
+
 # include <limits>
+
 #endif
 
 #if (defined(BOOST_HAS_LONG_LONG) && defined(BOOST_NO_LONG_LONG_NUMERIC_LIMITS)) \
-      || (defined(BOOST_HAS_MS_INT64) && defined(BOOST_NO_MS_INT64_NUMERIC_LIMITS))
+ || (defined(BOOST_HAS_MS_INT64) && defined(BOOST_NO_MS_INT64_NUMERIC_LIMITS))
 // Add missing specializations for numeric_limits:
 #ifdef BOOST_HAS_MS_INT64
 #  define BOOST_LLT __int64
@@ -140,7 +142,7 @@ namespace std
       
   };
 }
-#endif 
+#endif
 
 #endif
 

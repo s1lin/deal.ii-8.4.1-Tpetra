@@ -22,18 +22,18 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// Check that a type is a valid @c dim.
-template<typename T> 
-struct is_dim :
-    public mpl::false_
-{ };
+        template<typename T>
+        struct is_dim :
+                public mpl::false_ {
+        };
 
-template<typename T,typename V>
-struct is_dim< dim<T,V> > :
-    public mpl::true_
-{ };
+        template<typename T, typename V>
+        struct is_dim<dim < T, V> > :
+        public mpl::true_ {
+    };
 
 } // namespace units
 

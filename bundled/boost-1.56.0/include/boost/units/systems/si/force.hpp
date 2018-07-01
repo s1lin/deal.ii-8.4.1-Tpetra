@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<force_dimension,si::system>     force;
-    
-BOOST_UNITS_STATIC_CONSTANT(newton,force);  
-BOOST_UNITS_STATIC_CONSTANT(newtons,force); 
+            typedef unit <force_dimension, si::system> force;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(newton, force
+            );
+            BOOST_UNITS_STATIC_CONSTANT(newtons, force
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

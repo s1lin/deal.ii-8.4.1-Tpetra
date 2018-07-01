@@ -25,29 +25,37 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-template<class Base>
-struct constant 
-{ 
-    typedef typename Base::value_type value_type; 
-    operator value_type() const    { return Base().value(); } 
-    value_type value() const       { return Base().value(); } 
-    value_type uncertainty() const { return Base().uncertainty(); } 
-    value_type lower_bound() const { return Base().lower_bound(); } 
-    value_type upper_bound() const { return Base().upper_bound(); } 
-}; 
+        template<class Base>
+        struct constant {
+            typedef typename Base::value_type value_type;
 
-template<class Base>
-struct physical_constant 
-{ 
-    typedef typename Base::value_type value_type; 
-    operator value_type() const    { return Base().value(); } 
-    value_type value() const       { return Base().value(); } 
-    value_type uncertainty() const { return Base().uncertainty(); } 
-    value_type lower_bound() const { return Base().lower_bound(); } 
-    value_type upper_bound() const { return Base().upper_bound(); } 
-}; 
+            operator value_type() const { return Base().value(); }
+
+            value_type value() const { return Base().value(); }
+
+            value_type uncertainty() const { return Base().uncertainty(); }
+
+            value_type lower_bound() const { return Base().lower_bound(); }
+
+            value_type upper_bound() const { return Base().upper_bound(); }
+        };
+
+        template<class Base>
+        struct physical_constant {
+            typedef typename Base::value_type value_type;
+
+            operator value_type() const { return Base().value(); }
+
+            value_type value() const { return Base().value(); }
+
+            value_type uncertainty() const { return Base().uncertainty(); }
+
+            value_type lower_bound() const { return Base().lower_bound(); }
+
+            value_type upper_bound() const { return Base().upper_bound(); }
+        };
 
 #define BOOST_UNITS_DEFINE_HELPER(name, symbol, template_name)  \
                                                                 \
@@ -78,12 +86,19 @@ operator symbol(const template_name<Arg1, Arg2>& u, const constant<T>& t)\
 }
 
 BOOST_UNITS_DEFINE_HELPER(add, +, unit)
+
 BOOST_UNITS_DEFINE_HELPER(add, +, quantity)
+
 BOOST_UNITS_DEFINE_HELPER(subtract, -, unit)
+
 BOOST_UNITS_DEFINE_HELPER(subtract, -, quantity)
+
 BOOST_UNITS_DEFINE_HELPER(multiply, *, unit)
+
 BOOST_UNITS_DEFINE_HELPER(multiply, *, quantity)
+
 BOOST_UNITS_DEFINE_HELPER(divide, /, unit)
+
 BOOST_UNITS_DEFINE_HELPER(divide, /, quantity)
 
 #undef BOOST_UNITS_DEFINE_HELPER
@@ -130,8 +145,11 @@ operator symbol(const T1& t, const constant<T2>& u)                 \
 }
 
 BOOST_UNITS_DEFINE_HELPER(add, +)
+
 BOOST_UNITS_DEFINE_HELPER(subtract, -)
+
 BOOST_UNITS_DEFINE_HELPER(multiply, *)
+
 BOOST_UNITS_DEFINE_HELPER(divide, /)
 
 #undef BOOST_UNITS_DEFINE_HELPER
@@ -165,19 +183,22 @@ operator symbol(const one& t, const constant<T2>& u)                \
 }
 
 BOOST_UNITS_DEFINE_HELPER(multiply, *)
+
 BOOST_UNITS_DEFINE_HELPER(divide, /)
 
 #undef BOOST_UNITS_DEFINE_HELPER
 
 template<class T1, long N, long D>
-struct power_typeof_helper<constant<T1>, static_rational<N,D> >
+struct power_typeof_helper<constant < T1>, static_rational <N, D> >
 {
-    typedef power_typeof_helper<typename T1::value_type, static_rational<N,D> > base;
-    typedef typename base::type type;
-    static type value(const constant<T1>& arg)
-    {
-        return base::value(arg.value());
-    }
+typedef power_typeof_helper<typename T1::value_type, static_rational < N, D> >
+base;
+typedef typename base::type type;
+
+static type value(const constant <T1> &arg) {
+    return base::value(arg.value());
+}
+
 };
 
 #define BOOST_UNITS_DEFINE_HELPER(name, symbol)                     \
@@ -216,48 +237,43 @@ BOOST_UNITS_STATIC_CONSTANT(name, boost::units::constant<boost::units::physical_
 // stream output
 template<class Char, class Traits, class Y>
 inline
-std::basic_ostream<Char,Traits>& operator<<(std::basic_ostream<Char,Traits>& os,const physical_constant<Y>& val)
-{
+std::basic_ostream<Char, Traits> &operator<<(std::basic_ostream<Char, Traits> &os, const physical_constant <Y> &val) {
     boost::io::ios_precision_saver precision_saver(os);
     //boost::io::ios_width_saver width_saver(os);
     boost::io::ios_flags_saver flags_saver(os);
 
     //os << std::setw(21);
     typedef typename Y::value_type value_type;
-    
-    if (val.uncertainty() > value_type())
-    {
-        const double relative_uncertainty = std::abs(val.uncertainty()/val.value());
-    
-        const double  exponent = std::log10(relative_uncertainty);
-        const long digits_of_precision = static_cast<long>(std::ceil(std::abs(exponent)))+3;
-        
+
+    if (val.uncertainty() > value_type()) {
+        const double relative_uncertainty = std::abs(val.uncertainty() / val.value());
+
+        const double exponent = std::log10(relative_uncertainty);
+        const long digits_of_precision = static_cast<long>(std::ceil(std::abs(exponent))) + 3;
+
         // should try to replicate NIST CODATA syntax 
-        os << std::setprecision(digits_of_precision) 
+        os << std::setprecision(digits_of_precision)
            //<< std::setw(digits_of_precision+8) 
            //<< std::scientific
            << val.value();
 //           << long(10*(relative_uncertainty/std::pow(Y(10),Y(exponent))));
 
-        os << " (rel. unc. = " 
-           << std::setprecision(1) 
+        os << " (rel. unc. = "
+           << std::setprecision(1)
            //<< std::setw(7) 
            << std::scientific
            << relative_uncertainty << ")";
-    }
-    else
-    {
+    } else {
         os << val.value() << " (exact)";
     }
-    
+
     return os;
 }
 
 // stream output
 template<class Char, class Traits, class Y>
 inline
-std::basic_ostream<Char,Traits>& operator<<(std::basic_ostream<Char,Traits>& os,const constant<Y>&)
-{
+std::basic_ostream<Char, Traits> &operator<<(std::basic_ostream<Char, Traits> &os, const constant <Y> &) {
     os << Y();
     return os;
 }

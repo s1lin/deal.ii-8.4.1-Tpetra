@@ -18,13 +18,15 @@
 #include <boost/spirit/home/support/string_traits.hpp>
 #include <boost/spirit/home/support/common_terminals.hpp>
 
-namespace boost { namespace spirit
-{
-    // enables lazy lit(...) for qi
-    template <>
-    struct use_lazy_terminal<qi::domain, tag::lit, 1> 
-      : mpl::true_ {};
-}}
+namespace boost {
+    namespace spirit {
+        // enables lazy lit(...) for qi
+        template<>
+        struct use_lazy_terminal<qi::domain, tag::lit, 1>
+                : mpl::true_ {
+        };
+    }
+}
 
 #endif
 

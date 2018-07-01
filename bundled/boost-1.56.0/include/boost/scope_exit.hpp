@@ -66,78 +66,91 @@
 #endif
 
 // Steven Watanabe's trick with a modification suggested by Kim Barrett
-namespace boost { namespace scope_exit { namespace detail {
+namespace boost {
+    namespace scope_exit {
+        namespace detail {
 
 // Type of a local BOOST_SCOPE_EXIT_AUX_ARGS variable.
 // First use in a local scope will declare the BOOST_SCOPE_EXIT_AUX_ARGS
 // variable, subsequent uses will be resolved as two comparisons
 // (cmp1 with 0 and cmp2 with BOOST_SCOPE_EXIT_AUX_ARGS).
-template<int Dummy = 0>
-struct declared
-{
-    void* value;
-    static int const cmp2 = 0;
-    friend void operator>(int, declared const&) {}
-};
+            template<int Dummy = 0>
+            struct declared {
+                void *value;
+                static int const cmp2 = 0;
 
-struct undeclared { declared<> dummy[2]; };
+                friend void operator>(int, declared const &) {}
+            };
 
-template<int> struct resolve;
+            struct undeclared {
+                declared<> dummy[2];
+            };
 
-template<>
-struct resolve<sizeof(declared<>)>
-{
-    static const int cmp1 = 0;
-};
+            template<int>
+            struct resolve;
 
-template<>
-struct resolve<sizeof(undeclared)>
-{
-    template<int>
-    struct cmp1
-    {
-        static int const cmp2 = 0;
-    };
-};
+            template<>
+            struct resolve<sizeof(declared<>)> {
+                static const int cmp1 = 0;
+            };
 
-typedef void (*ref_tag)(int&);
-typedef void (*val_tag)(int );
+            template<>
+            struct resolve<sizeof(undeclared)> {
+                template<int>
+                struct cmp1 {
+                    static int const cmp2 = 0;
+                };
+            };
 
-template<class T, class Tag> struct member;
+            typedef void (*ref_tag)(int &);
 
-template<class T>
-struct member<T,ref_tag>
-{
-    T& value;
+            typedef void (*val_tag)(int);
+
+            template<class T, class Tag>
+            struct member;
+
+            template<class T>
+            struct member<T, ref_tag> {
+                T &value;
 #if !BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01
-    member(T& ref) : value(ref) {}
-#endif
-};
 
-template<class T>
-struct member<T,val_tag>
-{
-    T value;
+                member(T &ref) : value(ref) {}
+
+#endif
+            };
+
+            template<class T>
+            struct member<T, val_tag> {
+                T value;
 #if !BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01
-    member(T& val) : value(val) {}
+
+                member(T &val) : value(val) {}
+
 #endif
-};
+            };
 
-template<class T> inline T& deref(T* p, ref_tag) { return *p; }
-template<class T> inline T& deref(T& r, val_tag) { return  r; }
+            template<class T>
+            inline T &deref(T *p, ref_tag) { return *p; }
 
-template<class T>
-struct wrapper
-{
-    typedef T type;
-};
+            template<class T>
+            inline T &deref(T &r, val_tag) { return r; }
 
-template<class T> wrapper<T> wrap(T&);
+            template<class T>
+            struct wrapper {
+                typedef T type;
+            };
 
-} } } // namespace
+            template<class T>
+            wrapper<T> wrap(T &);
+
+        }
+    }
+} // namespace
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::detail::wrapper, 1)
+
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::detail::wrapper,
+1)
 
 #define BOOST_SCOPE_EXIT_AUX_ARGS boost_scope_exit_aux_args
 extern boost::scope_exit::detail::undeclared BOOST_SCOPE_EXIT_AUX_ARGS;
@@ -195,7 +208,7 @@ extern boost::scope_exit::detail::undeclared BOOST_SCOPE_EXIT_AUX_ARGS;
             BOOST_SCOPE_EXIT_DETAIL_PARAM_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
                     i, var) \
     var
- 
+
 #define BOOST_SCOPE_EXIT_AUX_ARG(r, id, i, var) \
     BOOST_PP_COMMA_IF(i) \
     boost_se_params_->BOOST_SCOPE_EXIT_DETAIL_PARAM(id, i, var).value
@@ -598,30 +611,39 @@ msvc_register_type<T, Organizer> typeof_register_type(const T&,
 
 #ifndef BOOST_NO_CXX11_LAMBDAS
 
-namespace boost { namespace scope_exit { namespace aux {
+namespace boost {
+    namespace scope_exit {
+        namespace aux {
 
-template<typename This = void>
-struct guard { // With object `this_` (for backward compatibility).
-    explicit guard(This _this) : this_(_this) {}
-    ~guard() { if(f_) f_(this_); }
-    template<typename Lambda>
-    void operator=(Lambda f) { f_ = f; }
-private:
-    This this_;
-    boost::function<void (This)> f_;
-};
+            template<typename This = void>
+            struct guard { // With object `this_` (for backward compatibility).
+                explicit guard(This _this) : this_(_this) {}
 
-template<>
-struct guard<void> { // Without object `this_` (could capture `this` directly).
-    ~guard() { if(f_) f_(); }
-    template<typename Lambda>
-    void operator=(Lambda f) { f_ = f; }
-private:
-    boost::function<void (void)> f_;
-};
+                ~guard() { if (f_) f_(this_); }
 
-} } } // namespace
-    
+                template<typename Lambda>
+                void operator=(Lambda f) { f_ = f; }
+
+            private:
+                This this_;
+                boost::function<void(This)> f_;
+            };
+
+            template<>
+            struct guard<void> { // Without object `this_` (could capture `this` directly).
+                ~guard() { if (f_) f_(); }
+
+                template<typename Lambda>
+                void operator=(Lambda f) { f_ = f; }
+
+            private:
+                boost::function<void(void)> f_;
+            };
+
+        }
+    }
+} // namespace
+
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id) \
     BOOST_PP_CAT(boost_se_lambda_params_, id)
 

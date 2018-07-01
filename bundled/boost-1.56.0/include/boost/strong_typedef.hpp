@@ -26,7 +26,7 @@
 #include <boost/operators.hpp>
 
 #if !defined(__BORLANDC__) || __BORLANDC__ >= 0x590
-    #define BOOST_STRONG_TYPEDEF(T, D)                              \
+#define BOOST_STRONG_TYPEDEF(T, D)                              \
     struct D                                                        \
         : boost::totally_ordered1< D                                \
         , boost::totally_ordered2< D, T                             \
@@ -44,7 +44,7 @@
         bool operator<(const D & rhs) const { return t < rhs.t; }   \
     };
 #else
-    #define BOOST_STRONG_TYPEDEF(T, D)                              \
+#define BOOST_STRONG_TYPEDEF(T, D)                              \
     struct D                                                        \
         : boost::totally_ordered1< D                                \
         , boost::totally_ordered2< D, T                             \

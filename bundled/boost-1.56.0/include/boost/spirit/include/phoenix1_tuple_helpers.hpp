@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_TUPLE_HELPERS
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_TUPLE_HELPERS
+
 #include <boost/spirit/home/classic/phoenix/tuple_helpers.hpp>
+
 #endif

@@ -10,34 +10,32 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/minus.hpp>
 
-namespace boost { namespace fusion
-{
-    struct vector_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct vector_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct distance_impl;
+        namespace extension {
+            template<typename Tag>
+            struct distance_impl;
 
-        template <>
-        struct distance_impl<vector_iterator_tag>
-        {
-            template <typename First, typename Last>
-            struct apply : mpl::minus<typename Last::index, typename First::index>
-            {    
-                BOOST_FUSION_GPU_ENABLED
-                static typename mpl::minus<
-                    typename Last::index, typename First::index>::type
-                call(First const&, Last const&)
-                {
-                    typedef typename mpl::minus<
-                        typename Last::index, typename First::index>::type 
-                    result;
-                    return result();
-                }
+            template<>
+            struct distance_impl<vector_iterator_tag> {
+                template<typename First, typename Last>
+                struct apply : mpl::minus<typename Last::index, typename First::index> {
+                    BOOST_FUSION_GPU_ENABLED
+                    static typename mpl::minus<
+                            typename Last::index, typename First::index>::type
+                    call(First const&, Last const&)
+                    {
+                        typedef typename mpl::minus<
+                                typename Last::index, typename First::index>::type
+                                result;
+                        return result();
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

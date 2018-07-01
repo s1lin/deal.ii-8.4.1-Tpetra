@@ -22,20 +22,19 @@
 #include <ostream>
 
 namespace boost {
-namespace numeric {
+    namespace numeric {
 
-template<class CharType, class CharTraits, class T, class Policies>
-std::basic_ostream<CharType, CharTraits> &operator<<
-  (std::basic_ostream<CharType, CharTraits> &stream,
-   interval<T, Policies> const &value)
-{
-  if (empty(value))
-    return stream << "[]";
-  else
-    return stream << '[' << lower(value) << ',' << upper(value) << ']';
-}
+        template<class CharType, class CharTraits, class T, class Policies>
+        std::basic_ostream<CharType, CharTraits> &operator<<
+                (std::basic_ostream<CharType, CharTraits> &stream,
+                 interval <T, Policies> const &value) {
+            if (empty(value))
+                return stream << "[]";
+            else
+                return stream << '[' << lower(value) << ',' << upper(value) << ']';
+        }
 
-} // namespace numeric
+    } // namespace numeric
 } // namespace boost
 
 #endif // BOOST_NUMERIC_INTERVAL_IO_HPP

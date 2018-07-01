@@ -14,11 +14,15 @@
 // $Date$
 // $Revision$
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template< typename Tag > struct insert_impl;
-template< typename Sequence, typename Pos_or_T, typename T > struct insert;
+        template<typename Tag>
+        struct insert_impl;
+        template<typename Sequence, typename Pos_or_T, typename T>
+        struct insert;
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_INSERT_FWD_HPP_INCLUDED

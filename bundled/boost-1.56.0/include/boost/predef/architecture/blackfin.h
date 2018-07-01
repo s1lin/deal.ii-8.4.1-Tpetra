@@ -41,7 +41,9 @@ Blackfin Processors from Analog Devices.
 #define BOOST_ARCH_BLACKFIN_NAME "Blackfin"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_BLACKFIN,BOOST_ARCH_BLACKFIN_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_BLACKFIN,
+BOOST_ARCH_BLACKFIN_NAME)
 
 
 #endif

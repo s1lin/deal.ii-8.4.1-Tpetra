@@ -14,7 +14,7 @@
 #include <boost/type_traits/detail/template_arity_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
-#define BOOST_TT_AUX_TYPE_TRAIT_DEF1(trait,T,result) \
+#define BOOST_TT_AUX_TYPE_TRAIT_DEF1(trait, T, result) \
 template< typename T > struct trait \
 { \
 public:\
@@ -25,7 +25,7 @@ public:\
 BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
 /**/
 
-#define BOOST_TT_AUX_TYPE_TRAIT_SPEC1(trait,spec,result) \
+#define BOOST_TT_AUX_TYPE_TRAIT_SPEC1(trait, spec, result) \
 template<> struct trait<spec> \
 { \
 public:\
@@ -34,7 +34,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(trait,spec,result) \
+#define BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(trait, spec, result) \
 template<> struct trait##_impl<spec> \
 { \
 public:\
@@ -42,7 +42,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(param,trait,spec,result) \
+#define BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(param, trait, spec, result) \
 template< param > struct trait<spec> \
 { \
 public:\
@@ -50,7 +50,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(param1,param2,trait,spec,result) \
+#define BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(param1, param2, trait, spec, result) \
 template< param1, param2 > struct trait<spec> \
 { \
 public:\
@@ -58,7 +58,7 @@ public:\
 }; \
 /**/
 
-#define BOOST_TT_AUX_TYPE_TRAIT_IMPL_PARTIAL_SPEC1_1(param,trait,spec,result) \
+#define BOOST_TT_AUX_TYPE_TRAIT_IMPL_PARTIAL_SPEC1_1(param, trait, spec, result) \
 template< param > struct trait##_impl<spec> \
 { \
 public:\

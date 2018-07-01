@@ -22,16 +22,19 @@
 #include <boost/utility/enable_if.hpp>
 
 #if !defined(BOOST_NO_SFINAE)
+
 #include <boost/type_traits/is_convertible.hpp>
+
 #endif
 
-namespace boost{
+namespace boost {
 
-template<class T> class reference_wrapper; /* fwd decl. */
+    template<class T>
+    class reference_wrapper; /* fwd decl. */
 
-namespace multi_index{
+    namespace multi_index {
 
-namespace detail{
+        namespace detail {
 
 /* global_fun is a read-only key extractor from Value based on a given global
  * (or static member) function with signature:
@@ -46,131 +49,118 @@ namespace detail{
  * arbitrary combinations of these (vg. T** or auto_ptr<T*>.)
  */
 
-template<class Value,typename Type,Type (*PtrToFunction)(Value)>
-struct const_ref_global_fun_base
-{
-  typedef typename remove_reference<Type>::type result_type;
+            template<class Value, typename Type, Type (*PtrToFunction)(Value)>
+            struct const_ref_global_fun_base {
+                typedef typename remove_reference<Type>::type result_type;
 
-  template<typename ChainedPtr>
-
-#if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,Value>,Type>::type
-#else
-  Type
-#endif
-
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
-
-  Type operator()(Value x)const
-  {
-    return PtrToFunction(x);
-  }
-
-  Type operator()(
-    const reference_wrapper<
-      typename remove_reference<Value>::type>& x)const
-  { 
-    return operator()(x.get());
-  }
-
-  Type operator()(
-    const reference_wrapper<
-      typename remove_const<
-        typename remove_reference<Value>::type>::type>& x)const
-  { 
-    return operator()(x.get());
-  }
-};
-
-template<class Value,typename Type,Type (*PtrToFunction)(Value)>
-struct non_const_ref_global_fun_base
-{
-  typedef typename remove_reference<Type>::type result_type;
-
-  template<typename ChainedPtr>
+                template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<ChainedPtr&,Value>,Type>::type
+                typename disable_if<
+                        is_convertible<const ChainedPtr &, Value>, Type>::type
 #else
-  Type
+                Type
 #endif
 
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
 
-  Type operator()(Value x)const
-  {
-    return PtrToFunction(x);
-  }
+                Type operator()(Value x) const {
+                    return PtrToFunction(x);
+                }
 
-  Type operator()(
-    const reference_wrapper<
-      typename remove_reference<Value>::type>& x)const
-  { 
-    return operator()(x.get());
-  }
-};
+                Type operator()(
+                        const reference_wrapper<
+                                typename remove_reference<Value>::type> &x) const {
+                    return operator()(x.get());
+                }
 
-template<class Value,typename Type,Type (*PtrToFunction)(Value)>
-struct non_ref_global_fun_base
-{
-  typedef typename remove_reference<Type>::type result_type;
+                Type operator()(
+                        const reference_wrapper<
+                                typename remove_const<
+                                        typename remove_reference<Value>::type>::type> &x) const {
+                    return operator()(x.get());
+                }
+            };
 
-  template<typename ChainedPtr>
+            template<class Value, typename Type, Type (*PtrToFunction)(Value)>
+            struct non_const_ref_global_fun_base {
+                typedef typename remove_reference<Type>::type result_type;
+
+                template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,const Value&>,Type>::type
+                typename disable_if<
+                        is_convertible < ChainedPtr & , Value>,Type>
+
+                ::type
 #else
-  Type
+                Type
 #endif
 
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
 
-  Type operator()(const Value& x)const
-  {
-    return PtrToFunction(x);
-  }
+                Type operator()(Value x) const {
+                    return PtrToFunction(x);
+                }
 
-  Type operator()(const reference_wrapper<const Value>& x)const
-  { 
-    return operator()(x.get());
-  }
+                Type operator()(
+                        const reference_wrapper<
+                                typename remove_reference<Value>::type> &x) const {
+                    return operator()(x.get());
+                }
+            };
 
-  Type operator()(
-    const reference_wrapper<typename remove_const<Value>::type>& x)const
-  { 
-    return operator()(x.get());
-  }
-};
+            template<class Value, typename Type, Type (*PtrToFunction)(Value)>
+            struct non_ref_global_fun_base {
+                typedef typename remove_reference<Type>::type result_type;
 
-} /* namespace multi_index::detail */
+                template<typename ChainedPtr>
 
-template<class Value,typename Type,Type (*PtrToFunction)(Value)>
-struct global_fun:
-  mpl::if_c<
-    is_reference<Value>::value,
-    typename mpl::if_c<
-      is_const<typename remove_reference<Value>::type>::value,
-      detail::const_ref_global_fun_base<Value,Type,PtrToFunction>,
-      detail::non_const_ref_global_fun_base<Value,Type,PtrToFunction>
-    >::type,
-    detail::non_ref_global_fun_base<Value,Type,PtrToFunction>
-  >::type
-{
-};
+#if !defined(BOOST_NO_SFINAE)
+                typename disable_if<
+                        is_convertible<const ChainedPtr &, const Value &>, Type>::type
+#else
+                Type
+#endif
 
-} /* namespace multi_index */
+                operator()(const ChainedPtr &x) const {
+                    return operator()(*x);
+                }
+
+                Type operator()(const Value &x) const {
+                    return PtrToFunction(x);
+                }
+
+                Type operator()(const reference_wrapper<const Value> &x) const {
+                    return operator()(x.get());
+                }
+
+                Type operator()(
+                        const reference_wrapper<typename remove_const<Value>::type> &x) const {
+                    return operator()(x.get());
+                }
+            };
+
+        } /* namespace multi_index::detail */
+
+        template<class Value, typename Type, Type (*PtrToFunction)(Value)>
+        struct global_fun :
+                mpl::if_c<
+                        is_reference<Value>::value,
+                        typename mpl::if_c<
+                                is_const<typename remove_reference<Value>::type>::value,
+                                detail::const_ref_global_fun_base<Value, Type, PtrToFunction>,
+                                detail::non_const_ref_global_fun_base<Value, Type, PtrToFunction>
+                        >::type,
+                        detail::non_ref_global_fun_base<Value, Type, PtrToFunction>
+                >::type {
+        };
+
+    } /* namespace multi_index */
 
 } /* namespace boost */
 

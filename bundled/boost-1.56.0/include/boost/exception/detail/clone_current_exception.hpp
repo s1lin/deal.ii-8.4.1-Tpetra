@@ -5,7 +5,7 @@
 
 #ifndef UUID_81522C0EB56511DFAB613DB0DFD72085
 #define UUID_81522C0EB56511DFAB613DB0DFD72085
-#if (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#if (__GNUC__ * 100 + __GNUC_MINOR__ > 301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
 #endif
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
@@ -17,11 +17,9 @@
 #endif
 
 namespace
-boost
-    {
+boost {
     namespace
-    exception_detail
-        {
+    exception_detail {
         class clone_base;
 
 #ifdef BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR
@@ -29,26 +27,24 @@ boost
 #endif
 
         namespace
-        clone_current_exception_result
-            {
-            int const success=0;
-            int const bad_alloc=1;
-            int const bad_exception=2;
-            int const not_supported=3;
-            }
+        clone_current_exception_result {
+            int const success = 0;
+            int const bad_alloc = 1;
+            int const bad_exception = 2;
+            int const not_supported = 3;
+        }
 
         inline
         int
-        clone_current_exception( clone_base const * & cloned )
-            {
+        clone_current_exception(clone_base const *&cloned) {
 #ifdef BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR
             return clone_current_exception_non_intrusive(cloned);
 #else
             return clone_current_exception_result::not_supported;
 #endif
-            }
         }
     }
+}
 
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma warning(pop)

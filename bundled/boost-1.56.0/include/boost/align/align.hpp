@@ -22,7 +22,9 @@
  @cond
 */
 #if !defined(BOOST_NO_CXX11_STD_ALIGN)
+
 #include <boost/align/detail/align_cxx11.hpp>
+
 #else
 #include <boost/align/detail/align.hpp>
 #endif

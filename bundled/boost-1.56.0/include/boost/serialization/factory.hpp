@@ -19,28 +19,28 @@
 #include <cstdarg> // valist
 #include <cstddef> // NULL
 
-#include <boost/preprocessor/control/if.hpp> 
+#include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/comparison/greater.hpp>
 #include <boost/preprocessor/facilities/empty.hpp>
 
-namespace std{
-    #if defined(__LIBCOMO__)
-        using ::va_list;
-    #endif
+namespace std {
+#if defined(__LIBCOMO__)
+    using ::va_list;
+#endif
 } // namespace std
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
 // default implementation does nothing.
-template<class T, int N>
-T * factory(std::va_list){
-    BOOST_ASSERT(false);
-    // throw exception here?
-    return NULL;
-}
+        template<class T, int N>
+        T *factory(std::va_list) {
+            BOOST_ASSERT(false);
+            // throw exception here?
+            return NULL;
+        }
 
-} // namespace serialization
+    } // namespace serialization
 } // namespace boost
 
 #define BOOST_SERIALIZATION_FACTORY(N, T, A0, A1, A2, A3) \

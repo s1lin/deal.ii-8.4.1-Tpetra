@@ -16,15 +16,15 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<conductivity_dimension,si::system>    conductivity;
-                                        
-} // namespace si
+            typedef unit <conductivity_dimension, si::system> conductivity;
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

@@ -27,7 +27,7 @@
 // Specify the name of the .lib file.
 #  pragma comment(lib, BOOST_STRINGIZE(BOOST_ZLIB_BINARY))
 # endif
-#else 
+#else
 # if !defined(BOOST_IOSTREAMS_SOURCE) && \
      !defined(BOOST_ALL_NO_LIB) && \
      !defined(BOOST_IOSTREAMS_NO_LIB) \
@@ -44,6 +44,7 @@
 
 // And include the header that does the work.
 #  include <boost/config/auto_link.hpp>
+
 # endif
 #endif
 

@@ -9,32 +9,32 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_scale
-(
-    double X [ ],
-    const double B [ ],
-    void *Numeric
-) ;
+        (
+                double X[],
+                const double B[],
+                void *Numeric
+        );
 
 UF_long umfpack_dl_scale
-(
-    double X [ ],
-    const double B [ ],
-    void *Numeric
-) ;
+        (
+                double X[],
+                const double B[],
+                void *Numeric
+        );
 
 int umfpack_zi_scale
-(
-    double Xx [ ],	 double Xz [ ],
-    const double Bx [ ], const double Bz [ ],
-    void *Numeric
-) ;
+        (
+                double Xx[], double Xz[],
+                const double Bx[], const double Bz[],
+                void *Numeric
+        );
 
 UF_long umfpack_zl_scale
-(
-    double Xx [ ],	 double Xz [ ],
-    const double Bx [ ], const double Bz [ ],
-    void *Numeric
-) ;
+        (
+                double Xx[], double Xz[],
+                const double Bx[], const double Bz[],
+                void *Numeric
+        );
 
 /*
 double int Syntax:

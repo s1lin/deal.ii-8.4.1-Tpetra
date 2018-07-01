@@ -24,124 +24,109 @@
 #include <boost/weak_ptr.hpp>
 
 namespace boost {
-  namespace signals2 {
-    namespace detail {
-      template<typename ResultType, typename Function>
-        class slot_call_iterator_cache
-      {
-      public:
-        slot_call_iterator_cache(const Function &f_arg):
-          f(f_arg),
-          connected_slot_count(0),
-          disconnected_slot_count(0)
-        {}
-        optional<ResultType> result;
-        typedef auto_buffer<void_shared_ptr_variant, store_n_objects<10> > tracked_ptrs_type;
-        tracked_ptrs_type tracked_ptrs;
-        Function f;
-        unsigned connected_slot_count;
-        unsigned disconnected_slot_count;
-      };
+    namespace signals2 {
+        namespace detail {
+            template<typename ResultType, typename Function>
+            class slot_call_iterator_cache {
+            public:
+                slot_call_iterator_cache(const Function &f_arg) :
+                        f(f_arg),
+                        connected_slot_count(0),
+                        disconnected_slot_count(0) {}
 
-      // Generates a slot call iterator. Essentially, this is an iterator that:
-      //   - skips over disconnected slots in the underlying list
-      //   - calls the connected slots when dereferenced
-      //   - caches the result of calling the slots
-      template<typename Function, typename Iterator, typename ConnectionBody>
-      class slot_call_iterator_t
-        : public boost::iterator_facade<slot_call_iterator_t<Function, Iterator, ConnectionBody>,
-        typename Function::result_type,
-        boost::single_pass_traversal_tag,
-        typename Function::result_type const&>
-      {
-        typedef boost::iterator_facade<slot_call_iterator_t<Function, Iterator, ConnectionBody>,
-          typename Function::result_type,
-          boost::single_pass_traversal_tag,
-          typename Function::result_type const&>
-        inherited;
+                optional <ResultType> result;
+                typedef auto_buffer <void_shared_ptr_variant, store_n_objects<10>> tracked_ptrs_type;
+                tracked_ptrs_type tracked_ptrs;
+                Function f;
+                unsigned connected_slot_count;
+                unsigned disconnected_slot_count;
+            };
 
-        typedef typename Function::result_type result_type;
+            // Generates a slot call iterator. Essentially, this is an iterator that:
+            //   - skips over disconnected slots in the underlying list
+            //   - calls the connected slots when dereferenced
+            //   - caches the result of calling the slots
+            template<typename Function, typename Iterator, typename ConnectionBody>
+            class slot_call_iterator_t
+                    : public boost::iterator_facade<slot_call_iterator_t<Function, Iterator, ConnectionBody>,
+                            typename Function::result_type,
+                            boost::single_pass_traversal_tag,
+                            typename Function::result_type const &> {
+                typedef boost::iterator_facade<slot_call_iterator_t<Function, Iterator, ConnectionBody>,
+                        typename Function::result_type,
+                        boost::single_pass_traversal_tag,
+                        typename Function::result_type const &>
+                        inherited;
 
-        friend class boost::iterator_core_access;
+                typedef typename Function::result_type result_type;
 
-      public:
-        slot_call_iterator_t(Iterator iter_in, Iterator end_in,
-          slot_call_iterator_cache<result_type, Function> &c):
-          iter(iter_in), end(end_in),
-          cache(&c), callable_iter(end_in)
-        {
-          lock_next_callable();
-        }
+                friend class boost::iterator_core_access;
 
-        typename inherited::reference
-        dereference() const
-        {
-          if (!cache->result) {
-            try
-            {
-              cache->result.reset(cache->f(*iter));
-            }
-            catch(expired_slot &)
-            {
-              (*iter)->disconnect();
-              throw;
-            }
-          }
-          return cache->result.get();
-        }
+            public:
+                slot_call_iterator_t(Iterator iter_in, Iterator end_in,
+                                     slot_call_iterator_cache<result_type, Function> &c) :
+                        iter(iter_in), end(end_in),
+                        cache(&c), callable_iter(end_in) {
+                    lock_next_callable();
+                }
 
-        void increment()
-        {
-          ++iter;
-          lock_next_callable();
-          cache->result.reset();
-        }
+                typename inherited::reference
+                dereference() const {
+                    if (!cache->result) {
+                        try {
+                            cache->result.reset(cache->f(*iter));
+                        }
+                        catch (expired_slot &) {
+                            (*iter)->disconnect();
+                            throw;
+                        }
+                    }
+                    return cache->result.get();
+                }
 
-        bool equal(const slot_call_iterator_t& other) const
-        {
-          return iter == other.iter;
-        }
+                void increment() {
+                    ++iter;
+                    lock_next_callable();
+                    cache->result.reset();
+                }
 
-      private:
-        typedef unique_lock<connection_body_base> lock_type;
+                bool equal(const slot_call_iterator_t &other) const {
+                    return iter == other.iter;
+                }
 
-        void lock_next_callable() const
-        {
-          if(iter == callable_iter)
-          {
-            return;
-          }
-          for(;iter != end; ++iter)
-          {
-            lock_type lock(**iter);
-            cache->tracked_ptrs.clear();
-            (*iter)->nolock_grab_tracked_objects(std::back_inserter(cache->tracked_ptrs));
-            if((*iter)->nolock_nograb_connected())
-            {
-              ++cache->connected_slot_count;
-            }else
-            {
-              ++cache->disconnected_slot_count;
-            }
-            if((*iter)->nolock_nograb_blocked() == false)
-            {
-              callable_iter = iter;
-              break;
-            }
-          }
-          if(iter == end)
-          {
-            callable_iter = end;
-          }
-        }
+            private:
+                typedef unique_lock <connection_body_base> lock_type;
 
-        mutable Iterator iter;
-        Iterator end;
-        slot_call_iterator_cache<result_type, Function> *cache;
-        mutable Iterator callable_iter;
-      };
-    } // end namespace detail
-  } // end namespace BOOST_SIGNALS_NAMESPACE
+                void lock_next_callable() const {
+                    if (iter == callable_iter) {
+                        return;
+                    }
+                    for (; iter != end; ++iter) {
+                        lock_type lock(**iter);
+                        cache->tracked_ptrs.clear();
+                        (*iter)->nolock_grab_tracked_objects(std::back_inserter(cache->tracked_ptrs));
+                        if ((*iter)->nolock_nograb_connected()) {
+                            ++cache->connected_slot_count;
+                        } else {
+                            ++cache->disconnected_slot_count;
+                        }
+                        if ((*iter)->nolock_nograb_blocked() == false) {
+                            callable_iter = iter;
+                            break;
+                        }
+                    }
+                    if (iter == end) {
+                        callable_iter = end;
+                    }
+                }
+
+                mutable Iterator iter;
+                Iterator end;
+                slot_call_iterator_cache<result_type, Function> *cache;
+                mutable Iterator callable_iter;
+            };
+        } // end namespace detail
+    } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
 
 #endif // BOOST_SIGNALS2_SLOT_CALL_ITERATOR_HPP

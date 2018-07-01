@@ -31,7 +31,7 @@
 */
 
 namespace boost {
-    namespace algorithm { 
+    namespace algorithm {
 
 //  find_iterator -----------------------------------------------//
 
@@ -47,25 +47,26 @@ namespace boost {
             the current match.
         */
         template<typename IteratorT>
-        class find_iterator : 
-            public iterator_facade<
-                find_iterator<IteratorT>,
-                const iterator_range<IteratorT>,
-                forward_traversal_tag >,
-            private detail::find_iterator_base<IteratorT>
-        {
+        class find_iterator :
+                public iterator_facade<
+                        find_iterator<IteratorT>,
+                        const iterator_range <IteratorT>,
+                        forward_traversal_tag>,
+                private detail::find_iterator_base<IteratorT> {
         private:
             // facade support
             friend class ::boost::iterator_core_access;
 
         private:
-        // typedefs
+            // typedefs
 
-            typedef detail::find_iterator_base<IteratorT> base_type;
-            typedef BOOST_STRING_TYPENAME 
-                base_type::input_iterator_type input_iterator_type;
-            typedef BOOST_STRING_TYPENAME 
-                base_type::match_type match_type;
+            typedef detail::find_iterator_base <IteratorT> base_type;
+            typedef BOOST_STRING_TYPENAME
+                    base_type
+            ::input_iterator_type input_iterator_type;
+            typedef BOOST_STRING_TYPENAME
+                    base_type
+            ::match_type match_type;
 
         public:
             //! Default constructor
@@ -80,10 +81,10 @@ namespace boost {
             /*!
                 Construct a copy of the find_iterator
             */
-            find_iterator( const find_iterator& Other ) :
-                base_type(Other),
-                m_Match(Other.m_Match),
-                m_End(Other.m_End) {}
+            find_iterator(const find_iterator &Other) :
+                    base_type(Other),
+                    m_Match(Other.m_Match),
+                    m_End(Other.m_End) {}
 
             //! Constructor
             /*!
@@ -94,11 +95,10 @@ namespace boost {
             find_iterator(
                     IteratorT Begin,
                     IteratorT End,
-                    FinderT Finder ) :
-                detail::find_iterator_base<IteratorT>(Finder,0),
-                m_Match(Begin,Begin),
-                m_End(End)
-            {
+                    FinderT Finder) :
+                    detail::find_iterator_base<IteratorT>(Finder, 0),
+                    m_Match(Begin, Begin),
+                    m_End(End) {
                 increment();
             }
 
@@ -109,47 +109,44 @@ namespace boost {
             */
             template<typename FinderT, typename RangeT>
             find_iterator(
-                    RangeT& Col,
-                    FinderT Finder ) :
-                detail::find_iterator_base<IteratorT>(Finder,0)
-            {
-                iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_col(::boost::as_literal(Col));
-                m_Match=::boost::make_iterator_range(::boost::begin(lit_col), ::boost::begin(lit_col));
-                m_End=::boost::end(lit_col);
+                    RangeT &Col,
+                    FinderT Finder) :
+                    detail::find_iterator_base<IteratorT>(Finder, 0) {
+                iterator_range < BOOST_STRING_TYPENAME
+                range_iterator<RangeT>::type > lit_col(::boost::as_literal(Col));
+                m_Match = ::boost::make_iterator_range(::boost::begin(lit_col), ::boost::begin(lit_col));
+                m_End = ::boost::end(lit_col);
 
                 increment();
             }
 
         private:
-        // iterator operations
+            // iterator operations
 
             // dereference
-            const match_type& dereference() const
-            {
+            const match_type &dereference() const {
                 return m_Match;
             }
 
             // increment
-            void increment()
-            {
-                m_Match=this->do_find(m_Match.end(),m_End);
+            void increment() {
+                m_Match = this->do_find(m_Match.end(), m_End);
             }
 
             // comparison
-            bool equal( const find_iterator& Other ) const
-            {
-                bool bEof=eof();
-                bool bOtherEof=Other.eof();
+            bool equal(const find_iterator &Other) const {
+                bool bEof = eof();
+                bool bOtherEof = Other.eof();
 
-                return bEof || bOtherEof ? bEof==bOtherEof :
-                    (
-                        m_Match==Other.m_Match &&
-                        m_End==Other.m_End 
-                    );
+                return bEof || bOtherEof ? bEof == bOtherEof :
+                       (
+                               m_Match == Other.m_Match &&
+                               m_End == Other.m_End
+                       );
             }
 
         public:
-        // operations
+            // operations
 
             //! Eof check
             /*!
@@ -157,18 +154,17 @@ namespace boost {
                 there is nothing more to be searched i.e. find_iterator
                 is after the last match.
             */
-            bool eof() const
-            {
-                return 
-                    this->is_null() || 
-                    ( 
-                        m_Match.begin() == m_End &&
-                        m_Match.end() == m_End
-                    );
+            bool eof() const {
+                return
+                        this->is_null() ||
+                        (
+                                m_Match.begin() == m_End &&
+                                m_Match.end() == m_End
+                        );
             }
 
         private:
-        // Attributes
+            // Attributes
             match_type m_Match;
             input_iterator_type m_End;
         };
@@ -178,14 +174,13 @@ namespace boost {
          *    Construct a find iterator to iterate through the specified string
          */
         template<typename RangeT, typename FinderT>
-        inline find_iterator< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        inline find_iterator<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         make_find_iterator(
-            RangeT& Collection,
-            FinderT Finder)
-        {
+                RangeT &Collection,
+                FinderT Finder) {
             return find_iterator<BOOST_STRING_TYPENAME range_iterator<RangeT>::type>(
-                Collection, Finder);
+                    Collection, Finder);
         }
 
 //  split iterator -----------------------------------------------//
@@ -203,25 +198,26 @@ namespace boost {
             the current match.
         */
         template<typename IteratorT>
-        class split_iterator : 
-            public iterator_facade<
-                split_iterator<IteratorT>,
-                const iterator_range<IteratorT>,
-                forward_traversal_tag >,
-            private detail::find_iterator_base<IteratorT>
-        {
+        class split_iterator :
+                public iterator_facade<
+                        split_iterator<IteratorT>,
+                        const iterator_range <IteratorT>,
+                        forward_traversal_tag>,
+                private detail::find_iterator_base<IteratorT> {
         private:
             // facade support
             friend class ::boost::iterator_core_access;
 
         private:
-        // typedefs
+            // typedefs
 
-            typedef detail::find_iterator_base<IteratorT> base_type;
-            typedef BOOST_STRING_TYPENAME 
-                base_type::input_iterator_type input_iterator_type;
-            typedef BOOST_STRING_TYPENAME 
-                base_type::match_type match_type;
+            typedef detail::find_iterator_base <IteratorT> base_type;
+            typedef BOOST_STRING_TYPENAME
+                    base_type
+            ::input_iterator_type input_iterator_type;
+            typedef BOOST_STRING_TYPENAME
+                    base_type
+            ::match_type match_type;
 
         public:
             //! Default constructor
@@ -235,13 +231,12 @@ namespace boost {
             /*!
                 Construct a copy of the split_iterator
             */
-            split_iterator( const split_iterator& Other ) :
-                base_type(Other),
-                m_Match(Other.m_Match),
-                m_Next(Other.m_Next),
-                m_End(Other.m_End),
-                m_bEof(Other.m_bEof)
-            {}
+            split_iterator(const split_iterator &Other) :
+                    base_type(Other),
+                    m_Match(Other.m_Match),
+                    m_Next(Other.m_Next),
+                    m_End(Other.m_End),
+                    m_bEof(Other.m_bEof) {}
 
             //! Constructor
             /*!
@@ -252,16 +247,14 @@ namespace boost {
             split_iterator(
                     IteratorT Begin,
                     IteratorT End,
-                    FinderT Finder ) :
-                detail::find_iterator_base<IteratorT>(Finder,0),
-                m_Match(Begin,Begin),
-                m_Next(Begin),
-                m_End(End),
-                m_bEof(false)
-            {
+                    FinderT Finder) :
+                    detail::find_iterator_base<IteratorT>(Finder, 0),
+                    m_Match(Begin, Begin),
+                    m_Next(Begin),
+                    m_End(End),
+                    m_bEof(false) {
                 // force the correct behavior for empty sequences and yield at least one token
-                if(Begin!=End)
-                {
+                if (Begin != End) {
                     increment();
                 }
             }
@@ -272,67 +265,61 @@ namespace boost {
             */
             template<typename FinderT, typename RangeT>
             split_iterator(
-                    RangeT& Col,
-                    FinderT Finder ) :
-                detail::find_iterator_base<IteratorT>(Finder,0),
-                m_bEof(false)
-            {
-                iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_col(::boost::as_literal(Col));
-                m_Match=make_iterator_range(::boost::begin(lit_col), ::boost::begin(lit_col));
-                m_Next=::boost::begin(lit_col);
-                m_End=::boost::end(lit_col);
+                    RangeT &Col,
+                    FinderT Finder) :
+                    detail::find_iterator_base<IteratorT>(Finder, 0),
+                    m_bEof(false) {
+                iterator_range < BOOST_STRING_TYPENAME
+                range_iterator<RangeT>::type > lit_col(::boost::as_literal(Col));
+                m_Match = make_iterator_range(::boost::begin(lit_col), ::boost::begin(lit_col));
+                m_Next = ::boost::begin(lit_col);
+                m_End = ::boost::end(lit_col);
 
                 // force the correct behavior for empty sequences and yield at least one token
-                if(m_Next!=m_End)
-                {
+                if (m_Next != m_End) {
                     increment();
                 }
             }
 
 
         private:
-        // iterator operations
+            // iterator operations
 
             // dereference
-            const match_type& dereference() const
-            {
+            const match_type &dereference() const {
                 return m_Match;
             }
 
             // increment
-            void increment()
-            {
-                match_type FindMatch=this->do_find( m_Next, m_End );
+            void increment() {
+                match_type FindMatch = this->do_find(m_Next, m_End);
 
-                if(FindMatch.begin()==m_End && FindMatch.end()==m_End)
-                {
-                    if(m_Match.end()==m_End)
-                    {
+                if (FindMatch.begin() == m_End && FindMatch.end() == m_End) {
+                    if (m_Match.end() == m_End) {
                         // Mark iterator as eof
-                        m_bEof=true;
+                        m_bEof = true;
                     }
                 }
 
-                m_Match=match_type( m_Next, FindMatch.begin() );
-                m_Next=FindMatch.end();
+                m_Match = match_type(m_Next, FindMatch.begin());
+                m_Next = FindMatch.end();
             }
 
             // comparison
-            bool equal( const split_iterator& Other ) const
-            {
-                bool bEof=eof();
-                bool bOtherEof=Other.eof();
+            bool equal(const split_iterator &Other) const {
+                bool bEof = eof();
+                bool bOtherEof = Other.eof();
 
-                return bEof || bOtherEof ? bEof==bOtherEof :
-                    (
-                        m_Match==Other.m_Match &&
-                        m_Next==Other.m_Next &&
-                        m_End==Other.m_End
-                    );
+                return bEof || bOtherEof ? bEof == bOtherEof :
+                       (
+                               m_Match == Other.m_Match &&
+                               m_Next == Other.m_Next &&
+                               m_End == Other.m_End
+                       );
             }
 
         public:
-        // operations
+            // operations
 
             //! Eof check
             /*!
@@ -340,13 +327,12 @@ namespace boost {
                 there is nothing more to be searched i.e. find_iterator
                 is after the last match.
             */
-            bool eof() const
-            {
+            bool eof() const {
                 return this->is_null() || m_bEof;
             }
 
         private:
-        // Attributes
+            // Attributes
             match_type m_Match;
             input_iterator_type m_Next;
             input_iterator_type m_End;
@@ -358,14 +344,13 @@ namespace boost {
          *    Construct a split iterator to iterate through the specified collection
          */
         template<typename RangeT, typename FinderT>
-        inline split_iterator< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        inline split_iterator<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         make_split_iterator(
-            RangeT& Collection,
-            FinderT Finder)
-        {
+                RangeT &Collection,
+                FinderT Finder) {
             return split_iterator<BOOST_STRING_TYPENAME range_iterator<RangeT>::type>(
-                Collection, Finder);
+                    Collection, Finder);
         }
 
 

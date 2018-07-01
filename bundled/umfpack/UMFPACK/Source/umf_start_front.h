@@ -5,9 +5,9 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_start_front
-(
-    Int chain,
-    NumericType *Numeric,
-    WorkType *Work,
-    SymbolicType *Symbolic
-) ;
+        (
+                Int chain,
+                NumericType *Numeric,
+                WorkType *Work,
+                SymbolicType *Symbolic
+        );

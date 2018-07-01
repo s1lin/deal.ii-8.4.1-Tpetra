@@ -18,32 +18,41 @@
 #include <boost/ref.hpp>
 #include <boost/mpl/aux_/config/gpu.hpp>
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-template< typename F >
-BOOST_MPL_CFG_GPU_ENABLED
-inline
-F& unwrap(F& f, long)
-{
-    return f;
-}
+            template<typename F>
+            BOOST_MPL_CFG_GPU_ENABLED
+            inline
+                    F
+            &
+            unwrap(F
+            & f, long) {
+            return
+            f;
+        }
 
-template< typename F >
-BOOST_MPL_CFG_GPU_ENABLED
-inline
-F&
-unwrap(reference_wrapper<F>& f, int)
-{
-    return f;
-}
+        template<typename F>
+        BOOST_MPL_CFG_GPU_ENABLED
+        inline
+                F
+        &
+        unwrap(reference_wrapper<F>
+        & f, int) {
+        return
+        f;
+    }
 
-template< typename F >
-BOOST_MPL_CFG_GPU_ENABLED
-inline
-F&
-unwrap(reference_wrapper<F> const& f, int)
-{
-    return f;
+    template<typename F>
+    BOOST_MPL_CFG_GPU_ENABLED
+    inline
+            F
+    &
+    unwrap(reference_wrapper<F>
+    const& f, int) {
+    return
+    f;
 }
 
 }}}

@@ -46,7 +46,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_IAR_NAME "IAR C/C++"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_IAR,BOOST_COMP_IAR_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_IAR,
+BOOST_COMP_IAR_NAME)
 
 #ifdef BOOST_COMP_IAR_EMULATED
 #include <boost/predef/detail/test.h>

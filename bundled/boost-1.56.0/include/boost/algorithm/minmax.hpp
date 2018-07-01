@@ -30,17 +30,17 @@
 
 namespace boost {
 
-  template <typename T>
-  tuple< T const&, T const& >
-  minmax(T const& a, T const& b) {
-    return (b<a) ? make_tuple(cref(b),cref(a)) : make_tuple(cref(a),cref(b));
-  }
+    template<typename T>
+    tuple<T const &, T const &>
+    minmax(T const &a, T const &b) {
+        return (b < a) ? make_tuple(cref(b), cref(a)) : make_tuple(cref(a), cref(b));
+    }
 
-  template <typename T, class BinaryPredicate>
-  tuple< T const&, T const& >
-  minmax(T const& a, T const& b, BinaryPredicate comp) {
-    return comp(b,a) ? make_tuple(cref(b),cref(a)) : make_tuple(cref(a),cref(b));
-  }
+    template<typename T, class BinaryPredicate>
+    tuple<T const &, T const &>
+    minmax(T const &a, T const &b, BinaryPredicate comp) {
+        return comp(b, a) ? make_tuple(cref(b), cref(a)) : make_tuple(cref(a), cref(b));
+    }
 
 } // namespace boost
 

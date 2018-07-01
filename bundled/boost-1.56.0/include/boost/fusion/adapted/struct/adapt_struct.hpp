@@ -41,7 +41,7 @@
     BOOST_FUSION_ADAPT_STRUCT_C_BASE(                                           \
         TEMPLATE_PARAMS_SEQ,NAME_SEQ,I,BOOST_PP_EMPTY,ATTRIBUTE,2)
 
-#define BOOST_FUSION_ADAPT_TPL_STRUCT(TEMPLATE_PARAMS_SEQ,NAME_SEQ, ATTRIBUTES) \
+#define BOOST_FUSION_ADAPT_TPL_STRUCT(TEMPLATE_PARAMS_SEQ, NAME_SEQ, ATTRIBUTES) \
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \
         (1)TEMPLATE_PARAMS_SEQ,                                                 \
         (1)NAME_SEQ,                                                            \

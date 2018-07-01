@@ -25,84 +25,81 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    struct zip_view_tag;
+        struct zip_view_tag;
 
-    namespace detail
-    {
-        template<typename SeqRef, typename M>
-        struct get_endpoint
-        {
-            typedef typename remove_reference<SeqRef>::type Seq;
-            typedef typename result_of::begin<Seq>::type begin;
-            typedef typename result_of::advance<begin, M>::type type;            
-        };
-
-        template<typename M>
-        struct endpoints
-        {
-            template<typename T>
-            struct result;
-
-            template<typename M1, typename SeqRef>
-            struct result<endpoints<M1>(SeqRef)>
-                : mpl::eval_if<is_same<SeqRef, unused_type const&>,
-                               mpl::identity<unused_type>,
-                               get_endpoint<SeqRef, M> >
-            {
-                BOOST_MPL_ASSERT((is_reference<SeqRef>));
+        namespace detail {
+            template<typename SeqRef, typename M>
+            struct get_endpoint {
+                typedef typename remove_reference<SeqRef>::type Seq;
+                typedef typename result_of::begin<Seq>::type begin;
+                typedef typename result_of::advance<begin, M>::type type;
             };
 
-            template<typename Seq>
-            BOOST_FUSION_GPU_ENABLED
-            typename result<endpoints(Seq&)>::type
-            operator()(Seq& seq) const
-            {
-                return fusion::advance<M>(fusion::begin(seq));
-            }
+            template<typename M>
+            struct endpoints {
+                template<typename T>
+                struct result;
 
-            template<typename Seq>
-            BOOST_FUSION_GPU_ENABLED
-            typename result<endpoints(Seq const&)>::type
-            operator()(Seq const& seq) const
-            {
-                return fusion::advance<M>(fusion::begin(seq));
-            }
+                template<typename M1, typename SeqRef>
+                struct result<endpoints<M1>(SeqRef)>
+                        : mpl::eval_if<is_same < SeqRef, unused_type const &>,
+                          mpl::identity<unused_type>,
+                          get_endpoint<SeqRef, M> >
+                {
+                    BOOST_MPL_ASSERT((is_reference < SeqRef > ));
+                };
 
-            BOOST_FUSION_GPU_ENABLED
-            unused_type operator()(unused_type const&) const
-            {
-                return unused_type();
-            }
-        };
-    }
+                template<typename Seq>
+                BOOST_FUSION_GPU_ENABLED
+                typename result<endpoints(Seq &)>::type
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct end_impl;
+                operator()(Seq &seq) const {
+                    return fusion::advance<M>(fusion::begin(seq));
+                }
 
-        template<>
-        struct end_impl<zip_view_tag>
-        {
-            template<typename Sequence>
-            struct apply
-            {
-                typedef zip_view_iterator<
-                    typename result_of::transform<typename Sequence::sequences, detail::endpoints<typename Sequence::size> >::type,
-                    typename Sequence::category> type;
+                template<typename Seq>
+                BOOST_FUSION_GPU_ENABLED
+                typename result<endpoints(Seq const &)>::type
+
+                operator()(Seq const &seq) const {
+                    return fusion::advance<M>(fusion::begin(seq));
+                }
 
                 BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& sequence)
-                {
-                    return type(
-                        fusion::transform(sequence.sequences_, detail::endpoints<typename Sequence::size>()));
+                        unused_type
+
+                operator()(unused_type const &) const {
+                    return unused_type();
                 }
             };
-        };
+        }
+
+        namespace extension {
+            template<typename Tag>
+            struct end_impl;
+
+            template<>
+            struct end_impl<zip_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef zip_view_iterator<
+                            typename result_of::transform<typename Sequence::sequences, detail::endpoints<typename Sequence::size> >::type,
+                            typename Sequence::category> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& sequence)
+                    {
+                        return type(
+                                fusion::transform(sequence.sequences_, detail::endpoints<typename Sequence::size>()));
+                    }
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

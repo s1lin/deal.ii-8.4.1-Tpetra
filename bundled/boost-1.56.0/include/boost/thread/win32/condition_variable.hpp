@@ -11,9 +11,11 @@
 #include <boost/thread/win32/thread_data.hpp>
 #include <boost/thread/win32/interlocked_read.hpp>
 #include <boost/thread/cv_status.hpp>
+
 #if defined BOOST_THREAD_USES_DATETIME
 #include <boost/thread/xtime.hpp>
 #endif
+
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread_time.hpp>
 #include <boost/thread/lock_guard.hpp>
@@ -33,16 +35,15 @@
 
 #include <boost/config/abi_prefix.hpp>
 
-namespace boost
-{
-    namespace detail
-    {
+namespace boost {
+    namespace detail {
         class basic_cv_list_entry;
-        void intrusive_ptr_add_ref(basic_cv_list_entry * p);
-        void intrusive_ptr_release(basic_cv_list_entry * p);
 
-        class basic_cv_list_entry
-        {
+        void intrusive_ptr_add_ref(basic_cv_list_entry *p);
+
+        void intrusive_ptr_release(basic_cv_list_entry *p);
+
+        class basic_cv_list_entry {
         private:
             detail::win32::handle_manager semaphore;
             detail::win32::handle_manager wake_sem;
@@ -52,74 +53,63 @@ namespace boost
 
         public:
             BOOST_THREAD_NO_COPYABLE(basic_cv_list_entry)
-            explicit basic_cv_list_entry(detail::win32::handle_manager const& wake_sem_):
-                semaphore(detail::win32::create_anonymous_semaphore(0,LONG_MAX)),
-                wake_sem(wake_sem_.duplicate()),
-                waiters(1),notified(false),references(0)
-            {}
 
-            static bool no_waiters(boost::intrusive_ptr<basic_cv_list_entry> const& entry)
-            {
+            explicit basic_cv_list_entry(detail::win32::handle_manager const &wake_sem_) :
+                    semaphore(detail::win32::create_anonymous_semaphore(0, LONG_MAX)),
+                    wake_sem(wake_sem_.duplicate()),
+                    waiters(1), notified(false), references(0) {}
+
+            static bool no_waiters(boost::intrusive_ptr<basic_cv_list_entry> const &entry) {
                 return !detail::interlocked_read_acquire(&entry->waiters);
             }
 
-            void add_waiter()
-            {
+            void add_waiter() {
                 BOOST_INTERLOCKED_INCREMENT(&waiters);
             }
 
-            void remove_waiter()
-            {
+            void remove_waiter() {
                 BOOST_INTERLOCKED_DECREMENT(&waiters);
             }
 
-            void release(unsigned count_to_release)
-            {
-                notified=true;
-                detail::win32::ReleaseSemaphore(semaphore,count_to_release,0);
+            void release(unsigned count_to_release) {
+                notified = true;
+                detail::win32::ReleaseSemaphore(semaphore, count_to_release, 0);
             }
 
-            void release_waiters()
-            {
+            void release_waiters() {
                 release(detail::interlocked_read_acquire(&waiters));
             }
 
-            bool is_notified() const
-            {
+            bool is_notified() const {
                 return notified;
             }
 
-            bool wait(timeout abs_time)
-            {
-                return this_thread::interruptible_wait(semaphore,abs_time);
+            bool wait(timeout abs_time) {
+                return this_thread::interruptible_wait(semaphore, abs_time);
             }
 
-            bool woken()
-            {
-                unsigned long const woken_result=detail::win32::WaitForSingleObject(wake_sem,0);
-                BOOST_ASSERT((woken_result==detail::win32::timeout) || (woken_result==0));
-                return woken_result==0;
+            bool woken() {
+                unsigned long const woken_result = detail::win32::WaitForSingleObject(wake_sem, 0);
+                BOOST_ASSERT((woken_result == detail::win32::timeout) || (woken_result == 0));
+                return woken_result == 0;
             }
 
-            friend void intrusive_ptr_add_ref(basic_cv_list_entry * p);
-            friend void intrusive_ptr_release(basic_cv_list_entry * p);
+            friend void intrusive_ptr_add_ref(basic_cv_list_entry *p);
+
+            friend void intrusive_ptr_release(basic_cv_list_entry *p);
         };
 
-        inline void intrusive_ptr_add_ref(basic_cv_list_entry * p)
-        {
+        inline void intrusive_ptr_add_ref(basic_cv_list_entry *p) {
             BOOST_INTERLOCKED_INCREMENT(&p->references);
         }
 
-        inline void intrusive_ptr_release(basic_cv_list_entry * p)
-        {
-            if(!BOOST_INTERLOCKED_DECREMENT(&p->references))
-            {
+        inline void intrusive_ptr_release(basic_cv_list_entry *p) {
+            if (!BOOST_INTERLOCKED_DECREMENT(&p->references)) {
                 delete p;
             }
         }
 
-        class basic_condition_variable
-        {
+        class basic_condition_variable {
             boost::mutex internal_mutex;
             long total_count;
             unsigned active_generation_count;
@@ -132,31 +122,27 @@ namespace boost
             generation_list generations;
             detail::win32::handle_manager wake_sem;
 
-            void wake_waiters(long count_to_wake)
-            {
-                detail::interlocked_write_release(&total_count,total_count-count_to_wake);
-                detail::win32::ReleaseSemaphore(wake_sem,count_to_wake,0);
+            void wake_waiters(long count_to_wake) {
+                detail::interlocked_write_release(&total_count, total_count - count_to_wake);
+                detail::win32::ReleaseSemaphore(wake_sem, count_to_wake, 0);
             }
 
             template<typename lock_type>
-            struct relocker
-            {
+            struct relocker {
                 BOOST_THREAD_NO_COPYABLE(relocker)
-                lock_type& lock;
+                lock_type &lock;
                 bool unlocked;
 
-                relocker(lock_type& lock_):
-                    lock(lock_),unlocked(false)
-                {}
-                void unlock()
-                {
+                relocker(lock_type &lock_) :
+                        lock(lock_), unlocked(false) {}
+
+                void unlock() {
                     lock.unlock();
-                    unlocked=true;
+                    unlocked = true;
                 }
-                ~relocker()
-                {
-                    if(unlocked)
-                    {
+
+                ~relocker() {
+                    if (unlocked) {
                         lock.lock();
                     }
 
@@ -164,48 +150,40 @@ namespace boost
             };
 
 
-            entry_ptr get_wait_entry()
-            {
+            entry_ptr get_wait_entry() {
                 boost::lock_guard<boost::mutex> internal_lock(internal_mutex);
 
-                if(!wake_sem)
-                {
-                    wake_sem=detail::win32::create_anonymous_semaphore(0,LONG_MAX);
+                if (!wake_sem) {
+                    wake_sem = detail::win32::create_anonymous_semaphore(0, LONG_MAX);
                     BOOST_ASSERT(wake_sem);
                 }
 
-                detail::interlocked_write_release(&total_count,total_count+1);
-                if(generations.empty() || generations.back()->is_notified())
-                {
+                detail::interlocked_write_release(&total_count, total_count + 1);
+                if (generations.empty() || generations.back()->is_notified()) {
                     entry_ptr new_entry(new list_entry(wake_sem));
                     generations.push_back(new_entry);
                     return new_entry;
-                }
-                else
-                {
+                } else {
                     generations.back()->add_waiter();
                     return generations.back();
                 }
             }
 
-            struct entry_manager
-            {
+            struct entry_manager {
                 entry_ptr const entry;
-                boost::mutex& internal_mutex;
+                boost::mutex &internal_mutex;
 
                 BOOST_THREAD_NO_COPYABLE(entry_manager)
-                entry_manager(entry_ptr const& entry_, boost::mutex& mutex_):
-                    entry(entry_), internal_mutex(mutex_)
-                {}
 
-                ~entry_manager()
-                {
+                entry_manager(entry_ptr const &entry_, boost::mutex &mutex_) :
+                        entry(entry_), internal_mutex(mutex_) {}
+
+                ~entry_manager() {
                     boost::lock_guard<boost::mutex> internal_lock(internal_mutex);
                     entry->remove_waiter();
                 }
 
-                list_entry* operator->()
-                {
+                list_entry *operator->() {
                     return entry.get();
                 }
             };
@@ -213,114 +191,103 @@ namespace boost
 
         protected:
             template<typename lock_type>
-            bool do_wait(lock_type& lock,timeout abs_time)
-            {
+            bool do_wait(lock_type &lock, timeout abs_time) {
                 relocker<lock_type> locker(lock);
 
                 entry_manager entry(get_wait_entry(), internal_mutex);
 
                 locker.unlock();
 
-                bool woken=false;
-                while(!woken)
-                {
-                    if(!entry->wait(abs_time))
-                    {
+                bool woken = false;
+                while (!woken) {
+                    if (!entry->wait(abs_time)) {
                         return false;
                     }
 
-                    woken=entry->woken();
+                    woken = entry->woken();
                 }
                 return woken;
             }
 
-            template<typename lock_type,typename predicate_type>
-            bool do_wait(lock_type& m,timeout const& abs_time,predicate_type pred)
-            {
-                while (!pred())
-                {
-                    if(!do_wait(m, abs_time))
+            template<typename lock_type, typename predicate_type>
+            bool do_wait(lock_type &m, timeout const &abs_time, predicate_type pred) {
+                while (!pred()) {
+                    if (!do_wait(m, abs_time))
                         return pred();
                 }
                 return true;
             }
 
-            basic_condition_variable(const basic_condition_variable& other);
-            basic_condition_variable& operator=(const basic_condition_variable& other);
+            basic_condition_variable(const basic_condition_variable &other);
+
+            basic_condition_variable &operator=(const basic_condition_variable &other);
 
         public:
-            basic_condition_variable():
-                total_count(0),active_generation_count(0),wake_sem(0)
-            {}
+            basic_condition_variable() :
+                    total_count(0), active_generation_count(0), wake_sem(0) {}
 
-            ~basic_condition_variable()
-            {}
+            ~basic_condition_variable() {}
 
-            void notify_one() BOOST_NOEXCEPT
-            {
-                if(detail::interlocked_read_acquire(&total_count))
-                {
-                    boost::lock_guard<boost::mutex> internal_lock(internal_mutex);
-                    if(!total_count)
-                    {
+            void notify_one()
+
+            BOOST_NOEXCEPT {
+                if (detail::interlocked_read_acquire(&total_count)) {
+                    boost::lock_guard <boost::mutex> internal_lock(internal_mutex);
+                    if (!total_count) {
                         return;
                     }
                     wake_waiters(1);
 
-                    for(generation_list::iterator it=generations.begin(),
-                            end=generations.end();
-                        it!=end;++it)
-                    {
+                    for (generation_list::iterator it = generations.begin(),
+                                 end = generations.end();
+                         it != end; ++it) {
                         (*it)->release(1);
                     }
-                    generations.erase(std::remove_if(generations.begin(),generations.end(),&basic_cv_list_entry::no_waiters),generations.end());
+                    generations.erase(
+                            std::remove_if(generations.begin(), generations.end(), &basic_cv_list_entry::no_waiters),
+                            generations.end());
                 }
             }
 
-            void notify_all() BOOST_NOEXCEPT
-            {
-                if(detail::interlocked_read_acquire(&total_count))
-                {
-                    boost::lock_guard<boost::mutex> internal_lock(internal_mutex);
-                    if(!total_count)
-                    {
+            void notify_all()
+
+            BOOST_NOEXCEPT {
+                if (detail::interlocked_read_acquire(&total_count)) {
+                    boost::lock_guard <boost::mutex> internal_lock(internal_mutex);
+                    if (!total_count) {
                         return;
                     }
                     wake_waiters(total_count);
-                    for(generation_list::iterator it=generations.begin(),
-                            end=generations.end();
-                        it!=end;++it)
-                    {
+                    for (generation_list::iterator it = generations.begin(),
+                                 end = generations.end();
+                         it != end; ++it) {
                         (*it)->release_waiters();
                     }
                     generations.clear();
-                    wake_sem=detail::win32::handle(0);
+                    wake_sem = detail::win32::handle(0);
                 }
             }
 
         };
     }
 
-    class condition_variable:
-        private detail::basic_condition_variable
-    {
+    class condition_variable :
+            private detail::basic_condition_variable {
     public:
         BOOST_THREAD_NO_COPYABLE(condition_variable)
-        condition_variable()
-        {}
+
+        condition_variable() {}
 
         using detail::basic_condition_variable::notify_one;
         using detail::basic_condition_variable::notify_all;
 
-        void wait(unique_lock<mutex>& m)
-        {
-            do_wait(m,detail::timeout::sentinel());
+        void wait(unique_lock <mutex> &m) {
+            do_wait(m, detail::timeout::sentinel());
         }
 
         template<typename predicate_type>
-        void wait(unique_lock<mutex>& m,predicate_type pred)
-        {
-            while(!pred()) wait(m);
+        void wait(unique_lock <mutex> &m, predicate_type pred) {
+            while (!pred()) wait(m);
         }
 
 
@@ -426,27 +393,24 @@ namespace boost
 #endif
     };
 
-    class condition_variable_any:
-        private detail::basic_condition_variable
-    {
+    class condition_variable_any :
+            private detail::basic_condition_variable {
     public:
         BOOST_THREAD_NO_COPYABLE(condition_variable_any)
-        condition_variable_any()
-        {}
+
+        condition_variable_any() {}
 
         using detail::basic_condition_variable::notify_one;
         using detail::basic_condition_variable::notify_all;
 
         template<typename lock_type>
-        void wait(lock_type& m)
-        {
-            do_wait(m,detail::timeout::sentinel());
+        void wait(lock_type &m) {
+            do_wait(m, detail::timeout::sentinel());
         }
 
-        template<typename lock_type,typename predicate_type>
-        void wait(lock_type& m,predicate_type pred)
-        {
-            while(!pred()) wait(m);
+        template<typename lock_type, typename predicate_type>
+        void wait(lock_type &m, predicate_type pred) {
+            while (!pred()) wait(m);
         }
 
 #if defined BOOST_THREAD_USES_DATETIME
@@ -547,7 +511,7 @@ namespace boost
 #endif
     };
 
-        BOOST_THREAD_DECL void notify_all_at_thread_exit(condition_variable& cond, unique_lock<mutex> lk);
+    BOOST_THREAD_DECL void notify_all_at_thread_exit(condition_variable &cond, unique_lock <mutex> lk);
 }
 
 #include <boost/config/abi_suffix.hpp>

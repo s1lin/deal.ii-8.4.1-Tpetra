@@ -13,34 +13,35 @@
 #include <boost/type_traits/rank.hpp>
 #include <boost/type_traits/extent.hpp>
 
-namespace boost { namespace fusion { namespace extension
-{
-    template <typename>
-    struct end_impl;
+namespace boost {
+    namespace fusion {
+        namespace extension {
+            template<typename>
+            struct end_impl;
 
-    template <>
-    struct end_impl<po_array_tag>
-    {
-        template <typename Seq>
-        struct apply
-        {
-            typedef
-                basic_iterator<
+            template<>
+            struct end_impl<po_array_tag> {
+                template<typename Seq>
+                struct apply {
+                    typedef
+                    basic_iterator <
                     po_array_iterator_tag
-                  , random_access_traversal_tag
-                  , Seq
-                  , extent<Seq,rank<Seq>::value-1>::value
-                >
-            type;
+                    , random_access_traversal_tag
+                    , Seq
+                    , extent<Seq, rank<Seq>::value - 1>::value
+                    >
+                            type;
 
-            BOOST_FUSION_GPU_ENABLED
-            static type
-            call(Seq& seq)
-            {
-                return type(seq,0);
-            }
-        };
-    };
-}}}
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Seq& seq)
+                    {
+                        return type(seq, 0);
+                    }
+                };
+            };
+        }
+    }
+}
 
 #endif

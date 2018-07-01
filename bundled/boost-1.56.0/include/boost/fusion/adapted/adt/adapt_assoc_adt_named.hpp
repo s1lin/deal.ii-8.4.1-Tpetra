@@ -12,7 +12,7 @@
 #include <boost/fusion/adapted/adt/adapt_assoc_adt.hpp>
 #include <boost/fusion/adapted/struct/detail/proxy_type.hpp>
 
-#define BOOST_FUSION_ADAPT_ASSOC_ADT_NAMED_NS(                                  \
+#define BOOST_FUSION_ADAPT_ASSOC_ADT_NAMED_NS(\
     WRAPPED_TYPE, NAMESPACE_SEQ, NAME, ATTRIBUTES)                              \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE_IMPL(                           \

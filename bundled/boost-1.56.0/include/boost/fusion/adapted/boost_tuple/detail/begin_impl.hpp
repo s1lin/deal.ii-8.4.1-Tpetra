@@ -10,32 +10,30 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/fusion/adapted/boost_tuple/boost_tuple_iterator.hpp>
 
-namespace boost { namespace fusion 
-{
-    struct boost_tuple_tag;
+namespace boost {
+    namespace fusion {
+        struct boost_tuple_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct begin_impl;
+        namespace extension {
+            template<typename T>
+            struct begin_impl;
 
-        template <>
-        struct begin_impl<boost_tuple_tag>
-        {
-            template <typename Sequence>
-            struct apply 
-            {
-                typedef boost_tuple_iterator<Sequence> type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& v)
-                {
-                    return type(v);
-                }
+            template<>
+            struct begin_impl<boost_tuple_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef boost_tuple_iterator <Sequence> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& v)
+                    {
+                        return type(v);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

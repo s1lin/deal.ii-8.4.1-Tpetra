@@ -12,35 +12,38 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion {
+namespace boost {
+    namespace fusion {
 
-    template<typename Key, typename T>
-    struct pair;
-
-    namespace result_of
-    {
         template<typename Key, typename T>
-        struct pair_tie
-        {
-            typedef fusion::pair<Key, T&> type;
-        };
-    }
+        struct pair;
 
-    template<typename Key, typename T>
-    BOOST_FUSION_GPU_ENABLED
-    typename disable_if<is_const<T>, typename result_of::pair_tie<Key, T>::type>::type
-    pair_tie(T& t)
-    {
-        return typename result_of::pair_tie<Key, T>::type(t);
-    }
+        namespace result_of {
+            template<typename Key, typename T>
+            struct pair_tie {
+                typedef fusion::pair<Key, T &> type;
+            };
+        }
 
-    template<typename Key, typename T>
-    BOOST_FUSION_GPU_ENABLED
-    typename result_of::pair_tie<Key, T const>::type
-    pair_tie(T const& t)
-    {
-        return typename result_of::pair_tie<Key, T const>::type(t);
+        template<typename Key, typename T>
+        BOOST_FUSION_GPU_ENABLED
+        typename disable_if<is_const < T>,
+        typename result_of::pair_tie<Key, T>::type>
+
+        ::type
+        pair_tie(T &t) {
+            return typename result_of::pair_tie<Key, T>::type(t);
+        }
+
+        template<typename Key, typename T>
+        BOOST_FUSION_GPU_ENABLED
+        typename result_of::pair_tie<Key, T const>::type
+        pair_tie(T
+        const& t) {
+        return
+        typename result_of::pair_tie<Key, T const>::type(t);
     }
-}}
+}
+}
 
 #endif

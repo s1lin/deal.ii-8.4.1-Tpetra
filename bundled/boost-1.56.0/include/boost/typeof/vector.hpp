@@ -31,9 +31,13 @@
 #   if   BOOST_TYPEOF_LIMIT_SIZE < 50
 #     include BOOST_PP_INCLUDE_SELF()
 #   elif BOOST_TYPEOF_LIMIT_SIZE < 100
+
 #     include <boost/typeof/vector50.hpp>
+
 #     define  BOOST_TYPEOF_PP_START_SIZE 51
+
 #     include BOOST_PP_INCLUDE_SELF()
+
 #   elif BOOST_TYPEOF_LIMIT_SIZE < 150
 #     include <boost/typeof/vector100.hpp>
 #     define  BOOST_TYPEOF_PP_START_SIZE 101

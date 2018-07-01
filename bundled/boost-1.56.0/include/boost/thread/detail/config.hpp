@@ -17,13 +17,13 @@
 
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER)
 
-  // GCC since 3.3 has may_alias attribute that helps to alleviate optimizer issues with
-  // regard to violation of the strict aliasing rules.
+// GCC since 3.3 has may_alias attribute that helps to alleviate optimizer issues with
+// regard to violation of the strict aliasing rules.
 
-  #define BOOST_THREAD_DETAIL_USE_ATTRIBUTE_MAY_ALIAS
-  #define BOOST_THREAD_ATTRIBUTE_MAY_ALIAS __attribute__((__may_alias__))
+#define BOOST_THREAD_DETAIL_USE_ATTRIBUTE_MAY_ALIAS
+#define BOOST_THREAD_ATTRIBUTE_MAY_ALIAS __attribute__((__may_alias__))
 #else
-  #define BOOST_THREAD_ATTRIBUTE_MAY_ALIAS
+#define BOOST_THREAD_ATTRIBUTE_MAY_ALIAS
 #endif
 
 
@@ -44,7 +44,7 @@
 
 // This compiler doesn't support Boost.Chrono
 #if defined __IBMCPP__ && (__IBMCPP__ < 1100) \
-  && ! defined BOOST_THREAD_DONT_USE_CHRONO
+ && !defined BOOST_THREAD_DONT_USE_CHRONO
 #define BOOST_THREAD_DONT_USE_CHRONO
 #if ! defined BOOST_THREAD_USES_DATETIME
 #define BOOST_THREAD_USES_DATETIME
@@ -59,12 +59,12 @@
 
 // This compiler doesn't support Boost.Container Allocators files
 #if defined __SUNPRO_CC \
-  && ! defined BOOST_THREAD_DONT_PROVIDE_FUTURE_CTOR_ALLOCATORS
+  && !defined BOOST_THREAD_DONT_PROVIDE_FUTURE_CTOR_ALLOCATORS
 #define BOOST_THREAD_DONT_PROVIDE_FUTURE_CTOR_ALLOCATORS
 #endif
 
-#if defined _WIN32_WCE && _WIN32_WCE==0x501 \
-  && ! defined BOOST_THREAD_DONT_PROVIDE_FUTURE_CTOR_ALLOCATORS
+#if defined _WIN32_WCE && _WIN32_WCE == 0x501 \
+ && !defined BOOST_THREAD_DONT_PROVIDE_FUTURE_CTOR_ALLOCATORS
 #define BOOST_THREAD_DONT_PROVIDE_FUTURE_CTOR_ALLOCATORS
 #endif
 
@@ -86,8 +86,8 @@
 #endif
 
 /// BASIC_THREAD_ID
-#if ! defined BOOST_THREAD_DONT_PROVIDE_BASIC_THREAD_ID \
- && ! defined BOOST_THREAD_PROVIDES_BASIC_THREAD_ID
+#if !defined BOOST_THREAD_DONT_PROVIDE_BASIC_THREAD_ID \
+ && !defined BOOST_THREAD_PROVIDES_BASIC_THREAD_ID
 #define BOOST_THREAD_PROVIDES_BASIC_THREAD_ID
 #endif
 
@@ -107,13 +107,13 @@
 
 // CHRONO
 // Uses Boost.Chrono by default if not stated the opposite defining BOOST_THREAD_DONT_USE_CHRONO
-#if ! defined BOOST_THREAD_DONT_USE_CHRONO \
-  && ! defined BOOST_THREAD_USES_CHRONO
+#if !defined BOOST_THREAD_DONT_USE_CHRONO \
+  && !defined BOOST_THREAD_USES_CHRONO
 #define BOOST_THREAD_USES_CHRONO
 #endif
 
-#if ! defined BOOST_THREAD_DONT_USE_ATOMIC \
-  && ! defined BOOST_THREAD_USES_ATOMIC
+#if !defined BOOST_THREAD_DONT_USE_ATOMIC \
+  && !defined BOOST_THREAD_USES_ATOMIC
 #define BOOST_THREAD_USES_ATOMIC
 //#define BOOST_THREAD_DONT_USE_ATOMIC
 #endif
@@ -126,23 +126,23 @@
 // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2444.html#Appendix
 #define BOOST_THREAD_ONCE_FAST_EPOCH
 #endif
-#if BOOST_THREAD_VERSION==2
+#if BOOST_THREAD_VERSION == 2
 
 // PROVIDE_PROMISE_LAZY
-#if ! defined BOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY \
-  && ! defined BOOST_THREAD_PROVIDES_PROMISE_LAZY
+#if !defined BOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY \
+  && !defined BOOST_THREAD_PROVIDES_PROMISE_LAZY
 #define BOOST_THREAD_PROVIDES_PROMISE_LAZY
 #endif
 
 // PROVIDE_THREAD_EQ
-#if ! defined BOOST_THREAD_DONT_PROVIDE_THREAD_EQ \
-  && ! defined BOOST_THREAD_PROVIDES_THREAD_EQ
+#if !defined BOOST_THREAD_DONT_PROVIDE_THREAD_EQ \
+  && !defined BOOST_THREAD_PROVIDES_THREAD_EQ
 #define BOOST_THREAD_PROVIDES_THREAD_EQ
 #endif
 
 #endif
 
-#if BOOST_THREAD_VERSION>=3
+#if BOOST_THREAD_VERSION >= 3
 
 // ONCE_CXX11
 // fixme BOOST_THREAD_PROVIDES_ONCE_CXX11 doesn't works when thread.cpp is compiled BOOST_THREAD_VERSION 3
@@ -205,25 +205,25 @@
 #if BOOST_THREAD_VERSION < 4
 
 // NESTED_LOCKS
-#if ! defined BOOST_THREAD_PROVIDES_NESTED_LOCKS \
- && ! defined BOOST_THREAD_DONT_PROVIDE_NESTED_LOCKS
+#if !defined BOOST_THREAD_PROVIDES_NESTED_LOCKS \
+ && !defined BOOST_THREAD_DONT_PROVIDE_NESTED_LOCKS
 #define BOOST_THREAD_PROVIDES_NESTED_LOCKS
 #endif
 
 // CONDITION
-#if ! defined BOOST_THREAD_PROVIDES_CONDITION \
- && ! defined BOOST_THREAD_DONT_PROVIDE_CONDITION
+#if !defined BOOST_THREAD_PROVIDES_CONDITION \
+ && !defined BOOST_THREAD_DONT_PROVIDE_CONDITION
 #define BOOST_THREAD_PROVIDES_CONDITION
 #endif
 
 // USE_DATETIME
-#if ! defined BOOST_THREAD_DONT_USE_DATETIME \
- && ! defined BOOST_THREAD_USES_DATETIME
+#if !defined BOOST_THREAD_DONT_USE_DATETIME \
+ && !defined BOOST_THREAD_USES_DATETIME
 #define BOOST_THREAD_USES_DATETIME
 #endif
 #endif
 
-#if BOOST_THREAD_VERSION>=4
+#if BOOST_THREAD_VERSION >= 4
 
 // SIGNATURE_PACKAGED_TASK
 #if ! defined BOOST_THREAD_PROVIDES_SIGNATURE_PACKAGED_TASK \
@@ -306,8 +306,8 @@
 #endif // BOOST_THREAD_VERSION>=4
 
 // INTERRUPTIONS
-#if ! defined BOOST_THREAD_PROVIDES_INTERRUPTIONS \
- && ! defined BOOST_THREAD_DONT_PROVIDE_INTERRUPTIONS
+#if !defined BOOST_THREAD_PROVIDES_INTERRUPTIONS \
+ && !defined BOOST_THREAD_DONT_PROVIDE_INTERRUPTIONS
 #define BOOST_THREAD_PROVIDES_INTERRUPTIONS
 #endif
 
@@ -322,7 +322,7 @@
 
 // BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN is defined if BOOST_THREAD_PROVIDES_SHARED_MUTEX_UPWARDS_CONVERSIONS
 #if defined BOOST_THREAD_PROVIDES_SHARED_MUTEX_UPWARDS_CONVERSIONS \
-&& ! defined BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN
+&& !defined BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN
 #define BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN
 #endif
 
@@ -365,14 +365,14 @@
 
 #if defined(BOOST_THREAD_PLATFORM_WIN32)
 #else
-  #   if defined(BOOST_HAS_PTHREAD_DELAY_NP) || defined(BOOST_HAS_NANOSLEEP)
-  #     define BOOST_THREAD_SLEEP_FOR_IS_STEADY
-  #   endif
+#   if defined(BOOST_HAS_PTHREAD_DELAY_NP) || defined(BOOST_HAS_NANOSLEEP)
+#     define BOOST_THREAD_SLEEP_FOR_IS_STEADY
+#   endif
 #endif
 
 // provided for backwards compatibility, since this
 // macro was used for several releases by mistake.
-#if defined(BOOST_THREAD_DYN_DLL) && ! defined BOOST_THREAD_DYN_LINK
+#if defined(BOOST_THREAD_DYN_DLL) && !defined BOOST_THREAD_DYN_LINK
 # define BOOST_THREAD_DYN_LINK
 #endif
 
@@ -392,12 +392,12 @@
 #   if defined(BOOST_THREAD_PLATFORM_WIN32)
 #       if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) \
       || defined(__MINGW32__) || defined(MINGW32) || defined(BOOST_MINGW32)
-      //For compilers supporting auto-tss cleanup
-            //with Boost.Threads lib, use Boost.Threads lib
+//For compilers supporting auto-tss cleanup
+      //with Boost.Threads lib, use Boost.Threads lib
 #           define BOOST_THREAD_USE_LIB
 #       else
-            //For compilers not yet supporting auto-tss cleanup
-            //with Boost.Threads lib, use Boost.Threads dll
+      //For compilers not yet supporting auto-tss cleanup
+      //with Boost.Threads lib, use Boost.Threads dll
 #           define BOOST_THREAD_USE_DLL
 #       endif
 #   else
@@ -449,6 +449,7 @@
 // And include the header that does the work:
 //
 #include <boost/config/auto_link.hpp>
+
 #endif  // auto-linking disabled
 
 #endif // BOOST_THREAD_CONFIG_WEK1032003_HPP

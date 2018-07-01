@@ -16,8 +16,8 @@
 # include <boost/mpl/placeholders.hpp>
 
 # if !defined(BOOST_NO_SFINAE) \
-  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-  && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
+ && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+ && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 
 #  include <boost/utility/enable_if.hpp>
 #  include <boost/mpl/lambda.hpp>
@@ -71,7 +71,9 @@ struct lambda<
     BOOST_PP_TUPLE_EAT(2) BOOST_PP_LPAREN() ~ \
     /**/
 # else
+
 #  include <boost/preprocessor/detail/is_binary.hpp>
+
 #  define BOOST_PARAMETER_IS_BINARY(x) BOOST_PP_IS_BINARY(x)
 # endif
 
@@ -109,7 +111,7 @@ struct lambda<
     }                                                               \
     BOOST_PARAMETER_NAME_OBJECT(tag_namespace::tag, name)
 
-# define BOOST_PARAMETER_COMPLEX_NAME_TUPLE1(tag,namespace)         \
+# define BOOST_PARAMETER_COMPLEX_NAME_TUPLE1(tag, namespace)         \
     (tag, namespace), ~
 
 # define BOOST_PARAMETER_COMPLEX_NAME_TUPLE(name)                   \

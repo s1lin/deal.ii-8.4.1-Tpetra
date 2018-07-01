@@ -32,7 +32,9 @@
 #define BOOST_FUSION_ITER_FOLD
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/algorithm/iteration/detail/preprocessed/iter_fold.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/iter_fold.hpp")

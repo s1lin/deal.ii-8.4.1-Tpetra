@@ -29,37 +29,48 @@
 #endif
 
 namespace boost {
-namespace serialization {
-    class extended_type_info;
-} // namespace serialization
+    namespace serialization {
+        class extended_type_info;
+    } // namespace serialization
 
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive;
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer;
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer : 
-    public basic_serializer
-{
-protected:
-    explicit basic_pointer_oserializer(
-        const boost::serialization::extended_type_info & type_
-    );
-public:
-    // account for bogus gcc warning
-    #if defined(__GNUC__)
-    virtual
-    #endif
-    ~basic_pointer_oserializer();
-    virtual const basic_oserializer & get_basic_serializer() const = 0;
-    virtual void save_object_ptr(
-        basic_oarchive & ar,
-        const void * x
-    ) const = 0;
-};
+            basic_oarchive;
 
-} // namespace detail
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
+            basic_oserializer;
+
+            class BOOST_ARCHIVE_DECL (BOOST_PP_EMPTY())
+
+            basic_pointer_oserializer :
+            public basic_serializer {
+            protected:
+
+            explicit basic_pointer_oserializer(
+                    const boost::serialization::extended_type_info &type_
+            );
+
+            public:
+            // account for bogus gcc warning
+#if defined(__GNUC__)
+
+            virtual
+#endif
+            ~basic_pointer_oserializer();
+
+            virtual const basic_oserializer &get_basic_serializer() const = 0;
+
+            virtual void save_object_ptr(
+                    basic_oarchive & ar,
+            const void *x
+            ) const = 0;
+        };
+
+    } // namespace detail
 } // namespace archive
 } // namespace boost
 

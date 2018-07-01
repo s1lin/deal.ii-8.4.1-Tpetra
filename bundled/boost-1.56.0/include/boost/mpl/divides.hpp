@@ -16,6 +16,7 @@
 
 #define AUX778076_OP_NAME divides
 #define AUX778076_OP_TOKEN /
+
 #include <boost/mpl/aux_/arithmetic_op.hpp>
 
 #endif // BOOST_MPL_DIVIDES_HPP_INCLUDED

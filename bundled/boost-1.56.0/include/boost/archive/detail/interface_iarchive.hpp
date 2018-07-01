@@ -24,52 +24,54 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
-namespace archive {
-namespace detail {
+    namespace archive {
+        namespace detail {
 
-class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
+            class BOOST_ARCHIVE_OR_WARCHIVE_DECL (BOOST_PP_EMPTY())
 
-template<class Archive>
-class interface_iarchive 
-{
-protected:
-    interface_iarchive(){};
-public:
-    /////////////////////////////////////////////////////////
-    // archive public interface
-    typedef mpl::bool_<true> is_loading;
-    typedef mpl::bool_<false> is_saving;
+            basic_pointer_iserializer;
 
-    // return a pointer to the most derived class
-    Archive * This(){
-        return static_cast<Archive *>(this);
-    }
+            template<class Archive>
+            class interface_iarchive {
+            protected:
+                interface_iarchive() {};
+            public:
+                /////////////////////////////////////////////////////////
+                // archive public interface
+                typedef mpl::bool_<true> is_loading;
+                typedef mpl::bool_<false> is_saving;
 
-    template<class T>
-    const basic_pointer_iserializer * 
-    register_type(T * = NULL){
-        const basic_pointer_iserializer & bpis =
-            boost::serialization::singleton<
-                pointer_iserializer<Archive, T> 
-            >::get_const_instance();
-        this->This()->register_basic_serializer(bpis.get_basic_serializer());
-        return & bpis;
-    }
-    template<class T>
-    Archive & operator>>(T & t){
-        this->This()->load_override(t, 0);
-        return * this->This();
-    }
+                // return a pointer to the most derived class
+                Archive *This() {
+                    return static_cast<Archive *>(this);
+                }
 
-    // the & operator 
-    template<class T>
-    Archive & operator&(T & t){
-        return *(this->This()) >> t;
-    }
-};
+                template<class T>
+                const basic_pointer_iserializer *
+                register_type(T * = NULL) {
+                    const basic_pointer_iserializer &bpis =
+                            boost::serialization::singleton<
+                                    pointer_iserializer < Archive, T>
+                            > ::get_const_instance();
+                    this->This()->register_basic_serializer(bpis.get_basic_serializer());
+                    return &bpis;
+                }
 
-} // namespace detail
-} // namespace archive
+                template<class T>
+                Archive &operator>>(T &t) {
+                    this->This()->load_override(t, 0);
+                    return *this->This();
+                }
+
+                // the & operator
+                template<class T>
+                Archive &operator&(T &t) {
+                    return *(this->This()) >> t;
+                }
+            };
+
+        } // namespace detail
+    } // namespace archive
 } // namespace boost
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas

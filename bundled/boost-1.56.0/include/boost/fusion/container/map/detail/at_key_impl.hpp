@@ -13,49 +13,51 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/identity.hpp>
 
-namespace boost { namespace fusion
-{
-    struct map_tag;
+namespace boost {
+    namespace fusion {
+        struct map_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct at_key_impl;
+        namespace extension {
+            template<typename Tag>
+            struct at_key_impl;
 
-        template <>
-        struct at_key_impl<map_tag>
-        {
-            template <typename Sequence, typename Key>
-            struct apply
-            {
-                typedef
+            template<>
+            struct at_key_impl<map_tag> {
+                template<typename Sequence, typename Key>
+                struct apply {
+                    typedef
                     decltype(std::declval<Sequence>().get(mpl::identity<Key>()))
-                type;
+                            type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& m)
-                {
-                    return m.get(mpl::identity<Key>());
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& m)
+                    {
+                        return m.get(mpl::identity<Key>());
+                    }
+                };
+
+                template<typename Sequence, typename Key>
+                struct apply<Sequence const, Key> {
+                    typedef
+                    decltype(std::declval < Sequence const>().
+
+                    get (mpl::identity<Key>())
+
+                    )
+                    type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence
+                    const& m)
+                    {
+                        return m.get(mpl::identity<Key>());
+                    }
+                };
             };
-
-            template <typename Sequence, typename Key>
-            struct apply<Sequence const, Key>
-            {
-                typedef
-                    decltype(std::declval<Sequence const>().get(mpl::identity<Key>()))
-                type;
-
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence const& m)
-                {
-                    return m.get(mpl::identity<Key>());
-                }
-            };
-        };
+        }
     }
-}}
+}
 
 #endif

@@ -36,45 +36,46 @@ namespace boost { namespace spirit { namespace detail
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
-namespace boost { namespace fusion
-{
-    struct void_;
-}}
-
-namespace boost { namespace spirit { namespace detail
-{
-    namespace result_of
-    {
-        template <
-            BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                FUSION_MAX_VECTOR_SIZE, typename T, fusion::void_)
-          , typename Extra = fusion::void_
-        >
-        struct make_vector;
-
-        template <>
-        struct make_vector<>
-        {
-            typedef fusion::vector0 type;
-        };
+namespace boost {
+    namespace fusion {
+        struct void_;
     }
+}
 
-    inline fusion::vector0
-    make_vector()
-    {
-        return fusion::vector0();
-    }
+namespace boost {
+    namespace spirit {
+        namespace detail {
+            namespace result_of {
+                template<
+                        BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
+                        FUSION_MAX_VECTOR_SIZE, typename T, fusion::void_ )
+                ,
+                typename Extra = fusion::void_
+                                 >
+                struct make_vector;
+
+                template<>
+                struct make_vector<> {
+                    typedef fusion::vector0 type;
+                };
+            }
+
+            inline fusion::vector0
+            make_vector() {
+                return fusion::vector0();
+            }
 
 #define BOOST_FUSION_AS_FUSION_ELEMENT(z, n, data)                               \
     typename fusion::detail::as_fusion_element<BOOST_PP_CAT(T, n)>::type
 
 #define BOOST_PP_FILENAME_1 <boost/spirit/home/support/detail/make_vector.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_VECTOR_SIZE)
+
 #include BOOST_PP_ITERATE()
 
 #undef BOOST_FUSION_AS_FUSION_ELEMENT
 
-}}}
+        }}}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -90,9 +91,9 @@ namespace boost { namespace spirit { namespace detail
     {
         template <BOOST_PP_ENUM_PARAMS(N, typename T)>
 #if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
-        #define TEXT(z, n, text) , text
+#define TEXT(z, n, text) , text
         struct make_vector< BOOST_PP_ENUM_PARAMS(N, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_VECTOR_SIZE, TEXT, fusion::void_) >
-        #undef TEXT
+#undef TEXT
 #else
         struct make_vector<BOOST_PP_ENUM_PARAMS(N, T)>
 #endif

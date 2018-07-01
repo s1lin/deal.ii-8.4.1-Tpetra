@@ -13,35 +13,34 @@
 
 #include <boost/mpl/if.hpp>
 
-namespace boost { namespace fusion {
-    
-    struct boost_array_tag;
+namespace boost {
+    namespace fusion {
 
-    namespace extension
-    {
-        template<typename T>
-        struct at_impl;
+        struct boost_array_tag;
 
-        template<>
-        struct at_impl<boost_array_tag>
-        {
-            template<typename Sequence, typename N>
-            struct apply
-            {
-                typedef typename mpl::if_<
-                    is_const<Sequence>, 
-                    typename Sequence::const_reference, 
+        namespace extension {
+            template<typename T>
+            struct at_impl;
+
+            template<>
+            struct at_impl<boost_array_tag> {
+                template<typename Sequence, typename N>
+                struct apply {
+                    typedef typename mpl::if_<
+                            is_const < Sequence>,
+                    typename Sequence::const_reference,
                     typename Sequence::reference>::type type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& seq)
-                {
-                    return seq[N::value];
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return seq[N::value];
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

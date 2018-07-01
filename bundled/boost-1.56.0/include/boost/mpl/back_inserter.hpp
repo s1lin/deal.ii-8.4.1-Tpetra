@@ -19,16 +19,16 @@
 #include <boost/mpl/inserter.hpp>
 
 namespace boost {
-namespace mpl {
+    namespace mpl {
 
-template<
-      typename Sequence
-    >
-struct back_inserter
-    : inserter< Sequence,push_back<> >
-{
-};
+        template<
+                typename Sequence
+        >
+        struct back_inserter
+                : inserter<Sequence, push_back<> > {
+        };
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_BACK_INSERTER_HPP_INCLUDED

@@ -7,12 +7,18 @@
 #  *     http://www.boost.org/LICENSE_1_0.txt)                                *
 #  *                                                                          *
 #  ************************************************************************** */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_LIBRARY_HPP
 # define BOOST_PREPROCESSOR_LIBRARY_HPP
 #
+
+
 # include <boost/preprocessor/arithmetic.hpp>
 # include <boost/preprocessor/array.hpp>
 # include <boost/preprocessor/cat.hpp>
@@ -32,5 +38,7 @@
 # include <boost/preprocessor/stringize.hpp>
 # include <boost/preprocessor/tuple.hpp>
 # include <boost/preprocessor/variadic.hpp>
+
 #
+
 # endif

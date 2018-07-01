@@ -10,10 +10,9 @@
 #include <iterator>
 #include <cstddef>           // std::ptrdiff_t
 
-namespace boost
-{
+namespace boost {
 
-using std::iterator;
+    using std::iterator;
 
 } // namespace boost
 

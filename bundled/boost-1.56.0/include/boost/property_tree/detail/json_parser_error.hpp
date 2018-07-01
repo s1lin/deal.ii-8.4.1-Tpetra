@@ -13,21 +13,22 @@
 #include <boost/property_tree/detail/file_parser_error.hpp>
 #include <string>
 
-namespace boost { namespace property_tree { namespace json_parser
-{
+namespace boost {
+    namespace property_tree {
+        namespace json_parser {
 
-    //! Json parser error
-    class json_parser_error: public file_parser_error
-    {
-    public:
-        json_parser_error(const std::string &message, 
-                          const std::string &filename, 
-                          unsigned long line): 
-            file_parser_error(message, filename, line)
-        { 
+            //! Json parser error
+            class json_parser_error : public file_parser_error {
+            public:
+                json_parser_error(const std::string &message,
+                                  const std::string &filename,
+                                  unsigned long line) :
+                        file_parser_error(message, filename, line) {
+                }
+            };
+
         }
-    };
-
-} } }
+    }
+}
 
 #endif

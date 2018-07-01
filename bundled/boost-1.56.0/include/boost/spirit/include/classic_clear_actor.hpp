@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_CLEAR_ACTOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_CLEAR_ACTOR
+
 #include <boost/spirit/home/classic/actor/clear_actor.hpp>
+
 #endif

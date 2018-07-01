@@ -13,6 +13,7 @@
 #include <boost/fusion/functional/adapter/fused_procedure.hpp>
 
 #define BOOST_FUSION_CLASS_TPL_NAME fused_procedure
+
 #include <boost/fusion/functional/generation/detail/gen_make_adapter.hpp>
 
 #endif

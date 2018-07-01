@@ -19,19 +19,19 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace temperature {
+        namespace temperature {
 
-struct celsius_base_unit : public base_unit<celsius_base_unit, temperature_dimension, -1008>
-{
-    static std::string name()   { return("celsius"); }
-    static std::string symbol() { return("C"); }
-};
+            struct celsius_base_unit : public base_unit<celsius_base_unit, temperature_dimension, -1008> {
+                static std::string name() { return ("celsius"); }
 
-} // namespace temperature
+                static std::string symbol() { return ("C"); }
+            };
 
-} // namespace units
+        } // namespace temperature
+
+    } // namespace units
 
 } // namespace boost
 

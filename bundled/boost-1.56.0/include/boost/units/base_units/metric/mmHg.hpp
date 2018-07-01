@@ -14,6 +14,7 @@
 #include <boost/units/conversion.hpp>
 #include <boost/units/systems/si/pressure.hpp>
 
-BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(metric, mmHg, "millimeters mercury", "mmHg", 133.322, si::pressure, -404);
+BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(metric, mmHg,
+"millimeters mercury", "mmHg", 133.322, si::pressure, -404);
 
 #endif // BOOST_UNIT_SYSTEMS_METRIC_MMHG_HPP_INCLUDED

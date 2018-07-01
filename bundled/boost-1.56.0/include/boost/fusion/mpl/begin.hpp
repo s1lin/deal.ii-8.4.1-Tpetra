@@ -13,20 +13,19 @@
 #include <boost/fusion/adapted/mpl/detail/begin_impl.hpp>
 #include <boost/fusion/iterator/mpl/fusion_iterator.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct begin_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct begin_impl;
 
-    template <>
-    struct begin_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply
-        {
-            typedef fusion_iterator<typename fusion::result_of::begin<Sequence>::type> type;
+        template<>
+        struct begin_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply {
+                typedef fusion_iterator<typename fusion::result_of::begin<Sequence>::type> type;
+            };
         };
-    };
-}}
+    }
+}
 
 #endif

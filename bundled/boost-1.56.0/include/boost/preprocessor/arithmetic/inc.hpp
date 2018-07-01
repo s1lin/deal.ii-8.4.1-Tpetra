@@ -6,18 +6,30 @@
 #  * accompanying file LICENSE_1_0.txt or copy at
 #  * http://www.boost.org/LICENSE_1_0.txt)
 #  */
+
 #
+
 # /* Revised by Paul Mensonides (2002) */
+
 #
+
 # /* See http://www.boost.org for most recent version. */
+
 #
+
 # ifndef BOOST_PREPROCESSOR_ARITHMETIC_INC_HPP
 # define BOOST_PREPROCESSOR_ARITHMETIC_INC_HPP
 #
+
+
 # include <boost/preprocessor/config/config.hpp>
+
 #
+
 # /* BOOST_PP_INC */
+
 #
+
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_INC(x) BOOST_PP_INC_I(x)
 # else
@@ -25,8 +37,10 @@
 #    define BOOST_PP_INC_OO(par) BOOST_PP_INC_I ## par
 # endif
 #
+
 # define BOOST_PP_INC_I(x) BOOST_PP_INC_ ## x
 #
+
 # define BOOST_PP_INC_0 1
 # define BOOST_PP_INC_1 2
 # define BOOST_PP_INC_2 3
@@ -285,4 +299,5 @@
 # define BOOST_PP_INC_255 256
 # define BOOST_PP_INC_256 256
 #
+
 # endif

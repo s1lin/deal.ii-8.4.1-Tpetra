@@ -30,35 +30,44 @@
 #define __TBB_null_rw_mutex_H
 
 namespace tbb {
-    
+
 //! A rw mutex which does nothing
 /** A null_rw_mutex is a rw mutex that does nothing and simulates successful operation.
     @ingroup synchronization */
-class null_rw_mutex {
-    //! Deny assignment and copy construction 
-    null_rw_mutex( const null_rw_mutex& );   
-    void operator=( const null_rw_mutex& );   
-public:   
-    //! Represents acquisition of a mutex.
-    class scoped_lock {   
-    public:   
-        scoped_lock() {}
-        scoped_lock( null_rw_mutex& , bool = true ) {}
-        ~scoped_lock() {}
-        void acquire( null_rw_mutex& , bool = true ) {}
-        bool upgrade_to_writer() { return true; }
-        bool downgrade_to_reader() { return true; }
-        bool try_acquire( null_rw_mutex& , bool = true ) { return true; }
-        void release() {}
+    class null_rw_mutex {
+        //! Deny assignment and copy construction
+        null_rw_mutex(const null_rw_mutex &);
+
+        void operator=(const null_rw_mutex &);
+
+    public:
+        //! Represents acquisition of a mutex.
+        class scoped_lock {
+        public:
+            scoped_lock() {}
+
+            scoped_lock(null_rw_mutex &, bool = true) {}
+
+            ~scoped_lock() {}
+
+            void acquire(null_rw_mutex &, bool = true) {}
+
+            bool upgrade_to_writer() { return true; }
+
+            bool downgrade_to_reader() { return true; }
+
+            bool try_acquire(null_rw_mutex &, bool = true) { return true; }
+
+            void release() {}
+        };
+
+        null_rw_mutex() {}
+
+        // Mutex traits
+        static const bool is_rw_mutex = true;
+        static const bool is_recursive_mutex = true;
+        static const bool is_fair_mutex = true;
     };
-  
-    null_rw_mutex() {}
-    
-    // Mutex traits   
-    static const bool is_rw_mutex = true;   
-    static const bool is_recursive_mutex = true;
-    static const bool is_fair_mutex = true;
-};  
 
 }
 

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_MINIMAL
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_MINIMAL
+
 #include <boost/spirit/home/classic/debug/minimal.hpp>
+
 #endif

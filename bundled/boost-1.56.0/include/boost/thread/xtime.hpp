@@ -9,6 +9,7 @@
 #define BOOST_XTIME_WEK070601_HPP
 
 #include <boost/thread/detail/config.hpp>
+
 #if defined BOOST_THREAD_USES_DATETIME
 
 #include <boost/cstdint.hpp>

@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_PRIMITIVES
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_PRIMITIVES
+
 #include <boost/spirit/home/classic/core/primitives/primitives.hpp>
+
 #endif

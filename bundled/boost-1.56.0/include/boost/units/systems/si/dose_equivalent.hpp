@@ -16,18 +16,20 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<dose_equivalent_dimension,si::system>     dose_equivalent;
-    
-BOOST_UNITS_STATIC_CONSTANT(sievert,dose_equivalent);  
-BOOST_UNITS_STATIC_CONSTANT(sieverts,dose_equivalent); 
+            typedef unit <dose_equivalent_dimension, si::system> dose_equivalent;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(sievert, dose_equivalent
+            );
+            BOOST_UNITS_STATIC_CONSTANT(sieverts, dose_equivalent
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

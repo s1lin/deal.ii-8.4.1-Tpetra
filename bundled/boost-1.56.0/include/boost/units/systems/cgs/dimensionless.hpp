@@ -15,15 +15,16 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace cgs {
+        namespace cgs {
 
-BOOST_UNITS_STATIC_CONSTANT(cgs_dimensionless,dimensionless);
+            BOOST_UNITS_STATIC_CONSTANT(cgs_dimensionless, dimensionless
+            );
 
-} // namespace cgs
+        } // namespace cgs
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

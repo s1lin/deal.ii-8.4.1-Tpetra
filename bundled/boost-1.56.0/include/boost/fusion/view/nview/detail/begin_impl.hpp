@@ -12,39 +12,38 @@
 #include <boost/mpl/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 
-namespace boost { namespace fusion
-{
-    struct nview_tag;
+namespace boost {
+    namespace fusion {
+        struct nview_tag;
 
-    template <typename Sequence, typename Pos>
-    struct nview_iterator;
+        template<typename Sequence, typename Pos>
+        struct nview_iterator;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct begin_impl;
+        namespace extension {
+            template<typename Tag>
+            struct begin_impl;
 
-        template<>
-        struct begin_impl<nview_tag>
-        {
-            template<typename Sequence>
-            struct apply
-            {
-                typedef typename Sequence::index_type index_type;
+            template<>
+            struct begin_impl<nview_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename Sequence::index_type index_type;
 
-                typedef nview_iterator<Sequence, 
-                    typename mpl::begin<index_type>::type> type;
+                    typedef nview_iterator<Sequence,
+                            typename mpl::begin<index_type>::type> type;
 
-                BOOST_FUSION_GPU_ENABLED
-                static type call(Sequence& s)
-                {
-                    return type(s);
-                }
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& s)
+                    {
+                        return type(s);
+                    }
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif
 

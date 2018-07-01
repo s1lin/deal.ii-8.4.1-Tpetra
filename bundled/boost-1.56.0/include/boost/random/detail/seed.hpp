@@ -23,17 +23,20 @@
 #include <boost/type_traits/is_arithmetic.hpp>
 
 namespace boost {
-namespace random {
-namespace detail {
+    namespace random {
+        namespace detail {
 
-template<class T>
-struct disable_seed : boost::disable_if<boost::is_arithmetic<T> > {};
+            template<class T>
+            struct disable_seed : boost::disable_if<boost::is_arithmetic<T> > {
+            };
 
-template<class Engine, class T>
-struct disable_constructor : disable_seed<T> {};
+            template<class Engine, class T>
+            struct disable_constructor : disable_seed<T> {
+            };
 
-template<class Engine>
-struct disable_constructor<Engine, Engine> {};
+            template<class Engine>
+            struct disable_constructor<Engine, Engine> {
+            };
 
 #define BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(Self, Generator, gen) \
     template<class Generator>                                           \
@@ -56,8 +59,8 @@ struct disable_constructor<Engine, Engine> {};
 
 #define BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(Self, T, x) \
     void seed(const T& x)
-}
-}
+        }
+    }
 }
 
 #else

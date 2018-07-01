@@ -13,35 +13,34 @@
 #include <boost/mpl/begin.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
-namespace boost { namespace fusion {
-    
-    struct mpl_sequence_tag;
+namespace boost {
+    namespace fusion {
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct begin_impl;
+        struct mpl_sequence_tag;
 
-        template <>
-        struct begin_impl<mpl_sequence_tag>
-        {
-            template <typename Sequence>
-            struct apply 
-            {
-                typedef typename mpl::begin<
-                    typename remove_const<Sequence>::type
-                >::type iterator;
-                typedef mpl_iterator<iterator> type;
-                
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence)
-                {
-                    return type();
-                }
+        namespace extension {
+            template<typename Tag>
+            struct begin_impl;
+
+            template<>
+            struct begin_impl<mpl_sequence_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef typename mpl::begin<
+                            typename remove_const<Sequence>::type
+                    >::type iterator;
+                    typedef mpl_iterator <iterator> type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence)
+                            {
+                                    return type();
+                            }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif

@@ -8,7 +8,7 @@
 /* web: http://www.cise.ufl.edu/research/sparse/umfpack                       */
 /* -------------------------------------------------------------------------- */
 
-double umfpack_timer ( void ) ;
+double umfpack_timer(void);
 
 /*
 Syntax (for all versions: di, dl, zi, and zl):

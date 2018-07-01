@@ -18,21 +18,24 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace astronomical {
+        namespace astronomical {
 
-typedef scaled_base_unit<boost::units::astronomical::light_second_base_unit, scale<31557600, static_rational<1> > > light_year_base_unit;
+            typedef scaled_base_unit <boost::units::astronomical::light_second_base_unit, scale<31557600,
+                    static_rational < 1>> >
+            light_year_base_unit;
 
-} // namespace astronomical
+        } // namespace astronomical
 
-template<>
-struct base_unit_info<astronomical::light_year_base_unit> {
-    static const char* name()   { return("light year"); }
-    static const char* symbol() { return("ly"); }
-};
+        template<>
+        struct base_unit_info<astronomical::light_year_base_unit> {
+            static const char *name() { return ("light year"); }
 
-} // namespace units
+            static const char *symbol() { return ("ly"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

@@ -11,17 +11,18 @@
 #include <boost/mpl/size.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 
-namespace boost { namespace mpl
-{
-    template <typename Tag>
-    struct size_impl;
+namespace boost {
+    namespace mpl {
+        template<typename Tag>
+        struct size_impl;
 
-    template <>
-    struct size_impl<fusion::fusion_sequence_tag>
-    {
-        template <typename Sequence>
-        struct apply : fusion::result_of::size<Sequence> {};
-    };
-}}
+        template<>
+        struct size_impl<fusion::fusion_sequence_tag> {
+            template<typename Sequence>
+            struct apply : fusion::result_of::size<Sequence> {
+            };
+        };
+    }
+}
 
 #endif

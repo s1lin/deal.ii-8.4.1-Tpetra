@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_FIXED_SIZE_QUEUE
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_FIXED_SIZE_QUEUE
+
 #include <boost/spirit/home/classic/iterator/fixed_size_queue.hpp>
+
 #endif

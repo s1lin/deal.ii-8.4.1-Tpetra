@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_REFACTORING
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_REFACTORING
+
 #include <boost/spirit/home/classic/meta/refactoring.hpp>
+
 #endif

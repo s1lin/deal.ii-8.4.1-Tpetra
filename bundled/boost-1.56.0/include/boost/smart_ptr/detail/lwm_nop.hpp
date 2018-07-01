@@ -17,20 +17,17 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class lightweight_mutex
-{
-public:
+        class lightweight_mutex {
+        public:
 
-    typedef lightweight_mutex scoped_lock;
-};
+            typedef lightweight_mutex scoped_lock;
+        };
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace boost
 

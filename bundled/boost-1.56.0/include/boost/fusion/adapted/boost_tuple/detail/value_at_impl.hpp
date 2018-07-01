@@ -10,22 +10,22 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/tuple/tuple.hpp>
 
-namespace boost { namespace fusion
-{
-    struct boost_tuple_tag;
+namespace boost {
+    namespace fusion {
+        struct boost_tuple_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct value_at_impl;
+        namespace extension {
+            template<typename T>
+            struct value_at_impl;
 
-        template <>
-        struct value_at_impl<boost_tuple_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply : tuples::element<N::value, Sequence> {};
-        };
+            template<>
+            struct value_at_impl<boost_tuple_tag> {
+                template<typename Sequence, typename N>
+                struct apply : tuples::element<N::value, Sequence> {
+                };
+            };
+        }
     }
-}}
+}
 
 #endif

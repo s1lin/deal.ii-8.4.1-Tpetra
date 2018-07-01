@@ -14,35 +14,35 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace fusion
-{
-    namespace result_of
-    {
-        template <typename Sequence, typename T>
-        struct push_front
-        {
-            typedef fusion::single_view<typename detail::as_fusion_element<T>::type> single_view;
-            typedef joint_view<single_view const, Sequence> type;
-        };
-    }
+namespace boost {
+    namespace fusion {
+        namespace result_of {
+            template<typename Sequence, typename T>
+            struct push_front {
+                typedef fusion::single_view<typename detail::as_fusion_element<T>::type> single_view;
+                typedef joint_view<single_view const, Sequence> type;
+            };
+        }
 
-    template <typename Sequence, typename T>
-    BOOST_FUSION_GPU_ENABLED
-    inline 
-    typename
-        lazy_enable_if<
-            traits::is_sequence<Sequence>
-          , result_of::push_front<Sequence const, T>
-        >::type
-    push_front(Sequence const& seq, T const& x)
-    {
-        typedef typename result_of::push_front<Sequence const, T> push_front;
-        typedef typename push_front::single_view single_view; 
-        typedef typename push_front::type result; 
-        single_view x_(x);
-        return result(x_, seq);
+        template<typename Sequence, typename T>
+        BOOST_FUSION_GPU_ENABLED
+        inline
+        typename
+                lazy_enable_if<
+                traits::is_sequence < Sequence>
+        , result_of::push_front<Sequence const, T>
+        >
+
+        ::type
+        push_front(Sequence const &seq, T const &x) {
+            typedef typename result_of::push_front<Sequence const, T> push_front;
+            typedef typename push_front::single_view single_view;
+            typedef typename push_front::type result;
+            single_view x_(x);
+            return result(x_, seq);
+        }
     }
-}}
+}
 
 #endif
 

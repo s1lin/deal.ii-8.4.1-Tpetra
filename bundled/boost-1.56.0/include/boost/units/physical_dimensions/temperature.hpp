@@ -16,14 +16,14 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
 /// base dimension of temperature
-struct temperature_base_dimension : 
-    boost::units::base_dimension<temperature_base_dimension,-5> 
-{ };               
+        struct temperature_base_dimension :
+                boost::units::base_dimension<temperature_base_dimension, -5> {
+        };
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 
@@ -37,12 +37,12 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::units::temperature_base_dimension)
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
 /// dimension of temperature (Theta)
-typedef temperature_base_dimension::dimension_type temperature_dimension;
+        typedef temperature_base_dimension::dimension_type temperature_dimension;
 
-} // namespace units
+    } // namespace units
 
 } // namespace boost
 

@@ -14,20 +14,22 @@
 #include <boost/spirit/home/support/info.hpp>
 #include <boost/spirit/home/karma/meta_compiler.hpp>
 
-namespace boost { namespace spirit { namespace karma
-{
-    template <typename Expr>
-    inline info what(Expr const& xpr)
-    {
-        // Report invalid expression error as early as possible.
-        // If you got an error_invalid_expression
-        // error message here, then the expression (expr) is not a
-        // valid spirit karma expression.
-        BOOST_SPIRIT_ASSERT_MATCH(karma::domain, Expr);
-        return compile<karma::domain>(xpr).what(unused);
-    }
+namespace boost {
+    namespace spirit {
+        namespace karma {
+            template<typename Expr>
+            inline info what(Expr const &xpr) {
+                // Report invalid expression error as early as possible.
+                // If you got an error_invalid_expression
+                // error message here, then the expression (expr) is not a
+                // valid spirit karma expression.
+                BOOST_SPIRIT_ASSERT_MATCH(karma::domain, Expr);
+                return compile<karma::domain>(xpr).what(unused);
+            }
 
-}}}
+        }
+    }
+}
 
 #endif
 

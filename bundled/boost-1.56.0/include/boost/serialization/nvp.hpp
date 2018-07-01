@@ -32,67 +32,68 @@
 #include <boost/serialization/wrapper.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-template<class T>
-struct nvp : 
-    public std::pair<const char *, T *>,
-    public wrapper_traits<const nvp< T > >
-{
-    explicit nvp(const char * name_, T & t) :
-        // note: redundant cast works around borland issue
-        // note: added _ to suppress useless gcc warning
-        std::pair<const char *, T *>(name_, (T*)(& t))
-    {}
-    nvp(const nvp & rhs) : 
-        // note: redundant cast works around borland issue
-        std::pair<const char *, T *>(rhs.first, (T*)rhs.second)
-    {}
+        template<class T>
+        struct nvp :
+                public std::pair<const char *, T *>,
+                public wrapper_traits<const nvp<T> > {
+            explicit nvp(const char *name_, T &t) :
+            // note: redundant cast works around borland issue
+            // note: added _ to suppress useless gcc warning
+                    std::pair<const char *, T *>(name_, (T *) (&t)) {}
 
-    const char * name() const {
-        return this->first;
-    }
-    T & value() const {
-        return *(this->second);
-    }
+            nvp(const nvp &rhs) :
+            // note: redundant cast works around borland issue
+                    std::pair<const char *, T *>(rhs.first, (T *) rhs.second) {}
 
-    const T & const_value() const {
-        return *(this->second);
-    }
+            const char *name() const {
+                return this->first;
+            }
 
-    // True64 compiler complains with a warning about the use of
-    // the name "Archive" hiding some higher level usage.  I'm sure this
-    // is an error but I want to accomodated as it generates a long warning
-    // listing and might be related to a lot of test failures.
-    // default treatment for name-value pairs. The name is
-    // just discarded and only the value is serialized. 
-    template<class Archivex>
-    void save(
-        Archivex & ar, 
-        const unsigned int /* file_version */
-    ) const {
-        // CodeWarrior 8.x can't seem to resolve the << op for a rhs of "const T *"
-        ar.operator<<(const_value());
-    }
-    template<class Archivex>
-    void load(
-        Archivex & ar, 
-        const unsigned int /* file_version */
-    ){
-        // CodeWarrior 8.x can't seem to resolve the >> op for a rhs of "const T *"
-        ar.operator>>(value());
-    }
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
-};
+            T &value() const {
+                return *(this->second);
+            }
 
-template<class T>
-inline
+            const T &const_value() const {
+                return *(this->second);
+            }
+
+            // True64 compiler complains with a warning about the use of
+            // the name "Archive" hiding some higher level usage.  I'm sure this
+            // is an error but I want to accomodated as it generates a long warning
+            // listing and might be related to a lot of test failures.
+            // default treatment for name-value pairs. The name is
+            // just discarded and only the value is serialized.
+            template<class Archivex>
+            void save(
+                    Archivex &ar,
+                    const unsigned int /* file_version */
+            ) const {
+                // CodeWarrior 8.x can't seem to resolve the << op for a rhs of "const T *"
+                ar.operator<<(const_value());
+            }
+
+            template<class Archivex>
+            void load(
+                    Archivex &ar,
+                    const unsigned int /* file_version */
+            ) {
+                // CodeWarrior 8.x can't seem to resolve the >> op for a rhs of "const T *"
+                ar.operator>>(value());
+            }
+
+            BOOST_SERIALIZATION_SPLIT_MEMBER()
+        };
+
+        template<class T>
+        inline
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-const
+        const
 #endif
-nvp< T > make_nvp(const char * name, T & t){
-    return nvp< T >(name, t);
-}
+        nvp<T> make_nvp(const char *name, T &t) {
+            return nvp<T>(name, t);
+        }
 
 // to maintain efficiency and portability, we want to assign
 // specific serialization traits to all instances of this wrappers.
@@ -101,25 +102,25 @@ nvp< T > make_nvp(const char * name, T & t){
 // wouldn't be treated the same on different platforms.  This would
 // break archive portability. Leave this here as reminder not to use it !!!
 
-template <class T>
-struct implementation_level<nvp< T > >
-{
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<object_serializable> type;
-    BOOST_STATIC_CONSTANT(int, value = implementation_level::type::value);
-};
+        template<class T>
+        struct implementation_level<nvp<T> > {
+            typedef mpl::integral_c_tag tag;
+            typedef mpl::int_ <object_serializable> type;
+
+            BOOST_STATIC_CONSTANT(int, value = implementation_level::type::value);
+        };
 
 // nvp objects are generally created on the stack and are never tracked
-template<class T>
-struct tracking_level<nvp< T > >
-{
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<track_never> type;
-    BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
-};
+        template<class T>
+        struct tracking_level<nvp<T> > {
+            typedef mpl::integral_c_tag tag;
+            typedef mpl::int_ <track_never> type;
+
+            BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
+        };
 
 
-} // seralization
+    } // seralization
 } // boost
 
 #include <boost/preprocessor/stringize.hpp>

@@ -8,28 +8,26 @@
 #if !defined(FUSION_VALUE_OF_IMPL_07172005_0838)
 #define FUSION_VALUE_OF_IMPL_07172005_0838
 
-namespace boost { namespace fusion
-{
-    struct cons_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct cons_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct value_of_impl;
+        namespace extension {
+            template<typename Tag>
+            struct value_of_impl;
 
-        template <>
-        struct value_of_impl<cons_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply 
-            {
-                typedef typename Iterator::cons_type cons_type;
-                typedef typename cons_type::car_type type;
+            template<>
+            struct value_of_impl<cons_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename Iterator::cons_type cons_type;
+                    typedef typename cons_type::car_type type;
+                };
             };
-        };
-    }
+        }
 
-}}
+    }
+}
 
 #endif
 

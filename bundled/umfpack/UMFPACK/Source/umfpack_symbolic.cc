@@ -16,24 +16,23 @@
 #include "umf_internal.h"
 
 GLOBAL Int UMFPACK_symbolic
-(
-    Int n_row,
-    Int n_col,
-    const Int Ap [ ],
-    const Int Ai [ ],
-    const double Ax [ ],
+        (
+                Int n_row,
+                Int n_col,
+                const Int Ap[],
+                const Int Ai[],
+                const double Ax[],
 #ifdef COMPLEX
-    const double Az [ ],
+        const double Az [ ],
 #endif
-    void **SymbolicHandle,
-    const double Control [UMFPACK_CONTROL],
-    double Info [UMFPACK_INFO]
-)
-{
-    Int *Qinit = (Int *) NULL ;
-    return (UMFPACK_qsymbolic (n_row, n_col, Ap, Ai, Ax,
+                void **SymbolicHandle,
+                const double Control[UMFPACK_CONTROL],
+                double Info[UMFPACK_INFO]
+) {
+    Int *Qinit = (Int *) NULL;
+    return (UMFPACK_qsymbolic(n_row, n_col, Ap, Ai, Ax,
 #ifdef COMPLEX
-	Az,
+            Az,
 #endif
-	Qinit, SymbolicHandle, Control, Info)) ;
+                              Qinit, SymbolicHandle, Control, Info));
 }

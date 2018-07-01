@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_TYPEOF
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_TYPEOF
+
 #include <boost/spirit/home/classic/actor/typeof.hpp>
+
 #endif

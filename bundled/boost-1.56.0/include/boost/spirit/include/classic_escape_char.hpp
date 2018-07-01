@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_ESCAPE_CHAR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_ESCAPE_CHAR
+
 #include <boost/spirit/home/classic/utility/escape_char.hpp>
+
 #endif

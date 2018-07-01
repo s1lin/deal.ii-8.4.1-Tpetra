@@ -21,135 +21,145 @@
 #include "boost/preprocessor/repeat_2nd.hpp"
 #include "boost/preprocessor/tuple.hpp"
 
-namespace boost { 
-namespace lambda {
+namespace boost {
+    namespace lambda {
 
 // Switch actions
-template <int N, class Switch1 = null_type, class Switch2 = null_type, 
-          class Switch3 = null_type, class Switch4 = null_type,
-          class Switch5 = null_type, class Switch6 = null_type, 
-          class Switch7 = null_type, class Switch8 = null_type, 
-          class Switch9 = null_type>
-struct switch_action {};
+        template<int N, class Switch1 = null_type, class Switch2 = null_type,
+                class Switch3 = null_type, class Switch4 = null_type,
+                class Switch5 = null_type, class Switch6 = null_type,
+                class Switch7 = null_type, class Switch8 = null_type,
+                class Switch9 = null_type>
+        struct switch_action {
+        };
 
 
-namespace detail {
+        namespace detail {
 
-  // templates to represent special lambda functors for the cases in 
-  // switch statements
-  
-template <int Value> struct case_label {};
-struct default_label {};
+            // templates to represent special lambda functors for the cases in
+            // switch statements
 
-template<class Type> struct switch_case_tag {};
+            template<int Value>
+            struct case_label {
+            };
+            struct default_label {
+            };
 
-  // a normal case is represented as:
-  // tagged_lambda_functor<switch_case_tag<case_label<N> > >, LambdaFunctor>
-  
-  // the default case as:
-  // tagged_lambda_functor<switch_case_tag<default_label> >, LambdaFunctor>
+            template<class Type>
+            struct switch_case_tag {
+            };
+
+            // a normal case is represented as:
+            // tagged_lambda_functor<switch_case_tag<case_label<N> > >, LambdaFunctor>
+
+            // the default case as:
+            // tagged_lambda_functor<switch_case_tag<default_label> >, LambdaFunctor>
 
 
-} // end detail
+        } // end detail
 
 
 /// create switch_case_tag tagged_lambda_functors
-template <int CaseValue, class Arg>
-inline const 
-tagged_lambda_functor<
-  detail::switch_case_tag<detail::case_label<CaseValue> >, 
-  lambda_functor<Arg> 
-> 
-case_statement(const lambda_functor<Arg>& a) { 
-  return 
-    tagged_lambda_functor<
-      detail::switch_case_tag<detail::case_label<CaseValue> >, 
-      lambda_functor<Arg> 
-    >(a); 
-}
+        template<int CaseValue, class Arg>
+        inline const
+        tagged_lambda_functor <
+        detail::switch_case_tag<detail::case_label<CaseValue> >,
+        lambda_functor<Arg>
+        >
+        case_statement(const lambda_functor <Arg> &a) {
+            return
+                    tagged_lambda_functor <
+                    detail::switch_case_tag<detail::case_label<CaseValue> >,
+                            lambda_functor < Arg >
+                            > (a);
+        }
 
 // No case body case.
-template <int CaseValue>
-inline const 
-tagged_lambda_functor<
-  detail::switch_case_tag<detail::case_label<CaseValue> >,
-  lambda_functor< 
-    lambda_functor_base< 
-      do_nothing_action, 
-      null_type
-    > 
-  > 
-> 
-case_statement() { 
-return 
-  tagged_lambda_functor<
-    detail::switch_case_tag<detail::case_label<CaseValue> >,
-    lambda_functor< 
-      lambda_functor_base< 
-        do_nothing_action, 
-        null_type
-      > 
-    > 
-  > () ;
-}
+        template<int CaseValue>
+        inline const
+        tagged_lambda_functor <
+        detail::switch_case_tag<detail::case_label<CaseValue> >,
+        lambda_functor<
+                lambda_functor_base <
+                do_nothing_action,
+                null_type
+        >
+        >
+        >
+
+        case_statement() {
+            return
+                    tagged_lambda_functor <
+                    detail::switch_case_tag<detail::case_label<CaseValue> >,
+                            lambda_functor <
+                            lambda_functor_base <
+                            do_nothing_action,
+                            null_type
+                            >
+                            >
+                            > ();
+        }
 
 // default label
-template <class Arg>
-inline const 
-tagged_lambda_functor<
-  detail::switch_case_tag<detail::default_label>, 
-  lambda_functor<Arg> 
-> 
-default_statement(const lambda_functor<Arg>& a) { 
-  return 
-    tagged_lambda_functor<
-      detail::switch_case_tag<detail::default_label>, 
-      lambda_functor<Arg> 
-    >(a); 
-}
+        template<class Arg>
+        inline const
+        tagged_lambda_functor <
+        detail::switch_case_tag<detail::default_label>,
+        lambda_functor<Arg>
+        >
+        default_statement(const lambda_functor <Arg> &a) {
+            return
+                    tagged_lambda_functor <
+                    detail::switch_case_tag<detail::default_label>,
+                            lambda_functor < Arg >
+                            > (a);
+        }
 
 // default lable, no case body case.
-inline const 
-tagged_lambda_functor<
-  detail::switch_case_tag<detail::default_label>,
-  lambda_functor< 
-    lambda_functor_base< 
-      do_nothing_action, 
-      null_type
-    > 
-  > 
-> 
-default_statement() { 
-return 
-      lambda_functor_base< 
-        do_nothing_action, 
-        null_type 
-      > () ;
-}
+        inline const
+        tagged_lambda_functor <
+        detail::switch_case_tag<detail::default_label>,
+        lambda_functor<
+                lambda_functor_base <
+                do_nothing_action,
+                null_type
+        >
+        >
+        >
+
+        default_statement() {
+            return
+                    lambda_functor_base<
+                            do_nothing_action,
+                            null_type
+                    >();
+        }
 
 
 // Specializations for lambda_functor_base of case_statement -----------------
 
 // 0 case type:
 // useless (just the condition part) but provided for completeness.
-template<class Args>
-class 
-lambda_functor_base<
-  switch_action<1>, 
-  Args
-> 
-{
-public:
-  Args args;
-  template <class SigArgs> struct sig { typedef void type; };
-public:
-  explicit lambda_functor_base(const Args& a) : args(a) {}
+        template<class Args>
+        class
+        lambda_functor_base<
+                switch_action<1>,
+                Args
+        > {
+        public:
+            Args args;
+            template<class SigArgs>
+            struct sig {
+                typedef void type;
+            };
+        public:
+            explicit lambda_functor_base(const Args &a) : args(a) {}
 
-  template<class RET, CALL_TEMPLATE_ARGS>
-  RET call(CALL_FORMAL_ARGS) const {
-    detail::select(::boost::tuples::get<1>(args), CALL_ACTUAL_ARGS);  
-  }
-};
+            template<class RET, CALL_TEMPLATE_ARGS>
+            RET call(CALL_FORMAL_ARGS) const {
+                detail::select(::boost::tuples::get<1>(args), CALL_ACTUAL_ARGS);
+            }
+        };
 
 // 1 case type:
 // template<class Args, int Case1>
@@ -289,10 +299,10 @@ BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(A,i)
 BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,T),i) BOOST_PP_TUPLE_ELEM(2,1,T)
 
 #define BOOST_LAMBDA_A_I_LIST(i, A) \
-BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I, A) 
+BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I, A)
 
 #define BOOST_LAMBDA_A_I_B_LIST(i, A, B) \
-BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I_B, (A,B)) 
+BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I_B, (A,B))
 
 
 // Switch related macros -------------------------------------------
@@ -330,7 +340,6 @@ public:                                                                       \
   }                                                                           \
 };
 
-        
 
 #define BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)                              \
 template<                                                                     \
@@ -374,39 +383,40 @@ public:                                                                       \
 // switch_statement bind functions -------------------------------------
 
 // The zero argument case, for completeness sake
-inline const 
-lambda_functor< 
-  lambda_functor_base< 
-    do_nothing_action, 
-    null_type
-  > 
->
-switch_statement() { 
-  return 
-      lambda_functor_base< 
-        do_nothing_action, 
-        null_type
-      > 
-  ();
-}
+        inline const
+        lambda_functor <
+        lambda_functor_base<
+                do_nothing_action,
+                null_type
+        >
+        >
+        switch_statement() {
+            return
+                    lambda_functor_base<
+                            do_nothing_action,
+                            null_type
+                    >
+                            ();
+        }
 
 // 1 argument case, this is useless as well, just the condition part
-template <class TestArg>
-inline const 
-lambda_functor< 
-  lambda_functor_base< 
-    switch_action<1>, 
-    tuple<lambda_functor<TestArg> >
-  > 
->
-switch_statement(const lambda_functor<TestArg>& a1) { 
-  return 
-      lambda_functor_base< 
-         switch_action<1>, 
-         tuple< lambda_functor<TestArg> > 
-      > 
-    ( tuple<lambda_functor<TestArg> >(a1));
-}
+        template<class TestArg>
+        inline const
+        lambda_functor <
+        lambda_functor_base<
+                switch_action<1>,
+                tuple < lambda_functor < TestArg>>
+        >
+        >
+
+        switch_statement(const lambda_functor <TestArg> &a1) {
+            return
+                    lambda_functor_base<
+                            switch_action<1>,
+                            tuple < lambda_functor < TestArg> >
+                    >
+                    (tuple < lambda_functor < TestArg > > (a1));
+        }
 
 
 #define HELPER(z, N, FOO)                                      \
@@ -455,7 +465,7 @@ switch_statement(                                                     \
 
 #define BOOST_LAMBDA_SWITCH(N)           \
 BOOST_LAMBDA_SWITCH_NO_DEFAULT_CASE(N)   \
-BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)        
+BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)
 
 // Use this to avoid case 0, these macros work only from case 1 upwards
 #define BOOST_LAMBDA_SWITCH_HELPER(z, N, A) \
@@ -470,15 +480,15 @@ BOOST_LAMBDA_SWITCH_STATEMENT(BOOST_PP_INC(N))
 #pragma warning(disable:4065)
 #endif
 
-  // up to 9 cases supported (counting default:)
-BOOST_PP_REPEAT_2ND(9,BOOST_LAMBDA_SWITCH_HELPER,FOO)
-BOOST_PP_REPEAT_2ND(9,BOOST_LAMBDA_SWITCH_STATEMENT_HELPER,FOO)
+        // up to 9 cases supported (counting default:)
+        BOOST_PP_REPEAT_2ND(9,BOOST_LAMBDA_SWITCH_HELPER,FOO)
+        BOOST_PP_REPEAT_2ND(9,BOOST_LAMBDA_SWITCH_STATEMENT_HELPER,FOO)
 
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
 
-} // namespace lambda 
+    } // namespace lambda
 } // namespace boost
 
 
@@ -495,7 +505,6 @@ BOOST_PP_REPEAT_2ND(9,BOOST_LAMBDA_SWITCH_STATEMENT_HELPER,FOO)
 
 #undef BOOST_LAMBDA_SWITCH_STATEMENT
 #undef BOOST_LAMBDA_SWITCH_STATEMENT_HELPER
-
 
 
 #endif

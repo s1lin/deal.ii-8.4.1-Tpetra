@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_PHOENIX1_COMPOSITE
 #define BOOST_SPIRIT_INCLUDE_PHOENIX1_COMPOSITE
+
 #include <boost/spirit/home/classic/phoenix/composite.hpp>
+
 #endif

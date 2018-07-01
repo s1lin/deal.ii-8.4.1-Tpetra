@@ -49,21 +49,21 @@ namespace boost {
 
               \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename RangeT, 
-            typename CharT, 
-            typename RegexTraitsT>
-        inline iterator_range< 
-            BOOST_STRING_TYPENAME range_iterator<RangeT>::type >
-        find_regex( 
-            RangeT& Input, 
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
-            iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(::boost::as_literal(Input));
+        template<
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline iterator_range<
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
+        find_regex(
+                RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
+            iterator_range < BOOST_STRING_TYPENAME
+            range_iterator<RangeT>::type > lit_input(::boost::as_literal(Input));
 
-            return ::boost::algorithm::regex_finder(Rx,Flags)(
-                ::boost::begin(lit_input), ::boost::end(lit_input) );
+            return ::boost::algorithm::regex_finder(Rx, Flags)(
+                    ::boost::begin(lit_input), ::boost::end(lit_input));
         }
 
 //  replace_regex --------------------------------------------------------------------//
@@ -85,45 +85,43 @@ namespace boost {
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
-            typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
-            typename RegexTraitsT,
-            typename FormatStringTraitsT, typename FormatStringAllocatorT >
+        template<
+                typename OutputIteratorT,
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT,
+                typename FormatStringTraitsT, typename FormatStringAllocatorT>
         inline OutputIteratorT replace_regex_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
-            match_flag_type Flags=match_default | format_default )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Output,
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::regex_formatter( Format, Flags ) );
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                const std::basic_string <CharT, FormatStringTraitsT, FormatStringAllocatorT> &Format,
+                match_flag_type Flags = match_default | format_default) {
+            return ::boost::algorithm::find_format_copy(
+                    Output,
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::regex_formatter(Format, Flags));
         }
 
         //! Replace regex algorithm
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT,
-            typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline SequenceT replace_regex_copy( 
-            const SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
-            match_flag_type Flags=match_default | format_default )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::regex_formatter( Format, Flags ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT,
+                typename FormatStringTraitsT, typename FormatStringAllocatorT>
+        inline SequenceT replace_regex_copy(
+                const SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                const std::basic_string <CharT, FormatStringTraitsT, FormatStringAllocatorT> &Format,
+                match_flag_type Flags = match_default | format_default) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::regex_formatter(Format, Flags));
         }
 
         //! Replace regex algorithm
@@ -136,21 +134,20 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT,
-            typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline void replace_regex( 
-            SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
-            match_flag_type Flags=match_default | format_default )
-        {
-            ::boost::algorithm::find_format( 
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::regex_formatter( Format, Flags ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT,
+                typename FormatStringTraitsT, typename FormatStringAllocatorT>
+        inline void replace_regex(
+                SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                const std::basic_string <CharT, FormatStringTraitsT, FormatStringAllocatorT> &Format,
+                match_flag_type Flags = match_default | format_default) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::regex_formatter(Format, Flags));
         }
 
 //  replace_all_regex --------------------------------------------------------------------//
@@ -171,45 +168,43 @@ namespace boost {
 
               \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
-            typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
-            typename RegexTraitsT,
-            typename FormatStringTraitsT, typename FormatStringAllocatorT >
+        template<
+                typename OutputIteratorT,
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT,
+                typename FormatStringTraitsT, typename FormatStringAllocatorT>
         inline OutputIteratorT replace_all_regex_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
-            match_flag_type Flags=match_default | format_default )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Output,
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::regex_formatter( Format, Flags ) );
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                const std::basic_string <CharT, FormatStringTraitsT, FormatStringAllocatorT> &Format,
+                match_flag_type Flags = match_default | format_default) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Output,
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::regex_formatter(Format, Flags));
         }
 
         //! Replace all regex algorithm
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT,
-            typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline SequenceT replace_all_regex_copy( 
-            const SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
-            match_flag_type Flags=match_default | format_default )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::regex_formatter( Format, Flags ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT,
+                typename FormatStringTraitsT, typename FormatStringAllocatorT>
+        inline SequenceT replace_all_regex_copy(
+                const SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                const std::basic_string <CharT, FormatStringTraitsT, FormatStringAllocatorT> &Format,
+                match_flag_type Flags = match_default | format_default) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::regex_formatter(Format, Flags));
         }
 
         //! Replace all regex algorithm
@@ -222,21 +217,20 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options            
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT,
-            typename FormatStringTraitsT, typename FormatStringAllocatorT >
-        inline void replace_all_regex( 
-            SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
-            match_flag_type Flags=match_default | format_default )
-        {
-            ::boost::algorithm::find_format_all( 
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::regex_formatter( Format, Flags ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT,
+                typename FormatStringTraitsT, typename FormatStringAllocatorT>
+        inline void replace_all_regex(
+                SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                const std::basic_string <CharT, FormatStringTraitsT, FormatStringAllocatorT> &Format,
+                match_flag_type Flags = match_default | format_default) {
+            ::boost::algorithm::find_format_all(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::regex_formatter(Format, Flags));
         }
 
 //  erase_regex --------------------------------------------------------------------//
@@ -256,41 +250,39 @@ namespace boost {
 
              \note The second variant of this function provides the strong exception-safety guarantee
        */
-        template< 
-            typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
-            typename RegexTraitsT >
+        template<
+                typename OutputIteratorT,
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT>
         inline OutputIteratorT erase_regex_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
             return ::boost::algorithm::find_format_copy(
-                Output,
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::empty_formatter( Input ) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase regex algorithm
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT >
-        inline SequenceT erase_regex_copy( 
-            const SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
-            return ::boost::algorithm::find_format_copy( 
-                Input, 
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::empty_formatter( Input ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline SequenceT erase_regex_copy(
+                const SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
+            return ::boost::algorithm::find_format_copy(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase regex algorithm
@@ -302,19 +294,18 @@ namespace boost {
             \param Rx A regular expression
             \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT >
-        inline void erase_regex( 
-            SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
-            ::boost::algorithm::find_format( 
-                Input, 
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::empty_formatter( Input ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline void erase_regex(
+                SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
+            ::boost::algorithm::find_format(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  erase_all_regex --------------------------------------------------------------------//
@@ -335,41 +326,39 @@ namespace boost {
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template< 
-            typename OutputIteratorT,
-            typename RangeT, 
-            typename CharT, 
-            typename RegexTraitsT >
+        template<
+                typename OutputIteratorT,
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT>
         inline OutputIteratorT erase_all_regex_copy(
-            OutputIteratorT Output,
-            const RangeT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
+                OutputIteratorT Output,
+                const RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
             return ::boost::algorithm::find_format_all_copy(
-                Output,
-                Input,
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::empty_formatter( Input ) );
+                    Output,
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase all regex algorithm
         /*!
             \overload
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT >
-        inline SequenceT erase_all_regex_copy( 
-            const SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
-            return ::boost::algorithm::find_format_all_copy( 
-                Input, 
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::empty_formatter( Input ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline SequenceT erase_all_regex_copy(
+                const SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
+            return ::boost::algorithm::find_format_all_copy(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
         //! Erase all regex algorithm
@@ -381,19 +370,18 @@ namespace boost {
             \param Rx A regular expression
             \param Flags Regex options
         */
-        template< 
-            typename SequenceT, 
-            typename CharT, 
-            typename RegexTraitsT>
-        inline void erase_all_regex( 
-            SequenceT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
-            ::boost::algorithm::find_format_all( 
-                Input, 
-                ::boost::algorithm::regex_finder( Rx, Flags ),
-                ::boost::algorithm::empty_formatter( Input ) );
+        template<
+                typename SequenceT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline void erase_all_regex(
+                SequenceT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
+            ::boost::algorithm::find_format_all(
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags),
+                    ::boost::algorithm::empty_formatter(Input));
         }
 
 //  find_all_regex ------------------------------------------------------------------//
@@ -420,21 +408,20 @@ namespace boost {
 
              \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename SequenceSequenceT, 
-            typename RangeT,         
-            typename CharT, 
-            typename RegexTraitsT >
-        inline SequenceSequenceT& find_all_regex(
-            SequenceSequenceT& Result,
-            const RangeT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
+        template<
+                typename SequenceSequenceT,
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline SequenceSequenceT &find_all_regex(
+                SequenceSequenceT &Result,
+                const RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
             return ::boost::algorithm::iter_find(
-                Result,
-                Input,
-                ::boost::algorithm::regex_finder(Rx,Flags) );         
+                    Result,
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags));
         }
 
 //  split_regex ------------------------------------------------------------------//
@@ -461,21 +448,20 @@ namespace boost {
 
                \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename SequenceSequenceT, 
-            typename RangeT,         
-            typename CharT, 
-            typename RegexTraitsT >
-        inline SequenceSequenceT& split_regex(
-            SequenceSequenceT& Result,
-            const RangeT& Input,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
+        template<
+                typename SequenceSequenceT,
+                typename RangeT,
+                typename CharT,
+                typename RegexTraitsT>
+        inline SequenceSequenceT &split_regex(
+                SequenceSequenceT &Result,
+                const RangeT &Input,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
             return ::boost::algorithm::iter_split(
-                Result,
-                Input,
-                ::boost::algorithm::regex_finder(Rx,Flags) );         
+                    Result,
+                    Input,
+                    ::boost::algorithm::regex_finder(Rx, Flags));
         }
 
 //  join_if ------------------------------------------------------------------//
@@ -498,46 +484,43 @@ namespace boost {
 
             \note This function provides the strong exception-safety guarantee
         */
-        template< 
-            typename SequenceSequenceT, 
-            typename Range1T,             
-            typename CharT, 
-            typename RegexTraitsT >
-        inline typename range_value<SequenceSequenceT>::type 
+        template<
+                typename SequenceSequenceT,
+                typename Range1T,
+                typename CharT,
+                typename RegexTraitsT>
+        inline typename range_value<SequenceSequenceT>::type
         join_if(
-            const SequenceSequenceT& Input,
-            const Range1T& Separator,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
-        {
+                const SequenceSequenceT &Input,
+                const Range1T &Separator,
+                const basic_regex <CharT, RegexTraitsT> &Rx,
+                match_flag_type Flags = match_default) {
             // Define working types
             typedef typename range_value<SequenceSequenceT>::type ResultT;
             typedef typename range_const_iterator<SequenceSequenceT>::type InputIteratorT;
 
             // Parse input
-            InputIteratorT itBegin=::boost::begin(Input);
-            InputIteratorT itEnd=::boost::end(Input);
+            InputIteratorT itBegin = ::boost::begin(Input);
+            InputIteratorT itEnd = ::boost::end(Input);
 
             // Construct container to hold the result
             ResultT Result;
 
 
             // Roll to the first element that will be added
-            while(
-                itBegin!=itEnd && 
-                !::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags)) ++itBegin;
+            while (
+                    itBegin != itEnd &&
+                    !::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags))
+                ++itBegin;
 
             // Add this element
-            if(itBegin!=itEnd)
-            {
+            if (itBegin != itEnd) {
                 detail::insert(Result, ::boost::end(Result), *itBegin);
                 ++itBegin;
             }
 
-            for(;itBegin!=itEnd; ++itBegin)
-            {
-                if(::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags))
-                {
+            for (; itBegin != itEnd; ++itBegin) {
+                if (::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags)) {
                     // Add separator
                     detail::insert(Result, ::boost::end(Result), ::boost::as_literal(Separator));
                     // Add element
@@ -550,71 +533,71 @@ namespace boost {
 
 #else  // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-                //! Conditional join algorithm
-        /*!
-            This algorithm joins all strings in a 'list' into one long string.
-            Segments are concatenated by given separator. Only segments that
-            match the given regular expression will be added to the result
+        //! Conditional join algorithm
+/*!
+    This algorithm joins all strings in a 'list' into one long string.
+    Segments are concatenated by given separator. Only segments that
+    match the given regular expression will be added to the result
 
-            This is a specialization of join_if algorithm.
+    This is a specialization of join_if algorithm.
 
-            \param Input A container that holds the input strings. It must be a container-of-containers.
-            \param Separator A string that will separate the joined segments.
-            \param Rx A regular expression
-            \param Flags Regex options
-            \return Concatenated string.
+    \param Input A container that holds the input strings. It must be a container-of-containers.
+    \param Separator A string that will separate the joined segments.
+    \param Rx A regular expression
+    \param Flags Regex options
+    \return Concatenated string.
 
-            \note This function provides the strong exception-safety guarantee
-        */
-        template< 
-            typename SequenceSequenceT, 
-            typename Range1T,             
-            typename CharT, 
-            typename RegexTraitsT >
-        inline typename range_value<SequenceSequenceT>::type 
-        join_if_regex(
-            const SequenceSequenceT& Input,
-            const Range1T& Separator,
-            const basic_regex<CharT, RegexTraitsT>& Rx,
-            match_flag_type Flags=match_default )
+    \note This function provides the strong exception-safety guarantee
+*/
+template<
+    typename SequenceSequenceT,
+    typename Range1T,
+    typename CharT,
+    typename RegexTraitsT >
+inline typename range_value<SequenceSequenceT>::type
+join_if_regex(
+    const SequenceSequenceT& Input,
+    const Range1T& Separator,
+    const basic_regex<CharT, RegexTraitsT>& Rx,
+    match_flag_type Flags=match_default )
+{
+    // Define working types
+    typedef typename range_value<SequenceSequenceT>::type ResultT;
+    typedef typename range_const_iterator<SequenceSequenceT>::type InputIteratorT;
+
+    // Parse input
+    InputIteratorT itBegin=::boost::begin(Input);
+    InputIteratorT itEnd=::boost::end(Input);
+
+    // Construct container to hold the result
+    ResultT Result;
+
+
+    // Roll to the first element that will be added
+    while(
+        itBegin!=itEnd &&
+        !::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags)) ++itBegin;
+
+    // Add this element
+    if(itBegin!=itEnd)
+    {
+        detail::insert(Result, ::boost::end(Result), *itBegin);
+        ++itBegin;
+    }
+
+    for(;itBegin!=itEnd; ++itBegin)
+    {
+        if(::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags))
         {
-            // Define working types
-            typedef typename range_value<SequenceSequenceT>::type ResultT;
-            typedef typename range_const_iterator<SequenceSequenceT>::type InputIteratorT;
-
-            // Parse input
-            InputIteratorT itBegin=::boost::begin(Input);
-            InputIteratorT itEnd=::boost::end(Input);
-
-            // Construct container to hold the result
-            ResultT Result;
-
-
-            // Roll to the first element that will be added
-            while(
-                itBegin!=itEnd && 
-                !::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags)) ++itBegin;
-
-            // Add this element
-            if(itBegin!=itEnd)
-            {
-                detail::insert(Result, ::boost::end(Result), *itBegin);
-                ++itBegin;
-            }
-
-            for(;itBegin!=itEnd; ++itBegin)
-            {
-                if(::boost::regex_match(::boost::begin(*itBegin), ::boost::end(*itBegin), Rx, Flags))
-                {
-                    // Add separator
-                    detail::insert(Result, ::boost::end(Result), ::boost::as_literal(Separator));
-                    // Add element
-                    detail::insert(Result, ::boost::end(Result), *itBegin);
-                }
-            }
-
-            return Result;
+            // Add separator
+            detail::insert(Result, ::boost::end(Result), ::boost::as_literal(Separator));
+            // Add element
+            detail::insert(Result, ::boost::end(Result), *itBegin);
         }
+    }
+
+    return Result;
+}
 
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING

@@ -16,20 +16,24 @@
 
 namespace boost {
 
-namespace units { 
+    namespace units {
 
-namespace si {
+        namespace si {
 
-typedef unit<wavenumber_dimension,si::system>    wavenumber;
-    
-BOOST_UNITS_STATIC_CONSTANT(reciprocal_meter,wavenumber);   
-BOOST_UNITS_STATIC_CONSTANT(reciprocal_meters,wavenumber);  
-BOOST_UNITS_STATIC_CONSTANT(reciprocal_metre,wavenumber);   
-BOOST_UNITS_STATIC_CONSTANT(reciprocal_metres,wavenumber);  
+            typedef unit <wavenumber_dimension, si::system> wavenumber;
 
-} // namespace si
+            BOOST_UNITS_STATIC_CONSTANT(reciprocal_meter, wavenumber
+            );
+            BOOST_UNITS_STATIC_CONSTANT(reciprocal_meters, wavenumber
+            );
+            BOOST_UNITS_STATIC_CONSTANT(reciprocal_metre, wavenumber
+            );
+            BOOST_UNITS_STATIC_CONSTANT(reciprocal_metres, wavenumber
+            );
 
-} // namespace units
+        } // namespace si
+
+    } // namespace units
 
 } // namespace boost
 

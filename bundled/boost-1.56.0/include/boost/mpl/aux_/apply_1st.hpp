@@ -16,20 +16,21 @@
 
 #include <boost/mpl/apply.hpp>
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost {
+    namespace mpl {
+        namespace aux {
 
-struct apply_1st
-{
-    template< typename Pair, typename T > struct apply
-        : apply2<
-              typename Pair::first
-            , typename Pair::second
-            , T
-            >
-    {
-    };
-};
+            struct apply_1st {
+                template<typename Pair, typename T>
+                struct apply
+                        : apply2<
+                                typename Pair::first, typename Pair::second, T
+                        > {
+                };
+            };
 
-}}}
+        }
+    }
+}
 
 #endif // BOOST_MPL_AUX_APPLY_1ST_HPP_INCLUDED

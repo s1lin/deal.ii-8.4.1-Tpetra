@@ -30,116 +30,97 @@
 # define BOOST_LIGHTWEIGHT_TEST_OSTREAM std::cerr
 #endif
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-struct report_errors_reminder
-{
-    bool called_report_errors_function;
+        struct report_errors_reminder {
+            bool called_report_errors_function;
 
-    report_errors_reminder() : called_report_errors_function(false) {}
+            report_errors_reminder() : called_report_errors_function(false) {}
 
-    ~report_errors_reminder()
-    {
-        BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called  
+            ~report_errors_reminder() {
+                BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called
+            }
+        };
+
+        inline report_errors_reminder &report_errors_remind() {
+            static report_errors_reminder r;
+            return r;
+        }
+
+        inline int &test_errors() {
+            static int x = 0;
+            report_errors_remind();
+            return x;
+        }
+
+        inline void test_failed_impl(char const *expr, char const *file, int line, char const *function) {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                    << file << "(" << line << "): test '" << expr << "' failed in function '"
+                    << function << "'" << std::endl;
+            ++test_errors();
+        }
+
+        inline void error_impl(char const *msg, char const *file, int line, char const *function) {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                    << file << "(" << line << "): " << msg << " in function '"
+                    << function << "'" << std::endl;
+            ++test_errors();
+        }
+
+        inline void throw_failed_impl(char const *excep, char const *file, int line, char const *function) {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                    << file << "(" << line << "): Exception '" << excep << "' not thrown in function '"
+                    << function << "'" << std::endl;
+            ++test_errors();
+        }
+
+        template<class T, class U>
+        inline void test_eq_impl(char const *expr1, char const *expr2,
+                                 char const *file, int line, char const *function, T const &t, U const &u) {
+            if (t == u) {
+                report_errors_remind();
+            } else {
+                BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                        << file << "(" << line << "): test '" << expr1 << " == " << expr2
+                        << "' failed in function '" << function << "': "
+                        << "'" << t << "' != '" << u << "'" << std::endl;
+                ++test_errors();
+            }
+        }
+
+        template<class T, class U>
+        inline void test_ne_impl(char const *expr1, char const *expr2,
+                                 char const *file, int line, char const *function, T const &t, U const &u) {
+            if (t != u) {
+                report_errors_remind();
+            } else {
+                BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                        << file << "(" << line << "): test '" << expr1 << " != " << expr2
+                        << "' failed in function '" << function << "': "
+                        << "'" << t << "' == '" << u << "'" << std::endl;
+                ++test_errors();
+            }
+        }
+
+    } // namespace detail
+
+    inline int report_errors() {
+        detail::report_errors_remind().called_report_errors_function = true;
+
+        int errors = detail::test_errors();
+
+        if (errors == 0) {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                    << "No errors detected." << std::endl;
+            return 0;
+        } else {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM
+                    << errors << " error" << (errors == 1 ? "" : "s") << " detected." << std::endl;
+            return 1;
+        }
     }
-};
-
-inline report_errors_reminder& report_errors_remind()
-{
-    static report_errors_reminder r;
-    return r;
-}
-
-inline int & test_errors()
-{
-    static int x = 0;
-    report_errors_remind();
-    return x;
-}
-
-inline void test_failed_impl(char const * expr, char const * file, int line, char const * function)
-{
-    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-      << file << "(" << line << "): test '" << expr << "' failed in function '"
-      << function << "'" << std::endl;
-    ++test_errors();
-}
-
-inline void error_impl(char const * msg, char const * file, int line, char const * function)
-{
-    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-      << file << "(" << line << "): " << msg << " in function '"
-      << function << "'" << std::endl;
-    ++test_errors();
-}
-
-inline void throw_failed_impl(char const * excep, char const * file, int line, char const * function)
-{
-   BOOST_LIGHTWEIGHT_TEST_OSTREAM
-    << file << "(" << line << "): Exception '" << excep << "' not thrown in function '"
-    << function << "'" << std::endl;
-   ++test_errors();
-}
-
-template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t == u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " == " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << t << "' != '" << u << "'" << std::endl;
-        ++test_errors();
-    }
-}
-
-template<class T, class U> inline void test_ne_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t != u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " != " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << t << "' == '" << u << "'" << std::endl;
-        ++test_errors();
-    }
-}
-
-} // namespace detail
-
-inline int report_errors()
-{
-    detail::report_errors_remind().called_report_errors_function = true;
-
-    int errors = detail::test_errors();
-
-    if( errors == 0 )
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-          << "No errors detected." << std::endl;
-        return 0;
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-          << errors << " error" << (errors == 1? "": "s") << " detected." << std::endl;
-        return 1;
-    }
-}
 
 } // namespace boost
 
@@ -147,11 +128,11 @@ inline int report_errors()
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
-#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_EQ(expr1, expr2) ( ::boost::detail::test_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_NE(expr1, expr2) ( ::boost::detail::test_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #ifndef BOOST_NO_EXCEPTIONS
-   #define BOOST_TEST_THROWS( EXPR, EXCEP )                    \
+#define BOOST_TEST_THROWS(EXPR, EXCEP)                    \
       try {                                                    \
          EXPR;                                                 \
          ::boost::detail::throw_failed_impl                    \
@@ -165,7 +146,7 @@ inline int report_errors()
       }                                                        \
    //
 #else
-   #define BOOST_TEST_THROWS( EXPR, EXCEP )
+#define BOOST_TEST_THROWS( EXPR, EXCEP )
 #endif
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP

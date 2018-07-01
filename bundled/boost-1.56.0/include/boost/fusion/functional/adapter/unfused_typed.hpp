@@ -34,75 +34,74 @@
 #endif
 
 
-namespace boost { namespace fusion
-{
+namespace boost {
+    namespace fusion {
 
-    template <class Function, class Sequence> class unfused_typed;
+        template<class Function, class Sequence>
+        class unfused_typed;
 
-    //----- ---- --- -- - -  -   -
+        //----- ---- --- -- - -  -   -
 
-    namespace detail
-    {
-        template <class Derived, class Function, 
-            class Sequence, long Arity>
-        struct unfused_typed_impl;
-    }
+        namespace detail {
+            template<class Derived, class Function,
+                    class Sequence, long Arity>
+            struct unfused_typed_impl;
+        }
 
-    template <class Function, class Sequence>
-    class unfused_typed
-        : public detail::unfused_typed_impl
-          < unfused_typed<Function,Sequence>, Function, Sequence, 
-            result_of::size<Sequence>::value > 
-    {
-        Function fnc_transformed;
+        template<class Function, class Sequence>
+        class unfused_typed
+                : public detail::unfused_typed_impl
+                        <unfused_typed<Function, Sequence>, Function, Sequence,
+                                result_of::size<Sequence>::value> {
+            Function fnc_transformed;
 
-        template <class D, class F, class S, long A>
-        friend struct detail::unfused_typed_impl;
+            template<class D, class F, class S, long A>
+            friend
+            struct detail::unfused_typed_impl;
 
-        typedef typename detail::call_param<Function>::type func_const_fwd_t;
+            typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
-    public:
+        public:
 
-        BOOST_FUSION_GPU_ENABLED
-        inline explicit unfused_typed(func_const_fwd_t f = Function())
-            : fnc_transformed(f)
-        { }
-    }; 
+            BOOST_FUSION_GPU_ENABLED
+            inline explicit unfused_typed(func_const_fwd_t f = Function())
+                    : fnc_transformed(f) {}
+        };
 
-    #define  BOOST_PP_FILENAME_1 <boost/fusion/functional/adapter/unfused_typed.hpp>
-    #define  BOOST_PP_ITERATION_LIMITS (0,BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY)
-    #include BOOST_PP_ITERATE() 
+#define  BOOST_PP_FILENAME_1 <boost/fusion/functional/adapter/unfused_typed.hpp>
+#define  BOOST_PP_ITERATION_LIMITS (0,BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY)
 
-}}
+#include BOOST_PP_ITERATE()
+
+    }}
 
 #if defined (BOOST_MSVC)
 #  pragma warning(pop)
 #endif
 
-namespace boost 
-{
+namespace boost {
 #if !defined(BOOST_RESULT_OF_USE_DECLTYPE) || defined(BOOST_NO_CXX11_DECLTYPE)
     template<class F, class Seq>
-    struct result_of< boost::fusion::unfused_typed<F,Seq> const () >
-        : boost::fusion::unfused_typed<F,Seq>::template result< 
-            boost::fusion::unfused_typed<F,Seq> const () >
-    { };
+    struct result_of<boost::fusion::unfused_typed<F, Seq> const()>
+            : boost::fusion::unfused_typed<F, Seq>::template result<
+                    boost::fusion::unfused_typed<F, Seq> const()> {
+    };
     template<class F, class Seq>
-    struct result_of< boost::fusion::unfused_typed<F,Seq>() >
-        : boost::fusion::unfused_typed<F,Seq>::template result< 
-            boost::fusion::unfused_typed<F,Seq> () >
-    { };
+    struct result_of<boost::fusion::unfused_typed<F, Seq>()>
+            : boost::fusion::unfused_typed<F, Seq>::template result<
+                    boost::fusion::unfused_typed<F, Seq>()> {
+    };
 #endif
     template<class F, class Seq>
-    struct tr1_result_of< boost::fusion::unfused_typed<F,Seq> const () >
-        : boost::fusion::unfused_typed<F,Seq>::template result< 
-            boost::fusion::unfused_typed<F,Seq> const () >
-    { };
+    struct tr1_result_of<boost::fusion::unfused_typed<F, Seq> const()>
+            : boost::fusion::unfused_typed<F, Seq>::template result<
+                    boost::fusion::unfused_typed<F, Seq> const()> {
+    };
     template<class F, class Seq>
-    struct tr1_result_of< boost::fusion::unfused_typed<F,Seq>() >
-        : boost::fusion::unfused_typed<F,Seq>::template result< 
-            boost::fusion::unfused_typed<F,Seq> () >
-    { };
+    struct tr1_result_of<boost::fusion::unfused_typed<F, Seq>()>
+            : boost::fusion::unfused_typed<F, Seq>::template result<
+                    boost::fusion::unfused_typed<F, Seq>()> {
+    };
 }
 
 

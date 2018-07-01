@@ -16,64 +16,67 @@
 #include <boost/spirit/home/x3/operator/detail/sequence.hpp>
 #include <boost/spirit/home/x3/directive/expect.hpp>
 
-namespace boost { namespace spirit { namespace x3
-{
-    template <typename Left, typename Right>
-    struct sequence : binary_parser<Left, Right, sequence<Left, Right>>
-    {
-        typedef binary_parser<Left, Right, sequence<Left, Right>> base_type;
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            template<typename Left, typename Right>
+            struct sequence : binary_parser<Left, Right, sequence<Left, Right>> {
+                typedef binary_parser <Left, Right, sequence<Left, Right>> base_type;
 
-        sequence(Left left, Right right)
-            : base_type(left, right) {}
+                sequence(Left left, Right right)
+                        : base_type(left, right) {}
 
-        template <typename Iterator, typename Context, typename RContext>
-        bool parse(
-            Iterator& first, Iterator const& last
-          , Context const& context, RContext& rcontext, unused_type) const
-        {
-            Iterator save = first;
-            if (this->left.parse(first, last, context, rcontext, unused)
-                && this->right.parse(first, last, context, rcontext, unused))
-                return true;
-            first = save;
-            return false;
+                template<typename Iterator, typename Context, typename RContext>
+                bool parse(
+                        Iterator &first, Iterator const &last, Context const &context, RContext &rcontext,
+                        unused_type) const {
+                    Iterator save = first;
+                    if (this->left.parse(first, last, context, rcontext, unused)
+                        && this->right.parse(first, last, context, rcontext, unused))
+                        return true;
+                    first = save;
+                    return false;
+                }
+
+                template<typename Iterator, typename Context, typename RContext, typename Attribute>
+                bool parse(
+                        Iterator &first, Iterator const &last, Context const &context, RContext &rcontext,
+                        Attribute &attr) const {
+                    return detail::parse_sequence(*this, first, last, context, rcontext, attr,
+                                                  typename traits::attribute_category<Attribute>::type());
+                }
+            };
+
+            template<typename Left, typename Right>
+            inline sequence<
+                    typename extension::as_parser<Left>::value_type, typename extension::as_parser<Right>::value_type>
+            operator>>(Left const &left, Right const &right) {
+                return {as_parser(left), as_parser(right)};
+            }
+
+            template<typename Left, typename Right>
+            inline sequence<
+                    typename extension::as_parser<Left>::value_type,
+                    expect_directive < typename extension::as_parser<Right>::value_type>>
+
+            operator>(Left const &left, Right const &right) {
+                return {as_parser(left), as_parser(right)};
+            }
         }
+    }
+}
 
-        template <typename Iterator, typename Context
-          , typename RContext, typename Attribute>
-        bool parse(
-            Iterator& first, Iterator const& last
-          , Context const& context, RContext& rcontext, Attribute& attr) const
-        {
-            return detail::parse_sequence(*this, first, last, context, rcontext, attr
-              , typename traits::attribute_category<Attribute>::type());
+namespace boost {
+    namespace spirit {
+        namespace x3 {
+            namespace traits {
+                template<typename Left, typename Right, typename Context>
+                struct attribute_of<x3::sequence<Left, Right>, Context>
+                        : x3::detail::attribute_of_sequence<Left, Right, Context> {
+                };
+            }
         }
-    };
-
-    template <typename Left, typename Right>
-    inline sequence<
-        typename extension::as_parser<Left>::value_type
-      , typename extension::as_parser<Right>::value_type>
-    operator>>(Left const& left, Right const& right)
-    {
-        return {as_parser(left), as_parser(right)};
     }
-
-    template <typename Left, typename Right>
-    inline sequence<
-        typename extension::as_parser<Left>::value_type
-      , expect_directive<typename extension::as_parser<Right>::value_type>>
-    operator>(Left const& left, Right const& right)
-    {
-        return {as_parser(left), as_parser(right)};
-    }
-}}}
-
-namespace boost { namespace spirit { namespace x3 { namespace traits
-{
-    template <typename Left, typename Right, typename Context>
-    struct attribute_of<x3::sequence<Left, Right>, Context>
-        : x3::detail::attribute_of_sequence<Left, Right, Context> {};
-}}}}
+}
 
 #endif

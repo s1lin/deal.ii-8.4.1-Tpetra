@@ -18,21 +18,23 @@
 
 namespace boost {
 
-namespace units {
+    namespace units {
 
-namespace us {
+        namespace us {
 
-typedef scaled_base_unit<pint_base_unit, scale<2, static_rational<-1> > > cup_base_unit;
+            typedef scaled_base_unit <pint_base_unit, scale<2, static_rational < -1>> >
+            cup_base_unit;
 
-} // namespace us
+        } // namespace us
 
-template<>
-struct base_unit_info<us::cup_base_unit> {
-    static const char* name()   { return("cup"); }
-    static const char* symbol() { return("c"); }
-};
+        template<>
+        struct base_unit_info<us::cup_base_unit> {
+            static const char *name() { return ("cup"); }
 
-} // namespace units
+            static const char *symbol() { return ("c"); }
+        };
+
+    } // namespace units
 
 } // namespace boost
 

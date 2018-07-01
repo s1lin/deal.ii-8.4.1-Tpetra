@@ -7,7 +7,7 @@
 
 //  See http://www.boost.org/libs/system for documentation.
 
-#ifndef BOOST_SYSTEM_CONFIG_HPP                  
+#ifndef BOOST_SYSTEM_CONFIG_HPP
 #define BOOST_SYSTEM_CONFIG_HPP
 
 #include <boost/config.hpp>
@@ -20,7 +20,7 @@
 //  normalize macros  ------------------------------------------------------------------//
 
 #if !defined(BOOST_SYSTEM_DYN_LINK) && !defined(BOOST_SYSTEM_STATIC_LINK) \
-  && !defined(BOOST_ALL_DYN_LINK) && !defined(BOOST_ALL_STATIC_LINK)
+ && !defined(BOOST_ALL_DYN_LINK) && !defined(BOOST_ALL_STATIC_LINK)
 # define BOOST_SYSTEM_STATIC_LINK
 #endif
 
@@ -64,6 +64,7 @@
 // And include the header that does the work:
 //
 #include <boost/config/auto_link.hpp>
+
 #endif  // auto-linking disabled
 
 #endif // BOOST_SYSTEM_CONFIG_HPP

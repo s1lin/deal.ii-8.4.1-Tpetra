@@ -5,8 +5,8 @@
 /* -------------------------------------------------------------------------- */
 
 GLOBAL Int UMF_tuple_lengths
-(
-    NumericType *Numeric,
-    WorkType *Work,
-    double *dusage
-) ;
+        (
+                NumericType *Numeric,
+                WorkType *Work,
+                double *dusage
+        );

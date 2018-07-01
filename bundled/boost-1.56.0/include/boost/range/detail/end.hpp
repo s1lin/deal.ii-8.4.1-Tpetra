@@ -18,11 +18,9 @@
 #include <boost/range/iterator.hpp>
 #include <boost/range/detail/common.hpp>
 
-namespace boost
-{
-    namespace range_detail
-    {
-        template< typename T >
+namespace boost {
+    namespace range_detail {
+        template<typename T>
         struct range_end;
 
         //////////////////////////////////////////////////////////////////////
@@ -30,9 +28,8 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct range_end<std_container_>
-        {
-            template< typename C >
+        struct range_end<std_container_> {
+            template<typename C>
             static BOOST_RANGE_DEDUCED_TYPENAME range_iterator<C>::type
             fun( C& c )
             {
@@ -45,12 +42,11 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct range_end<std_pair_>
-        {
-            template< typename P >
+        struct range_end<std_pair_> {
+            template<typename P>
             static BOOST_RANGE_DEDUCED_TYPENAME range_iterator<P>::type
-            fun( const P& p )
-            {
+
+            fun(const P &p) {
                 return p.second;
             }
         };
@@ -60,8 +56,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct range_end<array_>
-        {
+        struct range_end<array_> {
             template<typename T>
             static BOOST_RANGE_DEDUCED_TYPENAME remove_extent<T>::type* fun(T& t)
             {
@@ -71,15 +66,15 @@ namespace boost
 
     } // namespace 'range_detail'
 
-    namespace range_adl_barrier
-    {
-        template< typename C >
+    namespace range_adl_barrier {
+        template<typename C>
         inline BOOST_RANGE_DEDUCED_TYPENAME range_iterator<C>::type
-        end( C& c )
-        {
-            return range_detail::range_end< BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
-        }
-    } // namespace range_adl_barrier
+        end( C
+        & c ) {
+        return
+        range_detail::range_end<BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type>::fun( c );
+    }
+} // namespace range_adl_barrier
 
 } // namespace 'boost'
 

@@ -11,39 +11,37 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/prior.hpp>
 
-namespace boost { namespace fusion
-{
-    struct reverse_view_iterator_tag;
+namespace boost {
+    namespace fusion {
+        struct reverse_view_iterator_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct deref_impl;
+        namespace extension {
+            template<typename Tag>
+            struct deref_impl;
 
-        template <>
-        struct deref_impl<reverse_view_iterator_tag>
-        {
-            template <typename Iterator>
-            struct apply
-            {
-                typedef typename
+            template<>
+            struct deref_impl<reverse_view_iterator_tag> {
+                template<typename Iterator>
+                struct apply {
+                    typedef typename
                     result_of::deref<
-                        typename result_of::prior<
-                            typename Iterator::first_type
-                        >::type
+                            typename result_of::prior<
+                                    typename Iterator::first_type
+                            >::type
                     >::type
-                type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Iterator const& i)
-                {
-                    return *fusion::prior(i.first);
-                }
+                            type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Iterator const& i)
+                    {
+                        return *fusion::prior(i.first);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

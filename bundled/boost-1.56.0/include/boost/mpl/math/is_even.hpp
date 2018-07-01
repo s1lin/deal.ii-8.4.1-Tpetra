@@ -20,35 +20,37 @@
 #include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
-namespace boost { namespace mpl {
+namespace boost {
+    namespace mpl {
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-namespace aux
-{
-  template <class N>
-  struct is_even_base
-  {
-      enum { value = (N::value % 2) == 0 };
-      typedef bool_<value> type;
-  };
-}
-#endif 
+        namespace aux
+        {
+          template <class N>
+          struct is_even_base
+          {
+              enum { value = (N::value % 2) == 0 };
+              typedef bool_<value> type;
+          };
+        }
+#endif
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(N)
-    >
-struct is_even
+        template<
+                typename BOOST_MPL_AUX_NA_PARAM(N)
+        >
+        struct is_even
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-  : aux::is_even_base<N>::type
+            : aux::is_even_base<N>::type
 #else
-  : bool_<((N::value % 2) == 0)>
-#endif 
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_even,(N))
-};
+                : bool_<((N::value % 2) == 0)>
+#endif
+        {
+            BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_even,(N))
+        };
 
-BOOST_MPL_AUX_NA_SPEC(1, is_even)
+        BOOST_MPL_AUX_NA_SPEC(1, is_even)
 
-}}
+    }
+}
 
 #endif // BOOST_MPL_MATH_IS_EVEN_HPP_INCLUDED

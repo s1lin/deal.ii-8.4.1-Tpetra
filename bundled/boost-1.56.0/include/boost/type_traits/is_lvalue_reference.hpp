@@ -30,20 +30,24 @@
 namespace boost {
 
 #if defined( __CODEGEARC__ )
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference,T,__is_reference(T))
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference,T,__is_reference(T))
 #else
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference,T,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T&,true)
+    BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference, T,
+    false)
+
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T, is_lvalue_reference, T &,
+
+    true)
 
 #if  defined(BOOST_ILLEGAL_CV_REFERENCES)
-// these are illegal specialisations; cv-qualifies applied to
-// references have no effect according to [8.3.2p1],
-// C++ Builder requires them though as it treats cv-qualified
-// references as distinct types...
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& const,true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& volatile,true)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& const volatile,true)
+    // these are illegal specialisations; cv-qualifies applied to
+    // references have no effect according to [8.3.2p1],
+    // C++ Builder requires them though as it treats cv-qualified
+    // references as distinct types...
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& const,true)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& volatile,true)
+    BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& const volatile,true)
 #endif
 
 #endif

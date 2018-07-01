@@ -13,6 +13,7 @@
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 #include <boost/fusion/container/vector/vector10.hpp>
+
 #if (FUSION_MAX_VECTOR_SIZE > 10)
 #include <boost/fusion/container/vector/vector20.hpp>
 #endif
@@ -27,7 +28,9 @@
 #endif
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
+
 #include <boost/fusion/container/vector/detail/preprocessed/vector_fwd.hpp>
+
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/vvector" FUSION_MAX_VECTOR_SIZE_STR "_fwd.hpp")

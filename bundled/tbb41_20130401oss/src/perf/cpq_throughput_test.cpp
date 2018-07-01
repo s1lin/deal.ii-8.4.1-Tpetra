@@ -39,6 +39,7 @@
 #include "tbb/cache_aligned_allocator.h"
 #include "tbb/concurrent_priority_queue.h"
 #include "../test/harness.h"
+
 #pragma warning(disable: 4996)
 
 #define IMPL_SERIAL 0
@@ -68,9 +69,10 @@ const int padding_size = 15;  // change to get cache line size for test machine
 class padding_type {
 public:
     int p[padding_size];
-    padding_type& operator=(const padding_type& other) {
+
+    padding_type &operator=(const padding_type &other) {
         if (this != &other) {
-            for (int i=0; i<padding_size; ++i) {
+            for (int i = 0; i < padding_size; ++i) {
                 p[i] = other.p[i];
             }
         }
@@ -82,13 +84,14 @@ class my_data_type {
 public:
     int priority;
     padding_type padding;
+
     my_data_type() : priority(0) {}
 };
 
 class my_less {
 public:
     bool operator()(my_data_type d1, my_data_type d2) {
-        return d1.priority<d2.priority;
+        return d1.priority < d2.priority;
     }
 };
 
@@ -98,14 +101,14 @@ my_data_type *output_data;
 size_t arrsz;
 
 // Serial priority queue
-std::priority_queue<my_data_type, std::vector<my_data_type>, my_less > *serial_cpq;
+std::priority_queue<my_data_type, std::vector<my_data_type>, my_less> *serial_cpq;
 
 // Coarse-locked priority queue
 spin_mutex *my_mutex;
-std::priority_queue<my_data_type, std::vector<my_data_type>, my_less > *stl_cpq;
+std::priority_queue<my_data_type, std::vector<my_data_type>, my_less> *stl_cpq;
 
 // TBB concurrent_priority_queue
-concurrent_priority_queue<my_data_type, my_less > *agg_cpq;
+concurrent_priority_queue <my_data_type, my_less> *agg_cpq;
 
 // Busy work and calibration helpers
 unsigned int one_us_iters = 345; // default value
@@ -117,29 +120,26 @@ void calibrate_busy_wait() {
     tbb::tick_count t0, t1;
 
     t0 = tbb::tick_count::now();
-    for (volatile unsigned int i=0; i<1000000; ++i) continue;
+    for (volatile unsigned int i = 0; i < 1000000; ++i) continue;
     t1 = tbb::tick_count::now();
-    
-    one_us_iters = (unsigned int)((1000000.0/(t1-t0).seconds())*0.000001);
+
+    one_us_iters = (unsigned int) ((1000000.0 / (t1 - t0).seconds()) * 0.000001);
     printf("one_us_iters: %d\n", one_us_iters);
 }
 
-void busy_wait(int us)
-{
-    unsigned int iter = us*one_us_iters;
-    for (volatile unsigned int i=0; i<iter; ++i) continue;
+void busy_wait(int us) {
+    unsigned int iter = us * one_us_iters;
+    for (volatile unsigned int i = 0; i < iter; ++i) continue;
 }
 
 // Push to priority queue, depending on implementation
 void do_push(my_data_type elem, int nThr, int impl) {
     if (impl == IMPL_SERIAL) {
         serial_cpq->push(elem);
-    }
-    else if (impl == IMPL_STL) {
+    } else if (impl == IMPL_STL) {
         tbb::spin_mutex::scoped_lock myLock(*my_mutex);
         stl_cpq->push(elem);
-    }
-    else if (impl == IMPL_CPQ) {
+    } else if (impl == IMPL_CPQ) {
         agg_cpq->push(elem);
     }
 }
@@ -153,16 +153,14 @@ my_data_type do_pop(int nThr, int impl) {
             serial_cpq->pop();
             return elem;
         }
-    }
-    else if (impl == IMPL_STL) {
+    } else if (impl == IMPL_STL) {
         tbb::spin_mutex::scoped_lock myLock(*my_mutex);
         if (!stl_cpq->empty()) {
             elem = stl_cpq->top();
             stl_cpq->pop();
             return elem;
         }
-    }
-    else if (impl == IMPL_CPQ) {
+    } else if (impl == IMPL_CPQ) {
         if (agg_cpq->try_pop(elem)) {
             return elem;
         }
@@ -175,17 +173,17 @@ struct TestThroughputBody : NoAssign {
     int nThread;
     int implementation;
 
-    TestThroughputBody(int nThread_, int implementation_) : 
-        nThread(nThread_), implementation(implementation_) {}
-    
+    TestThroughputBody(int nThread_, int implementation_) :
+            nThread(nThread_), implementation(implementation_) {}
+
     void operator()(const int threadID) const {
         tbb::tick_count now;
         int pos_in = threadID, pos_out = threadID;
         my_data_type elem;
         while (1) {
-            for (int i=0; i<sample_operations; i+=ops_per_iteration) {
+            for (int i = 0; i < sample_operations; i += ops_per_iteration) {
                 // do pushes
-                for (int j=0; j<pushes_per_iter; ++j) {
+                for (int j = 0; j < pushes_per_iter; ++j) {
                     elem = input_data[pos_in];
                     do_push(elem, nThread, implementation);
                     busy_wait(contention);
@@ -193,7 +191,7 @@ struct TestThroughputBody : NoAssign {
                     if (pos_in >= arrsz) pos_in = pos_in % arrsz;
                 }
                 // do pops
-                for (int j=0; j<pops_per_iter; ++j) {
+                for (int j = 0; j < pops_per_iter; ++j) {
                     output_data[pos_out] = do_pop(nThread, implementation);
                     busy_wait(contention);
                     pos_out += nThread;
@@ -202,7 +200,7 @@ struct TestThroughputBody : NoAssign {
             }
             now = tbb::tick_count::now();
             operation_count += sample_operations;
-            if ((now-start).seconds() >= throughput_window) break;
+            if ((now - start).seconds() >= throughput_window) break;
         }
     }
 };
@@ -210,8 +208,8 @@ struct TestThroughputBody : NoAssign {
 void TestSerialThroughput() {
     tbb::tick_count now;
 
-    serial_cpq = new std::priority_queue<my_data_type, std::vector<my_data_type>, my_less >;        
-    for (int i=0; i<preload; ++i) do_push(input_data[i], 1, IMPL_SERIAL);
+    serial_cpq = new std::priority_queue<my_data_type, std::vector<my_data_type>, my_less>;
+    for (int i = 0; i < preload; ++i) do_push(input_data[i], 1, IMPL_SERIAL);
 
     TestThroughputBody my_serial_test(1, IMPL_SERIAL);
     start = tbb::tick_count::now();
@@ -219,35 +217,34 @@ void TestSerialThroughput() {
     now = tbb::tick_count::now();
     delete serial_cpq;
 
-    printf("SERIAL 1 %10d\n", int(operation_count/(now-start).seconds()));
+    printf("SERIAL 1 %10d\n", int(operation_count / (now - start).seconds()));
 }
 
 void TestThroughputCpqOnNThreads(int nThreads) {
     tbb::tick_count now;
 
     if (impl == IMPL_STL) {
-        stl_cpq = new std::priority_queue<my_data_type, std::vector<my_data_type>, my_less >;
-        for (int i=0; i<preload; ++i) do_push(input_data[i], nThreads, IMPL_STL);
+        stl_cpq = new std::priority_queue<my_data_type, std::vector<my_data_type>, my_less>;
+        for (int i = 0; i < preload; ++i) do_push(input_data[i], nThreads, IMPL_STL);
 
         TestThroughputBody my_stl_test(nThreads, IMPL_STL);
         start = tbb::tick_count::now();
         NativeParallelFor(nThreads, my_stl_test);
         now = tbb::tick_count::now();
         delete stl_cpq;
-        
-        printf("STL  %3d %10d\n", nThreads, int(operation_count/(now-start).seconds()));
-    }
-    else if (impl == IMPL_CPQ) {
-        agg_cpq = new concurrent_priority_queue<my_data_type, my_less >;
-        for (int i=0; i<preload; ++i) do_push(input_data[i], nThreads, IMPL_CPQ);
+
+        printf("STL  %3d %10d\n", nThreads, int(operation_count / (now - start).seconds()));
+    } else if (impl == IMPL_CPQ) {
+        agg_cpq = new concurrent_priority_queue<my_data_type, my_less>;
+        for (int i = 0; i < preload; ++i) do_push(input_data[i], nThreads, IMPL_CPQ);
 
         TestThroughputBody my_cpq_test(nThreads, IMPL_CPQ);
         start = tbb::tick_count::now();
         NativeParallelFor(nThreads, my_cpq_test);
         now = tbb::tick_count::now();
         delete agg_cpq;
-        
-        printf("CPQ  %3d %10d\n", nThreads, int(operation_count/(now-start).seconds()));
+
+        printf("CPQ  %3d %10d\n", nThreads, int(operation_count / (now - start).seconds()));
     }
 }
 
@@ -265,10 +262,10 @@ void ParseCommandLine(int argc, char *argv[]) {
     int i = 1;
     if (argc > 1) {
         // read n_thread range
-        char* endptr;
-        min_threads = strtol( argv[i], &endptr, 0 );
+        char *endptr;
+        min_threads = strtol(argv[i], &endptr, 0);
         if (*endptr == ':')
-            max_threads = strtol( endptr+1, &endptr, 0 );
+            max_threads = strtol(endptr + 1, &endptr, 0);
         else if (*endptr == '\0')
             max_threads = min_threads;
         if (*endptr != '\0') {
@@ -286,8 +283,8 @@ void ParseCommandLine(int argc, char *argv[]) {
         ++i;
         if (argc > 2) {
             // read contention
-            contention = strtol( argv[i], &endptr, 0 );
-            if( *endptr!='\0' ) {
+            contention = strtol(argv[i], &endptr, 0);
+            if (*endptr != '\0') {
                 printf("ERROR: contention is garbled\n");
                 printCommandLineErrorMsg();
                 exit(1);
@@ -295,14 +292,14 @@ void ParseCommandLine(int argc, char *argv[]) {
             ++i;
             if (argc > 3) {
                 // read impl
-                impl = strtol( argv[i], &endptr, 0 );
-                if( *endptr!='\0' ) {
+                impl = strtol(argv[i], &endptr, 0);
+                if (*endptr != '\0') {
                     printf("ERROR: impl is garbled\n");
                     printCommandLineErrorMsg();
                     exit(1);
                 }
                 if ((impl != IMPL_SERIAL) && (impl != IMPL_STL) && (impl != IMPL_CPQ)) {
-                    
+
                     printf("ERROR: impl of %d is invalid\n", impl);
                     printCommandLineErrorMsg();
                     exit(1);
@@ -310,8 +307,8 @@ void ParseCommandLine(int argc, char *argv[]) {
                 ++i;
                 if (argc > 4) {
                     // read pre-load
-                    preload = strtol( argv[i], &endptr, 0 );
-                    if( *endptr!='\0' ) {
+                    preload = strtol(argv[i], &endptr, 0);
+                    if (*endptr != '\0') {
                         printf("ERROR: pre-load is garbled\n");
                         printCommandLineErrorMsg();
                         exit(1);
@@ -319,8 +316,8 @@ void ParseCommandLine(int argc, char *argv[]) {
                     ++i;
                     if (argc > 5) {
                         //read batch
-                        ops_per_iteration = strtol( argv[i], &endptr, 0 );
-                        if( *endptr!='\0' ) {
+                        ops_per_iteration = strtol(argv[i], &endptr, 0);
+                        if (*endptr != '\0') {
                             printf("ERROR: batch size is garbled\n");
                             printCommandLineErrorMsg();
                             exit(1);
@@ -328,13 +325,13 @@ void ParseCommandLine(int argc, char *argv[]) {
                         ++i;
                         if (argc > 6) {
                             // read duration
-                            if (argc != 7)  {
+                            if (argc != 7) {
                                 printf("ERROR: maximum of six args\n");
                                 printCommandLineErrorMsg();
                                 exit(1);
                             }
-                            throughput_window = strtol( argv[i], &endptr, 0 );
-                            if( *endptr!='\0' ) {
+                            throughput_window = strtol(argv[i], &endptr, 0);
+                            if (*endptr != '\0') {
                                 printf("ERROR: duration is garbled\n");
                                 printCommandLineErrorMsg();
                                 exit(1);
@@ -347,8 +344,8 @@ void ParseCommandLine(int argc, char *argv[]) {
     }
     printf("Priority queue performance test %d will run with %dus contention "
            "using %d:%d threads, %d batch size, %d pre-loaded elements, for %d seconds.\n",
-           (int)impl, (int)contention, (int)min_threads, (int)max_threads, 
-           (int)ops_per_iteration, (int) preload, (int)throughput_window);
+           (int) impl, (int) contention, (int) min_threads, (int) max_threads,
+           (int) ops_per_iteration, (int) preload, (int) throughput_window);
 }
 
 int main(int argc, char *argv[]) {
@@ -357,22 +354,21 @@ int main(int argc, char *argv[]) {
     arrsz = 100000;
     input_data = new my_data_type[arrsz];
     output_data = new my_data_type[arrsz];
-    for (int i=0; i<arrsz; ++i) {
-       input_data[i].priority = rand()%100;
+    for (int i = 0; i < arrsz; ++i) {
+        input_data[i].priority = rand() % 100;
     }
     //calibrate_busy_wait();
-    pushes_per_iter = ops_per_iteration/2;
-    pops_per_iter = ops_per_iteration/2;
+    pushes_per_iter = ops_per_iteration / 2;
+    pops_per_iter = ops_per_iteration / 2;
     operation_count = 0;
 
     // Initialize mutex for Coarse-locked priority_queue
-    cache_aligned_allocator<spin_mutex> my_mutex_allocator;
-    my_mutex = (spin_mutex *)my_mutex_allocator.allocate(1);
+    cache_aligned_allocator <spin_mutex> my_mutex_allocator;
+    my_mutex = (spin_mutex *) my_mutex_allocator.allocate(1);
 
     if (impl == IMPL_SERIAL) {
         TestSerialThroughput();
-    }
-    else {
+    } else {
         for (int p = min_threads; p <= max_threads; ++p) {
             TestThroughputCpqOnNThreads(p);
         }

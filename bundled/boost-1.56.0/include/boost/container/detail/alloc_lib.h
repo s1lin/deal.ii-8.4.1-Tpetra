@@ -43,25 +43,22 @@ extern "C" {
 #endif
 
 /*!An forward iterator to traverse the elements of a memory chain container.*/
-typedef struct multialloc_node_impl
-{
-   struct multialloc_node_impl *next_node_ptr;
+typedef struct multialloc_node_impl {
+    struct multialloc_node_impl *next_node_ptr;
 } boost_cont_memchain_node;
 
 
 /*!An forward iterator to traverse the elements of a memory chain container.*/
-typedef struct multialloc_it_impl
-{
-   boost_cont_memchain_node *node_ptr;
+typedef struct multialloc_it_impl {
+    boost_cont_memchain_node *node_ptr;
 } boost_cont_memchain_it;
 
 /*!Memory chain: A container holding memory portions allocated by boost_cont_multialloc_nodes
    and boost_cont_multialloc_arrays functions.*/
-typedef struct boost_cont_memchain_impl
-{
-   size_t                   num_mem;
-   boost_cont_memchain_node  root_node;
-   boost_cont_memchain_node *last_node_ptr;
+typedef struct boost_cont_memchain_impl {
+    size_t num_mem;
+    boost_cont_memchain_node root_node;
+    boost_cont_memchain_node *last_node_ptr;
 } boost_cont_memchain;
 
 /*!Advances the iterator one position so that it points to the next element in the memory chain*/
@@ -217,11 +214,11 @@ typedef struct boost_cont_memchain_impl
 
 BOOST_CONTAINER_DECL size_t boost_cont_size(const void *p);
 
-BOOST_CONTAINER_DECL void* boost_cont_malloc(size_t bytes);
+BOOST_CONTAINER_DECL void *boost_cont_malloc(size_t bytes);
 
-BOOST_CONTAINER_DECL void  boost_cont_free(void* mem);
+BOOST_CONTAINER_DECL void boost_cont_free(void *mem);
 
-BOOST_CONTAINER_DECL void* boost_cont_memalign(size_t bytes, size_t alignment);
+BOOST_CONTAINER_DECL void *boost_cont_memalign(size_t bytes, size_t alignment);
 
 /*!Indicates the all elements allocated by boost_cont_multialloc_nodes or boost_cont_multialloc_arrays
    must be contiguous.*/
@@ -232,10 +229,11 @@ BOOST_CONTAINER_DECL void* boost_cont_memalign(size_t bytes, size_t alignment);
 #define DL_MULTIALLOC_DEFAULT_CONTIGUOUS    ((size_t)(0))
 
 BOOST_CONTAINER_DECL int boost_cont_multialloc_nodes
-   (size_t n_elements, size_t elem_size, size_t contiguous_elements, boost_cont_memchain *pchain);
+        (size_t n_elements, size_t elem_size, size_t contiguous_elements, boost_cont_memchain *pchain);
 
 BOOST_CONTAINER_DECL int boost_cont_multialloc_arrays
-   (size_t n_elements, const size_t *sizes, size_t sizeof_element, size_t contiguous_elements, boost_cont_memchain *pchain);
+        (size_t n_elements, const size_t *sizes, size_t sizeof_element, size_t contiguous_elements,
+         boost_cont_memchain *pchain);
 
 BOOST_CONTAINER_DECL void boost_cont_multidealloc(boost_cont_memchain *pchain);
 
@@ -247,11 +245,10 @@ BOOST_CONTAINER_DECL size_t boost_cont_chunksize(const void *p);
 
 BOOST_CONTAINER_DECL int boost_cont_all_deallocated();
 
-typedef struct boost_cont_malloc_stats_impl
-{
-   size_t max_system_bytes;
-   size_t system_bytes;
-   size_t in_use_bytes;
+typedef struct boost_cont_malloc_stats_impl {
+    size_t max_system_bytes;
+    size_t system_bytes;
+    size_t in_use_bytes;
 } boost_cont_malloc_stats_t;
 
 BOOST_CONTAINER_DECL boost_cont_malloc_stats_t boost_cont_malloc_stats();
@@ -261,56 +258,52 @@ BOOST_CONTAINER_DECL size_t boost_cont_in_use_memory();
 BOOST_CONTAINER_DECL int boost_cont_trim(size_t pad);
 
 BOOST_CONTAINER_DECL int boost_cont_mallopt
-   (int parameter_number, int parameter_value);
+        (int parameter_number, int parameter_value);
 
 BOOST_CONTAINER_DECL int boost_cont_grow
-   (void* oldmem, size_t minbytes, size_t maxbytes, size_t *received);
+        (void *oldmem, size_t minbytes, size_t maxbytes, size_t *received);
 
 BOOST_CONTAINER_DECL int boost_cont_shrink
-   (void* oldmem, size_t minbytes, size_t maxbytes, size_t *received, int do_commit);
+        (void *oldmem, size_t minbytes, size_t maxbytes, size_t *received, int do_commit);
 
-BOOST_CONTAINER_DECL void* boost_cont_alloc
-   (size_t minbytes, size_t preferred_bytes, size_t *received_bytes);
+BOOST_CONTAINER_DECL void *boost_cont_alloc
+        (size_t minbytes, size_t preferred_bytes, size_t *received_bytes);
 
 BOOST_CONTAINER_DECL int boost_cont_malloc_check();
 
 typedef unsigned int allocation_type;
 
-enum
-{
-   // constants for allocation commands
-   BOOST_CONTAINER_ALLOCATE_NEW          = 0X01,
-   BOOST_CONTAINER_EXPAND_FWD            = 0X02,
-   BOOST_CONTAINER_EXPAND_BWD            = 0X04,
-   BOOST_CONTAINER_SHRINK_IN_PLACE       = 0X08,
-   BOOST_CONTAINER_NOTHROW_ALLOCATION    = 0X10,
+enum {
+    // constants for allocation commands
+            BOOST_CONTAINER_ALLOCATE_NEW = 0X01,
+    BOOST_CONTAINER_EXPAND_FWD = 0X02,
+    BOOST_CONTAINER_EXPAND_BWD = 0X04,
+    BOOST_CONTAINER_SHRINK_IN_PLACE = 0X08,
+    BOOST_CONTAINER_NOTHROW_ALLOCATION = 0X10,
 //   BOOST_CONTAINER_ZERO_MEMORY           = 0X20,
-   BOOST_CONTAINER_TRY_SHRINK_IN_PLACE   = 0X40,
-   BOOST_CONTAINER_EXPAND_BOTH           = BOOST_CONTAINER_EXPAND_FWD | BOOST_CONTAINER_EXPAND_BWD,
-   BOOST_CONTAINER_EXPAND_OR_NEW         = BOOST_CONTAINER_ALLOCATE_NEW | BOOST_CONTAINER_EXPAND_BOTH
+            BOOST_CONTAINER_TRY_SHRINK_IN_PLACE = 0X40,
+    BOOST_CONTAINER_EXPAND_BOTH = BOOST_CONTAINER_EXPAND_FWD | BOOST_CONTAINER_EXPAND_BWD,
+    BOOST_CONTAINER_EXPAND_OR_NEW = BOOST_CONTAINER_ALLOCATE_NEW | BOOST_CONTAINER_EXPAND_BOTH
 };
 
 //#define BOOST_CONTAINERDLMALLOC__FOOTERS
 #ifndef BOOST_CONTAINERDLMALLOC__FOOTERS
-enum {   BOOST_CONTAINER_ALLOCATION_PAYLOAD = sizeof(size_t)   };
+enum {
+    BOOST_CONTAINER_ALLOCATION_PAYLOAD = sizeof(size_t)
+};
 #else
 enum {   BOOST_CONTAINER_ALLOCATION_PAYLOAD = sizeof(size_t)*2   };
 #endif
 
-typedef struct boost_cont_command_ret_impl
-{
-   void *first;
-   int   second;
-}boost_cont_command_ret_t;
+typedef struct boost_cont_command_ret_impl {
+    void *first;
+    int second;
+} boost_cont_command_ret_t;
 
 BOOST_CONTAINER_DECL boost_cont_command_ret_t boost_cont_allocation_command
-   ( allocation_type command
-   , size_t sizeof_object
-   , size_t limit_objects
-   , size_t preferred_objects
-   , size_t *received_objects
-   , void *reuse_ptr
-   );
+        (allocation_type command, size_t sizeof_object, size_t limit_objects, size_t preferred_objects,
+         size_t *received_objects, void *reuse_ptr
+        );
 
 BOOST_CONTAINER_DECL int boost_cont_mallopt(int param_number, int value);
 

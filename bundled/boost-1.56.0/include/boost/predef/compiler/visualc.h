@@ -37,12 +37,12 @@ Version number available as major, minor, and patch.
 #   if !defined (_MSC_FULL_VER)
 #       define BOOST_COMP_MSVC_BUILD 0
 #   else
-        /* how many digits does the build number have? */
+/* how many digits does the build number have? */
 #       if _MSC_FULL_VER / 10000 == _MSC_VER
-            /* four digits */
+    /* four digits */
 #           define BOOST_COMP_MSVC_BUILD (_MSC_FULL_VER % 10000)
 #       elif _MSC_FULL_VER / 100000 == _MSC_VER
-            /* five digits */
+    /* five digits */
 #           define BOOST_COMP_MSVC_BUILD (_MSC_FULL_VER % 100000)
 #       else
 #           error "Cannot determine build number from _MSC_FULL_VER"
@@ -68,7 +68,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_MSVC_NAME "Microsoft Visual C/C++"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_MSVC,BOOST_COMP_MSVC_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_MSVC,
+BOOST_COMP_MSVC_NAME)
 
 #ifdef BOOST_COMP_MSVC_EMULATED
 #include <boost/predef/detail/test.h>

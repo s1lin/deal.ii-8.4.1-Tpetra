@@ -33,25 +33,20 @@
 
 typedef HANDLE pthread_t;
 
-int pthread_create( pthread_t * thread, void const *, unsigned (__stdcall * start_routine) (void*), void* arg )
-{
-    HANDLE h = (HANDLE)_beginthreadex( 0, 0, start_routine, arg, 0, 0 );
+int pthread_create(pthread_t *thread, void const *, unsigned (__stdcall *start_routine)(void *), void *arg) {
+    HANDLE h = (HANDLE) _beginthreadex(0, 0, start_routine, arg, 0, 0);
 
-    if( h != 0 )
-    {
+    if (h != 0) {
         *thread = h;
         return 0;
-    }
-    else
-    {
+    } else {
         return EAGAIN;
     }
 }
 
-int pthread_join( pthread_t thread, void ** /*value_ptr*/ )
-{
-    ::WaitForSingleObject( thread, INFINITE );
-    ::CloseHandle( thread );
+int pthread_join(pthread_t thread, void ** /*value_ptr*/ ) {
+    ::WaitForSingleObject(thread, INFINITE);
+    ::CloseHandle(thread);
     return 0;
 }
 
@@ -59,77 +54,71 @@ int pthread_join( pthread_t thread, void ** /*value_ptr*/ )
 
 // template<class F> int lw_thread_create( pthread_t & pt, F f );
 
-namespace boost
-{
+namespace boost {
 
-namespace detail
-{
+    namespace detail {
 
-class lw_abstract_thread
-{
-public:
+        class lw_abstract_thread {
+        public:
 
-    virtual ~lw_abstract_thread() {}
-    virtual void run() = 0;
-};
+            virtual ~lw_abstract_thread() {}
+
+            virtual void run() = 0;
+        };
 
 #if defined( BOOST_HAS_PTHREADS )
 
-extern "C" void * lw_thread_routine( void * pv )
-{
-    std::auto_ptr<lw_abstract_thread> pt( static_cast<lw_abstract_thread *>( pv ) );
+        extern "C" void * lw_thread_routine( void * pv )
+        {
+            std::auto_ptr<lw_abstract_thread> pt( static_cast<lw_abstract_thread *>( pv ) );
 
-    pt->run();
+            pt->run();
 
-    return 0;
-}
+            return 0;
+        }
 
 #else
 
-unsigned __stdcall lw_thread_routine( void * pv )
-{
-    std::auto_ptr<lw_abstract_thread> pt( static_cast<lw_abstract_thread *>( pv ) );
+        unsigned __stdcall lw_thread_routine(void *pv) {
+            std::auto_ptr<lw_abstract_thread> pt(static_cast<lw_abstract_thread *>( pv ));
 
-    pt->run();
+            pt->run();
 
-    return 0;
-}
+            return 0;
+        }
 
 #endif
 
-template<class F> class lw_thread_impl: public lw_abstract_thread
-{
-public:
+        template<class F>
+        class lw_thread_impl : public lw_abstract_thread {
+        public:
 
-    explicit lw_thread_impl( F f ): f_( f )
-    {
-    }
+            explicit lw_thread_impl(F f) : f_(f) {
+            }
 
-    void run()
-    {
-        f_();
-    }
+            void run() {
+                f_();
+            }
 
-private:
+        private:
 
-    F f_;
-};
+            F f_;
+        };
 
-template<class F> int lw_thread_create( pthread_t & pt, F f )
-{
-    std::auto_ptr<lw_abstract_thread> p( new lw_thread_impl<F>( f ) );
+        template<class F>
+        int lw_thread_create(pthread_t &pt, F f) {
+            std::auto_ptr<lw_abstract_thread> p(new lw_thread_impl<F>(f));
 
-    int r = pthread_create( &pt, 0, lw_thread_routine, p.get() );
+            int r = pthread_create(&pt, 0, lw_thread_routine, p.get());
 
-    if( r == 0 )
-    {
-        p.release();
-    }
+            if (r == 0) {
+                p.release();
+            }
 
-    return r;
-}
+            return r;
+        }
 
-} // namespace detail
+    } // namespace detail
 } // namespace boost
 
 #endif // #ifndef BOOST_DETAIL_LIGHTWEIGHT_THREAD_HPP_INCLUDED

@@ -47,7 +47,9 @@ Version number available as major, minor, and patch.
 #define BOOST_COMP_PATH_NAME "EKOpath"
 
 #include <boost/predef/detail/test.h>
-BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_PATH,BOOST_COMP_PATH_NAME)
+
+BOOST_PREDEF_DECLARE_TEST(BOOST_COMP_PATH,
+BOOST_COMP_PATH_NAME)
 
 #ifdef BOOST_COMP_PATH_EMULATED
 #include <boost/predef/detail/test.h>

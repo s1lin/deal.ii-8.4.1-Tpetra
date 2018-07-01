@@ -9,32 +9,32 @@
 /* -------------------------------------------------------------------------- */
 
 int umfpack_di_report_vector
-(
-    int n,
-    const double X [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                int n,
+                const double X[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_dl_report_vector
-(
-    UF_long n,
-    const double X [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                UF_long n,
+                const double X[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 int umfpack_zi_report_vector
-(
-    int n,
-    const double Xx [ ], const double Xz [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                int n,
+                const double Xx[], const double Xz[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 UF_long umfpack_zl_report_vector
-(
-    UF_long n,
-    const double Xx [ ], const double Xz [ ],
-    const double Control [UMFPACK_CONTROL]
-) ;
+        (
+                UF_long n,
+                const double Xx[], const double Xz[],
+                const double Control[UMFPACK_CONTROL]
+        );
 
 /*
 double int Syntax:

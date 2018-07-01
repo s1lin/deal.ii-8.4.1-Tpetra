@@ -15,27 +15,31 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-namespace boost { namespace iostreams {
+namespace boost {
+    namespace iostreams {
 
-template<typename T>
-struct operations;
+        template<typename T>
+        struct operations;
 
-namespace detail {
+        namespace detail {
 
-struct custom_tag { };
+            struct custom_tag {
+            };
 
-template<typename T>
-struct is_custom
-    : mpl::not_<
-          is_base_and_derived< custom_tag, operations<T> >
-      >
-    { };
+            template<typename T>
+            struct is_custom
+                    : mpl::not_<
+                            is_base_and_derived < custom_tag, operations<T> >
+            > {
+        };
 
-} // End namespace detail.
+    } // End namespace detail.
 
-template<typename T>
-struct operations : detail::custom_tag { };
+    template<typename T>
+    struct operations : detail::custom_tag {
+    };
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_OPERATIONS_FWD_HPP_INCLUDED //--------------//

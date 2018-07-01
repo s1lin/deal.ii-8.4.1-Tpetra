@@ -23,7 +23,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/utility/enable_if.hpp>
 #endif
-#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) 
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <boost/mpl/if.hpp>
 #endif
 

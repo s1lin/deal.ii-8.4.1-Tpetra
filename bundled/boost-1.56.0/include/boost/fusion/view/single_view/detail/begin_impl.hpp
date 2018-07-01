@@ -11,36 +11,34 @@
 #include <boost/fusion/support/config.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion
-{
-    struct single_view_tag;
+namespace boost {
+    namespace fusion {
+        struct single_view_tag;
 
-    template <typename SingleView, typename Pos>
-    struct single_view_iterator;
+        template<typename SingleView, typename Pos>
+        struct single_view_iterator;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct begin_impl;
+        namespace extension {
+            template<typename Tag>
+            struct begin_impl;
 
-        template <>
-        struct begin_impl<single_view_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef single_view_iterator<Sequence, mpl::int_<0> > type;
-    
-                BOOST_FUSION_GPU_ENABLED
-                static type
-                call(Sequence& seq)
-                {
-                    return type(seq);
-                }
+            template<>
+            struct begin_impl<single_view_tag> {
+                template<typename Sequence>
+                struct apply {
+                    typedef single_view_iterator<Sequence, mpl::int_ < 0> > type;
+
+                    BOOST_FUSION_GPU_ENABLED
+                    static type
+                    call(Sequence& seq)
+                    {
+                        return type(seq);
+                    }
+                };
             };
-        };
+        }
     }
-}}
+}
 
 #endif
 

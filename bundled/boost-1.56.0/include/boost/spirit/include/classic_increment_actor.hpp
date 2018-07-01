@@ -8,5 +8,7 @@
 =============================================================================*/
 #ifndef BOOST_SPIRIT_INCLUDE_CLASSIC_INCREMENT_ACTOR
 #define BOOST_SPIRIT_INCLUDE_CLASSIC_INCREMENT_ACTOR
+
 #include <boost/spirit/home/classic/actor/increment_actor.hpp>
+
 #endif

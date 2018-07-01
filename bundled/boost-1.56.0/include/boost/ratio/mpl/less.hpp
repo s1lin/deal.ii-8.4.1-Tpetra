@@ -13,18 +13,17 @@
 #include <boost/ratio/mpl/numeric_cast.hpp>
 #include <boost/mpl/less.hpp>
 
-namespace boost { 
-namespace mpl {
+namespace boost {
+    namespace mpl {
 
-template<>
-struct less_impl< rational_c_tag,rational_c_tag >
-{
-    template< typename R1, typename R2 > struct apply
-        : ratio_less<R1, R2>
-    {
-    };
-};    
-}
+        template<>
+        struct less_impl<rational_c_tag, rational_c_tag> {
+            template<typename R1, typename R2>
+            struct apply
+                    : ratio_less<R1, R2> {
+            };
+        };
+    }
 }
 
 #endif  // BOOST_RATIO_MPL_LESS_HPP

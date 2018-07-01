@@ -17,20 +17,22 @@
 #include <boost/units/base_units/si/meter.hpp>
 
 namespace boost {
-namespace units {
-namespace metric {
+    namespace units {
+        namespace metric {
 
-typedef scaled_base_unit<boost::units::si::meter_base_unit, scale<10, static_rational<-15> > > fermi_base_unit;
+            typedef scaled_base_unit <boost::units::si::meter_base_unit, scale<10, static_rational < -15>> >
+            fermi_base_unit;
 
-}
+        }
 
-template<>
-struct base_unit_info<metric::fermi_base_unit> {
-    static const char* name()   { return("fermi"); }
-    static const char* symbol() { return("fm"); }
-};
+        template<>
+        struct base_unit_info<metric::fermi_base_unit> {
+            static const char *name() { return ("fermi"); }
 
-}
+            static const char *symbol() { return ("fm"); }
+        };
+
+    }
 }
 
 #endif // BOOST_UNIT_SYSTEMS_METRIC_FERMI_HPP_INCLUDED

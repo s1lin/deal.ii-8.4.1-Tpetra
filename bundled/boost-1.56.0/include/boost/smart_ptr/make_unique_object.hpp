@@ -22,13 +22,15 @@ namespace boost {
     }
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
     template<class T, class... Args>
     inline typename boost::detail::up_if_not_array<T>::type
-    make_unique(Args&&... args) {
+    make_unique(Args &&... args) {
         return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
     }
+
 #endif
-    
+
     template<class T>
     inline typename boost::detail::up_if_not_array<T>::type
     make_unique(typename add_rvalue_reference<T>::type value) {
