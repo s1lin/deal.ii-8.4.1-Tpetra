@@ -22,7 +22,7 @@
 #  include <deal.II/lac/dynamic_sparsity_pattern.h>
 
 DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
-#  include <Epetra_doExport.h>
+#  include <deal.II/lac/trilinos_tpetra_wrapper.h>
 DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 DEAL_II_NAMESPACE_OPEN
@@ -1002,7 +1002,7 @@ namespace TrilinosWrappers
 
 
 
-  const Epetra_Comm &
+  const comm_type &
   SparsityPattern::trilinos_communicator () const
   {
     return graph->getRangeMap().get()->getComm();
@@ -1016,9 +1016,9 @@ namespace TrilinosWrappers
 
 #ifdef DEAL_II_WITH_MPI
 
-    const Epetra_MpiComm *mpi_comm
-      = dynamic_cast<const Epetra_MpiComm *>(&graph->getRangeMap().get()->getComm());
-    return mpi_comm->Comm();
+    const comm_type *mpi_comm
+      = dynamic_cast<comm_type *>(graph->getRangeMap().get()->getComm());
+    return mpi_comm->get();
 #else
 
     return MPI_COMM_SELF;

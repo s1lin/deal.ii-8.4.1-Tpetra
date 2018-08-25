@@ -51,8 +51,8 @@ using Teuchos::rcpFromRef;
 using namespace std;
 
 typedef double                          ST;
-typedef multi_vector_type               MV;
-typedef operator_type                   OP;
+typedef TrilinosWrappers::types::multi_vector_type               MV;
+typedef TrilinosWrappers::types::operator_type                   OP;
 
 namespace TrilinosWrappers
 {
@@ -160,7 +160,7 @@ namespace TrilinosWrappers
      * Trilinos is chosen.
      */
     double
-    solve (operator_type        &A,
+    solve (TrilinosWrappers::types::operator_type        &A,
            VectorBase             &x,
            const VectorBase       &b,
            const PreconditionBase &preconditioner);
@@ -193,7 +193,7 @@ namespace TrilinosWrappers
      * exception will be thrown.
      */
     double
-    solve (operator_type              &A,
+    solve (TrilinosWrappers::types::operator_type              &A,
            dealii::Vector<double>       &x,
            const dealii::Vector<double> &b,
            const PreconditionBase       &preconditioner);
@@ -218,7 +218,7 @@ namespace TrilinosWrappers
      * Trilinos is chosen.
      */
     double
-    solve (operator_type                                     &A,
+    solve (TrilinosWrappers::types::operator_type                                     &A,
            dealii::parallel::distributed::Vector<double>       &x,
            const dealii::parallel::distributed::Vector<double> &b,
            const PreconditionBase                              &preconditioner);

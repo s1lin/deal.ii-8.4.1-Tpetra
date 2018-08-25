@@ -149,13 +149,13 @@ namespace TrilinosWrappers
                          const dealii::parallel::distributed::Vector<double> &src) const;
 
     /**
-     * Return a reference to the underlaying Trilinos operator_type. So you
+     * Return a reference to the underlaying Trilinos TrilinosWrappers::types::operator_type. So you
      * can use the preconditioner with unwrapped Trilinos solver.
      *
      * Calling this function from an uninitialized object will cause an
      * exception.
      */
-    operator_type &trilinos_operator() const;
+    TrilinosWrappers::types::operator_type &trilinos_operator() const;
 
     /**
      * Exception.
@@ -174,7 +174,7 @@ namespace TrilinosWrappers
      * This is a pointer to the preconditioner object that is used when
      * applying the preconditioner.
      */
-    std_cxx11::shared_ptr<operator_type> preconditioner;
+    std_cxx11::shared_ptr<TrilinosWrappers::types::operator_type> preconditioner;
 
     /**
      * Internal communication pattern in case the matrix needs to be copied
@@ -190,7 +190,7 @@ namespace TrilinosWrappers
      * Internal Trilinos map in case the matrix needs to be copied from
      * deal.II format.
      */
-    std_cxx11::shared_ptr<map_type>   vector_distributor;
+    std_cxx11::shared_ptr<TrilinosWrappers::types::map_type>   vector_distributor;
   };
 
 
@@ -1827,9 +1827,9 @@ namespace TrilinosWrappers
   PreconditionBase::vmult (VectorBase       &dst,
                            const VectorBase &src) const
   {
-    Assert (dst.vector_partitioner().isSameAs(dynamic_cast<map_type &>(preconditioner->getRangeMap().get())), 
+    Assert (dst.vector_partitioner().isSameAs(dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getRangeMap().get())), 
             ExcNonMatchingMaps("dst"));
-    Assert (src.vector_partitioner().isSameAs(dynamic_cast<map_type &>(dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).get())), 
+    Assert (src.vector_partitioner().isSameAs(dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get())),
             ExcNonMatchingMaps("src"));
 
     preconditioner->apply (src.trilinos_vector(), dst.trilinos_vector());
@@ -1841,9 +1841,9 @@ namespace TrilinosWrappers
   PreconditionBase::Tvmult (VectorBase       &dst,
                             const VectorBase &src) const
   {
-    Assert (dst.vector_partitioner().isSameAs(dynamic_cast<map_type &>(preconditioner->getRangeMap().get())),
+    Assert (dst.vector_partitioner().isSameAs(dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getRangeMap().get())),
             ExcNonMatchingMaps("dst"));
-    Assert (src.vector_partitioner().isSameAs(dynamic_cast<map_type &>(preconditioner->getDomainMap().get())),
+    Assert (src.vector_partitioner().isSameAs(dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get())),
             ExcNonMatchingMaps("src"));
 
 //    preconditioner->SetUseTranspose(true);
@@ -1866,13 +1866,17 @@ namespace TrilinosWrappers
                                 const dealii::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.size()),
-                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
+                     dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.size()),
                      preconditioner->getRangeMap()->getNodeNumElements());
-    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
-                            dst.begin());
-    vector_type tril_src (View, preconditioner->getRangeMap(),
-                            const_cast<double *>(src.begin()));
+
+    TrilinosWrappers::types::vector_type tril_dst (preconditioner->getDomainMap(), Teuchos::DataAccess::View);
+    TrilinosWrappers::types::vector_type tril_src (preconditioner->getRangeMap (), Teuchos::DataAccess::View);
+
+//    TrilinosWrappers::types::vector_type tril_dst (View, dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get()),
+//                            dst.begin());
+//    TrilinosWrappers::types::vector_type tril_src (View, preconditioner->getRangeMap(),
+//                            const_cast<double *>(src.begin()));
 
     preconditioner->apply (tril_src, tril_dst);
   }
@@ -1883,13 +1887,12 @@ namespace TrilinosWrappers
                                  const dealii::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.size()),
-                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
+                     dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.size()),
-                     preconditioner->getRangeMap().getNodeNumElements());
-    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
-                            dst.begin());
-    vector_type tril_src (View, preconditioner->getRangeMap(),
-                            const_cast<double *>(src.begin()));
+                     preconditioner->getRangeMap()->getNodeNumElements());
+    
+    TrilinosWrappers::types::vector_type tril_dst (preconditioner->getDomainMap(), Teuchos::DataAccess::View);
+    TrilinosWrappers::types::vector_type tril_src (preconditioner->getRangeMap (), Teuchos::DataAccess::View);
 
 //    preconditioner->SetUseTranspose(true);
     preconditioner->apply (tril_src, tril_dst);
@@ -1904,13 +1907,12 @@ namespace TrilinosWrappers
                            const parallel::distributed::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.local_size()),
-                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
+                     dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.local_size()),
                      preconditioner->getRangeMap()->getNodeNumElements());
-    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
-                            dst.begin());
-    vector_type tril_src (View, preconditioner->getRangeMap(),
-                            const_cast<double *>(src.begin()));
+
+    TrilinosWrappers::types::vector_type tril_dst (preconditioner->getDomainMap(), Teuchos::DataAccess::View);
+    TrilinosWrappers::types::vector_type tril_src (preconditioner->getRangeMap (), Teuchos::DataAccess::View);
 
     preconditioner->apply (tril_src, tril_dst);
   }
@@ -1921,13 +1923,12 @@ namespace TrilinosWrappers
                             const parallel::distributed::Vector<double> &src) const
   {
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(dst.local_size()),
-                     dynamic_cast<map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
+                     dynamic_cast<TrilinosWrappers::types::map_type &>(preconditioner->getDomainMap().get()).getNodeNumElements());
     AssertDimension (static_cast<TrilinosWrappers::types::int_type>(src.local_size()),
                      preconditioner->getRangeMap()->getNodeNumElements());
-    vector_type tril_dst (View, dynamic_cast<map_type &>(preconditioner->getDomainMap().get()),
-                            dst.begin());
-    vector_type tril_src (View, preconditioner->getRangeMap(),
-                            const_cast<double *>(src.begin()));
+
+    TrilinosWrappers::types::vector_type tril_dst (preconditioner->getDomainMap(), Teuchos::DataAccess::View);
+    TrilinosWrappers::types::vector_type tril_src (preconditioner->getRangeMap (), Teuchos::DataAccess::View);
 
 //    preconditioner->SetUseTranspose(true);
     preconditioner->apply (tril_src, tril_dst);
@@ -1935,7 +1936,7 @@ namespace TrilinosWrappers
   }
 
   inline
-  operator_type &
+  TrilinosWrappers::types::operator_type &
   PreconditionBase::trilinos_operator () const
   {
     AssertThrow (preconditioner, ExcMessage("Trying to dereference a null pointer."));

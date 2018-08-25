@@ -990,7 +990,7 @@ namespace TrilinosWrappers
      *
      * @deprecated Use get_mpi_communicator instead.
      */
-    const Tpetra_Comm &trilinos_communicator () const DEAL_II_DEPRECATED;
+    const comm_type &trilinos_communicator () const DEAL_II_DEPRECATED;
 
     /**
      * Return the MPI communicator object in use with this matrix.
@@ -1476,7 +1476,7 @@ namespace TrilinosWrappers
       }
     else
       graph->insertGlobalIndices
-             (1, (TrilinosWrappers::types::int_type *)&row, n_cols, col_index_ptr);
+              (row, n_cols, col_index_ptr);
 
   }
 

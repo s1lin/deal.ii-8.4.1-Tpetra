@@ -53,7 +53,6 @@
 using Teuchos::Array;
 using Teuchos::ArrayView;
 using Teuchos::RCP;
-using Teuchos::rcp;
 using Teuchos::arcp;
 using Teuchos::ArrayRCP;
 using Teuchos::ArrayView;
@@ -167,37 +166,6 @@ using Teuchos::tuple;
 
 //-------------------------------------------
 // MueLu uses Teuchos::RCP which is Trilinos version of std::shared_ptr.
-
-typedef double                                      SC;
-typedef int                                         LO;
-typedef int                                         GO;
-typedef KokkosClassic::DefaultNode::DefaultNodeType NT;
-
-
-typedef Tpetra::Map<SC, LO, GO>                     map_type;
-typedef Tpetra::Vector<SC, LO,	GO, NT>             vector_type;
-typedef Tpetra::RowMatrix<SC, LO, GO, NT>           row_matrix_type;
-typedef Tpetra::Export<SC, LO, GO>                  export_type;
-typedef Tpetra::Import<SC, LO, GO>                  import_type;
-typedef Tpetra::CrsMatrix<SC, LO, GO, NT>           crs_matrix_type;
-typedef Tpetra::CrsGraph<SC, LO, GO>                crs_graph_type;
-typedef Tpetra::MultiVector<SC, LO, GO, NT>         multi_vector_type;
-typedef Tpetra::Operator<SC, LO, GO, NT>            operator_type;
-
-//"reference-counted pointer."
-//typedef RCP<const map_type>                         rcprowMap_type;
-//typedef RCP<const map_type>                         rcpcolMap_type;
-//typedef RCP<const crs_matrix_type>                  rcpcrsMatrix_type;
-typedef MueLu::MLParameterListInterpreter<SC, LO, GO, NT> ML_ParameterListInterpreter;
-
-typedef Teuchos::RCP<Teuchos::Comm<int>> comm_type;
-
-typedef Tpetra::MpiPlatform<int>    Tpetra_MpiComm;
-typedef Tpetra::SerialPlatform<int> Tpetra_SerialComm;
-
-typedef Xpetra::CrsMatrix<SC, LO, GO, NT> xcrs_matrix_type;
-typedef Xpetra::Matrix<SC, LO, GO, NT> xmatrix_type;
-typedef Xpetra::CrsMatrixWrap<SC, LO, GO, NT> xcrs_matrix_wrap;
 
 #endif
 

@@ -101,7 +101,7 @@ namespace TrilinosWrappers
      * entries in Input_Maps.  For this non-distributed vector, the %parallel
      * partitioning is not used, just the global size of the partitioner.
      */
-    explicit BlockVector (const std::vector<map_type> &partitioner) DEAL_II_DEPRECATED;
+    explicit BlockVector (const std::vector<TrilinosWrappers::types::map_type> &partitioner) DEAL_II_DEPRECATED;
 
     /**
      * Constructor. Generate a block vector with as many blocks as there are
@@ -194,15 +194,15 @@ namespace TrilinosWrappers
      * map_types given in the input argument, according to the global size
      * of the individual components described in the maps. Note that the
      * resulting vector will be stored completely on each process. The
-     * map_type is useful when data exchange with a distributed vector based
-     * on the same map_type is intended. In that case, the same communicator
+     * TrilinosWrappers::types::map_type is useful when data exchange with a distributed vector based
+     * on the same TrilinosWrappers::types::map_type is intended. In that case, the same communicator
      * is used for data exchange.
      *
      * If <tt>omit_zeroing_entries==false</tt>, the vector is filled with
      * zeros.
      */
-    void reinit (const std::vector<map_type> &partitioning,
-                 const bool                     omit_zeroing_entries = false);
+    void reinit (const std::vector<TrilinosWrappers::types::map_type> &partitioning,
+                 const bool omit_zeroing_entries = false);
 
     /**
      * Reinitialize the BlockVector to contain as many blocks as there are
@@ -321,7 +321,7 @@ namespace TrilinosWrappers
 
 
   inline
-  BlockVector::BlockVector (const std::vector<map_type> &partitioning)
+  BlockVector::BlockVector (const std::vector<TrilinosWrappers::types::map_type> &partitioning)
   {
     reinit (partitioning);
   }

@@ -1022,6 +1022,7 @@ namespace TrilinosWrappers
     /**
      * Return the number of nonzero elements of this matrix.
      */
+    @DEAL_II_DEPRECATED
     size_type n_nonzero_elements () const;
 
     /**
@@ -2201,7 +2202,7 @@ namespace TrilinosWrappers
                                   const size_type  row,
                                   const size_type  index)
       :
-      accessor(matrix, row, index)
+       accessor(matrix, row, index)
     {}
 
 
@@ -2508,12 +2509,14 @@ namespace TrilinosWrappers
         // TODO: fix this (do not run compress here, but fail)
         if (last_action == Insert)
           {
-            int ierr;
-            ierr = matrix->GlobalAssemble(*column_space_map,
-                                          matrix->getRowMap(), false);
-
-            Assert (ierr == 0, ExcTrilinosError(ierr));
-            (void)ierr; // removes -Wunused-but-set-variable in optimized mode
+//         int ierr;
+//         ierr = matrix->GlobalAssemble(*column_space_map,
+//                                       matrix->getRowMap(), false);
+//
+//         Assert (ierr == 0, ExcTrilinosError(ierr));
+//         (void)ierr; // removes -Wunused-but-set-variable in optimized mode
+            const RCP<const map_type> column_map = rcp(column_space_map.get());
+            matrix->fillComplete(column_map, matrix->getRowMap());
           }
 
         last_action = Add;
@@ -2575,7 +2578,8 @@ namespace TrilinosWrappers
   SparseMatrix::size_type
   SparseMatrix::n_nonzero_elements () const
   {
-    return matrix->getCrsGraph().getNonzero;
+//      return matrix->NumGlobalNonzeros();
+    return 0;
   }
 
 
